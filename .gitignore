@@ -1,0 +1,13 @@
+.netrwhist
+.DS_Store
+*.py[cod]
+*.so
+*.o
+*.dylib
+*.sw*
+sessions
+backups
+ranger/bookmarks
+ranger/history
+ranger/tagged
+vim/bundle

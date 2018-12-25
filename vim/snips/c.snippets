@@ -1,0 +1,56 @@
+snippet for "for loop (for)" !
+for (${2:i} = 0; $2 < ${1:count}; ${3:++$2}) {
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet fori "for int loop (fori)" !
+for (${4:int} ${2:i} = 0; $2 < ${1:count}; ${3:++$2}) {
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet if "if .. (if)" !
+if (${1:/* condition */}) {
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet el "else .. (else)" !
+else {
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet ife "if .. else (ife)" !
+if (${1:/* condition */}) {
+	${2:/* code */}
+} else {
+	${3:/* else */}
+}
+endsnippet
+
+snippet fun "function" b!
+${1:void} ${2:function_name}(${3}) {
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}
+endsnippet
+
+snippet ifdef "#ifdef ... #endif"
+#ifdef ${1:SOME_DEFINE}
+    ${2:// ...}
+#endif
+endsnippet
+
+snippet dox "Doxygen skeleton" b
+/**
+ * @brief ${1:The description}
+ *
+ * ${2:Describe what the function does.}
+ *
+ * @param[in] ${3:parameter}    ${4:description of the parameter}
+ * @returns   ${5:RETURN_VALUE}
+ */
+endsnippet
+
+# vim:ft=snippets:

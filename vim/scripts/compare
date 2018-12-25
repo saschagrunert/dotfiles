@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+flat_symbol="⤚"
+
+__parse_git_stats() {
+    type git >/dev/null 2>&1
+    if [ "$?" -ne 0 ]; then
+        return
+    fi
+    [[ -z $(git rev-parse --git-dir 2> /dev/null) ]] && return
+    tracking_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    set -- $(git rev-list --left-right --count $tracking_branch...HEAD)
+    behind=$1
+    ahead=$2
+    if [[ $behind -gt 0 ]] ; then
+        local ret="↓ $behind"
+    fi
+    if [[ $ahead -gt 0 ]] ; then
+        local ret="${ret} ↑ $ahead"
+    fi
+    echo "$ret"
+}
+
+tmux_path=$(tmux display -p "#{pane_current_path}")
+cd "$tmux_path"
+stats=""
+if [ -n "${git_stats=$(__parse_git_stats)}" ]; then
+    stats="$git_stats"
+fi
+
+if [ -n "$stats" ]; then
+    echo "${stats}"
+fi
+

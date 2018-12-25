@@ -1,0 +1,60 @@
+call plug#begin('~/.vim/bundle')
+
+function! BuildYCM(info)
+    if a:info.status == 'installed' || a:info.force
+        !./install.py --clang-completer --go-completer --ts-completer --rust-completer
+    endif
+endfunction
+
+Plug 'Julian/vim-textobj-variable-segment'
+Plug 'SirVer/ultisnips'
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+Plug 'airblade/vim-gitgutter'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'dag/vim-fish', { 'for': 'fish' }
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'easymotion/vim-easymotion'
+Plug 'edkolev/tmuxline.vim'
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
+Plug 'glts/vim-textobj-comment'
+Plug 'godlygeek/tabular'
+Plug 'haya14busa/incsearch.vim'
+Plug 'honza/vim-snippets'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
+Plug 'kana/vim-operator-user'
+Plug 'kana/vim-textobj-lastpat'
+Plug 'kana/vim-textobj-user'
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'majutsushi/tagbar'
+Plug 'mbbill/undotree'
+Plug 'mhinz/vim-startify'
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+Plug 'ryanoasis/vim-devicons'
+Plug 'saihoooooooo/vim-textobj-space'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tommcdo/vim-exchange'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'w0rp/ale'
+Plug 'wellle/targets.vim'
+Plug 'zirrostig/vim-schlepp'
+
+call plug#end()

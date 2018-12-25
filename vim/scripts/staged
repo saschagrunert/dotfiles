@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+staged_symbol="⊕ "
+
+__parse_git_stats(){
+    type git >/dev/null 2>&1
+    if [ "$?" -ne 0 ]; then
+        return
+    fi
+    [[ -z $(git rev-parse --git-dir 2> /dev/null) ]] && return
+    staged=$(git diff --staged --name-status | wc -l)
+    echo "$staged"
+}
+
+tmux_path=$(tmux display -p "#{pane_current_path}")
+cd "$tmux_path"
+
+stats=""
+if [ -n "${git_stats=$(__parse_git_stats)}" ]; then
+    stats="$git_stats"
+fi
+if [[ -n "$stats" && $stats -gt 0 ]]; then
+    stats=$(echo $stats | sed -e "s/^[ \t]*//")
+    echo "${staged_symbol}${stats} "
+fi

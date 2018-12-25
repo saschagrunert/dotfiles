@@ -1,0 +1,45 @@
+[alias]
+    d = difftool
+    s = status
+    p = pull
+    c = clone
+    b = branch
+    co = checkout
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    ls = ls-files
+[user]
+    name = Sascha Grunert
+    email = sgrunert@suse.com
+    signingkey = 92836C5387398A449AF794CF8CE029DD1A866E52
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+[mergetool]
+    prompt = false
+[push]
+    default = upstream
+[diff]
+    tool = vimdiff2
+[difftool]
+    prompt = false
+[http]
+    sslVerify = false
+    postBuffer = 524288000
+[core]
+    editor = vim
+    excludesfile = ~/.gitignore_global
+[color]
+    ui = auto
+[multidiff]
+    tool = vd -f
+[pull]
+    rebase = true
+[rebase]
+    autostash = true
+[gitreview]
+    remote = origin
+[rerere]
+    enabled = 1
+[commit]
+    gpgsign = true

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+branch_symbol=""
+
+__parse_git_branch() {
+    type git >/dev/null 2>&1
+    if [ "$?" -ne 0 ]; then
+        return
+    fi
+    branch=$(git symbolic-ref HEAD 2> /dev/null)
+    if [[ -z $branch ]] ; then
+        branch=":$(git rev-parse --short HEAD 2> /dev/null)"
+    fi
+    if [ "$?" -ne 0 ]; then
+        return
+    fi
+    branch=${branch##*/}
+    echo  -n "${branch_symbol} ${branch} ($(git rev-parse --short HEAD))"
+}
+
+tmux_path=$(tmux display -p "#{pane_current_path}")
+cd "$tmux_path"
+branch=""
+if [ -n "${git_branch=$(__parse_git_branch)}" ]; then
+    branch="$git_branch"
+fi
+
+if [ -n "$branch" ]; then
+    echo "${branch} "
+fi
+

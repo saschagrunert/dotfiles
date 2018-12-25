@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+PWD_MAX_LEN="40"
+
+tcwd=$(tmux display -p "#{pane_current_path}")
+trunc_symbol="···"
+dir=${tcwd##*/}
+max_len="$PWD_MAX_LEN"
+max_len=$(( ( max_len < ${#dir} ) ? ${#dir} : max_len ))
+ttcwd=${tcwd/#$HOME/\~}
+pwdoffset=$(( ${#ttcwd} - max_len ))
+if [ ${pwdoffset} -gt "0" ]; then
+    ttcwd=${ttcwd:$pwdoffset:$max_len}
+    ttcwd=${trunc_symbol}/${ttcwd#*/}
+fi
+echo "$ttcwd"
+

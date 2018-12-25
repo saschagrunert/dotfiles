@@ -1,0 +1,103 @@
+snippet if "if Condition" b
+\if${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifundefined "ifundefined Condition" b
+\ifundefined${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifnum "ifnum Condition" b
+\ifnum${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifodd "ifodd Condition" b
+\ifodd${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifdim "ifdim Condition" b
+\ifdim${1}
+	${2}
+\fi
+endsnippet
+
+snippet iftrue "iftrue Condition" b
+\iftrue${1}
+	${2}
+\fi
+endsnippet
+
+snippet iffalse "iffalse Condition" b
+\iffalse${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifx "ifx Condition" b
+\ifx${1}
+	${2}
+\fi
+endsnippet
+
+snippet ifelse "if else Condition" b
+\if${1}
+	${2}
+\else
+	${3}
+\fi
+endsnippet
+
+snippet ifcase "ifcase Condition" b
+\ifcase${1}
+	${2}
+\or
+	${3}
+\or
+	${4}
+\else
+	${5}
+\fi
+endsnippet
+
+snippet whiledo "whiledo loop" b
+\newcounter{${1}}
+\setcounter{$1}{1}
+\whiledo{${2}}
+{
+	${3}
+}
+endsnippet
+
+snippet forloop "for loop" b
+\newcounter{${1}}
+\forloop{$1}{1}{\value{$1} < ${2:max}}
+{
+	${3}
+}
+endsnippet
+
+snippet note "Beamer note" b
+\note{%
+	${1}
+}
+endsnippet
+
+snippet notei "Beamer note with itemize" b
+\note{%
+	\begin{itemize}
+		\item ${1}
+	\end{itemize}
+}
+endsnippet
+
+snippet item "Iemize item"
+\item ${1}
+endsnippet
+# vim:ft=snippets:

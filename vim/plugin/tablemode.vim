@@ -1,0 +1,5 @@
+let g:table_mode_align_char = '='
+let g:table_mode_corner = '+'
+let g:table_mode_corner_corner = '+'
+let g:table_mode_fillchar = '-'
+let g:table_mode_separator = '|'

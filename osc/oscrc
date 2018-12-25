@@ -1,0 +1,13 @@
+[general]
+apiurl = https://api.opensuse.org
+use_keyring = 1
+checkout_no_colon = 1
+
+[https://api.opensuse.org]
+keyring=1
+user=sgrunert
+trusted_prj=openSUSE:Factory
+
+[https://api.suse.de]
+keyring=1
+user=sgrunert

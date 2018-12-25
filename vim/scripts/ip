@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+tmp_file="/tmp/ip.txt"
+
+getLanIP() {
+    if shell_is_bsd || shell_is_osx ; then
+        all_nics=$(ifconfig 2>/dev/null | awk -F':' '/^[a-z]/ && !/^lo/ { print $1 }')
+        for nic in ${all_nics[@]}; do
+            ipv4s_on_nic=$(ifconfig ${nic} 2>/dev/null | awk '$1 == "inet" { print $2 }')
+            for lan_ip in ${ipv4s_on_nic[@]}; do
+                [[ -n "${lan_ip}" ]] && break
+            done
+            [[ -n "${lan_ip}" ]] && break
+        done
+    else
+        all_nics="$(ip addr show | cut -d ' ' -f2 | tr -d :)"
+        all_nics=(${all_nics[@]//lo/})
+        for nic in "${all_nics[@]}"; do
+            lan_ip="$(ip addr show ${nic} | grep '\<inet\>' | tr -s ' ' | cut -d ' ' -f3)"
+            lan_ip="${lan_ip%/*}"
+            lan_ip="$(echo "$lan_ip" | tail -1)"
+            [ -n "$lan_ip" ] && break
+        done
+    fi
+    return 0
+}
+
+getWanIP() {
+    if [ -f "$tmp_file" ]; then
+        if shell_is_osx || shell_is_bsd; then
+            stat >/dev/null 2>&1 && is_gnu_stat=false || is_gnu_stat=true
+            if [ "$is_gnu_stat" == "true" ];then
+                last_update=$(stat -c "%Y" ${tmp_file})
+            else
+                last_update=$(stat -f "%m" ${tmp_file})
+            fi
+        elif shell_is_linux || [ -z $is_gnu_stat]; then
+            last_update=$(stat -c "%Y" ${tmp_file})
+        fi
+
+        time_now=$(date +%s)
+        update_period=900
+        up_to_date=$(echo "(${time_now}-${last_update}) < ${update_period}" | bc)
+
+        if [ "$up_to_date" -eq 1 ]; then
+            wan_ip=$(cat ${tmp_file})
+        fi
+    fi
+
+    if [ -z "$wan_ip" ]; then
+        wan_ip=$(curl --max-time 2 -s http://whatismyip.akamai.com/)
+
+        if [ "$?" -eq "0" ]; then
+            echo "${wan_ip}" > $tmp_file
+        elif [ -f "${tmp_file}" ]; then
+            wan_ip=$(cat "$tmp_file")
+        fi
+    fi
+
+    return 0
+}
+
+ostype() { echo $OSTYPE | tr '[A-Z]' '[a-z]'; }
+
+export SHELL_PLATFORM='unknown'
+
+case "$(ostype)" in
+    *'linux'*   ) SHELL_PLATFORM='linux'    ;;
+    *'darwin'*  ) SHELL_PLATFORM='osx'      ;;
+    *'bsd'*     ) SHELL_PLATFORM='bsd'      ;;
+esac
+
+shell_is_linux() { [[ $SHELL_PLATFORM == 'linux' || $SHELL_PLATFORM == 'bsd' ]]; }
+shell_is_osx()   { [[ $SHELL_PLATFORM == 'osx' ]]; }
+shell_is_bsd()   { [[ $SHELL_PLATFORM == 'bsd' || $SHELL_PLATFORM == 'osx' ]]; }
+
+export -f shell_is_linux
+export -f shell_is_osx
+export -f shell_is_bsd
+
+getLanIP
+getWanIP
+
+echo "${wan_ip} / ${lan_ip-N/a}"
+
