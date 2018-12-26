@@ -66,6 +66,7 @@ set updatetime=250
 set timeout
 set timeoutlen=2000
 set ttimeoutlen=0
+set formatoptions+=j
 
 "           +--Disable hlsearch while loading viminfo
 "           | +--Remember marks for last 50 files
