@@ -1,3 +1,5 @@
+[include]
+    path = ~/.gitconfig_user
 [alias]
     d = difftool
     s = status
@@ -8,10 +10,6 @@
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
     ls = ls-files
-[user]
-    name = Sascha Grunert
-    email = sgrunert@suse.com
-    signingkey = 92836C5387398A449AF794CF8CE029DD1A866E52
 [merge]
     tool = vimdiff
     conflictstyle = diff3

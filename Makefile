@@ -1,20 +1,23 @@
+# Used binaries
 GIT := git
 CURL := curl -sL
 CRONTAB := crontab
 LN := ln -sfn
 
+# Paths
+GITCONFIG_USER_PATH := ~/.gitconfig_user
+
+# User specific settings
+USER := Sascha Grunert
+EMAIL := sgrunert@suse.com
+SIGNKEY := 92836C5387398A449AF794CF8CE029DD1A866E52
+
 .SILENT:
-.PHONY: install update upgrade
+.PHONY: install gitconfig-user uninstall update upgrade
 
 all: install
 
-crontab:
-	echo '0 * * * * cd ~/.dotfiles && make update 2>&1 >> /dev/null' > /tmp/crontab
-	$(CRONTAB) /tmp/crontab
-	rm /tmp/crontab
-	$(CRONTAB) -l
-
-install:
+install: gitconfig-user
 	touch ~/.hushlogin
 	mkdir -p ~/.config/fish ~/.local/share/fonts
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
@@ -44,6 +47,34 @@ install:
 	$(LN) "$$PWD"/x11/xinitrc ~/.xinitrc
 	echo "Done"
 
+uninstall:
+	rm ~/.hushlogin
+	rm ~/.config/alacritty
+	rm ~/.clang-format
+	rm ~/.ccache
+	rm ~/.compton.conf
+	rm ~/.config/dunst
+	rm -rf ~/.config/fish
+	rm ~/.gdbinit
+	rm ~/.ghci
+	rm ~/.gitconfig
+	rm ~/.gitignore_global
+	rm ~/.config/hexchat
+	rm ~/.config/htop
+	rm ~/.i3
+	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf
+	rm ~/.config/osc
+	rm ~/.config/ranger
+	rm ~/.rustfmt.toml
+	rm ~/.tigrc
+	rm ~/.tmux.conf
+	rm ~/.vim
+	rm ~/.Xdefaults
+	rm ~/.profile
+	rm ~/.xinitrc
+	rm $(GITCONFIG_USER_PATH)
+	echo "Done"
+
 update:
 	$(GIT) pull --rebase --autostash
 
@@ -57,3 +88,15 @@ upgrade: update
 	$(GIT) add -A
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -m "Upgraded external dependencies"
 	$(GIT) push
+
+crontab:
+	echo '0 * * * * cd ~/.dotfiles && make update 2>&1 >> /dev/null' > /tmp/crontab
+	$(CRONTAB) /tmp/crontab
+	rm /tmp/crontab
+	$(CRONTAB) -l
+
+gitconfig-user:
+	echo "[user]" > $(GITCONFIG_USER_PATH)
+	echo "name = $(USER)" >> $(GITCONFIG_USER_PATH)
+	echo "email = $(EMAIL)" >> $(GITCONFIG_USER_PATH)
+	echo "signkey = $(SIGNKEY)" >> $(GITCONFIG_USER_PATH)
