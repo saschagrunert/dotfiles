@@ -4,3 +4,5 @@ dotfiles
 Toolchain
 dotfile
 cron
+metadata
+Autocompletion

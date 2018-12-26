@@ -222,7 +222,7 @@ The following vim plugins are available via these dotfiles:
 - [textobj-space](https://github.com/saihoooooooo/vim-textobj-space):
   Textobject enhancement for spaces
 - [textobj-user](https://github.com/kana/vim-textobj-user):
-  Enables ustom textobjects
+  Enables custom textobjects
 - [textobj-variable-segment](https://github.com/Julian/vim-textobj-variable-segment):
   Textobject enhancement for variables
 - [tmux-navigator](https://github.com/christoomey/vim-tmux-navigator):
@@ -245,8 +245,11 @@ The following vim plugins are available via these dotfiles:
 To install all files into your home directory, simply execute:
 
 ```fish
-> make install
+> make install USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
 ```
+
+The variables `USER`, `EMAIL` and `SIGNKEY` specify additionally created git
+user data.
 
 ### Vim
 
@@ -268,9 +271,17 @@ updating the repository every hour.
 
 To update all necessary vim plugins you can run `:PlugUpdate` or `:PlugUpdate!`.
 
+## Uninstall
+
+To uninstall all created symlinks and data from your home directory, run:
+
+```fish
+> make uninstall
+```
+
 ## Screenshots
 
-The vim layout looks like this:
+The vim scheme looks like this:
 
 ![vim screenshot](.github/vim.png "Vim")
 
