@@ -96,7 +96,6 @@ crontab:
 	$(CRONTAB) -l
 
 gitconfig-user:
-	echo "[user]" > $(GITCONFIG_USER_PATH)
-	echo "name = $(USER)" >> $(GITCONFIG_USER_PATH)
-	echo "email = $(EMAIL)" >> $(GITCONFIG_USER_PATH)
-	echo "signkey = $(SIGNKEY)" >> $(GITCONFIG_USER_PATH)
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
