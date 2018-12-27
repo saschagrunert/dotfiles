@@ -14,7 +14,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dag/vim-fish', { 'for': 'fish' }
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'saschagrunert/dracula', { 'branch': 'mod' }
 Plug 'easymotion/vim-easymotion'
 Plug 'edkolev/tmuxline.vim'
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -52,7 +52,6 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'w0rp/ale'
 Plug 'wellle/targets.vim'
 Plug 'zirrostig/vim-schlepp'

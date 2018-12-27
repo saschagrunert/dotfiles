@@ -13,7 +13,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+x kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -l 20 -p '' -fn 'MesloLGMDZ Nerd Font-8' -sf '#262626' -sb '#d7ff87'"
+bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -l 20 -p '' -fn 'MesloLGMDZ Nerd Font-8' -nb '#282a36' -nf '#f8f8f2' -sf '#282a36' -sb '#bd93f9'"
 
 # change focus
 bindsym $mod+h focus left
@@ -118,17 +118,14 @@ bar {
     strip_workspace_numbers yes
     # mode hide
     colors {
-        separator $lightgrey
-        background $grey
-        statusline $white
-        focused_workspace $green $green $black
-        active_workspace $white $white $black
-        inactive_workspace $grey $black $white
-        urgent_workspace $darkred $darkred $white
+        separator $selection
+        background $bg
+        statusline $fg
+        focused_workspace $purple $purple $selection
+        active_workspace $fg $fg $bg
+        inactive_workspace $bg $bg $fg
+        urgent_workspace $red $red $fg
     }
-    output eDP1
-    output DP1-2
-    output DP1-1
 }
 
 # where to output the workspaces
@@ -167,21 +164,24 @@ workspace_layout default
 hide_edge_borders both
 
 # colors
-set $back               #1d1F21
-set $black              #282A2E
-set $grey               #262626
-set $lightgrey          #4e4e4e
-set $white              #eeeeee
-set $red                #CC6666
-set $darkred            #A54242
-set $green              #d7ff87
+set $bg         #282a36
+set $selection  #44475a
+set $fg         #f8f8f2
+set $comment    #6272a4
+set $cyan       #8be9fd
+set $green      #50fa7b
+set $orange     #ffb86c
+set $pink       #ff79c6
+set $purple     #bd93f9
+set $red        #ff5555
+set $yellow     #f1fa8c
 
 #class                  border      backgr.     text        split
-client.focused          $green      $green      $black      $green
-client.focused_inactive $grey       $grey       $lightgrey  $grey
-client.unfocused        $grey       $grey       $lightgrey  $grey
-client.urgent           $red        $red        $black      $red
-client.background       $back
+client.focused          $purple     $purple     $bg         $purple
+client.focused_inactive $bg         $bg         $fg         $bg
+client.unfocused        $bg         $bg         $fg         $bg
+client.urgent           $red        $red        $bg         $red
+client.background       $bg
 
 # run auto setup
 exec ~/.i3/setup

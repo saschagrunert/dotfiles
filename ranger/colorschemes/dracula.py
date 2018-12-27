@@ -1,8 +1,20 @@
 from ranger.gui.colorscheme import ColorScheme
 from ranger.gui.color import *
 
+BACKGROUND = 17
+LINE = 59
+FOREGROUND = 231
+COMMENT = 61
+CYAN = 117
+GREEN = 84
+ORANGE = 215
+PINK = 212
+PURPLE = 141
+RED = 203
+YELLOW = 228
+
 class Default(ColorScheme):
-    progress_bar_color = 84
+    progress_bar_color = GREEN
 
     def use(self, context):
         fg, bg, attr = default_colors
@@ -16,40 +28,40 @@ class Default(ColorScheme):
             else:
                 attr = normal
             if context.empty or context.error:
-                fg = 203
+                fg = RED
                 bg = default
             if context.border:
-                fg = 84
+                fg = PURPLE
             if context.media:
                 if context.image:
-                    fg = 215
+                    fg = ORANGE
                 else:
-                    fg = magenta
+                    fg = PINK
             if context.container:
-                fg = 84
+                fg = GREEN
             if context.directory:
                 attr |= bold
-                fg = 117
+                fg = CYAN
             elif context.executable and not \
                     any((context.media, context.container,
                         context.fifo, context.socket)):
                 attr |= bold
-                fg = 84
+                fg = GREEN
             if context.socket:
-                fg = magenta
+                fg = PINK
                 attr |= bold
             if context.fifo or context.device:
-                fg = 215
+                fg = ORANGE
                 if context.device:
                     attr |= bold
             if context.link:
-                fg = 212
+                fg = PINK
             if context.tag_marker and not context.selected:
                 attr |= bold
-                if fg in (203, magenta):
+                if fg in (RED, PINK):
                     fg = white
                 else:
-                    fg = 203
+                    fg = RED
             if not context.selected and (context.cut or context.copied):
                 fg = black
                 attr |= bold
@@ -58,47 +70,47 @@ class Default(ColorScheme):
                     attr |= bold
                 if context.marked:
                     attr |= bold
-                    fg = 215
+                    fg = ORANGE
             if context.badinfo:
                 if attr & reverse:
-                    bg = magenta
+                    bg = PINK
                 else:
-                    fg = magenta
+                    fg = PINK
 
         elif context.in_titlebar:
             attr |= bold
             if context.hostname:
-                fg = context.bad and 203 or 84
+                fg = context.bad and RED or GREEN
             elif context.directory:
-                fg = 117
+                fg = CYAN
             elif context.tab:
                 if context.good:
                     fg = black
-                    bg = 84
+                    bg = GREEN
             elif context.link:
-                fg = 117
+                fg = CYAN
 
         elif context.in_statusbar:
             if context.permissions:
                 if context.good:
-                    fg = 117
+                    fg = CYAN
                 elif context.bad:
-                    fg = magenta
+                    fg = PINK
             if context.marked:
                 attr |= bold | reverse
-                fg = 215
+                fg = ORANGE
             if context.message:
                 if context.bad:
                     attr |= bold
-                    fg = 203
+                    fg = RED
             if context.loaded:
                 bg = self.progress_bar_color
                 fg = black
             if context.vcsinfo:
-                fg = 84
+                fg = GREEN
                 attr &= ~bold
             if context.vcscommit:
-                fg = 215
+                fg = ORANGE
                 attr &= ~bold
 
         if context.text:
@@ -107,7 +119,7 @@ class Default(ColorScheme):
 
         if context.in_taskview:
             if context.title:
-                fg = 117
+                fg = CYAN
 
             if context.selected:
                 attr |= reverse
@@ -121,29 +133,29 @@ class Default(ColorScheme):
         if context.vcsfile and not context.selected:
             attr &= ~bold
             if context.vcsconflict:
-                fg = magenta
+                fg = PINK
             elif context.vcschanged:
-                fg = 203
+                fg = RED
             elif context.vcsunknown:
-                fg = 203
+                fg = RED
             elif context.vcsstaged:
-                fg = 84
+                fg = GREEN
             elif context.vcssync:
-                fg = 84
+                fg = GREEN
             elif context.vcsignored:
                 fg = default
 
         elif context.vcsremote and not context.selected:
             attr &= ~bold
             if context.vcssync:
-                fg = 84
+                fg = GREEN
             elif context.vcsbehind:
-                fg = 203
+                fg = RED
             elif context.vcsahead:
-                fg = 117
+                fg = CYAN
             elif context.vcsdiverged:
-                fg = magenta
+                fg = PINK
             elif context.vcsunknown:
-                fg = 203
+                fg = RED
 
         return fg, bg, attr

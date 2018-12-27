@@ -3,7 +3,7 @@ switch (uname)
         if grep -q "opensuse" /etc/os-release
             alias up="zy dup;and zy up;and rup"
             alias zy="sudo zypper"
-        elseif grep -q "archlinux" /etc/os-release
+        else if grep -q "archlinux" /etc/os-release
             alias up="yaourt -Syyuua --devel --noconfirm; rup"
         end
     case Darwin

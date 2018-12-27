@@ -32,7 +32,7 @@ install: gitconfig-user
 	$(LN) "$$PWD"/ghci/ghci ~/.ghci
 	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
 	$(LN) "$$PWD"/git/gitignore_global ~/.gitignore_global
-	$(LN) "$$PWD"/hexchat ~/.config/hexchat
+	$(LN) "$$PWD"/hexchat/colors.conf ~/.config/hexchat/colors.conf
 	$(LN) "$$PWD"/htop ~/.config/htop
 	$(LN) "$$PWD"/i3 ~/.i3
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf ~/.local/share/fonts/
@@ -51,7 +51,7 @@ uninstall:
 	rm ~/.hushlogin
 	rm ~/.config/alacritty
 	rm ~/.clang-format
-	rm ~/.ccache
+	rm -rf ~/.ccache
 	rm ~/.compton.conf
 	rm ~/.config/dunst
 	rm -rf ~/.config/fish
@@ -59,7 +59,7 @@ uninstall:
 	rm ~/.ghci
 	rm ~/.gitconfig
 	rm ~/.gitignore_global
-	rm ~/.config/hexchat
+	rm ~/.config/hexchat/colors.conf
 	rm ~/.config/htop
 	rm ~/.i3
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf

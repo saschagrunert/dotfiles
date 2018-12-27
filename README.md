@@ -141,8 +141,6 @@ The following vim plugins are available via these dotfiles:
 
 - [abolish](https://github.com/tpope/vim-abolish):
   Easily search for, substitute, and abbreviate multiple variants of a word
-- [airline-themes](https://github.com/vim-airline/vim-airline-themes):
-  Themes for vim-airline
 - [airline](https://github.com/vim-airline/vim-airline):
   Statusline enhancements
 - [ale](https://github.com/w0rp/ale):
@@ -157,8 +155,8 @@ The following vim plugins are available via these dotfiles:
   Unicode characters for nerds
 - [dispatch](https://github.com/tpope/vim-dispatch):
   Asynchronous build and test dispatcher
-- [dracula](https://github.com/dracula/vim):
-  The color scheme
+- [dracula](https://github.com/saschagrunert/dracula):
+  Modified variant of the dracula color scheme
 - [easymotion](https://github.com/easymotion/vim-easymotion):
   Efficient movements
 - [endwise](https://github.com/tpope/vim-endwise):
@@ -245,6 +243,8 @@ The following vim plugins are available via these dotfiles:
 To install all files into your home directory, simply execute:
 
 ```fish
+> git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
+> cd ~/.dotfiles
 > make install USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
 ```
 
