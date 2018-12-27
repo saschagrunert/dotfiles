@@ -281,9 +281,8 @@ To uninstall all created symlinks and data from your home directory, run:
 
 ## Screenshots
 
-The vim scheme looks like this:
-
 ![vim screenshot](.github/vim.png "Vim")
+![alacritty screenshot](.github/alacritty.png "Alacritty")
 
 ## Contributing
 
