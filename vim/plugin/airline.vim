@@ -12,6 +12,7 @@ let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#ycm#enabled = 1
 let g:airline#extensions#ycm#error_symbol = '✗ '
 let g:airline#extensions#ycm#warning_symbol = '⚠ '
+let g:airline#extensions#tmuxline#enabled = 0
 let g:airline_detect_iminsert = 1
 let g:airline_mode_map = {
     \ '__' : '-',
