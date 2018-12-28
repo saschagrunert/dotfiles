@@ -6,7 +6,7 @@
     follow = mouse
     font = Sans 8
     format = "<b>%s</b>\n%b"
-    frame_color = "#4e4e4e"
+    frame_color = "#bd93f9"
     frame_width = 1
     geometry = "300x10-30+20"
     history_length = 20
@@ -33,16 +33,16 @@
     word_wrap = yes
 
 [urgency_low]
-    background = "#262626"
-    foreground = "#eeeeee"
+    background = "#282a36"
+    foreground = "#f8f8f2"
     timeout = 5
 
 [urgency_normal]
-    background = "#262626"
-    foreground = "#eeeeee"
+    background = "#282a36"
+    foreground = "#f8f8f2"
     timeout = 5
 
 [urgency_critical]
-    background = "#262626"
-    foreground = "#CC666666"
+    background = "#282a36"
+    foreground = "#f8f8f2"
     timeout = 0

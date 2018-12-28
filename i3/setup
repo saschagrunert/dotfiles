@@ -10,7 +10,7 @@ fi
 feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 
 # Setup default applications
-i3-msg exec "alacritty -e tmux new-session -s work fish -C 'vim +q'"
+i3-msg exec "alacritty -e tmux new-session -s work fish -C 'vim +PlugUpgrade +PlugUpdate +qa!'"
 i3-msg exec "xautolock -time 5 -corners --00 -locker 'i3lock-fancy -p'"
 i3-msg exec chromium
 i3-msg exec thunderbird

@@ -20,7 +20,6 @@ all: install
 install: gitconfig-user
 	touch ~/.hushlogin
 	mkdir -p ~/.config/fish ~/.local/share/fonts
-	$(LN) "$$PWD"/alacritty ~/.config/alacritty
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
 	$(LN) "$$PWD"/ccache ~/.ccache
 	$(LN) "$$PWD"/compton/compton.conf ~/.compton.conf
@@ -32,8 +31,10 @@ install: gitconfig-user
 	$(LN) "$$PWD"/ghci/ghci ~/.ghci
 	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
 	$(LN) "$$PWD"/git/gitignore_global ~/.gitignore_global
+	$(LN) "$$PWD"/gtk/gtkrc-2.0 ~/.gtkrc-2.0
 	$(LN) "$$PWD"/hexchat/colors.conf ~/.config/hexchat/colors.conf
 	$(LN) "$$PWD"/htop ~/.config/htop
+	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.i3
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf ~/.local/share/fonts/
 	$(LN) "$$PWD"/osc ~/.config/osc
@@ -59,9 +60,11 @@ uninstall:
 	rm ~/.ghci
 	rm ~/.gitconfig
 	rm ~/.gitignore_global
+	rm ~/.gtkrc-2.0
 	rm ~/.config/hexchat/colors.conf
 	rm ~/.config/htop
 	rm ~/.i3
+	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf
 	rm ~/.config/osc
 	rm ~/.config/ranger

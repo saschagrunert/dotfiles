@@ -10,6 +10,10 @@ repository:
 - **Desktop**:
   - [alacritty](https://github.com/jwilm/alacritty):
     A cross-platform, GPU-accelerated terminal emulator
+  - [arc](https://github.com/NicoHood/arc-theme)
+    The GTK theme
+  - [bibata](https://github.com/KaizIqbal/Bibata_Cursor)
+    Beatiful cursor theme
   - [chromium](https://github.com/chromium/chromium):
     The well-known browser
   - [compton](https://github.com/chjj/compton):
@@ -30,6 +34,8 @@ repository:
     Iconic fonts
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
     For managing network connections
+  - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
+    The icon theme
   - [spotify](https://spotify.com):
     Listening to music
   - [thunderbird](https://www.thunderbird.net):
