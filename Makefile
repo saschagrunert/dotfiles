@@ -20,6 +20,7 @@ all: install
 install: gitconfig-user
 	touch ~/.hushlogin
 	mkdir -p ~/.config/fish ~/.local/share/fonts
+	$(LN) "$$PWD"/alacritty ~/.config/alacritty
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
 	$(LN) "$$PWD"/ccache ~/.ccache
 	$(LN) "$$PWD"/compton/compton.conf ~/.compton.conf
