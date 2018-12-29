@@ -38,6 +38,8 @@ repository:
     For managing network connections
   - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
     The icon theme
+  - [polybar](https://github.com/jaagr/polybar):
+    The status bar
   - [spotify](https://spotify.com):
     Listening to music
   - [thunderbird](https://www.thunderbird.net):

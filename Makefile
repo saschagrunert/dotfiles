@@ -40,6 +40,7 @@ install: gitconfig-user
 	$(LN) "$$PWD"/i3 ~/.i3
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf ~/.local/share/fonts/
 	$(LN) "$$PWD"/osc ~/.config/osc
+	$(LN) "$$PWD"/polybar ~/.config/polybar
 	$(LN) "$$PWD"/ranger ~/.config/ranger
 	$(LN) "$$PWD"/rustfmt/rustfmt.toml ~/.rustfmt.toml
 	$(LN) "$$PWD"/tig/tigrc ~/.tigrc
@@ -70,6 +71,7 @@ uninstall:
 	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf
 	rm ~/.config/osc
+	rm ~/.config/polybar
 	rm ~/.config/ranger
 	rm ~/.rustfmt.toml
 	rm ~/.tigrc
