@@ -1,1 +1,1 @@
-/home/sascha/fzf/shell/key-bindings.fish
+<html><body>You are being <a href="https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.fish">redirected</a>.</body></html>
