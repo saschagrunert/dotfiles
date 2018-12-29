@@ -19,15 +19,15 @@ all: install
 
 install: gitconfig-user
 	touch ~/.hushlogin
-	mkdir -p ~/.config/fish ~/.local/share/fonts
+	mkdir -p ~/.config/hexchat \
+		~/.local/share/fonts \
+		~/.ccache
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
-	$(LN) "$$PWD"/ccache ~/.ccache
+	$(LN) "$$PWD"/ccache/ccache.conf ~/.ccache/ccache.conf
 	$(LN) "$$PWD"/compton/compton.conf ~/.compton.conf
 	$(LN) "$$PWD"/dunst ~/.config/dunst
-	$(LN) "$$PWD"/fish/aliases.fish ~/.config/fish/aliases.fish
-	$(LN) "$$PWD"/fish/config.fish ~/.config/fish/config.fish
-	$(LN) "$$PWD"/fish/completions ~/.config/fish/
+	$(LN) "$$PWD"/fish ~/.config/fish
 	$(LN) "$$PWD"/gdb/gdbinit ~/.gdbinit
 	$(LN) "$$PWD"/ghci/ghci ~/.ghci
 	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
@@ -53,10 +53,10 @@ uninstall:
 	rm ~/.hushlogin
 	rm ~/.config/alacritty
 	rm ~/.clang-format
-	rm -rf ~/.ccache
+	rm ~/.ccache/ccache.conf
 	rm ~/.compton.conf
 	rm ~/.config/dunst
-	rm -rf ~/.config/fish
+	rm ~/.config/fish
 	rm ~/.gdbinit
 	rm ~/.ghci
 	rm ~/.gitconfig
