@@ -89,8 +89,10 @@ upgrade: update
 		-o gdb/gdbinit
 	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/kubectl.fish \
 		-o fish/completions/kubectl.fish
+	$(CURL) https://github.com/junegunn/fzf/raw/master/shell/key-bindings.fish \
+		-o fish/functions/fzf_key_bindings.fish
 	$(GIT) add -A
-	$(GIT) diff-index --quiet HEAD || $(GIT) commit -m "Upgraded external dependencies"
+	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 	$(GIT) push
 
 crontab:
