@@ -109,25 +109,6 @@ mode "resize" {
 
 bindsym $mod+i mode "resize"
 
-# Start i3bar to display a workspace bar
-bar {
-    status_command ~/.i3/i3py
-    position top
-    workspace_buttons yes
-    separator_symbol "  "
-    strip_workspace_numbers yes
-    # mode hide
-    colors {
-        separator $selection
-        background $bg
-        statusline $fg
-        focused_workspace $purple $purple $selection
-        active_workspace $fg $fg $bg
-        inactive_workspace $bg $bg $fg
-        urgent_workspace $red $red $fg
-    }
-}
-
 # where to output the workspaces
 workspace $ws1 output DP1-1
 workspace $ws2 output DP1-2
@@ -182,6 +163,9 @@ client.focused_inactive $bg         $bg         $fg         $bg
 client.unfocused        $bg         $bg         $fg         $bg
 client.urgent           $red        $red        $bg         $red
 client.background       $bg
+
+# start polybar
+exec_always --no-startup-id $HOME/.config/polybar/launch
 
 # run auto setup
 exec ~/.i3/setup
