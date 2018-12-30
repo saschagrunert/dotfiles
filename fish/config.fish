@@ -116,3 +116,5 @@ if functions -q fish_vi_key_bindings
         bind -M insert \cg fzf-cd-widget
     end
 end
+
+source $HOME/.config/fish/functions/autojump.fish

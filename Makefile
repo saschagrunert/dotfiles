@@ -95,6 +95,8 @@ upgrade: update
 		-o fish/functions/fzf_key_bindings.fish
 	$(CURL) https://github.com/dracula/sublime/raw/master/Dracula.tmTheme \
 		-o bat/themes/Dracula.tmTheme
+	$(CURL) https://github.com/wting/autojump/raw/master/bin/autojump.fish \
+		-o fish/functions/autojump.fish
 	$(GIT) add -A
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 	$(GIT) push
