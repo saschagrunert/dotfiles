@@ -86,6 +86,8 @@ repository:
   - [yamllint](https://github.com/adrienverge/yamllint):
     Needed for ALE yaml linting and fixing
 - **Development**:
+  - [autojump](https://github.com/wting/autojump):
+    A cd command that learns
   - [bat](https://github.com/sharkdp/bat):
     Like `cat` with wings
   - [ccache](https://github.com/ccache/ccache):
