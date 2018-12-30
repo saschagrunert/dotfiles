@@ -23,6 +23,7 @@ install: gitconfig-user
 		~/.local/share/fonts \
 		~/.ccache
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
+	$(LN) "$$PWD"/bat ~/.config/bat
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
 	$(LN) "$$PWD"/ccache/ccache.conf ~/.ccache/ccache.conf
 	$(LN) "$$PWD"/compton/compton.conf ~/.compton.conf
@@ -52,6 +53,7 @@ install: gitconfig-user
 uninstall:
 	rm ~/.hushlogin
 	rm ~/.config/alacritty
+	rm ~/.config/bat
 	rm ~/.clang-format
 	rm ~/.ccache/ccache.conf
 	rm ~/.compton.conf
@@ -90,7 +92,8 @@ upgrade: update
 	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/kubectl.fish \
 		-o fish/completions/kubectl.fish
 	$(CURL) https://github.com/junegunn/fzf/raw/master/shell/key-bindings.fish \
-		-o fish/functions/fzf_key_bindings.fish
+	$(CURL) https://github.com/dracula/sublime/raw/master/Dracula.tmTheme \
+		-o bat/themes/Dracula.tmTheme
 	$(GIT) add -A
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 	$(GIT) push
