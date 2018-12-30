@@ -28,10 +28,6 @@ repository:
     A tiling window manager
   - [i3lock-fancy](https://github.com/meskarune/i3lock-fancy):
     A fancy lock screen for i3
-  - [i3pystatus](https://github.com/enkore/i3pystatus):
-    A complete replacement for i3status
-  - [j4-dmenu](https://github.com/enkore/j4-dmenu-desktop):
-    The desktop menu
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
     Iconic fonts
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
