@@ -6,14 +6,10 @@ font pango:MesloLGMDZ Nerd Font 8
 floating_modifier $mod
 
 # start a terminal
-# bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+x kill
-
-# start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -l 20 -p '' -fn 'MesloLGMDZ Nerd Font-8' -nb '#282a36' -nf '#f8f8f2' -sf '#282a36' -sb '#bd93f9'"
 
 # change focus
 bindsym $mod+h focus left
