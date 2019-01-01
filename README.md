@@ -45,7 +45,7 @@ repository:
   - [unclutter](https://github.com/Airblader/unclutter-xfixes):
     Hides the mouse cursor after a dedicated timeout
   - [x11](https://www.x.org):
-    Draws the windows
+    Windowing system
   - [xautolock](https://github.com/l0b0/xautolock):
     Automatically locks the screen after a certain amount of time
 - **Vim**:
