@@ -6,6 +6,7 @@
 .DS_Store
 .netrwhist
 fish/fishd*
+fish/fish_variables
 ranger/bookmarks
 ranger/history
 ranger/tagged
