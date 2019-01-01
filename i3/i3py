@@ -27,8 +27,9 @@ status.register("cpu_usage",
 
 status.register("cpu_usage_graph",
                 start_color=DRACULA_THEME["green"],
+                end_color=DRACULA_THEME["red"],
                 graph_style="braille-fill",
-                graph_width=20)
+                graph_width=25)
 
 status.register("mem",
                 color=DRACULA_THEME["foreground"],
@@ -41,6 +42,9 @@ status.register("temp",
 status.register("disk",
                 path="/",
                 format=" {used}/{total}G [{avail}G]")
+
+status.register("backlight",
+                color=DRACULA_THEME["foreground"])
 
 status.register("pulseaudio",
                 color_muted=DRACULA_THEME["selection"],
