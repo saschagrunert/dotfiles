@@ -30,6 +30,7 @@ install: gitconfig-user
 	$(LN) "$$PWD"/dunst ~/.config/dunst
 	$(LN) "$$PWD"/fish ~/.config/fish
 	$(LN) "$$PWD"/gdb/gdbinit ~/.gdbinit
+	$(LN) "$$PWD"/gdb/gdbinit.d ~/.gdbinit.d
 	$(LN) "$$PWD"/ghci/ghci ~/.ghci
 	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
 	$(LN) "$$PWD"/git/gitignore_global ~/.gitignore_global
@@ -60,6 +61,7 @@ uninstall:
 	rm ~/.config/dunst
 	rm ~/.config/fish
 	rm ~/.gdbinit
+	rm ~/.gdbinit.d
 	rm ~/.ghci
 	rm ~/.gitconfig
 	rm ~/.gitignore_global

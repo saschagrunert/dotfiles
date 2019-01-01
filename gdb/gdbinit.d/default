@@ -1,0 +1,8 @@
+set confirm off
+set verbose off
+set history filename ~/.gdb_history
+set history save
+
+dashboard -layout assembly expressions history memory registers source stack threads
+dashboard -style prompt_not_running '\[\e[1;31m\]>\[\e[0m\]'
+dashboard -style style_low '1;31'
