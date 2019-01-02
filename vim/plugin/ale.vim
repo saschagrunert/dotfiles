@@ -32,3 +32,4 @@ let g:ale_fixers = {
     \ }
 let g:ale_sh_shfmt_options = '-i 4'
 let g:ale_go_golangci_lint_package = 1
+let g:ale_go_golangci_lint_options = '--fast'
