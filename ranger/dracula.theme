@@ -1,0 +1,22 @@
+Description = "Dracula"
+
+Default = { Colour="#f8f8f2" }
+Canvas  = { Colour="#2b2b2b" }
+Number  = { Colour="#bd93f9" }
+Escape  = { Colour="#8be9fd" }
+String  = { Colour="#f1fa8c" }
+
+BlockComment   = { Colour="#6272a4" }
+StringPreProc  = String
+LineComment    = BlockComment
+Operator       = Default
+LineNum        = BlockComment
+PreProcessor   = { Colour="#50fa7b" }
+Interpolation  = Escape
+
+Keywords = {
+  { Colour="#ff79c6" },
+  { Colour="#ffb86c" },
+  { Colour="#ff79c6" },
+  { Colour="#50fa7b" },
+}

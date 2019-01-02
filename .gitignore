@@ -4,6 +4,7 @@
 *.so
 *.sw*
 .DS_Store
+.gdb_history
 .netrwhist
 fish/fishd*
 fish/fish_variables

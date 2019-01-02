@@ -10,7 +10,7 @@ window:
     y: 2
   dynamic_padding: false
   decorations: full
-  start_maximized: false
+  start_maximized: true
 scrolling:
   history: 10000
   multiplier: 3
@@ -73,7 +73,7 @@ mouse:
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
   save_to_clipboard: true
-dynamic_title: true
+dynamic_title: false
 cursor:
   style: Block
   unfocused_hollow: true

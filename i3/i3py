@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from i3pystatus import Status
+
 status = Status(standalone=True)
 
 DRACULA_THEME = {
@@ -44,6 +45,7 @@ status.register("disk",
                 format=" {used}/{total}G [{avail}G]")
 
 status.register("backlight",
+                format=" {percentage}%",
                 color=DRACULA_THEME["foreground"])
 
 status.register("pulseaudio",
