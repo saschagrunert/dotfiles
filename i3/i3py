@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from i3pystatus import Status
+from i3pystatus.core.command import run_through_shell
 
 status = Status(standalone=True)
 
@@ -46,6 +47,8 @@ status.register("disk",
 
 status.register("backlight",
                 format=" {percentage}%",
+                on_leftclick="lighter",
+                on_rightclick="darker",
                 color=DRACULA_THEME["foreground"])
 
 status.register("pulseaudio",
