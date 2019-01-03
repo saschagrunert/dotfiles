@@ -35,6 +35,8 @@ status.register("cpu_usage_graph",
 
 status.register("mem",
                 color=DRACULA_THEME["foreground"],
+                warn_color=DRACULA_THEME["yellow"],
+                alert_color=DRACULA_THEME["red"],
                 format=" {used_mem}/{avail_mem} GiB",
                 divisor=1024**3)
 
