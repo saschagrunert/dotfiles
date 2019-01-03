@@ -10,11 +10,11 @@ fi
 feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 
 # Setup default applications
-i3-msg exec_always --no-startup-id "xautolock -time 5 -corners --00 -locker 'i3lock-fancy -p'"
-i3-msg exec_always --no-startup-id compton
-i3-msg exec_always --no-startup-id dunst
-i3-msg exec_always --no-startup-id nm-applet
-i3-msg exec_always --no-startup-id uncluter
+i3-msg exec "xautolock -time 5 -corners --00 -locker 'i3lock-fancy -p'"
+i3-msg exec compton
+i3-msg exec dunst
+i3-msg exec nm-applet
+i3-msg exec uncluter
 
 i3-msg exec "alacritty -e tmux new-session -s work fish -C 'vim +PlugUpgrade +PlugUpdate +qa!'"
 i3-msg exec chromium
