@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from i3pystatus import Status
-from i3pystatus.core.command import run_through_shell
 
 status = Status(standalone=True)
 
