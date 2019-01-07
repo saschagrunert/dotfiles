@@ -4,6 +4,7 @@ set print pretty
 
 set history filename ~/.gdb_history
 set history save
+set auto-load safe-path /
 
 dashboard -layout !assembly history memory !registers stack threads expressions source
 dashboard -style prompt_not_running '\[\e[1;31m\]>\[\e[0m\]'
