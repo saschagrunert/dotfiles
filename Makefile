@@ -93,6 +93,8 @@ upgrade: update
 		-o gdb/gdbinit
 	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/kubectl.fish \
 		-o fish/completions/kubectl.fish
+	$(CURL) https://github.com/docker/cli/raw/master/contrib/completion/docker.fish \
+		-o fish/completions/docker.fish
 	$(CURL) https://github.com/junegunn/fzf/raw/master/shell/key-bindings.fish \
 		-o fish/functions/fzf_key_bindings.fish
 	$(CURL) https://github.com/dracula/sublime/raw/master/Dracula.tmTheme \
