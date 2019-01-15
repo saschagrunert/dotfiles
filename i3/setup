@@ -19,4 +19,4 @@ i3-msg exec unclutter
 i3-msg exec "alacritty -e tmux new-session -s work fish -C 'vim +PlugUpgrade +PlugUpdate +qa!'"
 i3-msg exec chromium
 i3-msg exec thunderbird
-i3-msg exec "sleep 3; hexchat"
+i3-msg exec hexchat
