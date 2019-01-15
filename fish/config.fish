@@ -20,8 +20,8 @@ if test -d $HOME/.local/bin
     set -x LOCALBIN $HOME/.local/bin
 end
 
-if test -d /usr/lib/ccache/bin
-    set -x CCACHEBIN /usr/lib/ccache/bin
+if test -d /usr/lib64/ccache
+    set -x CCACHEBIN /usr/lib64/ccache
 end
 
 if test -d /usr/local/sbin
