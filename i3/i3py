@@ -21,7 +21,7 @@ DRACULA_THEME = {
 }
 
 status.register("clock",
-                format=" %H:%M:%S   %a %-d %b KW%V",)
+                format=" %H:%M:%S   %a %-d %b W%V",)
 
 status.register("cpu_usage",
                 format=" {usage}%",)
