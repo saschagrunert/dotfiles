@@ -81,6 +81,8 @@ repository:
     Needed for ALE bash/sh linting and fixing
   - [shfmt](https://github.com/mvdan/sh):
     Needed for ALE bash/sh linting and fixing
+  - [tflint](https://github.com/wata727/tflint):
+    Needed for ALE terraform linting and fixing
   - [yapf](https://github.com/google/yapf):
     Needed for ALE python linting and fixing
   - [yamllint](https://github.com/adrienverge/yamllint):

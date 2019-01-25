@@ -28,6 +28,7 @@ let g:ale_fixers = {
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
     \ 'sh': [ 'shfmt' ],
+    \ 'terraform': [ 'terraform' ],
     \ 'typescript': [ 'prettier' ],
     \ }
 let g:ale_sh_shfmt_options = '-i 4'
