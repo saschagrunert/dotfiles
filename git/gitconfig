@@ -39,5 +39,3 @@
     remote = origin
 [rerere]
     enabled = 1
-[commit]
-    gpgsign = true
