@@ -1,25 +1,14 @@
-switch (uname)
-    case Linux
-        if grep -q "opensuse" /etc/os-release
-            alias up "zy dup;and zy up;and rup"
-            function zy --wraps zypper; sudo zypper $argv; end
-        else if grep -q "archlinux" /etc/os-release
-            alias up "yaourt -Syyuua --devel --noconfirm; rup"
-        end
-    case Darwin
-        alias up "brew update;and brew upgrade;and rup"
-end
-
 function c; clear; if test $TMUX; tmux clear-history; end; end
 function mdc; mkdir -p $argv; and cd $argv; end
 function gpl; for branch in (git branch -vv | grep ': gone]' | gawk '{print $1}'); git branch -D $branch; end; end
 function grm; git push origin :$argv; and gpl; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
+function zy --wraps zypper; sudo zypper $argv; end
 
-alias ..... "cd ../../../../"
-alias .... "cd ../../../"
-alias ... "cd ../../"
 alias .. "cd ../"
+alias ... "cd ../../"
+alias .... "cd ../../../"
+alias ..... "cd ../../../../"
 alias cat "bat"
 alias d "dirs"
 alias dockerclean "docker images -f=dangling=true -qa | xargs -r docker rmi -f"
@@ -68,12 +57,12 @@ alias hs "history --search"
 alias iosc "osc --apiurl https://api.suse.de"
 alias k "kill"
 alias kk "kubectl config use-context"
-alias ls "exa --git -bgF"
-alias la "ls -a"
 alias l "ls -l"
+alias la "ls -a"
 alias ll "l -a"
-alias lt "l -T"
 alias llt "ll -T"
+alias ls "exa --git -bgF"
+alias lt "l -T"
 alias m "make"
 alias mc "make clean"
 alias md "mkdir -p"
@@ -89,6 +78,11 @@ alias ta "tmux attach"
 alias tg "cd ~; and tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
+alias up "brew update;and brew upgrade;and rup"
+alias up "zy dup;and zy up;and rup"
 alias v "vim"
 alias vr "ranger"
 alias vv "vim -u NONE"
+alias zycl "zy pa --orphaned --unneeded"
+alias zypr "zy se --provides --match-exact"
+alias zyrm "zy rm --clean-deps"
