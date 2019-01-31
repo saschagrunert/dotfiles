@@ -109,6 +109,19 @@ mode "resize" {
 
 bindsym $mod+i mode "resize"
 
+# colors
+set $bg         #282a36
+set $selection  #44475a
+set $fg         #f8f8f2
+set $comment    #6272a4
+set $cyan       #8be9fd
+set $green      #50fa7b
+set $orange     #ffb86c
+set $pink       #ff79c6
+set $purple     #bd93f9
+set $red        #ff5555
+set $yellow     #f1fa8c
+
 # Start i3bar to display a workspace bar
 bar {
     status_command ~/.i3/i3py
@@ -158,23 +171,10 @@ for_window [class="Spotify"] move to workspace $ws4
 # other window settings
 new_window pixel 1
 new_float pixel 1
-for_window [class="*"] border pixel 1
+for_window [class=".*"] border pixel 1
 default_orientation horizontal
 workspace_layout default
 hide_edge_borders both
-
-# colors
-set $bg         #282a36
-set $selection  #44475a
-set $fg         #f8f8f2
-set $comment    #6272a4
-set $cyan       #8be9fd
-set $green      #50fa7b
-set $orange     #ffb86c
-set $pink       #ff79c6
-set $purple     #bd93f9
-set $red        #ff5555
-set $yellow     #f1fa8c
 
 #class                  border      backgr.     text        split
 client.focused          $purple     $purple     $bg         $purple
