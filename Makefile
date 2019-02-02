@@ -91,7 +91,7 @@ upgrade: update
 		-o "fonts/Meslo LG S DZ Regular Nerd Font Complete.otf"
 	$(CURL) https://github.com/cyrus-and/gdb-dashboard/raw/master/.gdbinit \
 		-o gdb/gdbinit
-	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/kubectl.fish \
+	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/completions/kubectl.fish \
 		-o fish/completions/kubectl.fish
 	$(CURL) https://github.com/docker/cli/raw/master/contrib/completion/fish/docker.fish \
 		-o fish/completions/docker.fish
