@@ -93,6 +93,7 @@ set nofoldenable
 silent !mkdir ~/.vim/backups > /dev/null 2>&1
 set undodir=~/.vim/backups
 set backupdir=~/.vim/backups
+set dir=/tmp
 set undofile
 set swapfile
 set backup
