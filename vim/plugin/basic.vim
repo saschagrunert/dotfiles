@@ -21,14 +21,12 @@ endif
 
 " show line numbers
 set number
-"set relativenumber
 
 set backspace=indent,eol,start  "Allow backspace in insert mode
 set history=1000                "Store lots of :cmdline history
 
 " highlight current line and column
 set cursorline
-"set colorcolumn=80
 
 " idendation
 set smartindent
