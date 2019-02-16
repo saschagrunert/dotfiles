@@ -29,11 +29,15 @@ if test -d /usr/local/sbin
     set -x LOCALSBIN /usr/local/sbin
 end
 
+if test -d /usr/local/bin
+    set -x USRLOCALBIN /usr/local/bin
+end
+
 if test -d /usr/sbin
     set -x SBIN /usr/sbin
 end
 
-set -U fish_user_paths $CCACHEBIN $DOTBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALBIN $LOCALSBIN $SBIN
+set -U fish_user_paths $CCACHEBIN $DOTBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
 
