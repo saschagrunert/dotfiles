@@ -26,6 +26,7 @@ let g:ale_fixers = {
     \ 'json': [ 'prettier' ],
     \ 'markdown': [ 'prettier' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
+    \ 'rust': [ 'rustfmt' ],
     \ 'sh': [ 'shfmt' ],
     \ 'terraform': [ 'terraform' ],
     \ 'typescript': [ 'prettier' ],
