@@ -87,7 +87,7 @@ update:
 	$(GIT) pull --rebase --autostash
 
 upgrade: update
-	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/complete/Meslo%20LG%20S%20DZ%20Regular%20Nerd%20Font%20Complete.otf \
+	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Regular/complete/Meslo%20LG%20S%20DZ%20Regular%20Nerd%20Font%20Complete.ttf \
 		-o "fonts/Meslo LG S DZ Regular Nerd Font Complete.otf"
 	$(CURL) https://github.com/cyrus-and/gdb-dashboard/raw/master/.gdbinit \
 		-o gdb/gdbinit
