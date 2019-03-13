@@ -28,8 +28,6 @@
     excludesfile = ~/.gitignore_global
 [color]
     ui = auto
-[multidiff]
-    tool = vd -f
 [pull]
     rebase = true
 [rebase]

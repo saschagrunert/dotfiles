@@ -209,45 +209,6 @@ function! ResizeWindow(dir)
     endif
 endfunction
 
-" multiple git diffs in tabs
-function! TabMultiDiff()
-    let s:tab_multi_diff = 0
-    argdo call s:AddBufferToTab()
-    tabclose
-endfun
-
-function! TabMultiDiffMaximized()
-    augroup TabMultiDiffMaximize
-        autocmd VimResized * silent! call EquilizeAllTabWindows()
-    augroup END
-    set lines=999 columns=999
-    call TabMultiDiff()
-endfun
-
-function! EquilizeAllTabWindows()
-    let orig = tabpagenr()
-    tabdo wincmd =
-    while tabpagenr() != orig
-        tabprevious
-    endwhile
-endfun
-
-function! s:AddBufferToTab()
-    let buf = bufnr("%")
-    if s:tab_multi_diff
-        tablast
-        vsplit
-        wincmd w
-    else
-        tab split
-        tabmove
-    endif
-    let s:tab_multi_diff = ! s:tab_multi_diff
-    exe 'b ' . buf
-    diffthis
-    tabfirst
-endfun
-
 " toggle syntax based folding
 function! ToggleFolding()
     if (!exists("b:outline_mode"))
