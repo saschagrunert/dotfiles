@@ -2,7 +2,7 @@ function c; clear; if test $TMUX; tmux clear-history; end; end
 function mdc; mkdir -p $argv; and cd $argv; end
 function gpl; for branch in (git branch -vv | grep ': gone]' | gawk '{print $1}'); git branch -D $branch; end; end
 function grm; git push origin :$argv; and gpl; end
-function gpr; git fetch origin pull/$argv/head:pr-$argv; and git checkout pr-$argv; end
+function gpr; git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
 function zy --wraps zypper; sudo zypper $argv; end
 
