@@ -7,6 +7,7 @@ function! BuildYCM(info)
 endfunction
 
 Plug 'Julian/vim-textobj-variable-segment'
+Plug 'LnL7/vim-nix', { 'for': 'nix' }
 Plug 'SirVer/ultisnips'
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 Plug 'airblade/vim-gitgutter'
