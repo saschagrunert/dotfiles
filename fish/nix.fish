@@ -48,9 +48,6 @@ if test -n "$HOME" ; and test -n "$USER" ;
         set -g  __nix_defexpr "$HOME"/.nix-defexpr
         test -L "$__nix_defexpr" ; and rm -f "$__nix_defexpr"
         mkdir -m 0755 -p "$__nix_defexpr"
-        if test "$USER" != root ; and test ! -L "$__nix_defexpr"/channels_root ;
-            ln -s /nix/var/nix/profiles/per-user/root/channels "$__nix_defexpr"/channels_root
-        end
         set -e __nix_defexpr
     end
 

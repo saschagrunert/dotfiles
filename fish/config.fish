@@ -40,8 +40,7 @@ end
 set -U fish_user_paths $CCACHEBIN $DOTBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
-source $HOME/.config/fish/nix-daemon.fish
-source $HOME/.config/fish/conf.d/nix.fish
+source $HOME/.config/fish/nix.fish
 
 function fish_prompt
     set -l last_status $status
