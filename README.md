@@ -122,7 +122,7 @@ repository:
     The go programminng language
   - [htop](https://github.com/hishamhm/htop):
     Process manager for the terminal
-  - [nix](https://nixos.org/nix)
+  - [nix](https://nixos.org/nix):
     A powerful functional package manager
   - [osc](https://github.com/openSUSE/osc):
     Command Line Interface to work with an Open Build Service
