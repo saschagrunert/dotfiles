@@ -1,13 +1,11 @@
 #!/usr/bin/env fish
-if test -n "$HOME" ; and test -n "$USER" ;
+if test -n /nix; and test -n "$HOME" ; and test -n "$USER" ;
     for d in $PATH; if test -e $d; set __savedpath $__savedpath $d; end; end;
     set -xg PATH /nix/store/dm20hrdk6s4jzfmk1197p2nya0p8fy3a-coreutils-8.29/bin
 
     # Set up the per-user profile.
     # This part should be kept in sync with nixpkgs:nixos/modules/programs/shell.nix
-
     set -g  NIX_LINK $HOME/.nix-profile
-
     set -g  NIX_USER_PROFILE_DIR /nix/var/nix/profiles/per-user/$USER
 
     mkdir -m 0755 -p "$NIX_USER_PROFILE_DIR"
@@ -54,11 +52,11 @@ if test -n "$HOME" ; and test -n "$USER" ;
     # Append ~/.nix-defexpr/channels/nixpkgs to $NIX_PATH so that
     # <nixpkgs> paths work when the user has fetched the Nixpkgs
     # channel.
-if test -z "$NIX_PATH";
+    if test -z "$NIX_PATH";
          set -xg NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-else
+    else
          set -xg NIX_PATH $NIX_PATH nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs
-end
+    end
 
     # Set up environment.
     # This part should be kept in sync with nixpkgs:nixos/modules/programs/environment.nix
