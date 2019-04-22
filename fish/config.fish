@@ -31,7 +31,7 @@ if test -d /usr/sbin
     set -x SBIN /usr/sbin
 end
 
-set -U fish_user_paths $CCACHEBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALSBIN $SBIN $USRLOCALBIN
+set -U fish_user_paths $CCACHEBIN $CARGOBIN $GOBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
 
