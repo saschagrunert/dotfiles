@@ -6,8 +6,6 @@ set -x RUST_SRC_PATH $HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gn
 set -x QT_STYLE_OVERRIDE gtk2
 set -x MAN_POSIXLY_CORRECT 1
 
-set -x DOTBIN $HOME/.vim/bin
-
 if test -d $HOME/go
     set -x GOPATH $HOME/go
     set -x GOBIN $GOPATH/bin
@@ -15,10 +13,6 @@ end
 
 if test -d $HOME/.cargo/bin
     set -x CARGOBIN $HOME/.cargo/bin
-end
-
-if test -d $HOME/.local/bin
-    set -x LOCALBIN $HOME/.local/bin
 end
 
 if test -d /usr/lib64/ccache
@@ -37,10 +31,13 @@ if test -d /usr/sbin
     set -x SBIN /usr/sbin
 end
 
-set -U fish_user_paths $CCACHEBIN $DOTBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALBIN $LOCALSBIN $SBIN $USRLOCALBIN
+set -U fish_user_paths $CCACHEBIN $CARGOBIN $GOBIN $HOMEBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
-source $HOME/.config/fish/nix.fish
+
+if test -d ~/.nix-profile/etc/profile.d/nix.sh
+    bass . ~/.nix-profile/etc/profile.d/nix.sh
+end
 
 function fish_prompt
     set -l last_status $status
