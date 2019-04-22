@@ -35,7 +35,7 @@ set -U fish_user_paths $CCACHEBIN $CARGOBIN $GOBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
 
-if test -d ~/.nix-profile/etc/profile.d/nix.sh
+if test -d ~/.nix-profile/etc/profile.d
     bass . ~/.nix-profile/etc/profile.d/nix.sh
 end
 
