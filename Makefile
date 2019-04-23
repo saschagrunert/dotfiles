@@ -40,6 +40,7 @@ install: gitconfig-user
 	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.i3
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf ~/.local/share/fonts/
+	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
 	$(LN) "$$PWD"/osc ~/.config/osc
 	$(LN) "$$PWD"/ranger ~/.config/ranger
 	$(LN) "$$PWD"/rustfmt/rustfmt.toml ~/.rustfmt.toml
@@ -71,6 +72,7 @@ uninstall:
 	rm ~/.i3
 	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf
+	rm ~/.config/nixpkgs
 	rm ~/.config/osc
 	rm ~/.config/ranger
 	rm ~/.rustfmt.toml
