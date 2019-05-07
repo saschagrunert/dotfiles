@@ -21,6 +21,7 @@ let g:ale_fixers = {
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
     \ 'haskell': [ 'hfmt' ],
+    \ 'html': [ 'prettier' ],
     \ 'less': [ 'prettier' ],
     \ 'javascript': [ 'prettier' ],
     \ 'json': [ 'prettier' ],
