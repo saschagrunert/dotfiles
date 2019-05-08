@@ -190,6 +190,9 @@ nnoremap ää ]m
 inoremap <C-A> <C-O>0
 inoremap <C-E> <C-O>$
 
+" remap the register accessor
+nnoremap <silent> ; "
+
 " fast buffer switching
 nnoremap <silent> Ä :bnext<cr>
 nnoremap <silent> Ö :bprevious<cr>
