@@ -191,7 +191,7 @@ inoremap <C-A> <C-O>0
 inoremap <C-E> <C-O>$
 
 " remap the register accessor
-nnoremap <silent> ; "
+noremap <silent> ; "
 
 " fast buffer switching
 nnoremap <silent> Ä :bnext<cr>
