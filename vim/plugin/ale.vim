@@ -28,6 +28,7 @@ let g:ale_fixers = {
     \ 'markdown': [ 'prettier' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
+    \ 'scss': [ 'prettier' ],
     \ 'sh': [ 'shfmt' ],
     \ 'terraform': [ 'terraform' ],
     \ 'typescript': [ 'prettier' ],
