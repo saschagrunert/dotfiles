@@ -21,7 +21,6 @@ Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'glts/vim-textobj-comment'
 Plug 'godlygeek/tabular'
 Plug 'hashivim/vim-terraform', { 'for': 'tf' }
-Plug 'haya14busa/incsearch.vim'
 Plug 'honza/vim-snippets'
 Plug 'jiangmiao/auto-pairs'
 Plug 'jremmen/vim-ripgrep', { 'on': 'Rg' }
