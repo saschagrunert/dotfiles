@@ -215,12 +215,8 @@ The following vim plugins are available via these dotfiles:
   Snippets for ultisnips
 - [speeddating](https://github.com/tpope/vim-speeddating):
   Use CTRL-A/CTRL-X to increment dates, times, and more
-- [startify](https://github.com/mhinz/vim-startify):
-  Fancy start screen
 - [surround](https://github.com/tpope/vim-surround):
   Quoting/parenthesizing made simple
-- [table-mode](https://github.com/dhruvasagar/vim-table-mode):
-  Instant table creation
 - [tabular](https://github.com/godlygeek/tabular):
   Text filtering and alignment
 - [tagbar](https://github.com/majutsushi/tagbar):
@@ -231,8 +227,6 @@ The following vim plugins are available via these dotfiles:
   Textobject enhancement for comments
 - [textobj-lastpat](https://github.com/kana/vim-textobj-lastpat):
   Textobject enhancement for last searched patterns
-- [textobj-space](https://github.com/saihoooooooo/vim-textobj-space):
-  Textobject enhancement for spaces
 - [textobj-user](https://github.com/kana/vim-textobj-user):
   Enables custom textobjects
 - [textobj-variable-segment](https://github.com/Julian/vim-textobj-variable-segment):

@@ -14,7 +14,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dag/vim-fish', { 'for': 'fish' }
-Plug 'dhruvasagar/vim-table-mode'
 Plug 'easymotion/vim-easymotion'
 Plug 'edkolev/tmuxline.vim'
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
@@ -30,14 +29,11 @@ Plug 'kana/vim-textobj-user'
 Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
 Plug 'majutsushi/tagbar'
 Plug 'mbbill/undotree'
-Plug 'mhinz/vim-startify'
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'ron-rs/ron.vim'
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'ryanoasis/vim-devicons'
-Plug 'saihoooooooo/vim-textobj-space'
 Plug 'saschagrunert/dracula', { 'branch': 'mod' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'tommcdo/vim-exchange'
