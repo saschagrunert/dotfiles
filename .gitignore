@@ -1,5 +1,6 @@
 *.dylib
 *.o
+*.orig
 *.py[cod]
 *.so
 *.sw*
