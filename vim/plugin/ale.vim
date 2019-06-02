@@ -20,7 +20,7 @@ let g:ale_fixers = {
     \ 'c': [ 'clang-format' ],
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
-    \ 'haskell': [ 'hfmt' ],
+    \ 'haskell': [ 'hfmt', 'stylish-haskell' ],
     \ 'html': [ 'prettier' ],
     \ 'less': [ 'prettier' ],
     \ 'javascript': [ 'prettier' ],
