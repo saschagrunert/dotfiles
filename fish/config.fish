@@ -15,6 +15,10 @@ if test -d $HOME/.cargo/bin
     set -x CARGOBIN $HOME/.cargo/bin
 end
 
+if test -d $HOME/.local/bin
+    set -x HOMELOCALBIN $HOME/.local/bin
+end
+
 if test -d /usr/lib64/ccache
     set -x CCACHEBIN /usr/lib64/ccache
 end
@@ -35,7 +39,7 @@ if test -d $HOME/.npm-global/bin
     set -x NPMBIN $HOME/.npm-global/bin
 end
 
-set -U fish_user_paths $CCACHEBIN $CARGOBIN $GOBIN $NPMBIN $LOCALSBIN $SBIN $USRLOCALBIN
+set -U fish_user_paths $CCACHEBIN $CARGOBIN $HOMELOCALBIN $GOBIN $NPMBIN $LOCALSBIN $SBIN $USRLOCALBIN
 
 source $HOME/.config/fish/aliases.fish
 
