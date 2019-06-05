@@ -6,6 +6,7 @@ let g:ale_sign_info = 'ℹ'
 let g:ale_linters = {
     \ 'go': [ 'golangci-lint' ],
     \ 'haskell': [
+        \ 'cabal-ghc',
         \ 'stack-build',
         \ 'hlint',
         \ 'hie',
