@@ -10,9 +10,9 @@ repository:
 - **Desktop**:
   - [alacritty](https://github.com/jwilm/alacritty):
     A cross-platform, GPU-accelerated terminal emulator
-  - [arc](https://github.com/NicoHood/arc-theme)
+  - [arc](https://github.com/NicoHood/arc-theme):
     The GTK theme
-  - [bibata](https://github.com/KaizIqbal/Bibata_Cursor)
+  - [bibata](https://github.com/KaizIqbal/Bibata_Cursor):
     Beatiful cursor theme
   - [chromium](https://github.com/chromium/chromium):
     The well-known browser
