@@ -17,6 +17,7 @@ let g:ale_linters = {
     \ }
 let g:ale_fixers = {
     \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \ 'asciidoc': [ 'alex', 'textlint', 'proselint', 'write-good' ],
     \ 'c': [ 'clang-format' ],
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
@@ -25,7 +26,7 @@ let g:ale_fixers = {
     \ 'less': [ 'prettier' ],
     \ 'javascript': [ 'prettier' ],
     \ 'json': [ 'prettier' ],
-    \ 'markdown': [ 'prettier' ],
+    \ 'markdown': [ 'prettier', 'alex', 'textlint', 'proselint', 'write-good' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
     \ 'scss': [ 'prettier' ],
