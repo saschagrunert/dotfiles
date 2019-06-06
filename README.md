@@ -49,10 +49,14 @@ repository:
   - [xautolock](https://github.com/l0b0/xautolock):
     Automatically locks the screen after a certain amount of time
 - **Vim**:
+  - [alex](https://github.com/get-alex/alex)
+    Needed for ALE Markdown/asciidoc linting and fixing
   - [cscope](http://cscope.sourceforge.net):
     Tool for source code indexing and querying
   - [ctags](http://ctags.sourceforge.net):
     Generates tags file for source code discovery
+  - [floskell](https://github.com/ennocramer/floskell)
+    Needed for ALE Haskell linting and fixing
   - [node](https://github.com/nodejs/node):
     Needed for YouCompleteMe typescript/javascript support
   - [npm](https://github.com/npm/cli):
@@ -73,6 +77,8 @@ repository:
     Needed for ALE python linting and fixing
   - [prettier](https://github.com/prettier/prettier):
     Needed for general ALE linting and fixing
+  - [proselint](https://github.com/amperser/proselint)
+    Needed for ALE Markdown/asciidoc linting and fixing
   - [rls](https://github.com/rust-lang/rls):
     Needed for ALE rust linting and fixing
   - [rustfmt](https://github.com/rust-lang/rustfmt):
@@ -81,8 +87,12 @@ repository:
     Needed for ALE bash/sh linting and fixing
   - [shfmt](https://github.com/mvdan/sh):
     Needed for ALE bash/sh linting and fixing
+  - [textlint](https://github.com/textlint/textlint)
+    Needed for ALE Markdown/asciidoc linting and fixing
   - [tflint](https://github.com/wata727/tflint):
     Needed for ALE terraform linting and fixing
+  - [write-good](https://github.com/btford/write-good)
+    Needed for ALE Markdown/asciidoc linting and fixing
   - [yapf](https://github.com/google/yapf):
     Needed for ALE python linting and fixing
   - [yamllint](https://github.com/adrienverge/yamllint):

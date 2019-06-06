@@ -4,6 +4,7 @@ let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
 let g:ale_sign_info = 'ℹ'
 let g:ale_linters = {
+    \ 'asciidoc': [ 'alex', 'textlint', 'proselint', 'write-good' ],
     \ 'go': [ 'golangci-lint' ],
     \ 'haskell': [
         \ 'stack-build',
@@ -13,11 +14,12 @@ let g:ale_linters = {
     \ 'c': [],
     \ 'cpp': [],
     \ 'html': [],
+    \ 'markdown': [ 'alex', 'textlint', 'proselint', 'write-good' ],
     \ 'rust': [ 'cargo', 'rustc' ],
     \ }
 let g:ale_fixers = {
     \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-    \ 'asciidoc': [ 'alex', 'textlint', 'proselint', 'write-good' ],
+    \ 'asciidoc': [ 'textlint' ],
     \ 'c': [ 'clang-format' ],
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
@@ -26,7 +28,7 @@ let g:ale_fixers = {
     \ 'less': [ 'prettier' ],
     \ 'javascript': [ 'prettier' ],
     \ 'json': [ 'prettier' ],
-    \ 'markdown': [ 'prettier', 'alex', 'textlint', 'proselint', 'write-good' ],
+    \ 'markdown': [ 'prettier', 'textlint' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
     \ 'scss': [ 'prettier' ],
