@@ -9,7 +9,7 @@ let mapleader="\<Space>"
 let maplocalleader="\,"
 
 set shell=bash
-set shortmess=I
+set shortmess+=W
 
 " set language
 let os=substitute(system('uname'), '\n', '', '')
