@@ -31,6 +31,7 @@ Plug 'majutsushi/tagbar'
 Plug 'mbbill/undotree'
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'ryanoasis/vim-devicons'
