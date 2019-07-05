@@ -10,7 +10,7 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_disable_for_files_larger_than_kb = 5000
 let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_filetype_blacklist = {}
-let g:ycm_rust_src_path = '~/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+let g:ycm_rust_src_path = '~/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_show_diagnostics_ui = 1
 
