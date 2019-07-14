@@ -3,7 +3,6 @@ vmap <unique> j <Plug>SchleppDown
 vmap <unique> h <Plug>SchleppLeft
 vmap <unique> l <Plug>SchleppRight
 
-vmap <unique> i        <Plug>SchleppToggleReindent
 vmap <unique> <S-up>   <Plug>SchleppIndentUp
 vmap <unique> <S-down> <Plug>SchleppIndentDown
 
