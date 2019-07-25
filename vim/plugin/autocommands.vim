@@ -1,5 +1,5 @@
 " file type settings
-autocmd FileType ruby,rdoc,cucumber,haskell,yaml setlocal softtabstop=2 tabstop=2 shiftwidth=2
+autocmd FileType typescript,ruby,rdoc,cucumber,haskell,yaml setlocal softtabstop=2 tabstop=2 shiftwidth=2
 autocmd Filetype plaintex,text,markdown,tex setlocal textwidth=80
 
 " Return to last edit position when opening files
