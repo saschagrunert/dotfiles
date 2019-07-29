@@ -10,7 +10,7 @@ window:
     y: 2
   dynamic_padding: false
   decorations: full
-  start_maximized: true
+  startup_mod: FullScreen
 scrolling:
   history: 10000
   multiplier: 3
