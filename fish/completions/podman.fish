@@ -662,5 +662,3 @@ complete -c podman -f -n '__fish_podman_no_subcommand' -a wait -d 'Block on one 
 complete -c podman -A -n '__fish_seen_subcommand_from wait' -s h -l help -f -d 'help for wait'
 complete -c podman -A -n '__fish_seen_subcommand_from wait' -s i -l interval -f -d 'Milliseconds to wait before polling for completion (default 250)'
 complete -c podman -A -n '__fish_seen_subcommand_from wait' -s l -l latest -f -d 'Act on the latest container podman is aware of'
-
-
