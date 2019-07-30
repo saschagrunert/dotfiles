@@ -167,7 +167,7 @@ The following vim plugins are available via these dotfiles:
   Easily search for, substitute, and abbreviate multiple variants of a word
 - [airline](https://github.com/vim-airline/vim-airline):
   Statusline enhancements
-- [ale](https://github.com/w0rp/ale):
+- [ale](https://github.com/dense-analysis/ale):
   Asynchronous linter and fixer
 - [auto-pairs](https://github.com/jiangmiao/auto-pairs):
   Insert or delete brackets, parens, quotes in pair
