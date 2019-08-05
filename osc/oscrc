@@ -1,7 +1,7 @@
 [general]
 apiurl = https://api.opensuse.org
 use_keyring = 1
-checkout_no_colon = 1
+checkout_no_colon = 0
 
 [https://api.opensuse.org]
 keyring=1
