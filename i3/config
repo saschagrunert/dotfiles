@@ -95,19 +95,20 @@ bindsym $mod+Shift+s exec "i3-nagbar -t warning -m 'Shutdown the computer?' -b '
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        bindsym h resize shrink width 20 px or 20 ppt
-        bindsym j resize grow height 20 px or 20 ppt
-        bindsym k resize shrink height 20 px or 20 ppt
-        bindsym l resize grow width 20 px or 20 ppt
-        bindsym odiaeresis resize grow width 20 px or 20 ppt
+    # These bindings trigger as soon as you enter the resize mode
+    bindsym h resize shrink width 20 px or 20 ppt
+    bindsym j resize grow height 20 px or 20 ppt
+    bindsym k resize shrink height 20 px or 20 ppt
+    bindsym l resize grow width 20 px or 20 ppt
+    bindsym odiaeresis resize grow width 20 px or 20 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
 }
 
 bindsym $mod+i mode "resize"
+mouse_warping none
 
 # colors
 set $bg         #282a36
