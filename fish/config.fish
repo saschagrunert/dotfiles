@@ -129,3 +129,4 @@ if functions -q fish_vi_key_bindings
 end
 
 source $HOME/.config/fish/functions/autojump.fish
+source $HOME/.config/fish/functions/kubernetes.fish
