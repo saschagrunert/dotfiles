@@ -14,12 +14,12 @@ repository:
     The GTK theme
   - [bibata](https://github.com/KaizIqbal/Bibata_Cursor):
     Beatiful cursor theme
-  - [chromium](https://github.com/chromium/chromium):
-    The well-known browser
   - [compton](https://github.com/chjj/compton):
     A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
     Lightweight and customizable notification daemon
+  - [firefox](https://github.com/mozilla):
+    The well-known browser
   - [feh](https://github.com/derf/feh):
     A fast and light image viewer
   - [hexchat](https://github.com/hexchat/hexchat):

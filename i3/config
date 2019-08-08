@@ -153,7 +153,7 @@ bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
 
 # start application commands
 bindsym $mod+b exec i3lock-fancy -p
-bindsym $mod+Shift+c exec chromium
+bindsym $mod+Shift+c exec firefox
 bindsym $mod+Shift+m exec spotify
 
 bindsym $mod+y [urgent=latest] focus
@@ -165,6 +165,7 @@ floating_maximum_size -1 x -1
 
 # assign to workspaces
 assign [class="Chromium"] → $ws1
+assign [class="Firefox"] → $ws1
 assign [class="Alacritty"] → $ws2
 assign [class="Thunderbird"] → $ws3
 assign [class="Hexchat"] → $ws3
