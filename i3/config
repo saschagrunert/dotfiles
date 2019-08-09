@@ -108,7 +108,6 @@ mode "resize" {
 }
 
 bindsym $mod+i mode "resize"
-mouse_warping none
 
 # colors
 set $bg         #282a36
