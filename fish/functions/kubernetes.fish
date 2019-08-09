@@ -27,7 +27,7 @@ function k8s-test
     export KUBE_MASTER_IP=$IP
     export KUBE_MASTER=$IP
 
-    cd $GOPATH/src/github.com/cri-o/cri-o
+    cd $GOPATH/src/k8s.io/kubernetes
     sudo make ginkgo
     sudo make WHAT=test/e2e/e2e.test
 
