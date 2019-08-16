@@ -33,7 +33,5 @@ function k8s-test
 
     sudo -E go run hack/e2e.go \
         --get=true -- --test --provider=local \
-        --test_args="-host=https://$IP:6443 \
-                     -ginkgo.succinct \
-                     -ginkgo.focus $argv"
+        --test_args="-host=https://$IP:6443 $argv"
 end
