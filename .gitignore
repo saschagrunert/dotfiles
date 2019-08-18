@@ -1,5 +1,6 @@
 *.dylib
 *.o
+*.old
 *.orig
 *.py[cod]
 *.so
@@ -7,8 +8,8 @@
 .DS_Store
 .gdb_history
 .netrwhist
-fish/fishd*
 fish/fish_variables
+fish/fishd*
 ranger/bookmarks
 ranger/history
 ranger/tagged
