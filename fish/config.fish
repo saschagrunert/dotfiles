@@ -9,37 +9,42 @@ set -x MAN_POSIXLY_CORRECT 1
 if test -d $HOME/go
     set -x GOPATH $HOME/go
     set -x GOBIN $GOPATH/bin
+    set -a __my_path $GOBIN
 end
 
 if test -d $HOME/.cargo/bin
-    set -x CARGOBIN $HOME/.cargo/bin
+    set -a __my_path $HOME/.cargo/bin
 end
 
 if test -d $HOME/.local/bin
-    set -x HOMELOCALBIN $HOME/.local/bin
+    set -a __my_path $HOME/.local/bin
 end
 
 if test -d /usr/lib64/ccache
-    set -x CCACHEBIN /usr/lib64/ccache
+    set -a __my_path /usr/lib64/ccache
 end
 
 if test -d /usr/local/sbin
-    set -x LOCALSBIN /usr/local/sbin
+    set -a __my_path /usr/local/sbin
 end
 
 if test -d /usr/local/bin
-    set -x USRLOCALBIN /usr/local/bin
+    set -a __my_path /usr/local/bin
 end
 
 if test -d /usr/sbin
-    set -x SBIN /usr/sbin
+    set -a __my_path /usr/sbin
+end
+
+if test -d /sbin
+    set -a __my_path /sbin
 end
 
 if test -d $HOME/.npm-global/bin
-    set -x NPMBIN $HOME/.npm-global/bin
+    set -a __my_path $HOME/.npm-global/bin
 end
 
-set -U fish_user_paths $CCACHEBIN $CARGOBIN $HOMELOCALBIN $GOBIN $NPMBIN $LOCALSBIN $SBIN $USRLOCALBIN
+set -U fish_user_paths $__my_path
 
 source $HOME/.config/fish/aliases.fish
 
