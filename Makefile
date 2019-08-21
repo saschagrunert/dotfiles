@@ -39,7 +39,7 @@ install: gitconfig-user
 	$(LN) "$$PWD"/htop ~/.config/htop
 	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.i3
-	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf ~/.local/share/fonts/
+	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
 	$(LN) "$$PWD"/osc ~/.config/osc
 	$(LN) "$$PWD"/ranger ~/.config/ranger
@@ -71,7 +71,7 @@ uninstall:
 	rm ~/.config/htop
 	rm ~/.i3
 	rm ~/.icons
-	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.otf
+	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf
 	rm ~/.config/nixpkgs
 	rm ~/.config/osc
 	rm ~/.config/ranger
