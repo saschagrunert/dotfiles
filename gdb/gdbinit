@@ -1009,11 +1009,9 @@ instructions constituting the current statement are marked, if available."""
         frame = gdb.selected_frame()  # PC is here
         disassemble = frame.architecture().disassemble
         try:
-            # try to fetch the function boundaries using the disassemble command
-            output = run('disassemble').split('\n')
-            start = int(re.split('[ :]', output[1][3:], 1)[0], 16)
-            end = int(re.split('[ :]', output[-3][3:], 1)[0], 16)
-            asm = disassemble(start, end_pc=end)
+            # disassemble the current block
+            block = gdb.block_for_pc(frame.pc())
+            asm = disassemble(block.start, end_pc=block.end - 1)
             # find the location of the PC
             pc_index = next(index for index, instr in enumerate(asm)
                             if instr['addr'] == frame.pc())
@@ -1024,7 +1022,7 @@ instructions constituting the current statement are marked, if available."""
             # line_info is not None but line_info.last is None
             line_info = gdb.find_pc_line(frame.pc())
             line_info = line_info if line_info.last else None
-        except (gdb.error, StopIteration):
+        except (gdb.error, RuntimeError, StopIteration):
             # if it is not possible (stripped binary or the PC is not present in
             # the output of `disassemble` as per issue #31) start from PC and
             # end after twice the context
@@ -1133,6 +1131,84 @@ instructions constituting the current statement are marked, if available."""
             }
         }
 
+class Variables(Dashboard.Module):
+    """Show arguments and locals of the selected frame."""
+
+    def label(self):
+        return 'Variables'
+
+    def lines(self, term_width, style_changed):
+        return Variables.format_variables(
+            gdb.selected_frame(),
+            self.show_arguments, self.show_locals, self.compact)
+
+    def attributes(self):
+        return {
+            'arguments': {
+                'doc': 'Frame arguments visibility flag.',
+                'default': True,
+                'name': 'show_arguments',
+                'type': bool
+            },
+            'locals': {
+                'doc': 'Frame locals visibility flag.',
+                'default': True,
+                'name': 'show_locals',
+                'type': bool
+            },
+            'compact': {
+                'doc': 'Single-line display flag.',
+                'default': False,
+                'type': bool
+            }
+        }
+
+    @staticmethod
+    def format_variables(frame, show_arguments, show_locals, compact):
+        out = []
+        # fetch frame arguments and locals
+        decorator = gdb.FrameDecorator.FrameDecorator(frame)
+        separator = ansi(', ', R.style_low)
+        if show_arguments:
+            def prefix(line):
+                return Stack.format_line('arg', line)
+            frame_args = decorator.frame_args()
+            args_lines = Variables.fetch(frame, frame_args, compact)
+            if args_lines:
+                if compact:
+                    args_line = separator.join(args_lines)
+                    single_line = prefix(args_line)
+                    out.append(single_line)
+                else:
+                    out.extend(map(prefix, args_lines))
+            else:
+                out.append(ansi('(no arguments)', R.style_low))
+        if show_locals:
+            def prefix(line):
+                return Stack.format_line('loc', line)
+            frame_locals = decorator.frame_locals()
+            locals_lines = Variables.fetch(frame, frame_locals, compact)
+            if locals_lines:
+                if compact:
+                    locals_line = separator.join(locals_lines)
+                    single_line = prefix(locals_line)
+                    out.append(single_line)
+                else:
+                    out.extend(map(prefix, locals_lines))
+            else:
+                out.append(ansi('(no locals)', R.style_low))
+        return out
+
+    @staticmethod
+    def fetch(frame, data, compact):
+        lines = []
+        for elem in data or []:
+            name = elem.sym
+            equal = ansi('=', R.style_low)
+            value = format_value(elem.sym.value(frame), compact)
+            lines.append('{} {} {}'.format(name, equal, value))
+        return lines
+
 class Stack(Dashboard.Module):
     """Show the current stack trace including the function name and the file
 location, if available. Optionally list the frame arguments and locals too."""
@@ -1165,37 +1241,9 @@ location, if available. Optionally list the frame arguments and locals too."""
             info = Stack.get_pc_line(frame, style)
             frame_lines = []
             frame_lines.append('[{}] {}'.format(frame_id, info))
-            # fetch frame arguments and locals
-            decorator = gdb.FrameDecorator.FrameDecorator(frame)
-            separator = ansi(', ', R.style_low)
-            if self.show_arguments:
-                def prefix(line):
-                    return Stack.format_line('arg', line)
-                frame_args = decorator.frame_args()
-                args_lines = self.fetch_frame_info(frame, frame_args)
-                if args_lines:
-                    if self.compact:
-                        args_line = separator.join(args_lines)
-                        single_line = prefix(args_line)
-                        frame_lines.append(single_line)
-                    else:
-                        frame_lines.extend(map(prefix, args_lines))
-                else:
-                    frame_lines.append(ansi('(no arguments)', R.style_low))
-            if self.show_locals:
-                def prefix(line):
-                    return Stack.format_line('loc', line)
-                frame_locals = decorator.frame_locals()
-                locals_lines = self.fetch_frame_info(frame, frame_locals)
-                if locals_lines:
-                    if self.compact:
-                        locals_line = separator.join(locals_lines)
-                        single_line = prefix(locals_line)
-                        frame_lines.append(single_line)
-                    else:
-                        frame_lines.extend(map(prefix, locals_lines))
-                else:
-                    frame_lines.append(ansi('(no locals)', R.style_low))
+            # add frame arguments and locals
+            frame_lines.extend(Variables.format_variables(
+                frame, self.show_arguments, self.show_locals, self.compact))
             # add frame
             frames.append(frame_lines)
             # next
@@ -1214,15 +1262,6 @@ location, if available. Optionally list the frame arguments and locals too."""
         # add the placeholder
         if more:
             lines.append('[{}]'.format(ansi('+', R.style_selected_2)))
-        return lines
-
-    def fetch_frame_info(self, frame, data):
-        lines = []
-        for elem in data or []:
-            name = elem.sym
-            equal = ansi('=', R.style_low)
-            value = format_value(elem.sym.value(frame), self.compact)
-            lines.append('{} {} {}'.format(name, equal, value))
         return lines
 
     @staticmethod
@@ -1262,13 +1301,13 @@ location, if available. Optionally list the frame arguments and locals too."""
         return {
             'limit': {
                 'doc': 'Maximum number of displayed frames (0 means no limit).',
-                'default': 2,
+                'default': 10,
                 'type': int,
                 'check': check_ge_zero
             },
             'arguments': {
                 'doc': 'Frame arguments visibility flag.',
-                'default': True,
+                'default': False,
                 'name': 'show_arguments',
                 'type': bool
             },
@@ -1469,11 +1508,18 @@ class Registers(Dashboard.Module):
         # skip if the current thread is not stopped
         if not gdb.selected_thread().is_stopped():
             return []
+        # obtain the registers to display
+        if style_changed:
+            self.table = {}
+        if self.register_list:
+            register_list = self.register_list.split()
+        else:
+            register_list = list(map(lambda line: line.split(None, 1)[0],
+                                     run('info registers').strip().split('\n')))
+
         # fetch registers status
         registers = []
-        for reg_info in run('info registers').strip().split('\n'):
-            # fetch register and update the table
-            name = reg_info.split(None, 1)[0]
+        for name in register_list:
             # Exclude registers with a dot '.' or parse_and_eval() will fail
             if '.' in name:
                 continue
@@ -1488,15 +1534,10 @@ class Registers(Dashboard.Module):
         max_name = max(len(name) for name, _, _ in registers)
         max_value = max(len(value) for _, value, _ in registers)
         max_width = max_name + max_value + 2
-        per_line = int((term_width + 1) / max_width) or 1
+        per_line = min(int((term_width + 1) / max_width) or 1, len(registers))
         # redistribute extra space among columns
         extra = int((term_width + 1 - max_width * per_line) / per_line)
-        if per_line == 1:
-            # center when there is only one column
-            max_name += int(extra / 2)
-            max_value += int(extra / 2)
-        else:
-            max_value += extra
+        max_name += int(extra / 2)
         # format registers info
         partial = []
         for name, value, changed in registers:
@@ -1524,6 +1565,12 @@ class Registers(Dashboard.Module):
                 'default': False,
                 'name': 'column_major',
                 'type': bool
+            },
+            'list': {
+                'doc': """String of space-separated register names to display.
+The empty list (default) causes to show all the available registers.""",
+                'default': '',
+                'name': 'register_list',
             }
         }
 
@@ -1552,13 +1599,22 @@ class Threads(Dashboard.Module):
         restore_frame = gdb.selected_thread().is_stopped()
         if restore_frame:
             selected_frame = gdb.selected_frame()
-        for thread in gdb.Inferior.threads(gdb.selected_inferior()):
+        # fetch the thread list
+        threads = []
+        for inferior in gdb.inferiors():
+            if self.all_inferiors or inferior == gdb.selected_inferior():
+                threads += gdb.Inferior.threads(inferior)
+        for thread in threads:
             # skip running threads if requested
             if self.skip_running and thread.is_running():
                 continue
             is_selected = (thread.ptid == selected_thread.ptid)
             style = R.style_selected_1 if is_selected else R.style_selected_2
-            number = ansi(str(thread.num), style)
+            if self.all_inferiors:
+                number = '{}.{}'.format(thread.inferior.num, thread.num)
+            else:
+                number = str(thread.num)
+            number = ansi(number, style)
             tid = ansi(str(thread.ptid[1] or thread.ptid[2]), style)
             info = '[{}] id {}'.format(number, tid)
             if thread.name:
@@ -1584,7 +1640,13 @@ class Threads(Dashboard.Module):
                 'default': False,
                 'name': 'skip_running',
                 'type': bool
-            }
+            },
+            'all-inferiors': {
+                'doc': 'Show threads from all inferiors.',
+                'default': False,
+                'name': 'all_inferiors',
+                'type': bool
+            },
         }
 
 class Expressions(Dashboard.Module):
