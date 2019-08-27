@@ -4,16 +4,22 @@ function k8s-up
     export CONTAINER_RUNTIME_ENDPOINT=/var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
 
-    set -l IP (hostname --ip-address)
+    set -l IP (__ip)
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
 
+    cd $GOPATH/src/k8s.io/kubernetes
+    sudo -E hack/local-up-cluster.sh
+end
+
+function crio-up
     cd $GOPATH/src/github.com/cri-o/cri-o
     make bin/crio
     sudo bin/crio &
+end
 
-    cd $GOPATH/src/k8s.io/kubernetes
-    sudo -E hack/local-up-cluster.sh
+function __ip
+    ip route get 1.2.3.4 | cut -d ' ' -f7 | tr -d '[:space:]'
 end
 
 function k8s-test
@@ -22,7 +28,7 @@ function k8s-test
     export PATH="$GOPATH/src/k8s.io/kubernetes/third_party/etcd $PATH"
     export PATH="$GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64 $PATH"
 
-    set -l IP (hostname --ip-address)
+    set -l IP (__ip)
     export KUBE_MASTER_URL=$IP
     export KUBE_MASTER_IP=$IP
     export KUBE_MASTER=$IP
