@@ -5,6 +5,7 @@ function k8s-up
     export ALLOW_PRIVILEGED=1
 
     set -l IP (__ip)
+    echo "Using IP: $IP"
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
 
