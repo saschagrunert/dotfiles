@@ -38,7 +38,8 @@ function k8s-test
     sudo make ginkgo
     sudo make WHAT=test/e2e/e2e.test
 
-    sudo -E go run hack/e2e.go \
-        --get=true -- --test --provider=local \
-        --test_args="-host=https://$IP:6443 $argv"
+    sudo -E _output/bin/e2e.test \
+        --provider=local \
+        --host=https://$IP:6443 \
+        $argv
 end
