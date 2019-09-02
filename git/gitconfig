@@ -21,7 +21,6 @@
 [difftool]
     prompt = false
 [http]
-    sslVerify = false
     postBuffer = 524288000
 [core]
     editor = vim
