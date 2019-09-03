@@ -40,6 +40,8 @@ install: gitconfig-user
 	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.i3
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
+	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
+	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
 	$(LN) "$$PWD"/osc ~/.config/osc
 	$(LN) "$$PWD"/ranger ~/.config/ranger
@@ -72,6 +74,8 @@ uninstall:
 	rm ~/.i3
 	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf
+	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf
+	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf
 	rm ~/.config/nixpkgs
 	rm ~/.config/osc
 	rm ~/.config/ranger
@@ -91,6 +95,10 @@ update:
 upgrade: update
 	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Regular/complete/Meslo%20LG%20S%20DZ%20Regular%20Nerd%20Font%20Complete.ttf \
 		-o "fonts/Meslo LG S DZ Regular Nerd Font Complete.ttf"
+	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Bold/complete/Meslo%20LG%20S%20DZ%20Bold%20Nerd%20Font%20Complete.ttf \
+		-o "fonts/Meslo LG S DZ Bold Nerd Font Complete.ttf"
+	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Italic/complete/Meslo%20LG%20S%20DZ%20Italic%20Nerd%20Font%20Complete.ttf \
+		-o "fonts/Meslo LG S DZ Italic Nerd Font Complete.ttf"
 	$(CURL) https://github.com/cyrus-and/gdb-dashboard/raw/master/.gdbinit \
 		-o gdb/gdbinit
 	$(CURL) https://github.com/evanlucas/fish-kubectl-completions/raw/master/completions/kubectl.fish \
