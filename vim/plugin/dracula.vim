@@ -1,5 +1,5 @@
-let g:dracula_italic = 1
-let g:dracula_bold = 1
+let g:dracula_italic = 0
+let g:dracula_bold = 0
 let g:dracula_underline = 1
 
 syntax on
