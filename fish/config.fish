@@ -9,7 +9,6 @@ set -x MAN_POSIXLY_CORRECT 1
 if test -d $HOME/go
     set -x GOPATH $HOME/go
     set -x GOBIN $GOPATH/bin
-    set -x GOPROXY https://proxy.golang.org
     set -a __my_path $GOBIN
 end
 
