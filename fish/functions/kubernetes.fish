@@ -18,7 +18,7 @@ end
 function crio-up
     cd $GOPATH/src/github.com/cri-o/cri-o
     make bin/crio
-    sudo bin/crio &
+    sudo bin/crio
 end
 
 function __ip
