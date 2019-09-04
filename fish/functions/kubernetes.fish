@@ -25,7 +25,7 @@ function __ip
     ip route get 1.2.3.4 | cut -d ' ' -f7 | tr -d '[:space:]'
 end
 
-function k8s-test
+function k8s-env
     export KUBE_CONTAINER_RUNTIME=remote
     export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
     export PATH="$GOPATH/src/k8s.io/kubernetes/third_party/etcd $PATH"
@@ -35,10 +35,20 @@ function k8s-test
     export KUBE_MASTER_URL=$IP
     export KUBE_MASTER_IP=$IP
     export KUBE_MASTER=$IP
+end
+
+function k8s-test
+    k8s-env
 
     cd $GOPATH/src/k8s.io/kubernetes
     sudo make ginkgo
     sudo make WHAT=test/e2e/e2e.test
+
+    k8s-test-run $argv
+end
+
+function k8s-test-run
+    k8s-env
 
     sudo -E _output/bin/e2e.test \
         --provider=local \
