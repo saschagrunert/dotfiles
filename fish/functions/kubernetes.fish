@@ -11,7 +11,9 @@ function k8s-up
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
 
+    k8s-env
     cd $GOPATH/src/k8s.io/kubernetes
+    hack/install-etcd.sh
     sudo -E hack/local-up-cluster.sh
 end
 
