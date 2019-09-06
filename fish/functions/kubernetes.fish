@@ -1,17 +1,18 @@
 function k8s-up
+    sudo systemctl stop ufw
+
+    set -l IP (__ip)
+    echo "Using IP: $IP"
+
     export CONTAINER_RUNTIME=remote
     export CGROUP_DRIVER=cgroupfs
     export CONTAINER_RUNTIME_ENDPOINT=/var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
-
-    # Prepare networking
-    sudo systemctl stop ufw
-    nmcli con down SUSE
-
-    set -l IP (__ip)
-    echo "Using IP: $IP"
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
+    export KUBE_ENABLE_CLUSTER_DASHBOARD=true
+    export SERVICE_CLUSTER_IP_RANGE=12.0.0.0/24
+    export FIRST_SERVICE_CLUSTER_IP=12.0.0.1
 
     cd $GOPATH/src/k8s.io/kubernetes
     hack/install-etcd.sh
