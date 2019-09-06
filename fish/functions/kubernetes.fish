@@ -4,13 +4,14 @@ function k8s-up
     export CONTAINER_RUNTIME_ENDPOINT=/var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
 
+    # Prepare networking
     sudo systemctl stop ufw
     nmcli con down SUSE
+
     set -l IP (__ip)
     echo "Using IP: $IP"
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
-    export KUBE_ENABLE_CLUSTER_DASHBOARD=true
 
     cd $GOPATH/src/k8s.io/kubernetes
     hack/install-etcd.sh
