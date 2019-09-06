@@ -11,9 +11,9 @@ function k8s-up
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
 
-    k8s-env
     cd $GOPATH/src/k8s.io/kubernetes
     hack/install-etcd.sh
+    export PATH="$GOPATH/src/k8s.io/kubernetes/third_party/etcd $PATH"
     sudo -E hack/local-up-cluster.sh
 end
 
@@ -30,7 +30,6 @@ end
 function k8s-env
     export KUBE_CONTAINER_RUNTIME=remote
     export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
-    export PATH="$GOPATH/src/k8s.io/kubernetes/third_party/etcd $PATH"
     export PATH="$GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64 $PATH"
 
     set -l IP (__ip)
