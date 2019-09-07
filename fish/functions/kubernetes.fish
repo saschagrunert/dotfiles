@@ -11,7 +11,6 @@ function k8s-up
     echo "Using IP: $IP"
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
-    export KUBE_ENABLE_CLUSTER_DASHBOARD=true
 
     cd $GOPATH/src/k8s.io/kubernetes
     hack/install-etcd.sh
