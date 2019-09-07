@@ -3,6 +3,7 @@ function k8s-up
     export CGROUP_DRIVER=cgroupfs
     export CONTAINER_RUNTIME_ENDPOINT=/var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
+    export ENABLE_HOSTPATH_PROVISIONER=true
 
     sudo systemctl stop ufw
     nmcli con down SUSE
