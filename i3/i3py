@@ -20,11 +20,23 @@ DRACULA_THEME = {
     "yellow": "#f1fa8c",
 }
 
-status.register("clock",
-                format=" %H:%M:%S   %a %-d %b W%V",)
+status.register(
+    "clock",
+    format=" %H:%M:%S   %a %-d %b W%V",
+)
 
-status.register("cpu_usage",
-                format=" {usage}%",)
+status.register(
+    "battery",
+    interval=5,
+    format=' {percentage_design:.2f}% {glyph}',
+    alert=True,
+    alert_percentage=15,
+)
+
+status.register(
+    "cpu_usage",
+    format=" {usage}%",
+)
 
 status.register("cpu_usage_graph",
                 start_color=DRACULA_THEME["green"],
@@ -39,12 +51,9 @@ status.register("mem",
                 format=" {used_mem}/{avail_mem} GiB",
                 divisor=1024**3)
 
-status.register("temp",
-                format=" {temp:.0f}°C")
+status.register("temp", format=" {temp:.0f}°C")
 
-status.register("disk",
-                path="/",
-                format=" {used}/{total}G [{avail}G]")
+status.register("disk", path="/", format=" {used}/{total}G [{avail}G]")
 
 status.register("backlight",
                 format=" {percentage}%",
