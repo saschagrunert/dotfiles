@@ -31,6 +31,10 @@ status.register(
     format='  {percentage_design:.2f}% {glyph}',
     alert=True,
     alert_percentage=15,
+    color=DRACULA_THEME["foreground"],
+    full_color=DRACULA_THEME["foreground"],
+    charging_color=DRACULA_THEME["green"],
+    critical_color=DRACULA_THEME["red"],
 )
 
 status.register(
