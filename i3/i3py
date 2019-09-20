@@ -28,7 +28,7 @@ status.register(
 status.register(
     "battery",
     interval=5,
-    format=' {percentage_design:.2f}% {glyph}',
+    format='  {percentage_design:.2f}% {glyph}',
     alert=True,
     alert_percentage=15,
 )
