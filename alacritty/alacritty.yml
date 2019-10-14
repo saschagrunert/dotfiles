@@ -49,7 +49,7 @@ colors:
     cyan: '0x8be9fd'
     white: '0xbfbfbf'
   bright:
-    black: '0x282a35'
+    black: '0x44475a'
     red: '0xff6e67'
     green: '0x5af78e'
     yellow: '0xf4f99d'
