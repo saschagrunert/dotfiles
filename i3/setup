@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
 # Adapt the display layout if needed
+
+# Workstation
+if [[ $(xrandr --listmonitors | grep DP-0) ]]; then
+    xrandr --output DP-2 --left-of DP-0
+    i3-msg restart
+fi
+
+# Docking station
 if [[ $(xrandr --listmonitors | grep DP1-2) ]]; then
     xrandr --output DP1-1 --left-of DP1-2 --output eDP1 --right-of DP1-2
     i3-msg restart
