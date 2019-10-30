@@ -144,6 +144,8 @@ bar {
 # where to output the workspaces
 workspace $ws1 output DP-2
 workspace $ws2 output DP-0
+workspace $ws3 output DP-0
+workspace $ws4 output DP-0
 
 # take a screenshot
 bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
