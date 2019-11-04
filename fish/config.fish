@@ -135,3 +135,7 @@ end
 
 source $HOME/.config/fish/functions/autojump.fish
 source $HOME/.config/fish/functions/kubernetes.fish
+
+if test -d $HOME/google-cloud-sdk
+    source $HOME/google-cloud-sdk/path.fish.inc
+end
