@@ -8,6 +8,13 @@ if [[ $(xrandr --listmonitors | grep DP-0) ]]; then
     i3-msg restart
 fi
 
+# Laptop
+if [[ $(xrandr --listmonitors | grep DP1-2) ]]; then
+    xrandr --output DP1-1 --left-of eDP1
+    xrandr --output DP1-2 --left-of DP1-1
+    i3-msg restart
+fi
+
 # Set the wallpaper
 feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 
