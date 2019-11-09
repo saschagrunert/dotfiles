@@ -159,7 +159,7 @@ bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
 
 # start application commands
 bindsym $mod+b exec i3lock-fancy -p
-bindsym $mod+Shift+c exec firefox
+bindsym $mod+Shift+c exec chromium
 bindsym $mod+Shift+m exec spotify
 
 bindsym $mod+y [urgent=latest] focus
