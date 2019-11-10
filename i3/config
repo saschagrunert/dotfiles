@@ -87,9 +87,6 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+p restart
 bindsym $mod+p reload
 
-# exit i3
-bindsym $mod+Shift+o exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit i3' 'i3-msg exit'"
-
 # shutdown computer
 bindsym $mod+Shift+s exec "i3-nagbar -t warning -m 'Shutdown the computer?' -b 'Yes' 'sudo shutdown -P now'"
 
@@ -149,9 +146,9 @@ workspace $ws2 output DP-0
 workspace $ws2 output DP1-1
 
 workspace $ws3 output DP-0
-workspace $ws4 output DP-0
-
 workspace $ws3 output eDP1
+
+workspace $ws4 output DP-0
 workspace $ws4 output eDP1
 
 # take a screenshot
@@ -175,7 +172,6 @@ assign [class="Firefox"] → $ws1
 assign [class="Alacritty"] → $ws2
 assign [class="Thunderbird"] → $ws3
 assign [class="Hexchat"] → $ws3
-assign [class="Mumble"] → $ws3
 for_window [class="Spotify"] move to workspace $ws4
 
 # other window settings
