@@ -4,7 +4,8 @@
 
 # Workstation
 if [[ $(xrandr --listmonitors | grep DP-0) ]]; then
-    xrandr --output DP-2 --left-of DP-0
+    xrandr --output DP-0 --primary --mode 1920x1080 --pos 1920x0 \
+        --output DP-2 --mode None --pos 0x0
     i3-msg restart
 fi
 
