@@ -2,8 +2,6 @@
 
 ### My personal dotfiles, crafted with ❤️
 
-## Toolchain
-
 The following dependencies are needed to use all features from this dotfile
 repository:
 
