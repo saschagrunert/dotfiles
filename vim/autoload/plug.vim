@@ -1275,7 +1275,7 @@ function! s:spawn(name, cmd, opts)
     \ 'on_stdout': function('s:nvim_cb'),
     \ 'on_exit':   function('s:nvim_cb'),
     \ })
-    let jid = jobstart(argv, job)
+    let jid = s:plug_call('jobstart', argv, job)
     if jid > 0
       let job.jobid = jid
     else
@@ -2482,7 +2482,9 @@ function! s:diff()
     call s:append_ul(2, origin ? 'Pending updates:' : 'Last update:')
     for [k, v] in plugs
       let range = origin ? '..origin/'.v.branch : 'HEAD@{1}..'
-      let cmd = 'git log --graph --color=never '.join(map(['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range], 'plug#shellescape(v:val)'))
+      let cmd = 'git log --graph --color=never '
+      \ . (s:git_version_requirement(2, 10, 0) ? '--no-show-signature ' : '')
+      \ . join(map(['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range], 'plug#shellescape(v:val)'))
       if has_key(v, 'rtp')
         let cmd .= ' -- '.plug#shellescape(v.rtp)
       endif
