@@ -1,6 +1,6 @@
 # Dotfiles
 
-### My personal dotfiles, crafted with ❤️
+### My dotfiles, crafted with ❤️
 
 The following dependencies are needed to use all features from this dotfile
 repository:
