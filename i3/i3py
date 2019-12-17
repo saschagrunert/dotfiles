@@ -22,13 +22,13 @@ DRACULA_THEME = {
 
 status.register(
     "clock",
-    format=" %H:%M:%S   %a %-d %b W%V",
+    format="  %H:%M:%S   %a %-d %b W%V",
 )
 
 status.register(
     "battery",
     interval=5,
-    format='  {percentage_design:.2f}% {glyph}',
+    format='   {percentage_design:.2f}% {glyph}',
     alert=True,
     alert_percentage=15,
     color=DRACULA_THEME["foreground"],
@@ -39,7 +39,7 @@ status.register(
 
 status.register(
     "cpu_usage",
-    format=" {usage}%",
+    format="  {usage}%",
 )
 
 status.register("cpu_usage_graph",
@@ -52,15 +52,15 @@ status.register("mem",
                 color=DRACULA_THEME["foreground"],
                 warn_color=DRACULA_THEME["yellow"],
                 alert_color=DRACULA_THEME["red"],
-                format=" {used_mem}/{avail_mem} GiB",
+                format="  {used_mem}/{avail_mem} GiB",
                 divisor=1024**3)
 
-status.register("temp", format=" {temp:.0f}°C")
+status.register("temp", format="  {temp:.0f}°C")
 
-status.register("disk", path="/", format=" {used}/{total}G [{avail}G]")
+status.register("disk", path="/", format="  {used}/{total}G [{avail}G]")
 
 status.register("backlight",
-                format=" {percentage}%",
+                format="  {percentage}%",
                 on_leftclick="lighter",
                 on_rightclick="darker",
                 color=DRACULA_THEME["foreground"])
@@ -69,7 +69,7 @@ status.register("pulseaudio",
                 color_muted=DRACULA_THEME["selection"],
                 color_unmuted=DRACULA_THEME["foreground"],
                 vertical_bar_width=1,
-                format=" {volume}% {volume_bar}")
+                format="  {volume}% {volume_bar}")
 
 status.register("spotify")
 
