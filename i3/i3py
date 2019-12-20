@@ -22,7 +22,7 @@ DRACULA_THEME = {
 
 status.register(
     "clock",
-    format="  %H:%M:%S   %a %-d %b W%V",
+    format="  %H:%M:%S    %a %-d %b W%V",
 )
 
 status.register(
