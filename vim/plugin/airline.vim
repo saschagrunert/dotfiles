@@ -1,4 +1,4 @@
-let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#ale#error_symbol = '✗ '
 let g:airline#extensions#ale#warning_symbol = '⚠ '
