@@ -7,7 +7,6 @@ au FileType go nmap <leader>t <Plug>(go-test)
 au FileType go setlocal listchars=tab:\ \ ,trail:·,extends:❯,precedes:❮
 
 let g:go_def_mode = 'gopls'
-let g:go_fmt_options= "-s"
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
