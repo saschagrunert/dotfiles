@@ -41,3 +41,4 @@ CNCF
 CRI
 kubelet
 AppArmor
+seccomp
