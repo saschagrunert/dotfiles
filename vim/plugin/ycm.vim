@@ -1,4 +1,4 @@
-let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_allow_changing_updatetime = 0
 let g:ycm_always_populate_location_list = 1
 let g:ycm_autoclose_preview_window_after_insertion = 0
@@ -19,4 +19,4 @@ nnoremap <leader>j :YcmCompleter GoTo<CR>
 nnoremap ycp :YcmCompleter GetParent<CR>
 nnoremap yct :YcmCompleter GetType<CR>
 
-set completeopt=menuone
+set completeopt=popup
