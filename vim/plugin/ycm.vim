@@ -1,4 +1,4 @@
-let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_always_populate_location_list = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
@@ -17,4 +17,5 @@ nnoremap <leader>j :YcmCompleter GoTo<CR>
 nnoremap ycp :YcmCompleter GetParent<CR>
 nnoremap yct :YcmCompleter GetType<CR>
 
-set completeopt+=popup
+set completeopt+=menuone
+set completeopt-=preview
