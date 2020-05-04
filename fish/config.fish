@@ -20,6 +20,10 @@ if test -d $HOME/.local/bin
     set -a __my_path $HOME/.local/bin
 end
 
+if test -d $HOME/.krew/bin
+    set -a __my_path $HOME/.krew/bin
+end
+
 if test -d /usr/lib64/ccache
     set -a __my_path /usr/lib64/ccache
 end
