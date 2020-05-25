@@ -141,3 +141,6 @@ set regexpengine=2
 
 " fancy fillchars
 set fillchars+=vert:│
+
+" max patterns
+set maxmempattern=10000
