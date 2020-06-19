@@ -6,7 +6,7 @@ au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>t <Plug>(go-test)
 au FileType go setlocal listchars=tab:\ \ ,trail:·,extends:❯,precedes:❮
 
-let g:go_gopls_enabled = 0
+let g:go_gopls_enabled = 1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
