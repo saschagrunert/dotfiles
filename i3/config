@@ -175,8 +175,8 @@ assign [class="Hexchat"] → $ws3
 for_window [class="Spotify"] move to workspace $ws4
 
 # other window settings
-new_window pixel 1
-new_float pixel 1
+default_border pixel 1
+default_floating_border pixel 1
 for_window [class=".*"] border pixel 1
 default_orientation horizontal
 workspace_layout default
