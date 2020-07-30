@@ -23,6 +23,7 @@ let g:ale_fixers = {
     \ 'c': [ 'clang-format' ],
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
+    \ 'go': [ 'gofmt', 'goimports' ],
     \ 'haskell': [ 'floskell', 'hlint' ],
     \ 'html': [ 'prettier' ],
     \ 'less': [ 'prettier' ],
