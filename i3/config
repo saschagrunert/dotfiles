@@ -7,7 +7,7 @@ floating_modifier $mod
 
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec konsole
 
 # kill focused window
 bindsym $mod+x kill
@@ -156,7 +156,7 @@ bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
 
 # start application commands
 bindsym $mod+b exec i3lock-fancy -p
-bindsym $mod+Shift+c exec chromium
+bindsym $mod+Shift+c exec firefox
 bindsym $mod+Shift+m exec spotify
 
 bindsym $mod+y [urgent=latest] focus
@@ -170,6 +170,7 @@ floating_maximum_size -1 x -1
 assign [class="Chromium"] → $ws1
 assign [class="Firefox"] → $ws1
 assign [class="Alacritty"] → $ws2
+assign [class="konsole"] → $ws2
 assign [class="Thunderbird"] → $ws3
 assign [class="Hexchat"] → $ws3
 for_window [class="Spotify"] move to workspace $ws4
