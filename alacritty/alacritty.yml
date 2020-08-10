@@ -9,6 +9,7 @@ window:
     x: 2
     y: 2
   dynamic_padding: false
+  dynamic_title: false
   decorations: full
   startup_mod: FullScreen
 scrolling:
@@ -54,7 +55,7 @@ colors:
     magenta: '0xff92d0'
     cyan: '0x9aedfe'
     white: '0xe6e6e6'
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
   color: '0xffffff'
@@ -71,7 +72,6 @@ mouse:
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
   save_to_clipboard: true
-dynamic_title: false
 cursor:
   style: Block
   unfocused_hollow: true
