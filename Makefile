@@ -26,9 +26,9 @@ install: gitconfig-user
 	$(LN) "$$PWD"/bat ~/.config/bat
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
 	$(LN) "$$PWD"/ccache/ccache.conf ~/.ccache/ccache.conf
-	$(LN) "$$PWD"/compton/compton.conf ~/.compton.conf
 	$(LN) "$$PWD"/dunst ~/.config/dunst
 	$(LN) "$$PWD"/fish ~/.config/fish
+	$(LN) "$$PWD"/picom ~/.config/picom
 	$(LN) "$$PWD"/gdb/gdbinit ~/.gdbinit
 	$(LN) "$$PWD"/gdb/gdbinit.d ~/.gdbinit.d
 	$(LN) "$$PWD"/ghci/ghci ~/.ghci
@@ -60,9 +60,9 @@ uninstall:
 	rm ~/.config/bat
 	rm ~/.clang-format
 	rm ~/.ccache/ccache.conf
-	rm ~/.compton.conf
 	rm ~/.config/dunst
 	rm ~/.config/fish
+	rm ~/.config/picom
 	rm ~/.gdbinit
 	rm ~/.gdbinit.d
 	rm ~/.ghci

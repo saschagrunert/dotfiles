@@ -12,7 +12,7 @@ repository:
     The GTK theme
   - [bibata](https://github.com/KaizIqbal/Bibata_Cursor):
     Beatiful cursor theme
-  - [compton](https://github.com/chjj/compton):
+  - [picom](https://github.com/yshui/compton):
     A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
     Lightweight and customizable notification daemon
