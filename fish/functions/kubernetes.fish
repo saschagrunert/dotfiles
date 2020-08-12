@@ -30,8 +30,11 @@ end
 
 function k8s-env
     export KUBE_CONTAINER_RUNTIME=remote
-    export KUBECONFIG=/var/run/kubernetes/admin.kubeconfig
+    export KUBERUN=/var/run/kubernetes
+    export KUBECONFIG=$KUBERUN/admin.kubeconfig
     export PATH="$GOPATH/src/k8s.io/kubernetes/_output/local/bin/linux/amd64:$PATH"
+
+    sudo chown (id -u):(id -g) $KUBERUN $KUBECONFIG
 
     set -l IP (__ip)
     export KUBE_MASTER_URL=$IP
