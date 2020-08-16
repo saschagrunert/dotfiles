@@ -5,6 +5,7 @@ set -x GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -x RUST_SRC_PATH $HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
 set -x QT_STYLE_OVERRIDE gtk2
 set -x MAN_POSIXLY_CORRECT 1
+set -x LD_LIBRARY_PATH (nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
 
 if test -d $HOME/go
     set -x GOPATH $HOME/go
@@ -51,10 +52,6 @@ end
 set -U fish_user_paths $__my_path
 
 source $HOME/.config/fish/aliases.fish
-
-if test -d ~/.nix-profile/etc/profile.d
-    bass . ~/.nix-profile/etc/profile.d/nix.sh
-end
 
 function fish_prompt
     set -l last_status $status

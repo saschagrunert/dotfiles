@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
-if which rainbarf >/dev/null; then
-    rainbarf --rgb --width=30 --battery --remaining --bright --skip 1
-fi
+~/.local/bin/rainbarf \
+    --rgb \
+    --width=30 \
+    --battery \
+    --remaining \
+    --bright \
+    --skip 1

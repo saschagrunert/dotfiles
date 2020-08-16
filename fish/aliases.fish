@@ -5,7 +5,7 @@ function grm; git push origin :$argv; and gpl; end
 function gpr; git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]; end
 function gup; git fetch $argv; and git merge $argv/master; and gp; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
-function zy --wraps zypper; sudo zypper $argv; end
+function ns; nix-shell ~/.dotfiles/nix-shell --run "$argv"; end
 
 alias .. "cd ../"
 alias ... "cd ../../"
@@ -83,10 +83,7 @@ alias ta "tmux attach"
 alias tg "cd ~; and tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
-alias up "zy dup; and rup;and nup"
+alias up "rup && sudo nixos-rebuild switch --upgrade"
 alias v "vim"
 alias vr "ranger"
 alias vv "vim -u NONE"
-alias zycl "zy pa --orphaned --unneeded"
-alias zypr "zy se --provides --match-exact"
-alias zyrm "zy rm --clean-deps"

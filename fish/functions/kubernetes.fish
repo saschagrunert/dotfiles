@@ -4,9 +4,6 @@ function k8s-up
     export CONTAINER_RUNTIME_ENDPOINT=/var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
 
-    sudo systemctl stop ufw
-    nmcli con down SUSE
-
     set -l IP (__ip)
     echo "Using IP: $IP"
     export DNS_SERVER_IP=$IP

@@ -6,7 +6,7 @@ let g:tmuxline_preset = {
    \ 'cwin': ['#I', '#W'],
    \ 'x': ['#(~/.vim/scripts/ip)'],
    \ 'y': ['%a', '%d. %b', '%R'],
-   \ 'z': ['  #H']
+   \ 'z': ['  #H']
    \ }
 
 call tmuxline#api#set_theme({

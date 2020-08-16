@@ -121,7 +121,7 @@ set $yellow     #f1fa8c
 
 # Start i3bar to display a workspace bar
 bar {
-    status_command ~/.i3/i3py
+    status_command cd ~/.i3 && nix-shell
     position top
     workspace_buttons yes
     separator_symbol "  "
@@ -168,10 +168,9 @@ floating_maximum_size -1 x -1
 
 # assign to workspaces
 assign [class="Chromium"] → $ws1
-assign [class="Firefox"] → $ws1
 assign [class="Alacritty"] → $ws2
-assign [class="konsole"] → $ws2
 assign [class="Thunderbird"] → $ws3
+assign [class="Daily"] → $ws3
 assign [class="Hexchat"] → $ws3
 for_window [class="Spotify"] move to workspace $ws4
 
