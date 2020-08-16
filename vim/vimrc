@@ -36,7 +36,6 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'ryanoasis/vim-devicons'
 Plug 'saschagrunert/dracula', { 'branch': 'mod' }
-Plug 'scrooloose/nerdcommenter'
 Plug 'tommcdo/vim-exchange'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-characterize'
@@ -49,6 +48,7 @@ Plug 'tpope/vim-markdown', { 'for': 'markdown' }
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-airline/vim-airline'

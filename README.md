@@ -171,6 +171,8 @@ The following vim plugins are available via these dotfiles:
   Insert or delete brackets, parens, quotes in pair
 - [characterize](https://github.com/tpope/vim-characterize):
   Unicode character metadata
+- [commentary](https://github.com/tpope/vim-commentary):
+  Easy commenting
 - [ctrlp](https://github.com/ctrlpvim/ctrlp.vim):
   Fuzzy file, buffer, mru, tag, etc finder.
 - [devicons](https://github.com/ryanoasis/vim-devicons):
@@ -205,8 +207,6 @@ The following vim plugins are available via these dotfiles:
   JavaScript syntax and definitions
 - [markdown](https://github.com/tpope/vim-markdown):
   Markdown syntax and definitions
-- [nerdcommenter](https://github.com/scrooloose/nerdcommenter):
-  Easy commenting
 - [operator-user](https://github.com/kana/vim-operator-user):
   Define your own operator easily
 - [repeat](https://github.com/tpope/vim-repeat):
