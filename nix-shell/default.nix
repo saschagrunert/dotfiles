@@ -8,6 +8,8 @@ stdenv.mkDerivation {
       gpgme
       libapparmor
       libseccomp
+      libselinux
+      lvm2
       pkg-config
     ];
 }
