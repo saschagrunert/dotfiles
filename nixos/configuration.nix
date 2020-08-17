@@ -175,6 +175,7 @@ in
       calc
       chromium
       clang
+      clang-tools
       cmake
       cni-plugins
       conmon
