@@ -261,15 +261,16 @@ in
   fonts = {
     enableDefaultFonts = true;
     fonts = with pkgs; [
-      ubuntu_font_family
       nerdfonts
+      roboto
+      roboto-slab
     ];
 
     fontconfig = {
       penultimate.enable = false;
       defaultFonts = {
-        serif = [ "Ubuntu" ];
-        sansSerif = [ "Ubuntu" ];
+        serif = [ "Roboto Slab" ];
+        sansSerif = [ "Roboto" ];
         monospace = [ "MesloLGSDZ Nerd Font" ];
       };
     };
