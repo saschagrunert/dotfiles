@@ -17,7 +17,7 @@ end
 
 function crio-up
     cd $GOPATH/src/github.com/cri-o/cri-o
-    make bin/crio
+    ns make
     sudo bin/crio
 end
 

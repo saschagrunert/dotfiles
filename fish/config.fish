@@ -21,28 +21,8 @@ if test -d $HOME/.local/bin
     set -a __my_path $HOME/.local/bin
 end
 
-if test -d $HOME/.krew/bin
-    set -a __my_path $HOME/.krew/bin
-end
-
 if test -d /usr/lib64/ccache
     set -a __my_path /usr/lib64/ccache
-end
-
-if test -d /usr/local/sbin
-    set -a __my_path /usr/local/sbin
-end
-
-if test -d /usr/local/bin
-    set -a __my_path /usr/local/bin
-end
-
-if test -d /usr/sbin
-    set -a __my_path /usr/sbin
-end
-
-if test -d /sbin
-    set -a __my_path /sbin
 end
 
 if test -d $HOME/.npm-global/bin
@@ -136,7 +116,3 @@ end
 
 source $HOME/.config/fish/functions/autojump.fish
 source $HOME/.config/fish/functions/kubernetes.fish
-
-if test -d $HOME/google-cloud-sdk
-    source $HOME/google-cloud-sdk/path.fish.inc
-end
