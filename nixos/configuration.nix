@@ -2,15 +2,15 @@
 
 let
   baseconfig = { allowUnfree = true; };
-  unstable = import <nixos-unstable> { config = baseconfig; };
+  unstable = import <nixpkgs-unstable> { config = baseconfig; };
 in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
 
-    <nixos-unstable/nixos/modules/virtualisation/podman.nix>
-    <nixos-unstable/nixos/modules/virtualisation/containers.nix>
-    <nixos-unstable/nixos/modules/config/users-groups.nix>
+    <nixpkgs-unstable/nixos/modules/virtualisation/podman.nix>
+    <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
+    <nixpkgs-unstable/nixos/modules/config/users-groups.nix>
   ];
   disabledModules = [
     "virualisation/podman.nix"
