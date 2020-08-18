@@ -201,6 +201,7 @@ in
       google-cloud-sdk
       hexchat
       htop
+      imagemagick
       iptables
       j4-dmenu-desktop
       jq
