@@ -155,6 +155,9 @@ in
           }
         }
       '';
+      "cni/net.d/99-loopback.conf".text = ''
+        { "cniVersion": "0.3.1", "type": "loopback" }
+      '';
       "crictl.yaml".text = ''
         runtime-endpoint: unix:///var/run/crio/crio.sock
       '';
