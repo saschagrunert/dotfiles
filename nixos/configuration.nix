@@ -229,6 +229,7 @@ in
       tig
       tmux
       unclutter
+      unzip
       wget
       xclip
       xorg.xev
