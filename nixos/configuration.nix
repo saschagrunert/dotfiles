@@ -179,6 +179,7 @@ in
       cmake
       cni-plugins
       conmon
+      conntrack-tools
       cri-o
       cri-tools
       dmenu
