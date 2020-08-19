@@ -31,7 +31,6 @@ in
         };
       };
     };
-    kernelModules = [ "kvm-intel" ];
     kernel = {
       sysctl = {
         "net.ipv4.conf.all.route_localnet" = 1;
@@ -39,6 +38,8 @@ in
         "net.ipv4.conf.default.forwarding" = 1;
       };
     };
+    kernelModules = [ "kvm-intel" ];
+    kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [];
     extraModprobeConfig = "options kvm_intel nested=1";
     loader = {
