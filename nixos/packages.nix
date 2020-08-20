@@ -39,7 +39,6 @@ in
     bat
     binutils
     buildah
-    buildah
     calc
     chromium
     clang
@@ -86,6 +85,7 @@ in
     python3
     ranger
     ripgrep
+    rpm
     runc
     rustup
     shellcheck
