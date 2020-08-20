@@ -72,10 +72,12 @@ in
     jq
     kubectl
     kubernetes
+    kustomize
     lm_sensors
     lshw
     lxappearance
     nixpkgs-fmt
+    nodePackages.prettier
     nodejs
     openssl
     pavucontrol
