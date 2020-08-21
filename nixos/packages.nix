@@ -25,6 +25,9 @@ in
       podman-unwrapped = unstable.podman-unwrapped;
       cri-o = unstable.cri-o;
       cri-o-unwrapped = unstable.cri-o-unwrapped;
+      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+        inherit pkgs;
+      };
     };
   };
 
@@ -82,6 +85,7 @@ in
     pavucontrol
     peek
     picom
+    pkgs.nur.repos.mic92.nixos-shell
     python3
     ranger
     ripgrep
