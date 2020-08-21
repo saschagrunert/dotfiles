@@ -2,9 +2,11 @@
 {
   virtualisation = {
     podman.enable = true;
-    cri-o.enable = false;
+    cri-o.enable = true;
     libvirtd.enable = false;
   };
+
+  systemd.services.crio.enable = false;
 
   programs = {
     fish.enable = true;
