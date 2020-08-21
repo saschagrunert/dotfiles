@@ -1,9 +1,9 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 stdenv.mkDerivation {
   name = "i3pystatus-run";
 
-  LD_LIBRARY_PATH="${pkgs.libpulseaudio}/lib";
+  LD_LIBRARY_PATH = "${pkgs.libpulseaudio}/lib";
 
   buildInputs = with pkgs; [
     libpulseaudio

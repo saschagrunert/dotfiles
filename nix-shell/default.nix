@@ -1,15 +1,15 @@
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 stdenv.mkDerivation {
-    name = "dev-environment";
-    buildInputs = [
-      btrfs-progs
-      glibc
-      glibc.static
-      gpgme
-      libapparmor
-      libseccomp
-      libselinux
-      lvm2
-      pkg-config
-    ];
+  name = "dev-environment";
+  buildInputs = [
+    btrfs-progs
+    glibc
+    glibc.static
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    pkg-config
+  ];
 }
