@@ -7,7 +7,6 @@
     ./security.nix
     ./users.nix
     ./locale.nix
-    ./environment.nix
     ./packages.nix
     ./services.nix
     ./fonts.nix
