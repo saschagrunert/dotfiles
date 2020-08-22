@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-~/.local/bin/rainbarf \
+rainbarf \
     --rgb \
     --width=30 \
     --battery \
