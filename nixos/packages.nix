@@ -67,7 +67,7 @@ in
     gcc
     git
     gnumake
-    go_1_15
+    go
     golangci-lint
     google-cloud-sdk
     hexchat
