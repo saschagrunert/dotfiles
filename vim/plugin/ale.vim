@@ -30,6 +30,7 @@ let g:ale_fixers = {
     \ 'javascript': [ 'prettier' ],
     \ 'json': [ 'prettier' ],
     \ 'markdown': [ 'prettier', 'textlint' ],
+    \ 'nix': [ 'nixpkgs-fmt' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
     \ 'scss': [ 'prettier' ],
