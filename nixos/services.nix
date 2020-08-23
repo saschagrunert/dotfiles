@@ -26,9 +26,11 @@
       enable = true;
       interval = "hourly";
     };
+
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", MODE="0666", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
     '';
+
     actkbd = {
       enable = true;
       bindings = [
@@ -37,6 +39,17 @@
       ];
     };
     upower.enable = true;
+
+    tlp = {
+      enable = true;
+      extraConfig = ''
+        CPU_SCALING_GOVERNOR_ON_BAT=powersave
+        CPU_SCALING_GOVERNOR_ON_AC=performance
+        CPU_MAX_PERF_ON_BAT=30
+        CPU_MAX_PERF_ON_AC=100
+      '';
+    };
+
     xserver = {
       enable = true;
       layout = "de";
