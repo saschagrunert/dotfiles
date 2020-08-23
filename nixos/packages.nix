@@ -82,6 +82,7 @@ in
     kubectl
     kubernetes
     kustomize
+    ldns
     lm_sensors
     lshw
     lxappearance
