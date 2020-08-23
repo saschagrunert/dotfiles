@@ -6,6 +6,7 @@ in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    <nixpkgs-unstable/nixos/modules/services/hardware/tlp.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/cri-o.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/podman.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
@@ -13,6 +14,7 @@ in
   ];
 
   disabledModules = [
+    "services/hardware/tlp.nix"
     "virtualisation/podman.nix"
     "virtualisation/cri-o.nix"
     "config/users-groups.nix"
@@ -22,6 +24,7 @@ in
 
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
+      tlp = unstable.tlp;
       podman = unstable.podman;
       podman-unwrapped = unstable.podman-unwrapped;
       cri-o = unstable.cri-o;
