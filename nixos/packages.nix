@@ -59,6 +59,7 @@ in
     conntrack-tools
     cri-o
     cri-tools
+    ctags
     dmenu
     dunst
     etcd
