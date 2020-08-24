@@ -12,6 +12,7 @@ stdenv.mkDerivation {
     libseccomp
     libselinux
     libtool
+    linuxPackages.bcc
     lvm2
     pkg-config
   ];
