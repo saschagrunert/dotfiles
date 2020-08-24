@@ -45,8 +45,6 @@ in
     apparmor-parser
     arandr
     arc-theme
-    autoconf
-    automake
     autojump
     bat
     binutils

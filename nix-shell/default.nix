@@ -2,6 +2,9 @@ with import <nixpkgs> { };
 stdenv.mkDerivation {
   name = "dev-environment";
   buildInputs = [
+    autoconf
+    automake
+    autoreconf
     btrfs-progs
     glibc
     glibc.static
@@ -9,6 +12,7 @@ stdenv.mkDerivation {
     libapparmor
     libseccomp
     libselinux
+    libtool
     lvm2
     pkg-config
   ];
