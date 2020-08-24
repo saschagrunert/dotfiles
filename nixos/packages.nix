@@ -74,6 +74,7 @@ in
     go
     golangci-lint
     google-cloud-sdk
+    haskellPackages.alex
     hexchat
     htop
     imagemagick
@@ -89,6 +90,8 @@ in
     lxappearance
     nixpkgs-fmt
     nodePackages.prettier
+    nodePackages.textlint
+    nodePackages.write-good
     nodejs
     openssl
     pavucontrol
@@ -96,6 +99,7 @@ in
     perlPackages.Apprainbarf
     picom
     pkgs.nur.repos.mic92.nixos-shell
+    proselint
     python3
     ranger
     ripgrep
