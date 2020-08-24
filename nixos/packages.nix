@@ -69,6 +69,7 @@ in
     file
     fzf
     gcc
+    ghc
     git
     gnumake
     go
