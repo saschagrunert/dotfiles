@@ -4,7 +4,6 @@ stdenv.mkDerivation {
   buildInputs = [
     autoconf
     automake
-    autoreconf
     btrfs-progs
     glibc
     glibc.static
