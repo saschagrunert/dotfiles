@@ -72,6 +72,7 @@ in
     fzf
     gcc
     ghc
+    ginkgo
     git
     gnumake
     go
@@ -94,6 +95,7 @@ in
     lshw
     lxappearance
     lvm2
+    nix-index
     nixpkgs-fmt
     nodePackages.prettier
     nodePackages.write-good
