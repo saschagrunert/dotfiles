@@ -118,6 +118,7 @@ in
     shellcheck
     shfmt
     skopeo
+    slirp4netns
     spotify
     sysstat
     teams
