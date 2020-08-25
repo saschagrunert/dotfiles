@@ -89,9 +89,9 @@ in
     lm_sensors
     lshw
     lxappearance
+    lvm2
     nixpkgs-fmt
     nodePackages.prettier
-    nodePackages.textlint
     nodePackages.write-good
     nodejs
     openssl
