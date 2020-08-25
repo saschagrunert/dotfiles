@@ -74,8 +74,10 @@ in
     git
     gnumake
     go
+    go-md2man
     golangci-lint
     google-cloud-sdk
+    gopls
     haskellPackages.alex
     hexchat
     htop
