@@ -102,6 +102,10 @@ in
     pkgs.nur.repos.mic92.nixos-shell
     proselint
     python3
+    python38Packages.autopep8
+    python38Packages.isort
+    python38Packages.yapf
+    python38Packages.osc
     ranger
     ripgrep
     rpm
