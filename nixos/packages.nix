@@ -61,6 +61,7 @@ in
     conntrack-tools
     cri-o
     cri-tools
+    crun
     ctags
     dmenu
     dunst
