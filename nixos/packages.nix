@@ -51,7 +51,7 @@ in
     binutils
     buildah
     calc
-    cargo-update
+    cargo-edit
     chromium
     clang
     clang-tools
