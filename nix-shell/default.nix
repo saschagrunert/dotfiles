@@ -9,11 +9,14 @@ stdenv.mkDerivation {
     glibc.static
     gpgme
     libapparmor
+    libcap
     libseccomp
     libselinux
     libtool
     linuxPackages.bcc
     lvm2
     pkg-config
+    systemd
+    yajl
   ];
 }
