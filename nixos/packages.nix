@@ -68,6 +68,7 @@ in
     fd
     feh
     file
+    fuse-overlayfs
     fzf
     gcc
     ghc
