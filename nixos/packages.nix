@@ -47,6 +47,7 @@ in
     arc-theme
     autojump
     bat
+    bats
     binutils
     buildah
     calc
@@ -95,6 +96,7 @@ in
     nodePackages.write-good
     nodejs
     openssl
+    parallel
     pavucontrol
     peek
     perlPackages.Apprainbarf
