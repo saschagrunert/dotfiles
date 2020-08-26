@@ -7,6 +7,14 @@ function gup; git fetch $argv; and git merge $argv/master; and gp; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
 function ns; nix-shell ~/.dotfiles/nix-shell --run "$argv"; end
 
+function nb;
+    set -l PKG (basename $PWD)
+    if count $argv > /dev/null
+        set PKG "$argv"
+    end
+    nix build "(import <nixpkgs-unstable> { }).$PKG.overrideAttrs (x: { src = ./.; })"
+end
+
 alias .. "cd ../"
 alias ... "cd ../../"
 alias .... "cd ../../../"
