@@ -54,6 +54,7 @@ in
     cargo-edit
     chromium
     clang
+    clang-analyzer
     clang-tools
     cmake
     cni-plugins
@@ -73,6 +74,7 @@ in
     fuse-overlayfs
     fzf
     gcc
+    gdb
     ghc
     ginkgo
     git
