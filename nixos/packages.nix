@@ -6,18 +6,21 @@ in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+
+    <nixpkgs-unstable/nixos/modules/config/users-groups.nix>
+    <nixpkgs-unstable/nixos/modules/security/apparmor.nix>
     <nixpkgs-unstable/nixos/modules/services/hardware/tlp.nix>
+    <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/cri-o.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/podman.nix>
-    <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
-    <nixpkgs-unstable/nixos/modules/config/users-groups.nix>
   ];
 
   disabledModules = [
-    "services/hardware/tlp.nix"
-    "virtualisation/podman.nix"
-    "virtualisation/cri-o.nix"
     "config/users-groups.nix"
+    "security/apparmor.nix"
+    "services/hardware/tlp.nix"
+    "virtualisation/cri-o.nix"
+    "virtualisation/podman.nix"
   ];
 
   nix.maxJobs = lib.mkDefault 8;
