@@ -88,6 +88,7 @@ in
     hexchat
     htop
     imagemagick
+    inetutils
     iptables
     j4-dmenu-desktop
     jq

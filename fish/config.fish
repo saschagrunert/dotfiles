@@ -5,7 +5,7 @@ set -x GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -x RUST_SRC_PATH $HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
 set -x QT_STYLE_OVERRIDE gtk2
 set -x MAN_POSIXLY_CORRECT 1
-#set -x LD_LIBRARY_PATH (nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
+set -x LD_LIBRARY_PATH (nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
 
 if test -d $HOME/go
     set -x GOPATH $HOME/go
