@@ -95,6 +95,7 @@ in
     iptables
     j4-dmenu-desktop
     jq
+    kind
     kubectl
     kubernetes
     kustomize
