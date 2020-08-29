@@ -12,21 +12,22 @@
 
   environment.etc = {
     "audit/auditd.conf".text = ''
-      local_events = yes
-      write_logs = yes
-      log_file = /var/log/audit/audit.log
-      log_group = adm
-      log_format = RAW
+      disp_qos = lossy
+      #dispatcher = ${pkgs.audit}/bin/audispd
       flush = INCREMENTAL_ASYNC
       freq = 50
+      local_events = yes
+      log_file = /var/log/audit/audit.log
+      log_format = RAW
+      log_group = adm
       max_log_file = 8
+      max_log_file_action = ROTATE
+      name_format = NONE
       num_logs = 5
       priority_boost = 4
-      disp_qos = lossy
-      name_format = NONE
-      max_log_file_action = ROTATE
       space_left = 75
       space_left_action = SYSLOG
+      write_logs = yes
     '';
   };
 }
