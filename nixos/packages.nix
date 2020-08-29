@@ -87,6 +87,7 @@ in
     golangci-lint
     google-cloud-sdk
     gopls
+    hadolint
     haskellPackages.alex
     hexchat
     htop
