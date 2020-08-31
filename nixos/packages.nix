@@ -139,6 +139,7 @@ in
     tmux
     unclutter
     unzip
+    virt-manager
     wget
     xclip
     xorg.xev
