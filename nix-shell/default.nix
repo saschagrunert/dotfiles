@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     libseccomp
     libselinux
     libtool
-    linuxPackages.bcc
+    linuxPackages_latest.bcc
     lvm2
     pkg-config
     systemd
