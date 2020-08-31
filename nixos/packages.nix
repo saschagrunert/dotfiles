@@ -23,6 +23,13 @@ in
     "virtualisation/podman.nix"
   ];
 
+  virtualisation.containers.containersConf.extraConfig = ''
+    [engine]
+    hooks_dir = [
+      "${unstable.oci-seccomp-bpf-hook}",
+    ]
+  '';
+
   nix.maxJobs = lib.mkDefault 8;
 
   nixpkgs.config = baseconfig // {
