@@ -9,6 +9,8 @@ function k8s-up
     export DNS_SERVER_IP=$IP
     export API_HOST_IP=$IP
 
+    sudo iptables -F
+
     cd $GOPATH/src/k8s.io/kubernetes
     hack/install-etcd.sh
     export PATH="$GOPATH/src/k8s.io/kubernetes/third_party/etcd:$PATH"
