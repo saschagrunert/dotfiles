@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     gpgme
     libapparmor
     libcap
-    libseccomp
+    (libseccomp.overrideAttrs (x: { dontDisableStatic = true; }))
     libselinux
     libtool
     linuxPackages_latest.bcc
