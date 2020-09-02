@@ -23,13 +23,6 @@ in
     "virtualisation/podman.nix"
   ];
 
-  virtualisation.containers.containersConf.extraConfig = ''
-    [engine]
-    hooks_dir = [
-      "${unstable.oci-seccomp-bpf-hook}",
-    ]
-  '';
-
   nix.maxJobs = lib.mkDefault 8;
 
   nixpkgs.config = baseconfig // {
@@ -108,10 +101,11 @@ in
     kubernetes
     kustomize
     ldns
+    linuxPackages_latest.bpftrace
     lm_sensors
     lshw
-    lxappearance
     lvm2
+    lxappearance
     nix-index
     nixpkgs-fmt
     nodePackages.prettier
@@ -128,8 +122,8 @@ in
     python3
     python38Packages.autopep8
     python38Packages.isort
-    python38Packages.yapf
     python38Packages.osc
+    python38Packages.yapf
     ranger
     ripgrep
     rpm
