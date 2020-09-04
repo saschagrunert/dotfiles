@@ -13,7 +13,7 @@ EMAIL := sgrunert@suse.com
 SIGNKEY := 92836C5387398A449AF794CF8CE029DD1A866E52
 
 .SILENT:
-.PHONY: install gitconfig-user uninstall update upgrade
+.PHONY: install gitconfig-user uninstall update upgrade nixpkgs
 
 all: install
 
@@ -124,3 +124,6 @@ gitconfig-user:
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
+
+nixpkgs:
+	nixos/nixpkgs-update

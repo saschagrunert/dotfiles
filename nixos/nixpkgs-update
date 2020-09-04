@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+CHANNEL="nixpkgs-unstable"
+URL="https://status.nixos.org/prometheus/api/v1/query?query=channel_revision"
+LATEST=${1:-$(
+    curl -sf "$URL" |
+        jq -r \
+            '.data.result[] | 
+             select(.metric.channel == "'$CHANNEL'") |
+             .metric.revision'
+)}
+echo "Latest nixpkgs rev  $LATEST"
+
+CURRENT=$(jq -r .rev ./nixpkgs.json)
+echo "Current nixpkgs rev $CURRENT"
+
+if [[ "$LATEST" == "$CURRENT" ]]; then
+    echo "All done, no new nixpkgs rev found"
+    exit 0
+fi
+
+nix-prefetch-git --no-deepClone \
+    --url https://github.com/nixos/nixpkgs \
+    --rev "$LATEST" \
+    >nixpkgs.json

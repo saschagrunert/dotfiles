@@ -1,13 +1,14 @@
 { config, lib, pkgs, ... }:
 let
   baseconfig = { allowUnfree = true; };
-  unstable = import <nixpkgs-unstable> { config = baseconfig; };
+  unstable = (import ./nixpkgs.nix {
+    config = baseconfig;
+  });
 in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
 
-    <nixpkgs-unstable/nixos/modules/config/users-groups.nix>
     <nixpkgs-unstable/nixos/modules/security/apparmor.nix>
     <nixpkgs-unstable/nixos/modules/services/hardware/tlp.nix>
     <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
@@ -16,7 +17,6 @@ in
   ];
 
   disabledModules = [
-    "config/users-groups.nix"
     "security/apparmor.nix"
     "services/hardware/tlp.nix"
     "virtualisation/cri-o.nix"
@@ -32,6 +32,7 @@ in
       podman-unwrapped = unstable.podman-unwrapped;
       cri-o = unstable.cri-o;
       cri-o-unwrapped = unstable.cri-o-unwrapped;
+      cri-tools = unstable.cri-tools;
       linuxPackages_latest = unstable.linuxPackages_latest;
       nur = import
         (builtins.fetchTarball
@@ -107,6 +108,7 @@ in
     lvm2
     lxappearance
     nix-index
+    nix-prefetch-git
     nixpkgs-fmt
     nodePackages.prettier
     nodePackages.write-good
@@ -119,6 +121,7 @@ in
     picom
     pkgs.nur.repos.mic92.nixos-shell
     proselint
+    pstree
     python3
     python38Packages.autopep8
     python38Packages.isort
