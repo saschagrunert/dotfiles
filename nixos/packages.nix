@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   baseconfig = { allowUnfree = true; };
-  unstable = (import ./nixpkgs.nix {
-    config = baseconfig;
-  });
+  unstable = import <nixpkgs-unstable> { config = baseconfig; };
 in
 {
   imports = [
