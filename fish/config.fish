@@ -10,6 +10,10 @@ if test -z $LD_LIBRARY_PATH
     set -x LD_LIBRARY_PATH (nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
 end
 
+if test -z $PROTOC
+    set -x PROTOC (command -v protoc)
+end
+
 if test -d $HOME/go
     set -x GOPATH $HOME/go
     set -x GOBIN $GOPATH/bin

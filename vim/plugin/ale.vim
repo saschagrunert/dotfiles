@@ -15,7 +15,7 @@ let g:ale_linters = {
     \ 'cpp': [],
     \ 'html': [],
     \ 'markdown': [ 'alex', 'textlint', 'proselint', 'write-good' ],
-    \ 'rust': [ 'cargo', 'rustc' ],
+    \ 'rust': [],
     \ }
 let g:ale_fixers = {
     \ '*': ['remove_trailing_lines', 'trim_whitespace'],
@@ -41,3 +41,4 @@ let g:ale_fixers = {
 let g:ale_sh_shfmt_options = '-i 4'
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = '--fast'
+let g:ale_rust_rustfmt_options = '--edition=2018'

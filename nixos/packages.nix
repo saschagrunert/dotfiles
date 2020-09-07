@@ -119,6 +119,7 @@ in
     picom
     pkgs.nur.repos.mic92.nixos-shell
     proselint
+    protobuf
     pstree
     python3
     python38Packages.autopep8
