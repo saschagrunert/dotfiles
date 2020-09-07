@@ -12,5 +12,9 @@
       "wheel"
     ];
     shell = pkgs.fish;
+
+    # TODO: remove from NixOS 20.09 release
+    subUidRanges = [{ startUid = 100000; count = 65536; }];
+    subGidRanges = [{ startGid = 100000; count = 65536; }];
   };
 }
