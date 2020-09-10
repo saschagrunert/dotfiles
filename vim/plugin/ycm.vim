@@ -8,7 +8,6 @@ let g:ycm_disable_for_files_larger_than_kb = 5000
 let g:ycm_error_symbol = '✖'
 let g:ycm_filetype_blacklist = {}
 let g:ycm_max_num_identifier_candidates = 25
-let g:ycm_rust_src_path = '~/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_warning_symbol = '⚠'
 
