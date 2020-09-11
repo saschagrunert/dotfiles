@@ -55,6 +55,7 @@ in
     buildah
     calc
     cargo-edit
+    cargo-kcov
     chromium
     clang
     clang-analyzer
@@ -96,6 +97,7 @@ in
     iptables
     j4-dmenu-desktop
     jq
+    kcov
     kubectl
     kubernetes
     kustomize
