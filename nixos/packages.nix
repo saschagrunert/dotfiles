@@ -145,6 +145,7 @@ in
     tmux
     unclutter
     unzip
+    usbutils
     virt-manager
     wget
     xclip
