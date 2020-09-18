@@ -82,6 +82,7 @@ in
     ghc
     ginkgo
     git
+    gitAndTools.gh
     gnumake
     go
     go-md2man
