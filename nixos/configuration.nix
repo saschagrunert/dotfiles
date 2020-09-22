@@ -10,6 +10,7 @@
     ./packages.nix
     ./services.nix
     ./fonts.nix
+    ./containers.nix
   ];
 
   system.stateVersion = "20.03";
