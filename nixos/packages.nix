@@ -144,6 +144,7 @@ in
     thunderbird
     tig
     tmux
+    tokei
     unclutter
     unzip
     usbutils
