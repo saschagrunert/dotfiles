@@ -64,12 +64,12 @@
       };
 
       displayManager = {
+        autoLogin.enable = true;
+        autoLogin.user = "sascha";
         defaultSession = "none+i3";
         lightdm = {
           enable = true;
           greeter.enable = false;
-          autoLogin.enable = true;
-          autoLogin.user = "sascha";
         };
       };
 

@@ -9,7 +9,6 @@
     ];
 
     fontconfig = {
-      penultimate.enable = false;
       defaultFonts = {
         serif = [ "Roboto Slab" ];
         sansSerif = [ "Roboto" ];

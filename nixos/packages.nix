@@ -6,26 +6,13 @@ in
 {
   imports = [
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-
-    <nixpkgs-unstable/nixos/modules/security/apparmor.nix>
-    <nixpkgs-unstable/nixos/modules/services/hardware/tlp.nix>
-    <nixpkgs-unstable/nixos/modules/virtualisation/containers.nix>
-    <nixpkgs-unstable/nixos/modules/virtualisation/cri-o.nix>
-    <nixpkgs-unstable/nixos/modules/virtualisation/podman.nix>
   ];
-
-  disabledModules = [
-    "security/apparmor.nix"
-    "services/hardware/tlp.nix"
-    "virtualisation/cri-o.nix"
-    "virtualisation/podman.nix"
-  ];
+  disabledModules = [ ];
 
   nix.maxJobs = lib.mkDefault 8;
 
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
-      tlp = unstable.tlp;
       podman = unstable.podman;
       podman-unwrapped = unstable.podman-unwrapped;
       cri-o = unstable.cri-o;
@@ -86,6 +73,7 @@ in
     gnumake
     go
     go-md2man
+    go-protobuf
     golangci-lint
     google-cloud-sdk
     gopls

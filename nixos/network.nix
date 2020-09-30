@@ -9,5 +9,4 @@
       wlp2s0.useDHCP = true;
     };
   };
-
 }
