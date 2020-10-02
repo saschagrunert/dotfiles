@@ -103,6 +103,7 @@ in
     nodePackages.write-good
     nodejs
     openssl
+    openvpn
     parallel
     pavucontrol
     peek

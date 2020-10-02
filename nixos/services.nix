@@ -33,13 +33,6 @@
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", MODE="0666", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
     '';
 
-    actkbd = {
-      enable = true;
-      bindings = [
-        { keys = [ 87 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/runuser -l sascha -c '/run/current-system/sw/bin/light -U 10'"; }
-        { keys = [ 88 ]; events = [ "key" ]; command = "/run/current-system/sw/bin/runuser -l sascha -c '/run/current-system/sw/bin/light -A 10'"; }
-      ];
-    };
     upower.enable = true;
 
     tlp = {
