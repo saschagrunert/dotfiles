@@ -48,6 +48,7 @@ in
     clang-analyzer
     clang-tools
     cmake
+    cni
     cni-plugins
     conmon
     conntrack-tools
