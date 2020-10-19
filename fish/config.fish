@@ -2,7 +2,6 @@ set -x TERM xterm-256color
 set -x VISUAL vim
 set -x EDITOR vim
 set -x GIT_DISCOVERY_ACROSS_FILESYSTEM 1
-set -x RUST_SRC_PATH $HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
 set -x QT_STYLE_OVERRIDE gtk2
 set -x MAN_POSIXLY_CORRECT 1
 
