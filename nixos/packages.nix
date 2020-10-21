@@ -34,6 +34,7 @@ in
     alacritty
     apparmor-parser
     arandr
+    asciinema
     arc-theme
     autojump
     bat
