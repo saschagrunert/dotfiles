@@ -71,6 +71,7 @@ in
     ghc
     ginkgo
     git
+    git-lfs
     gitAndTools.gh
     gnumake
     go
