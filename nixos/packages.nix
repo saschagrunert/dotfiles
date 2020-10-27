@@ -13,11 +13,6 @@ in
 
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
-      podman = unstable.podman;
-      podman-unwrapped = unstable.podman-unwrapped;
-      cri-o = unstable.cri-o;
-      cri-o-unwrapped = unstable.cri-o-unwrapped;
-      cri-tools = unstable.cri-tools;
       linuxPackages_latest = unstable.linuxPackages_latest;
       nur = import
         (builtins.fetchTarball
