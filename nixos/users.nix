@@ -6,6 +6,7 @@
     description = "Sascha Grunert";
     extraGroups = [
       "audio"
+      "docker"
       "networkmanager"
       "libvirtd"
       "video"

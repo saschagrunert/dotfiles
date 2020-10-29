@@ -5,6 +5,7 @@
     podman.enable = true;
     cri-o.enable = true;
     libvirtd.enable = true;
+    docker.enable = true;
   };
 
   systemd.services.crio.enable = false;

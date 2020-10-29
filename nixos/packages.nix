@@ -135,6 +135,7 @@ in
     unclutter
     unzip
     usbutils
+    valgrind
     virt-manager
     wget
     xclip
