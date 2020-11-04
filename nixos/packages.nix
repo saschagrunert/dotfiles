@@ -123,6 +123,7 @@ in
     rustup
     shellcheck
     shfmt
+    signal-desktop
     skopeo
     slirp4netns
     spotify
