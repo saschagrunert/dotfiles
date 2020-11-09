@@ -59,6 +59,7 @@ in
     fd
     feh
     file
+    firefox
     fuse-overlayfs
     fzf
     gcc
