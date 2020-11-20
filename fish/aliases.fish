@@ -3,7 +3,7 @@ function mdc; mkdir -p $argv; and cd $argv; end
 function gpl; for branch in (git branch -vv | grep ': gone]' | gawk '{print $1}'); git branch -D $branch; end; end
 function grm; git push origin :$argv; and gpl; end
 function gpr; git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]; end
-function gup; git fetch $argv; and git merge $argv/master; and gp; end
+function gup; git fetch $argv; and git merge $argv/master; and gp; and gl; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
 function ns; nix-shell ~/.dotfiles/nix-shell --run "$argv"; end
 
