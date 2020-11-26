@@ -124,3 +124,4 @@ gitconfig-user:
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
+	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
