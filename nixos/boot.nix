@@ -35,6 +35,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       grub = {
+        configurationLimit = 2;
         enable = true;
         version = 2;
         efiSupport = true;
