@@ -1,5 +1,2 @@
-if [[ $(hostname) == "nb-sascha" ]]; then
-    setxkbmap de
-fi
 xset b off
 exec i3
