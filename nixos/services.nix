@@ -47,8 +47,7 @@
 
     xserver = {
       enable = true;
-      layout = "de";
-      xkbVariant = "nodeadkeys";
+      layout = "us";
 
       libinput.enable = true;
 

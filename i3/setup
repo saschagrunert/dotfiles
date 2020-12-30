@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 
-# Workstation
-if xrandr --listmonitors | grep -q DP-0; then
-    sleep 3
-    xrandr --output DP-0 --primary --mode 1920x1080 --pos 1920x0 \
-        --output DP-2 --mode 1920x1080 --pos 0x0
-    i3-msg restart
-fi
-
 # Laptop
-if xrandr --listmonitors | grep -q DP1-2; then
-    xrandr --output DP1-1 --left-of eDP1
-    xrandr --output DP1-2 --left-of DP1-1
+if xrandr --listmonitors | grep -q DP-1-2; then
+    xrandr --output DP-1-1 --left-of eDP-1
+    xrandr --output DP-1-2 --left-of DP-1-1
     i3-msg restart
 fi
 
