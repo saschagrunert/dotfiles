@@ -24,6 +24,11 @@
   };
 
   services = {
+    printing = {
+      enable = true;
+      drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];
+    };
+
     locate = {
       enable = true;
       interval = "hourly";
