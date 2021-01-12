@@ -39,6 +39,7 @@ in
     calc
     cargo-edit
     cargo-kcov
+    cfssl
     chromium
     clang
     clang-analyzer
