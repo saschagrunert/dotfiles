@@ -29,7 +29,7 @@
     kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [ ];
     extraModprobeConfig = "options kvm_intel nested=1";
-    tmpOnTmpfs = true;
+    tmpOnTmpfs = false;
     loader = {
       timeout = 0;
       systemd-boot.enable = true;
