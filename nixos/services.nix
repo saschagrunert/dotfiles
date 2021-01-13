@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 {
   virtualisation = {
+    docker.enable = true;
     containers.ociSeccompBpfHook.enable = false;
     podman.enable = true;
     cri-o.enable = true;
