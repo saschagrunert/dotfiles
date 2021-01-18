@@ -303,4 +303,4 @@ To uninstall all created symlinks and data from your home directory, run:
 ## Contributing
 
 You want to contribute to this project? Wow, thanks! So please just fork it and
-send me a pull request.
+submit a pull request.
