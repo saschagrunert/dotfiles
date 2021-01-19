@@ -21,4 +21,4 @@ i3-msg exec "alacritty -e fish -C \"tmux new-session -s work fish -C 'vim +PlugU
 i3-msg exec chromium
 i3-msg exec thunderbird
 i3-msg exec hexchat
-i3-msg exec ibus-daemon --xim
+i3-msg exec "ibus-daemon --daemonize --xim"
