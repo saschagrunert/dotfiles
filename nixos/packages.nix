@@ -74,6 +74,7 @@ in
     go
     go-md2man
     go-protobuf
+    gofumpt
     golangci-lint
     google-cloud-sdk
     gopls
