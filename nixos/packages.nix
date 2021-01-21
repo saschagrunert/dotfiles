@@ -36,6 +36,7 @@ in
     bats
     binutils
     buildah
+    cachix
     calc
     cargo-edit
     cargo-kcov
