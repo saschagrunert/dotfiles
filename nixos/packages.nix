@@ -9,7 +9,10 @@ in
   ];
   disabledModules = [ ];
 
-  nix.maxJobs = lib.mkDefault 8;
+  nix = {
+    maxJobs = lib.mkDefault 8;
+    trustedUsers = [ "root" "sascha" ];
+  };
 
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
