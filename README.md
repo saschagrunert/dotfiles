@@ -28,6 +28,8 @@ repository:
     A fancy lock screen for i3
   - [i3pystatus](https://github.com/enkore/i3pystatus):
     A complete replacement for i3status
+  - [ibus](https://github.com/ibus/ibus):
+    Intelligent Input Bus
   - [j4-dmenu](https://github.com/enkore/j4-dmenu-desktop):
     The desktop menu
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
