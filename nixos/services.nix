@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 {
   virtualisation = {
-    docker.enable = true;
+    docker.enable = false;
     containers.ociSeccompBpfHook.enable = false;
     podman.enable = true;
     cri-o.enable = true;
-    libvirtd.enable = true;
+    libvirtd.enable = false;
   };
 
   systemd.services.crio.enable = false;
