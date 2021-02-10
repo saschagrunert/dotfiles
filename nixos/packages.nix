@@ -143,6 +143,7 @@ in
     unclutter
     unzip
     usbutils
+    vagrant
     valgrind
     virt-manager
     wget
