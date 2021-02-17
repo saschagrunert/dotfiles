@@ -82,7 +82,6 @@ in
     google-cloud-sdk
     gopls
     guvcview
-    hadolint
     haskellPackages.alex
     hexchat
     htop
