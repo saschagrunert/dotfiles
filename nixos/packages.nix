@@ -69,7 +69,6 @@ in
     fzf
     gcc
     gdb
-    ghc
     ginkgo
     git
     git-lfs
