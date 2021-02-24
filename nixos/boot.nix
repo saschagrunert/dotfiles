@@ -4,15 +4,17 @@
     initrd = {
       availableKernelModules = [
         "xhci_pci"
+        "nvme"
         "ahci"
         "usb_storage"
         "sd_mod"
+        "sdhci_pci"
         "rtsx_pci_sdmmc"
       ];
       kernelModules = [ "dm-snapshot" ];
       luks.devices = {
         crypted = {
-          device = "/dev/disk/by-uuid/d5d42ad3-d5d6-45ff-8723-44f15d7fcd9c";
+          device = "/dev/disk/by-uuid/b82ea7ef-b4df-44b8-bd24-87b3a1507c39";
           preLVM = true;
         };
       };

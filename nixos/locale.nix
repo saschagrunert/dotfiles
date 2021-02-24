@@ -9,7 +9,6 @@
 
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "de";
   };
 
   time.timeZone = "Europe/Berlin";

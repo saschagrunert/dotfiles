@@ -2,16 +2,17 @@
 {
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/779bee49-db2e-4a03-9cdb-fca6156f855f";
+      device = "/dev/disk/by-uuid/f7ff2198-47a7-4826-bff5-215128944553";
       fsType = "ext4";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/BCC6-032C";
+      device = "/dev/disk/by-uuid/DD06-C10E";
       fsType = "vfat";
     };
   };
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/3da6402f-aae6-4eb1-8b61-71681b654ba0"; }];
+  swapDevices = [{ device = "/dev/disk/by-uuid/b7ea93e6-6bf8-48e1-a355-9f10601c4feb"; }];
+
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   environment.variables = { MESA_LOADER_DRIVER_OVERRIDE = "iris"; };

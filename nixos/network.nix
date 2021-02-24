@@ -6,7 +6,7 @@
     useDHCP = false;
     interfaces = {
       enp0s31f6.useDHCP = true;
-      wlp2s0.useDHCP = true;
+      wlp82s0.useDHCP = true;
     };
   };
 }

@@ -64,7 +64,6 @@ in
     fd
     feh
     file
-    firefox
     fuse-overlayfs
     fzf
     gcc
@@ -133,8 +132,6 @@ in
     slirp4netns
     spotify
     sysstat
-    teams
-    thunderbird
     tig
     tmux
     tokei
