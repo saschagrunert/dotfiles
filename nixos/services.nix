@@ -54,6 +54,7 @@
     xserver = {
       enable = true;
       layout = "us";
+      dpi = 150;
 
       libinput.enable = true;
 

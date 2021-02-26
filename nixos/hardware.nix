@@ -15,7 +15,11 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  environment.variables = { MESA_LOADER_DRIVER_OVERRIDE = "iris"; };
+  environment.variables = {
+    MESA_LOADER_DRIVER_OVERRIDE = "iris";
+    GDK_SCALE = "2";
+    GDK_DPI_SCALE = "0.5";
+  };
 
   hardware = {
     cpu.intel.updateMicrocode = true;

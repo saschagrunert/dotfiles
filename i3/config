@@ -139,8 +139,8 @@ bar {
 }
 
 # where to output the workspaces
-workspace $ws1 output DP-1-2
-workspace $ws2 output DP-1-1
+workspace $ws1 output DP-3-1
+workspace $ws2 output DP-3-3
 workspace $ws3 output eDP-1
 workspace $ws4 output eDP-1
 
