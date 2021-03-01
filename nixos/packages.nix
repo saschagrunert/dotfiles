@@ -32,8 +32,8 @@ in
     alacritty
     apparmor-parser
     arandr
-    asciinema
     arc-theme
+    asciinema
     autojump
     bat
     bats
@@ -43,6 +43,7 @@ in
     calc
     cargo-edit
     cargo-kcov
+    ccache
     cfssl
     chromium
     clang
