@@ -25,6 +25,8 @@
   };
 
   services = {
+    blueman.enable = true;
+
     printing = {
       enable = true;
       drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];

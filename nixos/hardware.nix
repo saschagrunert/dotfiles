@@ -23,11 +23,15 @@
   };
 
   hardware = {
+    bluetooth.enable = true;
     cpu.intel.updateMicrocode = true;
     opengl.package = (pkgs.mesa.override {
       galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
     }).drivers;
-    pulseaudio.enable = true;
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+    };
   };
 
   sound.enable = true;
