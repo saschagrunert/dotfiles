@@ -2,9 +2,8 @@
 
 # Laptop
 if xrandr --listmonitors | grep -q DP-3-1; then
-    xrandr \
-        --output DP-3-3 --left-of eDP-1 \
-        --output DP-2 --left-of DP-3-3
+    xrandr --output DP-3-3 --left-of eDP-1
+    xrandr --output DP-2 --left-of DP-3-3
     i3-msg restart
 fi
 
