@@ -4,6 +4,7 @@
     apparmor.enable = true;
     audit.enable = true;
     auditd.enable = true;
+    pki.certificateFiles = [ /etc/pki/tls/certs/2015-RH-IT-Root-CA.pem ];
     sudo = {
       enable = true;
       wheelNeedsPassword = false;
