@@ -29,7 +29,7 @@ in
     arc-theme
     asciinema
     autojump
-    aws
+    awscli2
     bat
     bats
     binutils
