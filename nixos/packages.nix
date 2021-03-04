@@ -17,12 +17,6 @@ in
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
       linuxPackages_latest = unstable.linuxPackages_latest;
-      nur = import
-        (builtins.fetchTarball
-          "https://github.com/nix-community/NUR/archive/master.tar.gz")
-        {
-          inherit pkgs;
-        };
     };
   };
 
@@ -35,6 +29,7 @@ in
     arc-theme
     asciinema
     autojump
+    aws
     bat
     bats
     binutils
@@ -112,7 +107,7 @@ in
     peek
     perlPackages.Apprainbarf
     picom
-    pkgs.nur.repos.mic92.nixos-shell
+    nixos-shell
     proselint
     protobuf
     pstree
