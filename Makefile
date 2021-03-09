@@ -38,7 +38,8 @@ install: gitconfig-user
 	$(LN) "$$PWD"/hexchat/colors.conf ~/.config/hexchat/colors.conf
 	$(LN) "$$PWD"/htop ~/.config/htop
 	$(LN) "$$PWD"/icons ~/.icons
-	$(LN) "$$PWD"/i3 ~/.i3
+	$(LN) "$$PWD"/i3 ~/config/i3
+	$(LN) "$$PWD"/i3status-rust ~/config/i3status-rust
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
@@ -71,7 +72,8 @@ uninstall:
 	rm ~/.gtkrc-2.0
 	rm ~/.config/hexchat/colors.conf
 	rm ~/.config/htop
-	rm ~/.i3
+	rm ~/config/i3
+	rm ~/config/i3status-rust
 	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf

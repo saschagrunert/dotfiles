@@ -121,10 +121,8 @@ set $yellow     #f1fa8c
 
 # Start i3bar to display a workspace bar
 bar {
-    status_command cd ~/.i3 && nix-shell
+    status_command i3status-rs
     position top
-    workspace_buttons yes
-    separator_symbol "  "
     strip_workspace_numbers yes
     # mode hide
     colors {

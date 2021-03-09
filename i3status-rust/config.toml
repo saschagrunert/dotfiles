@@ -1,0 +1,78 @@
+icons = "awesome"
+
+[theme]
+name = "slick"
+
+[theme.overrides]
+idle_bg = "#282a36"
+idle_fg = "#f8f8f2"
+info_bg = "#282a36"
+info_fg = "#f8f8f2"
+good_bg = "#282a36"
+good_fg = "#f8f8f2"
+warning_bg = "#282a36"
+warning_fg = "#f8f8f2"
+critical_bg = "#282a36"
+critical_fg = "#f8f8f2"
+separator = "\ue0b2"
+separator_bg = "auto"
+separator_fg = "auto"
+
+[[block]]
+block = "music"
+player = "spotify"
+buttons = ["play", "next"]
+
+[[block]]
+block = "backlight"
+device = "intel_backlight"
+
+[[block]]
+block = "battery"
+interval = 10
+format = " {percentage}% {time}"
+driver = "upower"
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GiB"
+format = "{icon} {used}/{total} {unit} ({available} {unit})"
+
+[[block]]
+block = "temperature"
+collapsed = false
+interval = 1
+format = " {average}°C"
+chip = "coretemp-isa-00000"
+
+[[block]]
+block = "net"
+device = "wlp82s0"
+format = " {speed_down} {speed_up}"
+interval = 1
+use_bits = false
+
+[[block]]
+block = "memory"
+clickable = false
+display_type = "memory"
+format_mem = " {Mug}/{MTg} GiB ({Mup}%)"
+
+[[block]]
+block = "cpu"
+interval = 1
+format = " {utilization} {frequency}"
+
+[[block]]
+block = "sound"
+driver = "pulseaudio"
+on_click = "pavucontrol"
+format = " {volume}%"
+
+[[block]]
+block = "time"
+interval = 1
+format = " %H:%M:%S    %a %-d %b W%V"

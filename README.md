@@ -26,8 +26,8 @@ repository:
     A tiling window manager
   - [i3lock-fancy](https://github.com/meskarune/i3lock-fancy):
     A fancy lock screen for i3
-  - [i3pystatus](https://github.com/enkore/i3pystatus):
-    A complete replacement for i3status
+  - [i3status-rust](https://github.com/greshake/i3status-rust):
+    A replacement for i3status
   - [ibus](https://github.com/ibus/ibus):
     Intelligent Input Bus
   - [j4-dmenu](https://github.com/enkore/j4-dmenu-desktop):
