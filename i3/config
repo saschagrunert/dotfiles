@@ -181,4 +181,4 @@ client.urgent           $red        $red        $bg         $red
 client.background       $bg
 
 # run auto setup
-exec ~/.i3/setup
+exec ~/.config/i3/setup
