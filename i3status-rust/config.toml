@@ -31,7 +31,6 @@ device = "intel_backlight"
 block = "battery"
 interval = 10
 format = " {percentage}% {time}"
-driver = "upower"
 
 [[block]]
 block = "disk_space"
