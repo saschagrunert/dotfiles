@@ -21,6 +21,7 @@ in
   };
 
   environment.systemPackages = with unstable; [
+    (chromium.override { enableVaapi = true; })
     (vim_configurable.override { python = python3; })
     acpilight
     alacritty
@@ -40,7 +41,6 @@ in
     cargo-kcov
     ccache
     cfssl
-    chromium
     clang
     clang-analyzer
     clang-tools
@@ -96,6 +96,7 @@ in
     lxappearance
     nix-index
     nix-prefetch-git
+    nixos-shell
     nixpkgs-fmt
     nodePackages.prettier
     nodePackages.write-good
@@ -108,7 +109,6 @@ in
     peek
     perlPackages.Apprainbarf
     picom
-    nixos-shell
     proselint
     protobuf
     pstree

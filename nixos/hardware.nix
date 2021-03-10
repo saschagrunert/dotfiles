@@ -16,7 +16,6 @@
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   environment.variables = {
-    MESA_LOADER_DRIVER_OVERRIDE = "iris";
     GDK_SCALE = "2";
     GDK_DPI_SCALE = "0.5";
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
@@ -25,9 +24,16 @@
   hardware = {
     bluetooth.enable = true;
     cpu.intel.updateMicrocode = true;
-    opengl.package = (pkgs.mesa.override {
-      galliumDrivers = [ "nouveau" "virgl" "swrast" "iris" ];
-    }).drivers;
+    opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+      ];
+      driSupport32Bit = true;
+    };
     pulseaudio = {
       enable = true;
       package = pkgs.pulseaudioFull;
