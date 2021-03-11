@@ -21,6 +21,8 @@ separator_fg = "auto"
 [[block]]
 block = "music"
 player = "spotify"
+smart_trim = true
+hide_when_empty = true
 buttons = ["play", "next"]
 
 [[block]]
