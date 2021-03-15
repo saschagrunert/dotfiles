@@ -138,6 +138,7 @@ in
     vagrant
     valgrind
     virt-manager
+    vulkan-tools
     wget
     xclip
     xorg.xev
