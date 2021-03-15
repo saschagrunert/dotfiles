@@ -21,7 +21,6 @@ in
   };
 
   environment.systemPackages = with unstable; [
-    (chromium.override { enableVaapi = true; })
     (vim_configurable.override { python = python3; })
     acpilight
     alacritty
@@ -74,6 +73,7 @@ in
     go-protobuf
     gofumpt
     golangci-lint
+    google-chrome
     google-cloud-sdk
     gopls
     guvcview

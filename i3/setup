@@ -19,6 +19,6 @@ i3-msg exec blueman-applet
 i3-msg exec unclutter
 
 i3-msg exec "alacritty -e fish -C \"tmux new-session -s work fish -C 'vim +PlugUpgrade +PlugUpdate +qa!'\""
-i3-msg exec chromium
+i3-msg exec google-chrome-stable
 i3-msg exec hexchat
 i3-msg exec "ibus-daemon --daemonize --xim"
