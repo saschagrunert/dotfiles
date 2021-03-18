@@ -16,8 +16,6 @@ repository:
     A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
     Lightweight and customizable notification daemon
-  - [firefox](https://www.mozilla.org/en-US/firefox):
-    The well-known browser
   - [feh](https://github.com/derf/feh):
     A fast and light image viewer
   - [hexchat](https://github.com/hexchat/hexchat):
