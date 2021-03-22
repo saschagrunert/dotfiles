@@ -74,6 +74,7 @@ in
     gofumpt
     golangci-lint
     google-chrome
+    googleearth
     google-cloud-sdk
     gopls
     guvcview
