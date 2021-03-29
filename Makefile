@@ -9,8 +9,8 @@ GITCONFIG_USER_PATH := ~/.gitconfig_user
 
 # User specific settings
 USER := Sascha Grunert
-EMAIL := sgrunert@suse.com
-SIGNKEY := 92836C5387398A449AF794CF8CE029DD1A866E52
+EMAIL := sgrunert@redhat.com
+SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
 .PHONY: install gitconfig-user uninstall update upgrade
