@@ -87,6 +87,7 @@ in
     j4-dmenu-desktop
     jq
     kcov
+    kdenlive
     kubectl
     kubernetes
     kustomize
