@@ -81,6 +81,7 @@ in
     haskellPackages.alex
     hexchat
     htop
+    hub
     imagemagick
     inetutils
     iptables
