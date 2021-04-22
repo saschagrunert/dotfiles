@@ -44,7 +44,6 @@ in
     clang-analyzer
     clang-tools
     cmake
-    cni
     cni-plugins
     conmon
     conntrack-tools
@@ -81,7 +80,6 @@ in
     haskellPackages.alex
     hexchat
     htop
-    hub
     imagemagick
     inetutils
     iptables
