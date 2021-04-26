@@ -1,9 +1,10 @@
 function c; clear; if test $TMUX; tmux clear-history; end; end
 function mdc; mkdir -p $argv; and cd $argv; end
+function gldb; git symbolic-ref refs/remotes/origin/HEAD | cut -d/ -f4; end
 function gpl; for branch in (git branch -vv | grep ': gone]' | gawk '{print $1}'); git branch -D $branch; end; end
 function grm; git push origin :$argv; and gpl; end
 function gpr; git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]; end
-function gup; git fetch $argv; and git merge $argv/master; and gp; and gl; end
+function gup; git fetch $argv; and git merge $argv/(gldb); and gp; and gl; end
 function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
 function ns; nix-shell ~/.dotfiles/nix-shell --run "$argv"; end
 
@@ -33,13 +34,13 @@ alias gca "git commit -s --amend"
 alias gcan "git commit -s --amend --no-edit"
 alias gcaa "git commit -s -a --amend --no-edit"
 alias gcl "git clone"
-alias gcm "git checkout master"
+alias gcm "git checkout (gldb)"
 alias gcmsg "git commit -sm"
 alias gco "git checkout"
 alias gd "git diff"
 alias gdc "git diff --cached"
-alias gdiff "git difftool origin/master...(git rev-parse --abbrev-ref HEAD)"
-alias gdifff "git diff --name-only origin/master...(git rev-parse --abbrev-ref HEAD)"
+alias gdiff "git difftool origin/(gldb)...(git rev-parse --abbrev-ref HEAD)"
+alias gdifff "git diff --name-only origin/(gldb)...(git rev-parse --abbrev-ref HEAD)"
 alias gl "git pull --prune;and gpl"
 alias glg "git log --stat --max-count=10"
 alias glgg "git log --graph --max-count=10"
@@ -48,8 +49,8 @@ alias glo "git log --oneline --decorate --color"
 alias glog "git log --oneline --decorate --color --graph"
 alias glr "git pull --rebase"
 alias gm "git merge"
-alias gmb "git merge-base origin/master (git rev-parse --abbrev-ref HEAD)"
-alias gmm "git merge origin/master"
+alias gmb "git merge-base origin/(gldb) (git rev-parse --abbrev-ref HEAD)"
+alias gmm "git merge origin/(gldb)"
 alias gmn "git merge --no-ff"
 alias gp "git push"
 alias gpf "git push -f"
