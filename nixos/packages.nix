@@ -24,7 +24,6 @@ in
     (vim_configurable.override { python = python3; })
     acpilight
     alacritty
-    apparmor-parser
     arandr
     arc-theme
     asciinema
