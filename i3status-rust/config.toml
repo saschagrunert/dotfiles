@@ -28,6 +28,7 @@ buttons = ["play", "next"]
 [[block]]
 block = "backlight"
 device = "intel_backlight"
+invert_icons = true
 
 [[block]]
 block = "battery"
@@ -39,8 +40,8 @@ block = "disk_space"
 path = "/"
 alias = "/"
 info_type = "available"
-unit = "GiB"
-format = "{icon} {used}/{total} {unit} ({available} {unit})"
+unit = "GB"
+format = "{icon} {used}/{total} GB ({available} GB)"
 
 [[block]]
 block = "temperature"
@@ -54,13 +55,12 @@ block = "net"
 device = "wlp82s0"
 format = " {speed_down} {speed_up}"
 interval = 1
-use_bits = false
 
 [[block]]
 block = "memory"
 clickable = false
 display_type = "memory"
-format_mem = " {Mug}/{MTg} GiB ({Mup}%)"
+format_mem = " {mem_used;G}/{mem_total;G} GiB ({mem_used_percents}%)"
 
 [[block]]
 block = "cpu"
