@@ -33,7 +33,7 @@ invert_icons = true
 [[block]]
 block = "battery"
 interval = 10
-format = " {percentage}% {time}"
+format = " {percentage}"
 
 [[block]]
 block = "disk_space"
@@ -41,13 +41,13 @@ path = "/"
 alias = "/"
 info_type = "available"
 unit = "GB"
-format = "{icon} {used}/{total} GB ({available} GB)"
+format = "{icon} {used}/{total} ({available})"
 
 [[block]]
 block = "temperature"
 collapsed = false
 interval = 1
-format = " {average}°C"
+format = " {average}C"
 chip = "coretemp-isa-00000"
 
 [[block]]
@@ -60,7 +60,7 @@ interval = 1
 block = "memory"
 clickable = false
 display_type = "memory"
-format_mem = " {mem_used;G}/{mem_total;G} GiB ({mem_used_percents}%)"
+format_mem = " {mem_used;G}/{mem_total;G} ({mem_used_percents})"
 
 [[block]]
 block = "cpu"
@@ -71,7 +71,7 @@ format = " {utilization} {frequency}"
 block = "sound"
 driver = "pulseaudio"
 on_click = "pavucontrol"
-format = " {volume}%"
+format = " {volume}"
 
 [[block]]
 block = "time"
