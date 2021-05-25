@@ -66,7 +66,7 @@ mouse:
   double_click: { threshold: 300 }
   triple_click: { threshold: 300 }
   hide_when_typing: true
-  url:
+  hints:
     launcher: chromium
     modifiers: Control|Shift
 selection:
