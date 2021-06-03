@@ -60,7 +60,7 @@ interval = 1
 block = "memory"
 clickable = false
 display_type = "memory"
-format_mem = " {mem_used;G}/{mem_total;G} ({mem_used_percents})"
+format_mem = " {mem_used;G} /{mem_total;G} ({mem_used_percents})"
 
 [[block]]
 block = "cpu"
