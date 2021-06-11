@@ -6,10 +6,6 @@
     docker.enable = true;
     libvirtd.enable = true;
     podman.enable = true;
-    virtualbox.host = {
-      enable = true;
-      enableExtensionPack = true;
-    };
   };
 
   systemd.services.crio.enable = false;
