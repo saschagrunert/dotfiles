@@ -7,8 +7,9 @@
     extraGroups = [
       "audio"
       "docker"
-      "networkmanager"
       "libvirtd"
+      "networkmanager"
+      "vboxusers"
       "video"
       "wheel"
     ];
