@@ -84,6 +84,7 @@ in
     iptables
     j4-dmenu-desktop
     jq
+    jsonnet
     kcov
     kdenlive
     kubectl
