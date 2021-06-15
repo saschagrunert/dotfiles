@@ -19,6 +19,7 @@ Plug 'edkolev/tmuxline.vim'
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
 Plug 'glts/vim-textobj-comment'
 Plug 'godlygeek/tabular'
+Plug 'google/vim-jsonnet'
 Plug 'hashivim/vim-terraform', { 'for': 'tf' }
 Plug 'honza/vim-snippets'
 Plug 'jiangmiao/auto-pairs'
