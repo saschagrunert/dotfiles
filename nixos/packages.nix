@@ -28,7 +28,6 @@ in
     arc-theme
     asciinema
     autojump
-    awscli2
     bat
     bats
     binutils
