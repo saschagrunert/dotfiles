@@ -50,7 +50,7 @@
       local_events = yes
       write_logs = yes
       log_file = /var/log/audit/audit.log
-      log_group = root
+      log_group = wheel
       log_format = ENRICHED
       flush = INCREMENTAL_ASYNC
       freq = 50
@@ -58,7 +58,6 @@
       num_logs = 5
       priority_boost = 4
       name_format = NONE
-      ##name = mydomain
       max_log_file_action = ROTATE
       space_left = 75
       space_left_action = SYSLOG
