@@ -21,7 +21,7 @@ in
   };
 
   environment.systemPackages = with unstable; [
-    (vim_configurable.override { python = python3; })
+    (vim_configurable.override { python = python39; })
     acpilight
     alacritty
     arandr
@@ -112,11 +112,11 @@ in
     proselint
     protobuf
     pstree
-    python3
-    python38Packages.autopep8
-    python38Packages.isort
-    python38Packages.osc
-    python38Packages.yapf
+    python39
+    python39Packages.autopep8
+    python39Packages.isort
+    python39Packages.osc
+    python39Packages.yapf
     ranger
     ripgrep
     rpm
