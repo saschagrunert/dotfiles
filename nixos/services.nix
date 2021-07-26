@@ -53,6 +53,8 @@
       };
     };
 
+    sysstat.enable = true;
+
     xserver = {
       enable = true;
       layout = "us";
