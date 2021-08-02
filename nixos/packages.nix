@@ -90,6 +90,7 @@ in
     kubernetes
     kustomize
     ldns
+    linuxPackages.bpftrace
     lm_sensors
     lshw
     lvm2
