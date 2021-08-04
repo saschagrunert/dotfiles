@@ -5,6 +5,7 @@ stdenv.mkDerivation {
     autoconf
     automake
     btrfs-progs
+    dbus
     glibc
     glibc.static
     gpgme
