@@ -86,6 +86,7 @@ in
     jsonnet
     kcov
     kdenlive
+    kind
     kubectl
     kubernetes
     kustomize
