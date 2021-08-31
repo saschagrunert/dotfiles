@@ -71,9 +71,10 @@ in
     gofumpt
     golangci-lint
     google-chrome
-    googleearth
     google-cloud-sdk
+    googleearth
     gopls
+    graphviz
     guvcview
     haskellPackages.alex
     hexchat
