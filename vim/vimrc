@@ -56,5 +56,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'dense-analysis/ale'
 Plug 'wellle/targets.vim'
 Plug 'zirrostig/vim-schlepp'
+Plug 'mmarchini/bpftrace.vim'
 
 call plug#end()
