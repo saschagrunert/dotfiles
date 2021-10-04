@@ -65,7 +65,7 @@ in
     git-lfs
     gitAndTools.gh
     gnumake
-    go
+    go_1_17
     go-md2man
     go-protobuf
     gofumpt
@@ -92,7 +92,7 @@ in
     kubernetes
     kustomize
     ldns
-    linuxPackages.bpftrace
+    #linuxPackages.bpftrace
     lm_sensors
     lshw
     lvm2
