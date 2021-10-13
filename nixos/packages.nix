@@ -21,6 +21,7 @@ in
   };
 
   environment.systemPackages = with unstable; [
+    #linuxPackages.bpftrace
     (vim_configurable.override { python = python39; })
     acpilight
     alacritty
@@ -65,9 +66,9 @@ in
     git-lfs
     gitAndTools.gh
     gnumake
-    go_1_17
     go-md2man
     go-protobuf
+    go_1_17
     gofumpt
     golangci-lint
     google-chrome
@@ -92,7 +93,8 @@ in
     kubernetes
     kustomize
     ldns
-    #linuxPackages.bpftrace
+    libbpf
+    libelf
     lm_sensors
     lshw
     lvm2
@@ -148,6 +150,7 @@ in
     xsel
     yamllint
     yq
+    zlib
     zoom-us
   ];
 }
