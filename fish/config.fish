@@ -5,8 +5,9 @@ set -x GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -x QT_STYLE_OVERRIDE gtk2
 set -x MAN_POSIXLY_CORRECT 1
 
-if test -z $LD_LIBRARY_PATH
-    set -x LD_LIBRARY_PATH /run/current-system/sw/lib:(nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
+if test -z "$LD_LIBRARY_PATH"
+    set -x LD_LIBRARY_PATH (nix eval --raw nixpkgs.stdenv.cc.cc.lib)/lib
+    set -a LD_LIBRARY_PATH /run/current-system/sw/lib
 end
 
 if test -z $PROTOC
