@@ -93,8 +93,6 @@ in
     kubernetes
     kustomize
     ldns
-    libbpf
-    libelf
     lm_sensors
     lshw
     lvm2
@@ -150,7 +148,6 @@ in
     xsel
     yamllint
     yq
-    zlib
     zoom-us
   ];
 }
