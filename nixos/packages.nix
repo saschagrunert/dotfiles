@@ -32,6 +32,7 @@ in
     bat
     bats
     binutils
+    bpftool
     buildah
     cachix
     calc
