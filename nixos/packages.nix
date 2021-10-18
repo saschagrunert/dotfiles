@@ -39,7 +39,7 @@ in
     cargo-kcov
     ccache
     cfssl
-    clang
+    clang_12
     clang-analyzer
     clang-tools
     cmake
