@@ -11,6 +11,7 @@ stdenv.mkDerivation {
     gpgme
     libapparmor
     libcap
+    libelf
     (libseccomp.overrideAttrs (x: { dontDisableStatic = true; }))
     libselinux
     libtool
@@ -19,5 +20,6 @@ stdenv.mkDerivation {
     pkg-config
     systemd
     yajl
+    zlib
   ];
 }
