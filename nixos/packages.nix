@@ -109,6 +109,7 @@ in
     openshift
     openssl
     openvpn
+    pahole
     parallel
     pavucontrol
     peek
