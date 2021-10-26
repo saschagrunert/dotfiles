@@ -21,7 +21,6 @@ in
   };
 
   environment.systemPackages = with unstable; [
-    #linuxPackages.bpftrace
     (vim_configurable.override { python = python39; })
     acpilight
     alacritty
@@ -40,9 +39,9 @@ in
     cargo-kcov
     ccache
     cfssl
-    clang_12
     clang-analyzer
     clang-tools
+    clang_12
     cmake
     cni-plugins
     conmon
@@ -94,6 +93,8 @@ in
     kubernetes
     kustomize
     ldns
+    linuxPackages.bpftrace
+    llvm_12
     lm_sensors
     lshw
     lvm2

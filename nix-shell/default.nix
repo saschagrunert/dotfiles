@@ -2,6 +2,7 @@ with import <nixpkgs> { };
 stdenv.mkDerivation {
   name = "dev-environment";
   buildInputs = [
+    (libseccomp.overrideAttrs (x: { dontDisableStatic = true; }))
     autoconf
     automake
     btrfs-progs
@@ -10,9 +11,9 @@ stdenv.mkDerivation {
     glibc.static
     gpgme
     libapparmor
+    libbpf
     libcap
     libelf
-    (libseccomp.overrideAttrs (x: { dontDisableStatic = true; }))
     libselinux
     libtool
     linuxPackages_latest.bcc
@@ -21,5 +22,6 @@ stdenv.mkDerivation {
     systemd
     yajl
     zlib
+    zlib.static
   ];
 }
