@@ -17,6 +17,7 @@ stdenv.mkDerivation {
     libselinux
     libtool
     linuxPackages_latest.bcc
+    llvmPackages_12.clang-unwrapped
     lvm2
     pkg-config
     systemd
@@ -24,4 +25,7 @@ stdenv.mkDerivation {
     zlib
     zlib.static
   ];
+  shellHook = ''
+    export CFLAGS=$NIX_CFLAGS_COMPILE
+  '';
 }
