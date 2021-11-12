@@ -35,6 +35,7 @@ in
     buildah
     cachix
     calc
+    capnproto
     cargo-edit
     cargo-kcov
     ccache
