@@ -40,9 +40,6 @@ in
     cargo-kcov
     ccache
     cfssl
-    clang-analyzer
-    clang-tools
-    clang_13
     cmake
     cni-plugins
     conmon
@@ -95,7 +92,6 @@ in
     kustomize
     ldns
     linuxPackages.bpftrace
-    llvm_13
     lm_sensors
     lshw
     lvm2
