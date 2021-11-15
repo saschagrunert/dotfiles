@@ -10,6 +10,9 @@ in
   disabledModules = [ ];
 
   nix = {
+    extraOptions = ''
+      experimental-features = nix-command
+    '';
     maxJobs = lib.mkDefault 8;
     trustedUsers = [ "root" "sascha" ];
   };
