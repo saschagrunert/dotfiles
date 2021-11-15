@@ -11,7 +11,7 @@ in
 
   nix = {
     extraOptions = ''
-      experimental-features = nix-command
+      experimental-features = nix-command flakes
     '';
     maxJobs = lib.mkDefault 8;
     trustedUsers = [ "root" "sascha" ];
