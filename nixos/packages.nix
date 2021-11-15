@@ -42,7 +42,7 @@ in
     cfssl
     clang-analyzer
     clang-tools
-    clang_12
+    clang_13
     cmake
     cni-plugins
     conmon
@@ -95,7 +95,7 @@ in
     kustomize
     ldns
     linuxPackages.bpftrace
-    llvm_12
+    llvm_13
     lm_sensors
     lshw
     lvm2
