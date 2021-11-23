@@ -133,6 +133,7 @@ in
     signal-desktop
     skopeo
     slirp4netns
+    socat
     spotify
     sysstat
     tig
