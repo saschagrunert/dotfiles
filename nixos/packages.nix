@@ -136,6 +136,7 @@ in
     socat
     spotify
     sysstat
+    terraform
     tig
     tmux
     tokei
