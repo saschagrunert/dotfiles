@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     glibc
     glibc.static
     gpgme
+    krb5
     libapparmor
     libbpf
     libcap
