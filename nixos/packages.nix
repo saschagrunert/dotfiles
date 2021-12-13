@@ -106,7 +106,6 @@ in
     nodePackages.prettier
     nodePackages.write-good
     nodejs
-    openshift
     openssl
     openvpn
     pahole
