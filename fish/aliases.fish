@@ -5,7 +5,7 @@ function gpl; for branch in (git branch -vv | grep ': gone]' | gawk '{print $1}'
 function grm; git push origin :$argv; and gpl; end
 function gpr; git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]; end
 function gup; git fetch $argv; and git merge $argv/(gldb); and gp; and gl; end
-function kns; kubectl config set-context (kubectl config current-context) --namespace=$argv; end
+function kns; kubectl config set-context --current --namespace=$argv; end
 function ns; nix-shell ~/.dotfiles/nix-shell --run "$argv"; end
 function tailc; watch -n1 'curl -sf "'$argv[1]'" | tail -n $(($(tput lines) - 2))'; end
 
