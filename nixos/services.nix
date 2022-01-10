@@ -78,9 +78,7 @@
 
       windowManager.i3 = {
         enable = true;
-        extraPackages = with pkgs; [
-          i3status-rust
-        ];
+        extraPackages = with pkgs; [ i3status-rust ];
       };
     };
   };
