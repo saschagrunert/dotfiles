@@ -20,7 +20,6 @@ in
   nixpkgs.config = baseconfig // {
     packageOverrides = pkgs: {
       linuxPackages_latest = unstable.linuxPackages_latest;
-      notmuch = unstable.notmuch.overrideAttrs (x: { doCheck = false; }); # breaks i3status-rust
     };
   };
 
