@@ -123,6 +123,7 @@ in
     python39Packages.osc
     python39Packages.yapf
     ranger
+    rekor-cli
     ripgrep
     rpm
     runc
