@@ -47,6 +47,7 @@ in
     cni-plugins
     conmon
     conntrack-tools
+    cosign
     cri-o
     cri-tools
     crun
