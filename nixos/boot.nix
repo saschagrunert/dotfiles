@@ -34,7 +34,7 @@
     tmpOnTmpfs = true;
     loader = {
       timeout = 0;
-      systemd-boot.enable = true;
+      #systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       grub = {
         configurationLimit = 2;
