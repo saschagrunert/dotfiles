@@ -13,8 +13,10 @@ in
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    maxJobs = lib.mkDefault 8;
-    trustedUsers = [ "root" "sascha" ];
+    settings = {
+      max-jobs = lib.mkDefault 8;
+      trusted-users = [ "root" "sascha" ];
+    };
   };
 
   nixpkgs.config = baseconfig // {
