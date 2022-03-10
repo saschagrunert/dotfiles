@@ -3,7 +3,7 @@
   virtualisation = {
     containers.ociSeccompBpfHook.enable = true;
     cri-o.enable = true;
-    docker.enable = false;
+    docker.enable = true;
     libvirtd.enable = true;
     podman.enable = true;
   };
