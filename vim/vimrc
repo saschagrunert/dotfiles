@@ -13,6 +13,7 @@ Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 Plug 'airblade/vim-gitgutter'
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'cstrahan/vim-capnp'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dag/vim-fish', { 'for': 'fish' }
 Plug 'easymotion/vim-easymotion'
