@@ -78,6 +78,7 @@ in
     google-chrome
     google-cloud-sdk
     gopls
+    gotools
     graphviz
     guvcview
     haskellPackages.alex
