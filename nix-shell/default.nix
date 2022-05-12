@@ -2,7 +2,10 @@ with import <nixpkgs> { };
 stdenv.mkDerivation {
   name = "dev-environment";
   buildInputs = [
-    (libseccomp.overrideAttrs (x: { dontDisableStatic = true; }))
+    (libseccomp.overrideAttrs (x: {
+      doCheck = false;
+      dontDisableStatic = true;
+    }))
     autoconf
     automake
     btrfs-progs
