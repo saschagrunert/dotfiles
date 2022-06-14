@@ -155,7 +155,7 @@ in
     xorg.xev
     xsel
     yamllint
-    yq
+    yq-go
     zoom-us
   ];
 }

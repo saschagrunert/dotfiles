@@ -43,3 +43,5 @@
 [pager]
 	branch = false
 	diff = false
+[safe]
+	directory = *
