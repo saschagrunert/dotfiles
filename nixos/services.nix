@@ -32,6 +32,11 @@
       drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];
     };
 
+    journald = {
+      rateLimitInterval = "0";
+      rateLimitBurst = 0;
+    };
+
     locate = {
       enable = true;
       interval = "hourly";
