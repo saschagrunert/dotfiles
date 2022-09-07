@@ -98,6 +98,7 @@ in
     kustomize
     ldns
     linuxPackages.bpftrace
+    linuxPackages.perf
     lm_sensors
     lshw
     lvm2
