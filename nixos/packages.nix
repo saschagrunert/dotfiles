@@ -82,6 +82,7 @@ in
     graphviz
     guvcview
     haskellPackages.alex
+    heaptrack
     hexchat
     htop
     imagemagick

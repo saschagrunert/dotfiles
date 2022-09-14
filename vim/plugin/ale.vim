@@ -20,6 +20,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
     \ '*': ['remove_trailing_lines', 'trim_whitespace'],
     \ 'asciidoc': [ 'textlint' ],
+    \ 'bash': [ 'shfmt' ],
     \ 'c': [ 'clang-format' ],
     \ 'cpp': [ 'clang-format' ],
     \ 'css': [ 'prettier' ],
