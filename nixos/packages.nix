@@ -44,7 +44,7 @@ in
     cargo-kcov
     #ccache
     cfssl
-    clang_13
+    clang_14
     cmake
     cni-plugins
     conmon
