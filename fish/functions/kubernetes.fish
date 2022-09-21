@@ -1,6 +1,8 @@
 function k8s-up
     export CONTAINER_RUNTIME=remote
-    export CGROUP_DRIVER=cgroupfs
+    export CGROUP_DRIVER=systemd
+    export CGROUP_ROOT=/
+    export KUBELET_FLAGS='--runtime-cgroups=/system.slice/crio.service'
     export CONTAINER_RUNTIME_ENDPOINT=unix:///var/run/crio/crio.sock
     export ALLOW_PRIVILEGED=1
 
