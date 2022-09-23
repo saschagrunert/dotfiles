@@ -56,6 +56,7 @@ end
 function k8s-test-run
     k8s-env
 
+    cd $GOPATH/src/k8s.io/kubernetes
     sudo -E _output/bin/e2e.test \
         --provider=local \
         --host=https://$IP:6443 \
