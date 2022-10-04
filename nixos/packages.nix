@@ -35,14 +35,13 @@ in
     bat
     bats
     binutils
-    bpftool
+    bpftools
     buildah
     cachix
     calc
     capnproto
     cargo-edit
     cargo-kcov
-    #ccache
     cfssl
     clang_14
     cmake
