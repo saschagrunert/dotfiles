@@ -47,6 +47,7 @@ in
     cmake
     cni-plugins
     conmon
+    conmon-rs
     conntrack-tools
     cosign
     cri-o
