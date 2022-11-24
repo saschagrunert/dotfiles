@@ -10,18 +10,18 @@ stdenv.mkDerivation {
     automake
     btrfs-progs
     dbus
+    elfutils
     glibc
     glibc.static
     gpgme
     krb5
     libapparmor
-    libbpf
+    libbpf_1
     libcap
-    libelf
     libselinux
     libtool
     linuxPackages_latest.bcc
-    llvmPackages_13.clang-unwrapped
+    llvmPackages_14.clang-unwrapped
     lvm2
     pkg-config
     systemd
