@@ -32,6 +32,7 @@ let g:ale_fixers = {
     \ 'json': [ 'prettier' ],
     \ 'markdown': [ 'prettier', 'textlint' ],
     \ 'nix': [ 'nixpkgs-fmt' ],
+    \ 'proto': [ 'clang-format' ],
     \ 'python': [ 'autopep8', 'yapf', 'isort' ],
     \ 'rust': [ 'rustfmt' ],
     \ 'scss': [ 'prettier' ],
