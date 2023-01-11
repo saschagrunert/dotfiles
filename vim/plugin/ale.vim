@@ -2,6 +2,7 @@ let g:airline#extensions#ale#enabled = 1
 let g:ale_fix_on_save = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
+let g:ale_virtualtext_cursor = 0
 let g:ale_sign_info = 'ℹ'
 let g:ale_linters = {
     \ 'asciidoc': [ 'alex', 'textlint', 'proselint', 'write-good' ],
