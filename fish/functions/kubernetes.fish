@@ -26,7 +26,7 @@ function crio-up
 end
 
 function __ip
-    ip route get 1.2.3.4 | cut -d ' ' -f7 | tr -d '[:space:]'
+    ip route get 1.2.3.4 | cut -d ' ' -f7 | head -n1
 end
 
 function k8s-env
