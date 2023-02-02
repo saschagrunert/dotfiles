@@ -73,7 +73,7 @@ in
     gnumake
     go-md2man
     go-protobuf
-    go_1_19
+    go_1_20
     gofumpt
     golangci-lint
     google-chrome
