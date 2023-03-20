@@ -1,7 +1,8 @@
-icons = "awesome"
+[icons]
+icons = "awesome5"
 
 [theme]
-name = "slick"
+theme = "slick"
 
 [theme.overrides]
 idle_bg = "#282a36"
@@ -21,9 +22,6 @@ separator_fg = "auto"
 [[block]]
 block = "music"
 player = "spotify"
-smart_trim = true
-hide_when_empty = true
-buttons = ["play", "next"]
 
 [[block]]
 block = "backlight"
@@ -33,47 +31,40 @@ invert_icons = true
 [[block]]
 block = "battery"
 interval = 10
-format = " {percentage}"
+format = "$percentage"
 
 [[block]]
 block = "disk_space"
 path = "/"
-alias = "/"
 info_type = "available"
-unit = "GB"
-format = "{icon} {used}/{total} ({available})"
+format = " $icon $used/$total ($available)"
 
 [[block]]
 block = "temperature"
-collapsed = false
 interval = 1
-format = " {average}C"
+format = " $average C "
 chip = "coretemp-isa-00000"
 
 [[block]]
 block = "net"
 device = "wlp82s0"
-format = " {speed_down} {speed_up}"
+format = " $speed_down $speed_up "
 interval = 1
 
 [[block]]
 block = "memory"
-clickable = false
-display_type = "memory"
-format_mem = " {mem_used;G} /{mem_total;G} ({mem_used_percents})"
+format = "$mem_used / $mem_total ($mem_used_percents) "
 
 [[block]]
 block = "cpu"
 interval = 1
-format = " {utilization} {frequency}"
+format = " $utilization $frequency "
 
 [[block]]
 block = "sound"
 driver = "pulseaudio"
-on_click = "pavucontrol"
-format = " {volume}"
 
 [[block]]
 block = "time"
 interval = 1
-format = " %H:%M:%S    %a %-d %b W%V"
+format = " $timestamp.datetime(f:'%H:%M:%S    %a %-d %b W%V')"
