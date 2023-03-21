@@ -23,6 +23,10 @@ separator_fg = "auto"
 block = "music"
 player = "spotify"
 
+[[block.click]]
+button = "left"
+cmd = "spotify"
+
 [[block]]
 block = "backlight"
 device = "intel_backlight"
@@ -58,13 +62,17 @@ format = "$mem_used / $mem_total ($mem_used_percents) "
 [[block]]
 block = "cpu"
 interval = 1
-format = " $utilization $frequency "
+format = " $utilization ($frequency) "
 
 [[block]]
 block = "sound"
 driver = "pulseaudio"
 
+[[block.click]]
+button = "left"
+cmd = "pavucontrol"
+
 [[block]]
 block = "time"
 interval = 1
-format = " $timestamp.datetime(f:'%H:%M:%S    %a %-d %b W%V')"
+format = " $icon $timestamp.datetime(f:'%H:%M:%S    %a %-d %b W%V') "
