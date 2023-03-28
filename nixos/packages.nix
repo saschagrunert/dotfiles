@@ -105,13 +105,13 @@ in
     lshw
     lvm2
     lxappearance
+    mediainfo
     nix-index
     nix-prefetch-git
     nixos-shell
     nixpkgs-fmt
     nodePackages.prettier
     nodePackages.write-good
-    nodejs
     openssl
     openvpn
     pahole
