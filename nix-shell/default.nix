@@ -6,17 +6,12 @@ stdenv.mkDerivation {
       doCheck = false;
       dontDisableStatic = true;
     }))
+    (zstd.override { static = true; })
     autoconf
     automake
     btrfs-progs
     dbus
-    (elfutils.overrideAttrs (x: {
-      version = "0.188";
-      src = fetchurl {
-        url = "https://sourceware.org/elfutils/ftp/0.188/elfutils-0.188.tar.bz2";
-        sha256 = "sha256-+4sOjQgCAFuaMJxgwdjeMt0pUbVvDDo8tW0hzgFZXf8=";
-      };
-    }))
+    elfutils
     glibc
     glibc.static
     gpgme
