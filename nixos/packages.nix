@@ -146,6 +146,7 @@ in
     tig
     tmux
     tokei
+    typos
     unclutter
     unzip
     usbutils

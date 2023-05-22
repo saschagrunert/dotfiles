@@ -154,6 +154,8 @@ repository:
     Terminal multiplexer
   - [tokei](https://github.com/Aaronepower/tokei):
     Count lines of code quickly
+  - [typos](https://github.com/crate-ci/typos):
+    Source code spell checker
   - [vim](https://github.com/vim):
     The editor
 
