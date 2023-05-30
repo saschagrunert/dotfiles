@@ -62,6 +62,7 @@ in
     fd
     feh
     file
+    func
     fuse-overlayfs
     fzf
     gcc
