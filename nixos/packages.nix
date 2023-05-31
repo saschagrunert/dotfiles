@@ -95,6 +95,7 @@ in
     kcov
     kdenlive
     kind
+    krew
     kubectl
     kubernetes
     kustomize

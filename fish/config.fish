@@ -24,6 +24,10 @@ if test -d $HOME/.cargo/bin
     set -a __my_path $HOME/.cargo/bin
 end
 
+if test -d $HOME/.krew/bin
+    set -a __my_path $HOME/.krew/bin
+end
+
 if test -d $HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin
     set -a __my_path $HOME/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin
 end
