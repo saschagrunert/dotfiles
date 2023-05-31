@@ -62,7 +62,6 @@ in
     fd
     feh
     file
-    func
     fuse-overlayfs
     fzf
     gcc
@@ -96,7 +95,6 @@ in
     kcov
     kdenlive
     kind
-    kn
     kubectl
     kubernetes
     kustomize
