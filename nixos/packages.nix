@@ -43,7 +43,7 @@ in
     cargo-edit
     cargo-kcov
     cfssl
-    clang_15
+    clang_16
     clang-tools
     cmake
     cni-plugins
@@ -55,6 +55,7 @@ in
     cri-tools
     crun
     ctags
+    dart-sass
     dmenu
     dunst
     etcd
@@ -147,6 +148,7 @@ in
     tig
     tmux
     tokei
+    trunk
     typos
     unclutter
     unzip
