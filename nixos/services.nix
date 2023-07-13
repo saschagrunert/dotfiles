@@ -24,7 +24,10 @@
     light.enable = true;
     mtr.enable = true;
     nm-applet.enable = true;
-    vim.defaultEditor = true;
+    vim = {
+      defaultEditor = true;
+      package = pkgs.vim_configurable;
+    };
   };
 
   services = {

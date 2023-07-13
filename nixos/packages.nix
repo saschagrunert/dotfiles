@@ -155,7 +155,6 @@ in
     usbutils
     vagrant
     valgrind
-    vim_configurable
     virt-manager
     wget
     xclip
