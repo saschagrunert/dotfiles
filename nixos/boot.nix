@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 {
   boot = {
+    enableContainers = false;
     initrd = {
       availableKernelModules = [
         "xhci_pci"
@@ -36,12 +37,10 @@
     };
     loader = {
       timeout = 0;
-      #systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       grub = {
         configurationLimit = 2;
         enable = true;
-        version = 2;
         efiSupport = true;
         enableCryptodisk = true;
         device = "nodev";

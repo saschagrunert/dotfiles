@@ -43,8 +43,8 @@ in
     cargo-edit
     cargo-kcov
     cfssl
-    clang_16
     clang-tools
+    clang_16
     cmake
     cni-plugins
     conmon
