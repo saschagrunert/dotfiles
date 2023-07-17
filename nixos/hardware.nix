@@ -2,16 +2,16 @@
 {
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/f7ff2198-47a7-4826-bff5-215128944553";
+      device = "/dev/disk/by-uuid/a3e8a789-81cc-422b-8c50-183bbfdbfa8a";
       fsType = "ext4";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/DD06-C10E";
+      device = "/dev/disk/by-uuid/5AA3-6FE5";
       fsType = "vfat";
     };
   };
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/b7ea93e6-6bf8-48e1-a355-9f10601c4feb"; }];
+  swapDevices = [{ device = "/dev/disk/by-uuid/708288a8-9726-41c4-84b2-65eba4782272"; }];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 

@@ -38,13 +38,12 @@ install: gitconfig-user
 	$(LN) "$$PWD"/hexchat/colors.conf ~/.config/hexchat/colors.conf
 	$(LN) "$$PWD"/htop ~/.config/htop
 	$(LN) "$$PWD"/icons ~/.icons
-	$(LN) "$$PWD"/i3 ~/config/i3
-	$(LN) "$$PWD"/i3status-rust ~/config/i3status-rust
+	$(LN) "$$PWD"/i3 ~/.config/i3
+	$(LN) "$$PWD"/i3status-rust ~/.config/i3status-rust
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
-	$(LN) "$$PWD"/osc ~/.config/osc
 	$(LN) "$$PWD"/ranger ~/.config/ranger
 	$(LN) "$$PWD"/rustfmt/rustfmt.toml ~/.rustfmt.toml
 	$(LN) "$$PWD"/tig/tigrc ~/.tigrc
@@ -72,14 +71,13 @@ uninstall:
 	rm ~/.gtkrc-2.0
 	rm ~/.config/hexchat/colors.conf
 	rm ~/.config/htop
-	rm ~/config/i3
-	rm ~/config/i3status-rust
+	rm ~/.config/i3
+	rm ~/.config/i3status-rust
 	rm ~/.icons
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf
 	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf
 	rm ~/.config/nixpkgs
-	rm ~/.config/osc
 	rm ~/.config/ranger
 	rm ~/.rustfmt.toml
 	rm ~/.tigrc

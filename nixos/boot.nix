@@ -15,7 +15,7 @@
       kernelModules = [ "dm-snapshot" ];
       luks.devices = {
         crypted = {
-          device = "/dev/disk/by-uuid/b82ea7ef-b4df-44b8-bd24-87b3a1507c39";
+          device = "/dev/disk/by-uuid/a6f2f4f1-8a59-4aa0-89b9-fdd94e573637";
           preLVM = true;
         };
       };
