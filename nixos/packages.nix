@@ -41,7 +41,6 @@ in
     calc
     capnproto
     cargo-edit
-    cargo-kcov
     cfssl
     clang-tools
     clang_16
@@ -55,10 +54,8 @@ in
     cri-tools
     crun
     ctags
-    dart-sass
     dmenu
     dunst
-    etcd
     exa
     fd
     feh
@@ -72,8 +69,6 @@ in
     git-lfs
     gitAndTools.gh
     gnumake
-    go-md2man
-    go-protobuf
     go_1_20
     gofumpt
     golangci-lint
@@ -84,7 +79,6 @@ in
     graphviz
     guvcview
     haskellPackages.alex
-    heaptrack
     hexchat
     htop
     imagemagick
@@ -92,17 +86,12 @@ in
     iptables
     j4-dmenu-desktop
     jq
-    jsonnet
-    kcov
     kdenlive
     kind
-    krew
     kubectl
     kubernetes
     kustomize
     ldns
-    linuxPackages.bpftrace
-    linuxPackages.perf
     lm_sensors
     lshw
     lvm2
@@ -131,7 +120,6 @@ in
     python3Packages.osc
     python3Packages.yapf
     ranger
-    rekor-cli
     ripgrep
     rpm
     runc
@@ -144,11 +132,8 @@ in
     socat
     spotify
     sysstat
-    terraform
     tig
     tmux
-    tokei
-    trunk
     typos
     unclutter
     unzip
