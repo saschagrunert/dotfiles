@@ -51,7 +51,7 @@ chip = "coretemp-isa-00000"
 
 [[block]]
 block = "net"
-device = "wlp82s0"
+device = "wlp9s0"
 format = " $speed_down $speed_up "
 interval = 1
 
