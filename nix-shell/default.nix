@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     libselinux
     libtool
     linuxPackages_latest.bcc
-    llvmPackages_15.clang-unwrapped
+    llvmPackages_16.clang-unwrapped
     lvm2
     pkg-config
     systemd
