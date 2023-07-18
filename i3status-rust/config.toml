@@ -73,6 +73,11 @@ button = "left"
 cmd = "pavucontrol"
 
 [[block]]
+block = "battery"
+format = " $icon $percentage "
+driver = "upower"
+
+[[block]]
 block = "time"
 interval = 1
 format = " $icon $timestamp.datetime(f:'%H:%M:%S    %a %-d %b W%V') "
