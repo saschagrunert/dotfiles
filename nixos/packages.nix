@@ -69,7 +69,7 @@ in
     git-lfs
     gitAndTools.gh
     gnumake
-    go_1_20
+    go_1_21
     gofumpt
     golangci-lint
     google-chrome
