@@ -56,7 +56,7 @@ in
     ctags
     dmenu
     dunst
-    exa
+    eza
     fd
     feh
     file

@@ -112,7 +112,7 @@ repository:
     Linter for C/C++ projects
   - [cpplint](https://github.com/cpplint/cpplint):
     Linter for C/C++ projects
-  - [exa](https://github.com/ogham/exa):
+  - [eza](https://github.com/eza-community/eza):
     Modern version of `ls`
   - [fd](https://github.com/sharkdp/fd):
     A fast alternative to `find`
