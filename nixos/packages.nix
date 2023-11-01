@@ -92,6 +92,7 @@ in
     kubernetes
     kustomize
     ldns
+    lima
     lm_sensors
     lshw
     lvm2
