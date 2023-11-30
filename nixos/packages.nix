@@ -35,6 +35,7 @@ in
     bat
     bats
     binutils
+    bom
     bpftools
     buildah
     cachix
