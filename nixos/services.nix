@@ -68,7 +68,6 @@
 
     xserver = {
       enable = true;
-      layout = "us";
       dpi = 150;
 
       libinput.enable = true;
@@ -91,6 +90,8 @@
         enable = true;
         extraPackages = with pkgs; [ i3status-rust ];
       };
+
+      xkb.layout = "us";
     };
   };
 }
