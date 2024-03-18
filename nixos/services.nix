@@ -19,7 +19,6 @@
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
-      pinentryFlavor = "gnome3";
     };
     light.enable = true;
     mtr.enable = true;
