@@ -44,7 +44,7 @@ in
     cargo-edit
     cfssl
     clang-tools
-    clang_16
+    clang_18
     cmake
     cni-plugins
     conmon

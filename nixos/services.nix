@@ -32,6 +32,14 @@
   services = {
     blueman.enable = true;
 
+    displayManager = {
+      autoLogin = {
+        enable = true;
+        user = "sascha";
+      };
+      defaultSession = "none+i3";
+    };
+
     printing = {
       enable = true;
       drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];
@@ -76,9 +84,6 @@
       };
 
       displayManager = {
-        autoLogin.enable = true;
-        autoLogin.user = "sascha";
-        defaultSession = "none+i3";
         lightdm = {
           enable = true;
           greeter.enable = false;
