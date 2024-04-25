@@ -42,6 +42,7 @@ in
     calc
     capnproto
     cargo-edit
+    cargo-watch
     cfssl
     clang-tools
     clang_18
