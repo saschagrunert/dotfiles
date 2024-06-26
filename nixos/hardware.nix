@@ -23,15 +23,15 @@
   hardware = {
     bluetooth.enable = true;
     cpu.intel.updateMicrocode = true;
-    opengl = {
+    graphics = {
       enable = true;
+      enable32Bit = true;
       extraPackages = with pkgs; [
         intel-media-driver
         vaapiIntel
         vaapiVdpau
         libvdpau-va-gl
       ];
-      driSupport32Bit = true;
     };
     pulseaudio = {
       enable = true;

@@ -1,67 +1,36 @@
 " vim-plug: Vim plugin manager
 " ============================
 "
-" Download plug.vim and put it in ~/.vim/autoload
+" 1. Download plug.vim and put it in 'autoload' directory
 "
+"   # Vim
 "   curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 "
-" Edit your .vimrc
+"   # Neovim
+"   sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 "
-"   call plug#begin('~/.vim/plugged')
+" 2. Add a vim-plug section to your ~/.vimrc (or ~/.config/nvim/init.vim for Neovim)
 "
-"   " Make sure you use single quotes
+"   call plug#begin()
 "
-"   " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-"   Plug 'junegunn/vim-easy-align'
+"   " List your plugins here
+"   Plug 'tpope/vim-sensible'
 "
-"   " Any valid git URL is allowed
-"   Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-"
-"   " Multiple Plug commands can be written in a single line using | separators
-"   Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-"
-"   " On-demand loading
-"   Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-"   Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-"
-"   " Using a non-default branch
-"   Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-"
-"   " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-"   Plug 'fatih/vim-go', { 'tag': '*' }
-"
-"   " Plugin options
-"   Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-"
-"   " Plugin outside ~/.vim/plugged with post-update hook
-"   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-"
-"   " Unmanaged plugin (manually installed and updated)
-"   Plug '~/my-prototype-plugin'
-"
-"   " Initialize plugin system
 "   call plug#end()
 "
-" Then reload .vimrc and :PlugInstall to install plugins.
+" 3. Reload the file or restart Vim, then you can,
 "
-" Plug options:
+"     :PlugInstall to install plugins
+"     :PlugUpdate  to update plugins
+"     :PlugDiff    to review the changes from the last update
+"     :PlugClean   to remove plugins no longer in the list
 "
-"| Option                  | Description                                      |
-"| ----------------------- | ------------------------------------------------ |
-"| `branch`/`tag`/`commit` | Branch/tag/commit of the repository to use       |
-"| `rtp`                   | Subdirectory that contains Vim plugin            |
-"| `dir`                   | Custom directory for the plugin                  |
-"| `as`                    | Use different name for the plugin                |
-"| `do`                    | Post-update hook (string or funcref)             |
-"| `on`                    | On-demand loading: Commands or `<Plug>`-mappings |
-"| `for`                   | On-demand loading: File types                    |
-"| `frozen`                | Do not update unless explicitly specified        |
-"
-" More information: https://github.com/junegunn/vim-plug
+" For more information, see https://github.com/junegunn/vim-plug
 "
 "
-" Copyright (c) 2017 Junegunn Choi
+" Copyright (c) 2024 Junegunn Choi
 "
 " MIT License
 "
@@ -2312,7 +2281,10 @@ endfunction
 
 function! s:with_cd(cmd, dir, ...)
   let script = a:0 > 0 ? a:1 : 1
-  return printf('cd%s %s && %s', s:is_win ? ' /d' : '', plug#shellescape(a:dir, {'script': script}), a:cmd)
+  let pwsh = s:is_powershell(&shell)
+  let cd = s:is_win && !pwsh ? 'cd /d' : 'cd'
+  let sep = pwsh ? ';' : '&&'
+  return printf('%s %s %s %s', cd, plug#shellescape(a:dir, {'script': script, 'shell': &shell}), sep, a:cmd)
 endfunction
 
 function! s:system(cmd, ...)

@@ -50,6 +50,8 @@
       rateLimitBurst = 0;
     };
 
+    libinput.enable = true;
+
     locate = {
       enable = true;
       interval = "hourly";
@@ -76,8 +78,6 @@
     xserver = {
       enable = true;
       dpi = 150;
-
-      libinput.enable = true;
 
       desktopManager = {
         xterm.enable = false;
