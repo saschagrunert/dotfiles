@@ -108,6 +108,7 @@ in
     nodePackages.write-good
     openssl
     openvpn
+    oras
     pahole
     parallel
     pavucontrol
