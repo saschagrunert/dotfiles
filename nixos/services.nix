@@ -24,6 +24,7 @@
     mtr.enable = true;
     nm-applet.enable = true;
     vim = {
+      enable = true;
       defaultEditor = true;
       package = pkgs.vim_configurable;
     };

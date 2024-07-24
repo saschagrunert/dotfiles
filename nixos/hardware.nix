@@ -42,6 +42,4 @@
       '';
     };
   };
-
-  sound.enable = true;
 }
