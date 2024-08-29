@@ -54,6 +54,7 @@ in
     cosign
     cri-o
     cri-tools
+    criu
     crun
     ctags
     dmenu
