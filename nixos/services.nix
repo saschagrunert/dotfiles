@@ -41,6 +41,7 @@
       defaultSession = "none+i3";
     };
 
+    pipewire.enable = false;
     printing = {
       enable = true;
       drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];
