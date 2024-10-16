@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     glibc
     glibc.static
     gpgme
+    jansson
     krb5
     libapparmor
     libbpf_1
