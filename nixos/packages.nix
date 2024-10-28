@@ -37,6 +37,7 @@ in
     binutils
     bom
     bpftools
+    buf
     buildah
     cachix
     calc
@@ -118,6 +119,7 @@ in
     picom
     proselint
     protobuf
+    protolint
     pstree
     python3
     python3Packages.autopep8
