@@ -145,7 +145,7 @@ in
     unclutter
     unzip
     usbutils
-    vagrant
+    #vagrant
     valgrind
     virt-manager
     wget
