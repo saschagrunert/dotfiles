@@ -3,7 +3,7 @@
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
-      nerdfonts
+      nerd-fonts.meslo-lg
       roboto
       roboto-slab
     ];
