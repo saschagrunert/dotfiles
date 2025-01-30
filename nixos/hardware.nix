@@ -33,13 +33,5 @@
         libvdpau-va-gl
       ];
     };
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      support32Bit = true;
-      extraConfig = ''
-        load-module module-switch-on-connect
-      '';
-    };
   };
 }
