@@ -142,7 +142,6 @@ in
     tig
     tmux
     typos
-    unclutter
     unzip
     usbutils
     vagrant

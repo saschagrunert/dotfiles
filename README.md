@@ -40,8 +40,6 @@ repository:
     Listening to music
   - [thunderbird](https://www.thunderbird.net):
     Reading and writing mails
-  - [unclutter](https://github.com/Airblader/unclutter-xfixes):
-    Hides the mouse cursor after a dedicated timeout
   - [x11](https://www.x.org):
     Windowing system
   - [xautolock](https://github.com/l0b0/xautolock):
