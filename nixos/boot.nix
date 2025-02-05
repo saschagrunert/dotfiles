@@ -4,18 +4,18 @@
     enableContainers = false;
     initrd = {
       availableKernelModules = [
-        "xhci_pci"
-        "nvme"
         "ahci"
-        "usb_storage"
-        "sd_mod"
-        "sdhci_pci"
+        "nvme"
         "rtsx_pci_sdmmc"
+        "sd_mod"
+        "thunderbolt"
+        "usb_storage"
+        "xhci_pci"
       ];
       kernelModules = [ "dm-snapshot" ];
       luks.devices = {
         crypted = {
-          device = "/dev/disk/by-uuid/a6f2f4f1-8a59-4aa0-89b9-fdd94e573637";
+          device = "/dev/disk/by-uuid/37979e33-77a8-4b2e-8bff-7d0ae8850266";
           preLVM = true;
         };
       };
@@ -28,10 +28,9 @@
         "net.ipv4.ip_unprivileged_port_start" = 0;
       };
     };
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "kvm-amd" ];
     kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [ ];
-    extraModprobeConfig = "options kvm_intel nested=1";
     tmp = {
       useTmpfs = true;
     };

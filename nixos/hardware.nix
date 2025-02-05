@@ -2,16 +2,17 @@
 {
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/a3e8a789-81cc-422b-8c50-183bbfdbfa8a";
+      device = "/dev/disk/by-uuid/f436cabf-2f00-4ca2-aa5f-bebbeffb3a18";
       fsType = "ext4";
     };
     "/boot" = {
-      device = "/dev/disk/by-uuid/5AA3-6FE5";
+      device = "/dev/disk/by-uuid/BA23-E4AC";
       fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
     };
   };
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/708288a8-9726-41c4-84b2-65eba4782272"; }];
+  swapDevices = [{ device = "/dev/disk/by-uuid/7b5f80d4-b31d-4619-b8c4-c3fcae0441a9"; }];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
@@ -22,16 +23,13 @@
 
   hardware = {
     bluetooth.enable = true;
-    cpu.intel.updateMicrocode = true;
+    cpu.amd.updateMicrocode = true;
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = with pkgs; [
-        intel-media-driver
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-      ];
+    };
+    opengl = {
+      enable = true;
     };
   };
 }

@@ -12,5 +12,5 @@
     ./fonts.nix
   ];
 
-  system.stateVersion = "20.03";
+  system.stateVersion = "24.11";
 }

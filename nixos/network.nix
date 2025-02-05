@@ -5,7 +5,7 @@
     networkmanager.enable = true;
     useDHCP = false;
     interfaces = {
-      wlp9s0.useDHCP = true;
+      wlp1s0.useDHCP = true;
     };
   };
 }
