@@ -29,7 +29,7 @@ cmd = "spotify"
 
 [[block]]
 block = "backlight"
-device = "intel_backlight"
+device = "amdgpu_bl1"
 invert_icons = true
 
 [[block]]
@@ -47,11 +47,11 @@ format = " $icon $used/$total ($available)"
 block = "temperature"
 interval = 1
 format = " $average C "
-chip = "coretemp-isa-00000"
+chip = "*-isa-*"
 
 [[block]]
 block = "net"
-device = "wlp9s0"
+device = "wlp1s0"
 format = " $speed_down $speed_up "
 interval = 1
 
