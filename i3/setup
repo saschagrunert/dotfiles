@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
 # Laptop
-if xrandr --listmonitors | grep -q DP-8; then
-    xrandr --output DP-8 --left-of eDP-1
-    xrandr --output DP-4 --left-of DP-8
-    i3-msg restart
-fi
+xrandr --output DP-8 --mode 3840x2160 --left-of eDP-1
+xrandr --output DP-4 --mode 3840x2160 --left-of DP-8
+xrandr --dpi 150
+i3-msg restart
 
 # Set the wallpaper
 feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 
 # Setup default applications
-# i3-msg exec "xautolock -time 5 -corners --00 -locker 'i3lock-fancy -p'"
 i3-msg exec picom
 i3-msg exec dunst
 i3-msg exec nm-applet
