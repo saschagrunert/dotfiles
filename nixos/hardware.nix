@@ -28,8 +28,5 @@
       enable = true;
       enable32Bit = true;
     };
-    opengl = {
-      enable = true;
-    };
   };
 }
