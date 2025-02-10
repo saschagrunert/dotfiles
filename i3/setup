@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 
-# Laptop
-xrandr --output DP-8 --mode 3840x2160 --left-of eDP-1
-xrandr --output DP-4 --mode 3840x2160 --left-of DP-8
 xrandr --dpi 150
-i3-msg restart
-
-# Set the wallpaper
-feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 
 # Setup default applications
 i3-msg exec picom
@@ -19,3 +12,5 @@ i3-msg exec "alacritty -e fish -C \"tmux new-session -s work fish -C 'vim +PlugU
 i3-msg exec "google-chrome-stable --force-device-scale-factor=1.5"
 i3-msg exec hexchat
 i3-msg exec "ibus-daemon --daemonize --xim"
+
+i3-msg exec setup-screens

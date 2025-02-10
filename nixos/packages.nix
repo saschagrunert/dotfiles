@@ -26,6 +26,7 @@ in
   };
 
   environment.systemPackages = with unstable; [
+    (import ./setup-screens.nix)
     acpilight
     alacritty
     arandr
@@ -107,7 +108,6 @@ in
     nixos-shell
     nixpkgs-fmt
     nodePackages.prettier
-    nodePackages.write-good
     openssl
     openvpn
     oras

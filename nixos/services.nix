@@ -41,6 +41,8 @@
       defaultSession = "none+i3";
     };
 
+    fwupd.enable = true;
+
     pipewire.enable = false;
     printing = {
       enable = true;
