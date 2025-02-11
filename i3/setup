@@ -13,4 +13,4 @@ i3-msg exec "google-chrome-stable --force-device-scale-factor=1.5"
 i3-msg exec hexchat
 i3-msg exec "ibus-daemon --daemonize --xim"
 
-i3-msg exec setup-screens
+setup-screens
