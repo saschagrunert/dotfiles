@@ -19,6 +19,9 @@ writeShellScriptBin "setup-screens" ''
   xrandr --output $R --mode $MODE --left-of $LAPTOP
   xrandr --output $L --mode $MODE --left-of $R
 
+  # Set the DPI
+  xrandr --dpi 150
+
   # Render the background
   feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
 ''
