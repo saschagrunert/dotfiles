@@ -91,7 +91,6 @@ in
     iptables
     j4-dmenu-desktop
     jq
-    kdenlive
     kind
     kubectl
     kubernetes
