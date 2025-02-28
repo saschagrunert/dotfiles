@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 i3-msg exec setup-screens
+i3-msg restart
 
 # Setup default applications
 i3-msg exec picom
