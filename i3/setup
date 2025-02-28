@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-xrandr --dpi 150
-
 # Setup default applications
 i3-msg exec picom
 i3-msg exec dunst
