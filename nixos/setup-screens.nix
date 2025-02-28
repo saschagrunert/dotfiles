@@ -3,7 +3,7 @@ writeShellScriptBin "setup-screens" ''
   set -euxo pipefail
 
   LAPTOP=eDP
-  L=DisplayPort-3
+  L=DisplayPort-2
   R=DisplayPort-7
   MODE=3840x2160
 
@@ -13,6 +13,4 @@ writeShellScriptBin "setup-screens" ''
 
   # Render the background
   feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
-
-  xset dpms force off
 ''
