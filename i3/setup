@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+setup-screens
+
 # Setup default applications
 i3-msg exec picom
 i3-msg exec dunst
