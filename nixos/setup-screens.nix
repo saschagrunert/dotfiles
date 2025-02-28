@@ -7,11 +7,11 @@ writeShellScriptBin "setup-screens" ''
   R=DP-8
   MODE=3840x2160
 
-  xrandr --dpi 150
 
   # Initial setup
   xrandr --output $R --mode $MODE --left-of $LAPTOP
   xrandr --output $L --mode $MODE --left-of $R
+  xrandr --dpi 150
 
   # Render the background
   feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg
