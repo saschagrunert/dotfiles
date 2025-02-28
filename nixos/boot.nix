@@ -12,7 +12,10 @@
         "usb_storage"
         "xhci_pci"
       ];
-      kernelModules = [ "dm-snapshot" ];
+      kernelModules = [
+        "amdgpu"
+        "dm-snapshot"
+      ];
       luks.devices = {
         crypted = {
           device = "/dev/disk/by-uuid/37979e33-77a8-4b2e-8bff-7d0ae8850266";
@@ -30,6 +33,11 @@
     };
     kernelModules = [ "kvm-amd" ];
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelParams = [
+      "video=DP-4:3840x2160@60"
+      "video=DP-8:3840x2160@60"
+      "video=eDP-1:1920x1200@60"
+    ];
     extraModulePackages = [ ];
     tmp = {
       useTmpfs = true;

@@ -103,6 +103,8 @@
         };
       };
 
+      videoDrivers = [ "amdgpu" ];
+
       windowManager.i3 = {
         enable = true;
         extraPackages = with pkgs; [ i3status-rust ];
