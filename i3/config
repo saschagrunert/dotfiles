@@ -137,10 +137,10 @@ bar {
 }
 
 # where to output the workspaces
-workspace $ws1 output DP-4
-workspace $ws2 output DP-8
-workspace $ws3 output eDP-1
-workspace $ws4 output eDP-1
+workspace $ws1 output DisplayPort-2
+workspace $ws2 output DisplayPort-7
+workspace $ws3 output eDP
+workspace $ws4 output eDP
 
 # take a screenshot
 bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
