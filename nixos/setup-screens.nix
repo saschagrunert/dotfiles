@@ -3,7 +3,7 @@ writeShellScriptBin "setup-screens" ''
   set -euxo pipefail
 
   LAPTOP=eDP
-  L=DisplayPort-3
+  L=DisplayPort-2
   R=DisplayPort-7
   MODE=3840x2160
 
