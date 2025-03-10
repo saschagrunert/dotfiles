@@ -125,5 +125,8 @@ if functions -q fish_vi_key_bindings
     end
 end
 
+set fish_cursor_default block
+set fish_cursor_insert block
+
 source $HOME/.config/fish/functions/autojump.fish
 source $HOME/.config/fish/functions/kubernetes.fish
