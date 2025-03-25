@@ -46,7 +46,10 @@
     pipewire.enable = false;
     printing = {
       enable = true;
-      drivers = [ pkgs.hplip pkgs.hplipWithPlugin ];
+      drivers = [
+        pkgs.hplip
+        #pkgs.hplipWithPlugin
+      ];
     };
 
     journald = {
