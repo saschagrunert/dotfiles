@@ -20,14 +20,6 @@ separator_bg = "auto"
 separator_fg = "auto"
 
 [[block]]
-block = "music"
-player = "spotify"
-
-[[block.click]]
-button = "left"
-cmd = "spotify"
-
-[[block]]
 block = "backlight"
 device = "amdgpu_bl1"
 invert_icons = true

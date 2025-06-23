@@ -136,7 +136,6 @@ in
     skopeo
     slirp4netns
     socat
-    spotify
     sysstat
     tig
     tmux

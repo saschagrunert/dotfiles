@@ -148,7 +148,6 @@ bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
 # start application commands
 bindsym $mod+b exec i3lock-fancy -p
 bindsym $mod+Shift+c exec google-chrome-stable
-bindsym $mod+Shift+m exec spotify
 
 bindsym $mod+y [urgent=latest] focus
 
@@ -163,7 +162,6 @@ assign [class="Alacritty"] → $ws2
 assign [class="Thunderbird"] → $ws3
 assign [class="Daily"] → $ws3
 assign [class="Hexchat"] → $ws3
-for_window [class="Spotify"] move to workspace $ws4
 
 # other window settings
 default_border pixel 1

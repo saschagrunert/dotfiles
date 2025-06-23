@@ -36,10 +36,6 @@ repository:
     For managing network connections
   - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
     The icon theme
-  - [spotify](https://spotify.com):
-    Listening to music
-  - [thunderbird](https://www.thunderbird.net):
-    Reading and writing mails
   - [x11](https://www.x.org):
     Windowing system
   - [xautolock](https://github.com/l0b0/xautolock):
