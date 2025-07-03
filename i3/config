@@ -137,7 +137,7 @@ bar {
 }
 
 # where to output the workspaces
-workspace $ws1 output DisplayPort-3
+workspace $ws1 output DisplayPort-2
 workspace $ws2 output DisplayPort-7
 workspace $ws3 output eDP
 workspace $ws4 output eDP
