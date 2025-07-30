@@ -48,6 +48,7 @@ in
     cfssl
     clang-tools
     clang_18
+    claude-code
     cmake
     cni-plugins
     conmon
