@@ -98,6 +98,7 @@ in
     kubernetes
     kustomize
     ldns
+    libcgroup
     lima
     lm_sensors
     lshw
