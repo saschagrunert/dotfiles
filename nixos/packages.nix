@@ -47,7 +47,7 @@ in
     cargo-watch
     cfssl
     clang-tools
-    clang_18
+    clang_21
     claude-code
     cmake
     cni-plugins
@@ -75,7 +75,7 @@ in
     git-lfs
     gitAndTools.gh
     gnumake
-    go_1_24
+    go_1_25
     gofumpt
     golangci-lint
     google-chrome
