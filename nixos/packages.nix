@@ -93,6 +93,7 @@ in
     iptables
     j4-dmenu-desktop
     jq
+    jwt-cli
     kind
     kubectl
     kubernetes
