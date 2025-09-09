@@ -144,6 +144,7 @@ in
     tig
     tmux
     typos
+    unixtools.netstat
     unzip
     usbutils
     vagrant
