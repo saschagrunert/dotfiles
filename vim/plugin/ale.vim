@@ -42,6 +42,4 @@ let g:ale_fixers = {
     \ 'typescript': [ 'prettier' ],
     \ }
 let g:ale_sh_shfmt_options = '-i 4'
-let g:ale_go_golangci_lint_package = 1
-let g:ale_go_golangci_lint_options = '--fast'
 let g:ale_rust_rustfmt_options = '--edition=2018'
