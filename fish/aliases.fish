@@ -21,7 +21,7 @@ function cl
     export ANTHROPIC_VERTEX_PROJECT_ID=itpc-gcp-hybrid-pe-eng-claude
     export CLAUDE_CODE_USE_VERTEX=1
     export CLOUD_ML_REGION=us-east5
-    claude
+    claude --dangerously-skip-permissions
 end
 
 alias .. "cd ../"
