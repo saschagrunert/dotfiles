@@ -27,7 +27,7 @@
     vim = {
       enable = true;
       defaultEditor = true;
-      package = pkgs.vim_configurable;
+      package = pkgs.vim-full;
     };
   };
 

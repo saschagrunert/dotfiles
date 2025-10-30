@@ -70,10 +70,10 @@ in
     fzf
     gcc
     gdb
+    gh
     ginkgo
     git
     git-lfs
-    gitAndTools.gh
     gnumake
     go_1_25
     gofumpt
