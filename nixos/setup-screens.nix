@@ -3,9 +3,16 @@ writeShellScriptBin "setup-screens" ''
   set -euxo pipefail
 
   LAPTOP=eDP
-  L=DisplayPort-3
-  R=DisplayPort-7
+  DT=DisplayPort
   MODE=3840x2160
+
+  R=$DT-7
+
+  if xrandr --listmonitors | grep -q $DT-3; then
+      L=$DT-3
+  else
+      L=$DT-2
+  fi
 
   # Initial setup
   xrandr --output $R --mode $MODE --left-of $LAPTOP
