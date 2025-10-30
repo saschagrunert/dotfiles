@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     jansson
     krb5
     libapparmor
-    libbpf_1
+    libbpf
     libcap
     libselinux
     libtool
