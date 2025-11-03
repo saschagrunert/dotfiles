@@ -98,6 +98,8 @@ repository:
     Compiler cache for gcc and clang
   - [cht.sh](https://github.com/chubin/cheat.sh):
     Command line stackoverflow queries
+  - [claude](https://github.com/anthropics/claude-code):
+    Anthropic's official CLI for Claude AI
   - [clang](https://github.com/llvm-mirror/clang):
     The LLVM compiler frontend
   - [cmake](https://github.com/Kitware/CMake):
