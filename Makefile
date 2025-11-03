@@ -21,11 +21,13 @@ install: gitconfig-user
 	touch ~/.hushlogin
 	mkdir -p ~/.config/hexchat \
 		~/.local/share/fonts \
-		~/.ccache
+		~/.ccache \
+		~/.claude
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
 	$(LN) "$$PWD"/bat ~/.config/bat
 	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
 	$(LN) "$$PWD"/ccache/ccache.conf ~/.ccache/ccache.conf
+	$(LN) "$$PWD"/claude/settings.json ~/.claude/settings.json
 	$(LN) "$$PWD"/dunst ~/.config/dunst
 	$(LN) "$$PWD"/fish ~/.config/fish
 	$(LN) "$$PWD"/picom ~/.config/picom
@@ -60,6 +62,7 @@ uninstall:
 	rm ~/.config/bat
 	rm ~/.clang-format
 	rm ~/.ccache/ccache.conf
+	rm ~/.claude/settings.json
 	rm ~/.config/dunst
 	rm ~/.config/fish
 	rm ~/.config/picom
