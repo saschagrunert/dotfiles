@@ -97,11 +97,11 @@ update:
 
 upgrade: update
 	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Regular/MesloLGSDZNerdFont-Regular.ttf \
-		-o "fonts/MesloLGSDZNerdFont-Regular.ttf"
+		-o "fonts/Meslo LG S DZ Regular Nerd Font Complete.ttf"
 	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Bold/MesloLGSDZNerdFont-Bold.ttf \
-		-o "fonts/MesloLGSDZNerdFont-Bold.ttf"
+		-o "fonts/Meslo LG S DZ Bold Nerd Font Complete.ttf"
 	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Italic/MesloLGSDZNerdFont-Italic.ttf \
-		-o "fonts/MesloLGSDZNerdFont-Italic.ttf"
+		-o "fonts/Meslo LG S DZ Italic Nerd Font Complete.ttf"
 	$(CURL) https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit \
 		-o gdb/gdbinit
 	$(CURL) https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/refs/heads/main/completions/kubectl.fish \
