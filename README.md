@@ -31,7 +31,7 @@ repository:
   - [j4-dmenu](https://github.com/enkore/j4-dmenu-desktop):
     The desktop menu
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
-    Iconic fonts
+    Iconic fonts (managed via NixOS packages)
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
     For managing network connections
   - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
