@@ -128,6 +128,8 @@ repository:
     Process manager for the terminal
   - [nix](https://nixos.org/nix):
     A powerful functional package manager
+  - [nixos](https://nixos.org):
+    Linux distribution built on Nix package manager
   - [osc](https://github.com/openSUSE/osc):
     Command Line Interface to work with an Open Build Service
   - [python](https://github.com/python):
@@ -167,6 +169,10 @@ The following vim plugins are available via these dotfiles:
   Asynchronous linter and fixer
 - [auto-pairs](https://github.com/jiangmiao/auto-pairs):
   Insert or delete brackets, parens, quotes in pair
+- [bpftrace](https://github.com/mmarchini/bpftrace.vim):
+  BPFtrace syntax highlighting
+- [capnp](https://github.com/cstrahan/vim-capnp):
+  Cap'n Proto syntax highlighting
 - [characterize](https://github.com/tpope/vim-characterize):
   Unicode character metadata
 - [commentary](https://github.com/tpope/vim-commentary):
@@ -175,8 +181,6 @@ The following vim plugins are available via these dotfiles:
   Fuzzy file, buffer, mru, tag, etc finder.
 - [devicons](https://github.com/ryanoasis/vim-devicons):
   Unicode characters for nerds
-- [dispatch](https://github.com/tpope/vim-dispatch):
-  Asynchronous build and test dispatcher
 - [dracula](https://github.com/saschagrunert/dracula):
   Modified variant of the dracula color scheme
 - [easymotion](https://github.com/easymotion/vim-easymotion):
@@ -199,12 +203,14 @@ The following vim plugins are available via these dotfiles:
   Enhancements for golang
 - [haskell](https://github.com/neovimhaskell/haskell-vim):
   Haskell syntax and definitions
-- [incsearch](https://github.com/haya14busa/incsearch.vim):
-  Improved incremental searching
 - [javascript](https://github.com/pangloss/vim-javascript):
   JavaScript syntax and definitions
+- [jsonnet](https://github.com/google/vim-jsonnet):
+  Jsonnet syntax and definitions
 - [markdown](https://github.com/tpope/vim-markdown):
   Markdown syntax and definitions
+- [nix](https://github.com/LnL7/vim-nix):
+  Nix syntax and definitions
 - [operator-user](https://github.com/kana/vim-operator-user):
   Define your own operator easily
 - [repeat](https://github.com/tpope/vim-repeat):
@@ -217,6 +223,8 @@ The following vim plugins are available via these dotfiles:
   Easily moving text selections around
 - [scriptease](https://github.com/tpope/vim-scriptease):
   A Vim plugin for Vim plugins
+- [shakespeare](https://github.com/pbrisbin/vim-syntax-shakespeare):
+  Shakespeare template syntax highlighting
 - [snippets](https://github.com/honza/vim-snippets):
   Snippets for ultisnips
 - [speeddating](https://github.com/tpope/vim-speeddating):
@@ -227,6 +235,8 @@ The following vim plugins are available via these dotfiles:
   Text filtering and alignment
 - [tagbar](https://github.com/majutsushi/tagbar):
   Sidebar for tags
+- [terraform](https://github.com/hashivim/vim-terraform):
+  Terraform syntax and definitions
 - [targets](https://github.com/wellle/targets.vim):
   Additional text objects
 - [textobj-comment](https://github.com/glts/vim-textobj-comment):
@@ -241,6 +251,8 @@ The following vim plugins are available via these dotfiles:
   Seamlessly switch between tmux panes and vim
 - [tmuxline](https://github.com/edkolev/tmuxline.vim):
   Tmux status line modding
+- [toml](https://github.com/cespare/vim-toml):
+  TOML syntax and definitions
 - [typescript](https://github.com/leafgarland/typescript-vim):
   Typescript syntax and definitions
 - [ultisnips](https://github.com/SirVer/ultisnips):
@@ -249,6 +261,8 @@ The following vim plugins are available via these dotfiles:
   Graphica undo list representation
 - [unimpaired](https://github.com/tpope/vim-unimpaired):
   Pairs of handy bracket mappings
+- [ycm-generator](https://github.com/rdnetto/YCM-Generator):
+  Generate YouCompleteMe configuration files
 - [youcompleteme](https://github.com/Valloric/YouCompleteMe):
   Autocompletion for multiple languages
 
