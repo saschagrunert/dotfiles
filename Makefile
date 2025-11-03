@@ -20,7 +20,6 @@ all: install
 install: gitconfig-user
 	touch ~/.hushlogin
 	mkdir -p ~/.config/hexchat \
-		~/.local/share/fonts \
 		~/.ccache \
 		~/.claude
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
@@ -42,9 +41,6 @@ install: gitconfig-user
 	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.config/i3
 	$(LN) "$$PWD"/i3status-rust ~/.config/i3status-rust
-	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
-	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
-	$(LN) "$$PWD"/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf ~/.local/share/fonts/
 	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
 	$(LN) "$$PWD"/ranger ~/.config/ranger
 	$(LN) "$$PWD"/rustfmt/rustfmt.toml ~/.rustfmt.toml
@@ -77,9 +73,6 @@ uninstall:
 	rm ~/.config/i3
 	rm ~/.config/i3status-rust
 	rm ~/.icons
-	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Regular\ Nerd\ Font\ Complete.ttf
-	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Bold\ Nerd\ Font\ Complete.ttf
-	rm ~/.local/share/fonts/Meslo\ LG\ S\ DZ\ Italic\ Nerd\ Font\ Complete.ttf
 	rm ~/.config/nixpkgs
 	rm ~/.config/ranger
 	rm ~/.rustfmt.toml
@@ -96,12 +89,6 @@ update:
 	$(GIT) pull --rebase --autostash
 
 upgrade: update
-	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Regular/MesloLGSDZNerdFont-Regular.ttf \
-		-o "fonts/Meslo LG S DZ Regular Nerd Font Complete.ttf"
-	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Bold/MesloLGSDZNerdFont-Bold.ttf \
-		-o "fonts/Meslo LG S DZ Bold Nerd Font Complete.ttf"
-	$(CURL) https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/S-DZ/Italic/MesloLGSDZNerdFont-Italic.ttf \
-		-o "fonts/Meslo LG S DZ Italic Nerd Font Complete.ttf"
 	$(CURL) https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit \
 		-o gdb/gdbinit
 	$(CURL) https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/refs/heads/main/completions/kubectl.fish \
