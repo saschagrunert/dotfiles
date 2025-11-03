@@ -40,7 +40,10 @@ if test -d $HOME/.npm-global/bin
     set -a __my_path $HOME/.npm-global/bin
 end
 
-set -U fish_user_paths $__my_path
+# Only update fish_user_paths if it has changed to avoid unnecessary universal variable writes
+if not test "$__my_path" = "$fish_user_paths"
+    set -U fish_user_paths $__my_path
+end
 
 source $HOME/.config/fish/aliases.fish
 
@@ -88,30 +91,33 @@ function fish_greeting; end
 function fish_title; end
 function fish_mode_prompt; end
 
-set -U fish_color_normal normal
-set -U fish_color_command 8be9fd
-set -U fish_color_quote f1fa8c
-set -U fish_color_redirection ffb86c
-set -U fish_color_end 50fa7b
-set -U fish_color_error ff5555
-set -U fish_color_param f8f8f2
-set -U fish_color_comment 6272a4
-set -U fish_color_match 8be9fd
-set -U fish_color_search_match --background=44475a
-set -U fish_color_operator 50fa7b
-set -U fish_color_escape bd93f9
-set -U fish_color_cwd bd93f9
-set -U fish_color_cwd_root ff5555
-set -U fish_color_autosuggestion 6272a4
-set -U fish_color_history_current 8be9fd
-set -U fish_color_host -o 8be9fd
-set -U fish_color_status ff5555
-set -U fish_color_valid_path normal
-set -U fish_color_selection --background=44475a
-set -U fish_pager_color_completion f8f8f2
-set -U fish_pager_color_description 808080
-set -U fish_pager_color_prefix ffb86c
-set -U fish_pager_color_progress 50fa7b
+# Only set colors if not already set (avoid unnecessary universal variable writes)
+if not set -q fish_color_normal
+    set -U fish_color_normal normal
+    set -U fish_color_command 8be9fd
+    set -U fish_color_quote f1fa8c
+    set -U fish_color_redirection ffb86c
+    set -U fish_color_end 50fa7b
+    set -U fish_color_error ff5555
+    set -U fish_color_param f8f8f2
+    set -U fish_color_comment 6272a4
+    set -U fish_color_match 8be9fd
+    set -U fish_color_search_match --background=44475a
+    set -U fish_color_operator 50fa7b
+    set -U fish_color_escape bd93f9
+    set -U fish_color_cwd bd93f9
+    set -U fish_color_cwd_root ff5555
+    set -U fish_color_autosuggestion 6272a4
+    set -U fish_color_history_current 8be9fd
+    set -U fish_color_host -o 8be9fd
+    set -U fish_color_status ff5555
+    set -U fish_color_valid_path normal
+    set -U fish_color_selection --background=44475a
+    set -U fish_pager_color_completion f8f8f2
+    set -U fish_pager_color_description 808080
+    set -U fish_pager_color_prefix ffb86c
+    set -U fish_pager_color_progress 50fa7b
+end
 
 if functions -q fish_vi_key_bindings
     function fish_user_key_bindings
@@ -125,8 +131,9 @@ if functions -q fish_vi_key_bindings
     end
 end
 
-set fish_cursor_default block
-set fish_cursor_insert block
+set -g fish_cursor_default block
+set -g fish_cursor_insert block
 
-source $HOME/.config/fish/functions/autojump.fish
-source $HOME/.config/fish/functions/kubernetes.fish
+# Source optional functions only if they exist
+test -f $HOME/.config/fish/functions/autojump.fish; and source $HOME/.config/fish/functions/autojump.fish
+test -f $HOME/.config/fish/functions/kubernetes.fish; and source $HOME/.config/fish/functions/kubernetes.fish
