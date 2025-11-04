@@ -44,7 +44,7 @@ TERM = "xterm-256color"
 size = 9.0
 
 [font.bold]
-family = "MesloLGSDZ Nerd Font"
+family = "MesloLGSDZ Nerd Font Mono"
 style = "Regular"
 
 [font.glyph_offset]
@@ -52,11 +52,11 @@ x = 0
 y = 0
 
 [font.italic]
-family = "MesloLGSDZ Nerd Font"
+family = "MesloLGSDZ Nerd Font Mono"
 style = "Italic"
 
 [font.normal]
-family = "MesloLGSDZ Nerd Font"
+family = "MesloLGSDZ Nerd Font Mono"
 style = "Regular"
 
 [font.offset]
