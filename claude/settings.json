@@ -8,5 +8,5 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "alwaysThinkingEnabled": false
+  "alwaysThinkingEnabled": true
 }
