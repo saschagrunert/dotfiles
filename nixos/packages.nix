@@ -83,7 +83,6 @@ in
     gopls
     gotools
     graphviz
-    guvcview
     haskellPackages.alex
     heaptrack
     hexchat
