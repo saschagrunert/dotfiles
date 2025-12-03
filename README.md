@@ -18,8 +18,6 @@ repository:
     Lightweight and customizable notification daemon
   - [feh](https://github.com/derf/feh):
     A fast and light image viewer
-  - [hexchat](https://github.com/hexchat/hexchat):
-    IRC client
   - [i3](https://github.com/i3/i3):
     A tiling window manager
   - [i3lock-fancy](https://github.com/meskarune/i3lock-fancy):

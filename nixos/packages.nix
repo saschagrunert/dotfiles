@@ -85,7 +85,6 @@ in
     graphviz
     haskellPackages.alex
     heaptrack
-    hexchat
     htop
     imagemagick
     inetutils

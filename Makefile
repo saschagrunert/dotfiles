@@ -19,8 +19,7 @@ all: install
 
 install: gitconfig-user
 	touch ~/.hushlogin
-	mkdir -p ~/.config/hexchat \
-		~/.ccache \
+	mkdir -p ~/.ccache \
 		~/.claude
 	$(LN) "$$PWD"/alacritty ~/.config/alacritty
 	$(LN) "$$PWD"/bat ~/.config/bat
@@ -36,7 +35,6 @@ install: gitconfig-user
 	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
 	$(LN) "$$PWD"/git/gitignore_global ~/.gitignore_global
 	$(LN) "$$PWD"/gtk/gtkrc-2.0 ~/.gtkrc-2.0
-	$(LN) "$$PWD"/hexchat/colors.conf ~/.config/hexchat/colors.conf
 	$(LN) "$$PWD"/htop ~/.config/htop
 	$(LN) "$$PWD"/icons ~/.icons
 	$(LN) "$$PWD"/i3 ~/.config/i3
@@ -68,7 +66,6 @@ uninstall:
 	rm ~/.gitconfig
 	rm ~/.gitignore_global
 	rm ~/.gtkrc-2.0
-	rm ~/.config/hexchat/colors.conf
 	rm ~/.config/htop
 	rm ~/.config/i3
 	rm ~/.config/i3status-rust
