@@ -109,6 +109,7 @@ in
     nixos-shell
     nixpkgs-fmt
     nodePackages.prettier
+    nodejs
     openssl
     openvpn
     oras
