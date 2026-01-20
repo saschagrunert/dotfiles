@@ -1,12 +1,12 @@
 # Clear terminal and tmux history
 function c
     clear
-    test -n "$TMUX"; and tmux clear-history
+    test -n "$TMUX" && tmux clear-history
 end
 
 # Make directory and cd into it
 function mdc
-    mkdir -p $argv; and cd $argv
+    mkdir -p $argv && cd $argv
 end
 
 # Get local default branch
@@ -23,23 +23,23 @@ end
 
 # Remove remote branch and prune local
 function grm
-    git push origin :$argv; and gpl
+    git push origin :$argv && gpl
 end
 
 # Fetch and checkout GitHub PR
 function gpr
-    test (count $argv) -eq 2; or return 1
-    git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2]; and git checkout pr-$argv[2]
+    test (count $argv) -eq 2 || return 1
+    git fetch $argv[1] pull/$argv[2]/head:pr-$argv[2] && git checkout pr-$argv[2]
 end
 
 # Update branch from remote
 function gup
-    git fetch $argv; and git merge $argv/(gldb); and gp; and gl
+    git fetch $argv && git merge $argv/(gldb) && gp && gl
 end
 
 # Set kubernetes namespace
 function kns
-    kubectl config set-context --current --namespace=$argv
+    kubectl config set-context --current --namespace=$argv[1]
 end
 
 # Run command in nix-shell
@@ -54,15 +54,15 @@ end
 
 # Build nix package
 function nb
-    set -l PKG (basename $PWD)
-    test (count $argv) -gt 0; and set PKG "$argv"
+    set -l PKG (basename "$PWD")
+    test (count $argv) -gt 0 && set PKG "$argv"
     nix build "(import <nixpkgs-unstable> { }).$PKG.overrideAttrs (x: { src = ./.; })"
 end
 
-alias .. "cd ../"
-alias ... "cd ../../"
-alias .... "cd ../../../"
-alias ..... "cd ../../../../"
+alias .. "cd .."
+alias ... "cd ../.."
+alias .... "cd ../../.."
+alias ..... "cd ../../../.."
 alias cat "bat"
 alias cl "claude"
 alias duf "du -sh *"
@@ -97,7 +97,7 @@ function gdifff
 end
 
 function gl
-    git pull --prune; and gpl
+    git pull --prune && gpl
 end
 
 alias glg "git log --stat --max-count=10"
@@ -136,12 +136,11 @@ alias grv "git remote -v"
 alias gsp "git stash pop"
 
 function gsq
-    git reset (gmb); and gaa; and git commit -s
+    git reset (gmb) && gaa && git commit -s
 end
 
 alias gss "git stash"
 alias gst "git status"
-alias gsta "git stash"
 alias h "history"
 alias hs "history --search"
 alias k "kubectl"
@@ -155,9 +154,11 @@ alias lt "l -T"
 alias m "make"
 alias mc "make clean"
 alias md "mkdir -p"
-alias mm "make -j32"
-alias nowrap "cut -c-$COLUMNS"
-alias nup "nix-channel --update; and nix-env -u '*'"
+alias mm "make -j(nproc)"
+function nowrap
+    cut -c-$COLUMNS
+end
+alias nup "nix-channel --update && nix-env -u '*'"
 alias p "pwd"
 alias po "popd"
 alias pu "pushd"
@@ -166,7 +167,7 @@ alias rup "rustup update"
 alias screensleep "xset dpms force off"
 alias t "tail -f"
 alias ta "tmux attach"
-alias tg "cd ~; and tmux"
+alias tg "cd ~ && tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
 alias up "rup && sudo nix-channel --update && sudo nixos-rebuild switch --upgrade"
