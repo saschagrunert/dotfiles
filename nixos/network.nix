@@ -10,5 +10,8 @@
     interfaces = {
       wlp1s0.useDHCP = true;
     };
+    firewall = {
+      allowedTCPPorts = [ 8000 ];
+    };
   };
 }
