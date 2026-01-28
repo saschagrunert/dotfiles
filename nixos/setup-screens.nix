@@ -6,7 +6,11 @@ writeShellScriptBin "setup-screens" ''
   DT=DisplayPort
   MODE=3840x2160
 
-  R=$DT-7
+  if xrandr --listmonitors | grep -q $DT-8; then
+      R=$DT-8
+  else
+      R=$DT-7
+  fi
 
   if xrandr --listmonitors | grep -q $DT-3; then
       L=$DT-3
