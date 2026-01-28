@@ -64,7 +64,12 @@ alias ... "cd ../.."
 alias .... "cd ../../.."
 alias ..... "cd ../../../.."
 alias cat "bat"
-alias cl "claude"
+
+function cl
+    export PATH="$HOME/.local/bin:$PATH"
+    claude $argv
+end
+
 alias duf "du -sh *"
 alias f "fd"
 alias ff "fd --type f"
