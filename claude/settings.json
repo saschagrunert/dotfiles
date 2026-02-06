@@ -7,6 +7,5 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "defaultMode": "bypassPermissions"
-  },
-  "alwaysThinkingEnabled": false
+  }
 }

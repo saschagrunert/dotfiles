@@ -4,7 +4,12 @@ writeShellScriptBin "setup-screens" ''
 
   DT=DP
   LAPTOP=eDP-1
+
   L=$DT-3
+  if xrandr --listmonitors | grep -q $DT-4; then
+      L=$DT-4
+  fi
+
   R=$DT-8
   MODE=3840x2160
 
