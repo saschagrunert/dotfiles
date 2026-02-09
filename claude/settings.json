@@ -7,5 +7,6 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "defaultMode": "bypassPermissions"
-  }
+  },
+  "model": "claude-opus-4-6"
 }
