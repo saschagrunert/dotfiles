@@ -22,6 +22,7 @@
   };
 
   hardware = {
+    amdgpu.overdrive.enable = true;
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;
     graphics = {
