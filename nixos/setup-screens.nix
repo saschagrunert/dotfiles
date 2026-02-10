@@ -2,17 +2,13 @@ with import <nixpkgs> { };
 writeShellScriptBin "setup-screens" ''
   set -euxo pipefail
 
-  DT=DP
-  LAPTOP=eDP-1
+  DT=DisplayPort
+  LAPTOP=eDP
 
-  L=$DT-3
-  if xrandr --listmonitors | grep -q $DT-4; then
-      L=$DT-4
-  fi
+  L=$DT-2
+  R=$DT-7
 
-  R=$DT-8
   MODE=3840x2160
-
 
   # Initial setup
   xrandr --output $R --mode $MODE --left-of $LAPTOP
