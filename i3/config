@@ -125,6 +125,8 @@ bar {
     position top
     strip_workspace_numbers yes
     # mode hide
+    bindsym button4 exec ~/.config/i3/workspace-scroll prev
+    bindsym button5 exec ~/.config/i3/workspace-scroll next
     colors {
         separator $selection
         background $bg

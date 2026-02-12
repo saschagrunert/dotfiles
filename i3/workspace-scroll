@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+direction=$1
+workspaces=$(i3-msg -t get_workspaces)
+
+focused_num=$(echo "$workspaces" | jq '.[] | select(.focused==true) | .num')
+focused_output=$(echo "$workspaces" | jq -r '.[] | select(.focused==true) | .output')
+
+output_nums=$(echo "$workspaces" | jq --arg out "$focused_output" '[.[] | select(.output==$out) | .num] | sort')
+
+if [ "$direction" = "next" ]; then
+    max_on_output=$(echo "$output_nums" | jq 'max')
+    if [ "$focused_num" -eq "$max_on_output" ]; then
+        global_max=$(echo "$workspaces" | jq '[.[].num] | max')
+        i3-msg workspace $((global_max + 1))
+    else
+        i3-msg workspace next_on_output
+    fi
+elif [ "$direction" = "prev" ]; then
+    min_on_output=$(echo "$output_nums" | jq 'min')
+    if [ "$focused_num" -eq "$min_on_output" ]; then
+        :
+    else
+        i3-msg workspace prev_on_output
+    fi
+fi
