@@ -155,6 +155,7 @@ bindsym $mod+y [urgent=latest] focus
 
 # floating window settings
 for_window [class="Arandr"] floating enable
+for_window [class="X-Plane"] floating enable, fullscreen disable
 floating_minimum_size 10 x 10
 floating_maximum_size -1 x -1
 
