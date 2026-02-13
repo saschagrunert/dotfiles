@@ -8,5 +8,6 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "model": "claude-opus-4-6"
+  "model": "claude-opus-4-6",
+  "skipDangerousModePermissionPrompt": true
 }
