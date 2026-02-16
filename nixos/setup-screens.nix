@@ -5,12 +5,8 @@ writeShellScriptBin "setup-screens" ''
   DT=DisplayPort
   LAPTOP=eDP
 
-  L=$DT-2
-  if xrandr --listmonitors | grep -q $DT-3; then
-      L=$DT-3
-  fi
-
-  R=$DT-7
+  L=$DT-7
+  R=$DT-9
 
   MODE=3840x2160
 

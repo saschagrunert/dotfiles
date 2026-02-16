@@ -48,19 +48,15 @@ bindsym $mod+a focus parent
 
 set $ws1 "1: "
 set $ws2 "2: "
-set $ws3 "3: "
-set $ws4 "4: "
 
 # switch to workspace
 bindsym $mod+q workspace $ws1
 bindsym $mod+w workspace $ws2
-bindsym $mod+e workspace $ws3
-bindsym $mod+r workspace $ws4
 
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
@@ -70,13 +66,11 @@ bindsym $mod+9 workspace 9
 # move focused container to workspace
 bindsym $mod+Shift+q move container to workspace $ws1
 bindsym $mod+Shift+w move container to workspace $ws2
-bindsym $mod+Shift+e move container to workspace $ws3
-bindsym $mod+Shift+r move container to workspace $ws4
 
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
@@ -139,10 +133,8 @@ bar {
 }
 
 # where to output the workspaces
-workspace $ws1 output DisplayPort-2
-workspace $ws2 output DisplayPort-7
-workspace $ws3 output eDP
-workspace $ws4 output eDP
+workspace $ws1 output DisplayPort-7
+workspace $ws2 output DisplayPort-9
 
 # take a screenshot
 bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
@@ -163,9 +155,6 @@ floating_maximum_size -1 x -1
 # assign to workspaces
 assign [class="google-chrome"] → $ws1
 assign [class="Alacritty"] → $ws2
-assign [class="Thunderbird"] → $ws3
-assign [class="Daily"] → $ws3
-assign [class="Hexchat"] → $ws3
 
 # other window settings
 default_border pixel 1
