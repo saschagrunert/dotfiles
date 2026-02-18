@@ -75,7 +75,7 @@ in
     git
     git-lfs
     gnumake
-    go_1_25
+    go_1_26
     gofumpt
     golangci-lint
     google-chrome
