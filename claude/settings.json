@@ -1,6 +1,6 @@
 {
   "env": {
-    "ANTHROPIC_VERTEX_PROJECT_ID": "itpc-gcp-hybrid-pe-eng-claude",
+    "ANTHROPIC_VERTEX_PROJECT_ID": "itpc-gcp-hcm-pe-eng-claude",
     "CLOUD_ML_REGION": "us-east5",
     "CLAUDE_CODE_USE_VERTEX": "1"
   },
