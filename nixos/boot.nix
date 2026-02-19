@@ -33,11 +33,6 @@
     };
     kernelModules = [ "kvm-amd" ];
     #kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [
-      "video=DisplayPort-7:3840x2160@60"
-      "video=DisplayPort-9:3840x2160@60"
-      "video=eDP:1920x1200@60"
-    ];
     extraModulePackages = [ ];
     tmp = {
       useTmpfs = true;
