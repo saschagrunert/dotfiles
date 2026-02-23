@@ -10,7 +10,7 @@ EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
-.PHONY: switch gitconfig-user update upgrade
+.PHONY: all switch gitconfig-user update upgrade
 
 all: gitconfig-user
 
