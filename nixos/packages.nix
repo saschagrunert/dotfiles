@@ -105,7 +105,6 @@
     pahole
     parallel
     pavucontrol
-    pulseaudio
     peek
     perlPackages.Apprainbarf
     picom

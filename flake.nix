@@ -25,6 +25,9 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
+            home-manager.extraSpecialArgs = {
+              dotfilesPath = "/home/sascha/.dotfiles";
+            };
             home-manager.users.sascha = import ./home.nix;
           }
         ];

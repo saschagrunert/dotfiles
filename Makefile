@@ -18,6 +18,7 @@ switch:
 	sudo nixos-rebuild switch --flake ~/.dotfiles\#nixos
 
 gitconfig-user:
+	rm -f $(GITCONFIG_USER_PATH)
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
@@ -40,4 +41,3 @@ upgrade: update
 		-o fish/functions/autojump.fish
 	$(GIT) add -A
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
-	$(GIT) push

@@ -58,7 +58,7 @@ format = " $utilization ($frequency) "
 
 [[block]]
 block = "sound"
-driver = "pulseaudio"
+driver = "pipewire"
 
 [[block.click]]
 button = "left"

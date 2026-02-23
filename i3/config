@@ -142,7 +142,6 @@ workspace $ws3 output DisplayPort-9
 bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
 
 # start application commands
-bindsym $mod+b exec i3lock-fancy -p
 bindsym $mod+Shift+c exec google-chrome-stable
 
 bindsym $mod+y [urgent=latest] focus

@@ -1,41 +1,40 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, dotfilesPath, ... }:
 let
   link = config.lib.file.mkOutOfStoreSymlink;
-  dotfiles = "/home/sascha/.dotfiles";
 in
 {
   home.stateVersion = "24.11";
 
   home.file = {
     ".hushlogin".text = "";
-    ".clang-format".source = link "${dotfiles}/clang/clang-format";
-    ".gdbinit".source = link "${dotfiles}/gdb/gdbinit";
-    ".gdbinit.d".source = link "${dotfiles}/gdb/gdbinit.d";
-    ".ghci".source = link "${dotfiles}/ghci/ghci";
-    ".gitconfig".source = link "${dotfiles}/git/gitconfig";
-    ".gitignore_global".source = link "${dotfiles}/git/gitignore_global";
-    ".gtkrc-2.0".source = link "${dotfiles}/gtk/gtkrc-2.0";
-    ".icons".source = link "${dotfiles}/icons";
-    ".rustfmt.toml".source = link "${dotfiles}/rustfmt/rustfmt.toml";
-    ".tigrc".source = link "${dotfiles}/tig/tigrc";
-    ".tmux.conf".source = link "${dotfiles}/tmux/tmux.conf";
-    ".vim".source = link "${dotfiles}/vim";
-    ".Xdefaults".source = link "${dotfiles}/x11/Xdefaults";
-    ".profile".source = link "${dotfiles}/x11/profile";
-    ".xinitrc".source = link "${dotfiles}/x11/xinitrc";
-    ".ccache/ccache.conf".source = link "${dotfiles}/ccache/ccache.conf";
-    ".claude/settings.json".source = link "${dotfiles}/claude/settings.json";
+    ".clang-format".source = link "${dotfilesPath}/clang/clang-format";
+    ".gdbinit".source = link "${dotfilesPath}/gdb/gdbinit";
+    ".gdbinit.d".source = link "${dotfilesPath}/gdb/gdbinit.d";
+    ".ghci".source = link "${dotfilesPath}/ghci/ghci";
+    ".gitconfig".source = link "${dotfilesPath}/git/gitconfig";
+    ".gitignore_global".source = link "${dotfilesPath}/git/gitignore_global";
+    ".gtkrc-2.0".source = link "${dotfilesPath}/gtk/gtkrc-2.0";
+    ".icons".source = link "${dotfilesPath}/icons";
+    ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
+    ".tigrc".source = link "${dotfilesPath}/tig/tigrc";
+    ".tmux.conf".source = link "${dotfilesPath}/tmux/tmux.conf";
+    ".vim".source = link "${dotfilesPath}/vim";
+    ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
+    ".profile".source = link "${dotfilesPath}/x11/profile";
+    ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
+    ".ccache/ccache.conf".source = link "${dotfilesPath}/ccache/ccache.conf";
+    ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
   };
 
   xdg.configFile = {
-    "alacritty".source = link "${dotfiles}/alacritty";
-    "bat".source = link "${dotfiles}/bat";
-    "dunst".source = link "${dotfiles}/dunst";
-    "fish".source = link "${dotfiles}/fish";
-    "htop".source = link "${dotfiles}/htop";
-    "i3".source = link "${dotfiles}/i3";
-    "i3status-rust".source = link "${dotfiles}/i3status-rust";
-    "picom".source = link "${dotfiles}/picom";
-    "ranger".source = link "${dotfiles}/ranger";
+    "alacritty".source = link "${dotfilesPath}/alacritty";
+    "bat".source = link "${dotfilesPath}/bat";
+    "dunst".source = link "${dotfilesPath}/dunst";
+    "fish".source = link "${dotfilesPath}/fish";
+    "htop".source = link "${dotfilesPath}/htop";
+    "i3".source = link "${dotfilesPath}/i3";
+    "i3status-rust".source = link "${dotfilesPath}/i3status-rust";
+    "picom".source = link "${dotfilesPath}/picom";
+    "ranger".source = link "${dotfilesPath}/ranger";
   };
 }
