@@ -44,7 +44,11 @@ end
 
 # Run command in nix dev shell
 function ns
-    nix develop ~/.dotfiles --command $argv
+    if test (count $argv) -gt 0
+        nix develop ~/.dotfiles --command $argv
+    else
+        nix develop ~/.dotfiles --command fish
+    end
 end
 
 # Tail curl output with auto-refresh
@@ -175,7 +179,7 @@ alias ta "tmux attach"
 alias tg "cd ~ && tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
-alias up "rup && sudo nixos-rebuild switch --flake ~/.dotfiles#nixos && nix-collect-garbage -d && ns"
+alias up "rup && sudo nixos-rebuild switch --flake ~/.dotfiles#nixos && nix-collect-garbage -d && nix develop ~/.dotfiles --command true"
 alias v "vim"
 alias vr "ranger"
 alias vv "vim -u NONE"
