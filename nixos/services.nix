@@ -32,6 +32,7 @@
   };
 
   services = {
+    autorandr.enable = true;
     blueman.enable = true;
 
     displayManager = {

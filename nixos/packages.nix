@@ -19,6 +19,7 @@
     acpilight
     alacritty
     arandr
+    autorandr
     arc-theme
     asciinema
     autojump

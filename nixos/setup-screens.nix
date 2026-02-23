@@ -1,18 +1,8 @@
 { writeShellScriptBin }:
 writeShellScriptBin "setup-screens" ''
-  set -euxo pipefail
+  set -euo pipefail
 
-  DT=DisplayPort
-  LAPTOP=eDP
-
-  L=$DT-7
-  R=$DT-9
-
-  MODE=3840x2160
-
-  # Initial setup
-  xrandr --output $R --mode $MODE --left-of $LAPTOP
-  xrandr --output $L --mode $MODE --left-of $R
+  autorandr --change
 
   # Render the background
   feh --bg-scale ~/.dotfiles/wallpaper/blurred.jpg

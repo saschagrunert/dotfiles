@@ -10,4 +10,3 @@ i3-msg exec blueman-applet
 
 i3-msg exec "alacritty -e fish -C \"tmux new-session -s work\""
 i3-msg exec "google-chrome-stable --force-device-scale-factor=1.5"
-i3-msg exec "ibus-daemon --daemonize --xim"

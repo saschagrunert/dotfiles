@@ -21,6 +21,7 @@ separator_fg = "auto"
 
 [[block]]
 block = "backlight"
+# Hardware-specific: adjust per machine
 device = "amdgpu_bl1"
 invert_icons = true
 
@@ -43,6 +44,7 @@ chip = "*-isa-*"
 
 [[block]]
 block = "net"
+# Hardware-specific: adjust per machine
 device = "wlp1s0"
 format = " $speed_down $speed_up "
 interval = 1
