@@ -42,4 +42,4 @@ let g:ale_fixers = {
     \ 'typescript': [ 'prettier' ],
     \ }
 let g:ale_sh_shfmt_options = '-i 4'
-let g:ale_rust_rustfmt_options = '--edition=2018'
+let g:ale_rust_rustfmt_options = '--edition=2021'
