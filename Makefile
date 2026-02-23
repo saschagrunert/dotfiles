@@ -1,8 +1,6 @@
 # Used binaries
 GIT := git
 CURL := curl -sL
-CRONTAB := crontab
-
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
@@ -43,9 +41,3 @@ upgrade: update
 	$(GIT) add -A
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 	$(GIT) push
-
-crontab:
-	echo '0 * * * * cd ~/.dotfiles && make update 2>&1 >> /dev/null' > /tmp/crontab
-	$(CRONTAB) /tmp/crontab
-	rm /tmp/crontab
-	$(CRONTAB) -l

@@ -35,7 +35,6 @@ in
     "htop".source = link "${dotfiles}/htop";
     "i3".source = link "${dotfiles}/i3";
     "i3status-rust".source = link "${dotfiles}/i3status-rust";
-    "nixpkgs".source = link "${dotfiles}/nixpkgs";
     "picom".source = link "${dotfiles}/picom";
     "ranger".source = link "${dotfiles}/ranger";
   };

@@ -42,9 +42,9 @@ function kns
     kubectl config set-context --current --namespace=$argv[1]
 end
 
-# Run command in nix-shell
+# Run command in nix dev shell
 function ns
-    nix-shell ~/.dotfiles/nix-shell --run "$argv"
+    nix develop ~/.dotfiles --command $argv
 end
 
 # Tail curl output with auto-refresh

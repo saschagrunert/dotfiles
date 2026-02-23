@@ -9,20 +9,61 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, home-manager, ... }:
+    let
       system = "x86_64-linux";
-      specialArgs = { inherit nixpkgs; };
-      modules = [
-        ./nixos/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "hm-backup";
-          home-manager.users.sascha = import ./home.nix;
-        }
-      ];
+      pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit nixpkgs; };
+        modules = [
+          ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "hm-backup";
+            home-manager.users.sascha = import ./home.nix;
+          }
+        ];
+      };
+
+      devShells.${system}.default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          (libseccomp.overrideAttrs (x: {
+            doCheck = false;
+            dontDisableStatic = true;
+          }))
+          (zstd.override { static = true; })
+          autoconf
+          automake
+          btrfs-progs
+          dbus
+          elfutils
+          glibc
+          glibc.static
+          gpgme
+          jansson
+          krb5
+          libapparmor
+          libbpf
+          libcap
+          libselinux
+          libtool
+          linuxPackages_latest.bcc
+          llvmPackages_21.clang-unwrapped
+          lvm2
+          pkg-config
+          systemd
+          yajl
+          zlib
+          zlib.static
+        ];
+        shellHook = ''
+          export CFLAGS=$NIX_CFLAGS_COMPILE
+        '';
+      };
     };
-  };
 }
