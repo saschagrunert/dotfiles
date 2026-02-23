@@ -1,4 +1,4 @@
-with import <nixpkgs> { };
+{ writeShellScriptBin }:
 writeShellScriptBin "setup-screens" ''
   set -euxo pipefail
 

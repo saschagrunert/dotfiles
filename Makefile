@@ -2,7 +2,6 @@
 GIT := git
 CURL := curl -sL
 CRONTAB := crontab
-LN := ln -sfn
 
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
@@ -13,74 +12,19 @@ EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
-.PHONY: install gitconfig-user uninstall update upgrade
+.PHONY: switch gitconfig-user update upgrade
 
-all: install
+all: gitconfig-user
 
-install: gitconfig-user
-	touch ~/.hushlogin
-	mkdir -p ~/.ccache \
-		~/.claude
-	$(LN) "$$PWD"/alacritty ~/.config/alacritty
-	$(LN) "$$PWD"/bat ~/.config/bat
-	$(LN) "$$PWD"/clang/clang-format ~/.clang-format
-	$(LN) "$$PWD"/ccache/ccache.conf ~/.ccache/ccache.conf
-	$(LN) "$$PWD"/claude/settings.json ~/.claude/settings.json
-	$(LN) "$$PWD"/dunst ~/.config/dunst
-	$(LN) "$$PWD"/fish ~/.config/fish
-	$(LN) "$$PWD"/picom ~/.config/picom
-	$(LN) "$$PWD"/gdb/gdbinit ~/.gdbinit
-	$(LN) "$$PWD"/gdb/gdbinit.d ~/.gdbinit.d
-	$(LN) "$$PWD"/ghci/ghci ~/.ghci
-	$(LN) "$$PWD"/git/gitconfig ~/.gitconfig
-	$(LN) "$$PWD"/git/gitignore_global ~/.gitignore_global
-	$(LN) "$$PWD"/gtk/gtkrc-2.0 ~/.gtkrc-2.0
-	$(LN) "$$PWD"/htop ~/.config/htop
-	$(LN) "$$PWD"/icons ~/.icons
-	$(LN) "$$PWD"/i3 ~/.config/i3
-	$(LN) "$$PWD"/i3status-rust ~/.config/i3status-rust
-	$(LN) "$$PWD"/nixpkgs ~/.config/nixpkgs
-	$(LN) "$$PWD"/ranger ~/.config/ranger
-	$(LN) "$$PWD"/rustfmt/rustfmt.toml ~/.rustfmt.toml
-	$(LN) "$$PWD"/tig/tigrc ~/.tigrc
-	$(LN) "$$PWD"/tmux/tmux.conf ~/.tmux.conf
-	$(LN) "$$PWD"/vim ~/.vim
-	$(LN) "$$PWD"/x11/Xdefaults ~/.Xdefaults
-	$(LN) "$$PWD"/x11/profile ~/.profile
-	$(LN) "$$PWD"/x11/xinitrc ~/.xinitrc
-	echo "Done"
+switch:
+	sudo nixos-rebuild switch --flake ~/.dotfiles\#nixos
 
-uninstall:
-	rm ~/.hushlogin
-	rm ~/.config/alacritty
-	rm ~/.config/bat
-	rm ~/.clang-format
-	rm ~/.ccache/ccache.conf
-	rm ~/.claude/settings.json
-	rm ~/.config/dunst
-	rm ~/.config/fish
-	rm ~/.config/picom
-	rm ~/.gdbinit
-	rm ~/.gdbinit.d
-	rm ~/.ghci
-	rm ~/.gitconfig
-	rm ~/.gitignore_global
-	rm ~/.gtkrc-2.0
-	rm ~/.config/htop
-	rm ~/.config/i3
-	rm ~/.config/i3status-rust
-	rm ~/.icons
-	rm ~/.config/nixpkgs
-	rm ~/.config/ranger
-	rm ~/.rustfmt.toml
-	rm ~/.tigrc
-	rm ~/.tmux.conf
-	rm ~/.vim
-	rm ~/.Xdefaults
-	rm ~/.profile
-	rm ~/.xinitrc
-	rm $(GITCONFIG_USER_PATH)
-	echo "Done"
+gitconfig-user:
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
+	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
 
 update:
 	$(GIT) pull --rebase --autostash
@@ -105,10 +49,3 @@ crontab:
 	$(CRONTAB) /tmp/crontab
 	rm /tmp/crontab
 	$(CRONTAB) -l
-
-gitconfig-user:
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
-	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)

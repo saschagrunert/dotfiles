@@ -34,7 +34,7 @@
         };
       };
     };
-    pki.certificateFiles = [ /etc/pki/tls/certs/2022-IT-Root-CA.pem ];
+    pki.certificateFiles = [ ./2022-IT-Root-CA.pem ];
     sudo = {
       enable = true;
       wheelNeedsPassword = false;

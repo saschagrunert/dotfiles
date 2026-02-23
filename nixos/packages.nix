@@ -1,32 +1,21 @@
-{ config, lib, pkgs, ... }:
-let
-  baseconfig = { allowUnfree = true; };
-  unstable = import <nixpkgs-unstable> { config = baseconfig; };
-in
+{ config, lib, pkgs, nixpkgs, ... }:
 {
   imports = [
-    <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
+    "${nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
   ];
-  disabledModules = [ ];
 
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
     settings = {
+      experimental-features = [ "nix-command" "flakes" ];
       max-jobs = lib.mkDefault 8;
       trusted-users = [ "root" "sascha" ];
     };
   };
 
-  nixpkgs.config = baseconfig // {
-    packageOverrides = pkgs: {
-      linuxPackages_latest = unstable.linuxPackages_latest;
-    };
-  };
+  nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with unstable; [
-    (import ./setup-screens.nix)
+  environment.systemPackages = with pkgs; [
+    (import ./setup-screens.nix { inherit writeShellScriptBin; })
     acpilight
     alacritty
     arandr
@@ -116,6 +105,7 @@ in
     pahole
     parallel
     pavucontrol
+    pulseaudio
     peek
     perlPackages.Apprainbarf
     picom
@@ -151,7 +141,7 @@ in
     virt-manager
     wget
     xclip
-    xorg.xev
+    xev
     xsel
     yamllint
     yq-go

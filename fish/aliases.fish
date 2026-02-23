@@ -56,7 +56,7 @@ end
 function nb
     set -l PKG (basename "$PWD")
     test (count $argv) -gt 0 && set PKG "$argv"
-    nix build "(import <nixpkgs-unstable> { }).$PKG.overrideAttrs (x: { src = ./.; })"
+    nix build --impure --expr "with import (builtins.getFlake \"nixpkgs\") {}; $PKG.overrideAttrs { src = ./.; }"
 end
 
 alias .. "cd .."
@@ -163,7 +163,7 @@ alias mm "make -j(nproc)"
 function nowrap
     cut -c-$COLUMNS
 end
-alias nup "nix-channel --update && nix-env -u '*'"
+alias nup "nix flake update --flake ~/.dotfiles"
 alias p "pwd"
 alias po "popd"
 alias pu "pushd"
@@ -175,7 +175,7 @@ alias ta "tmux attach"
 alias tg "cd ~ && tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
-alias up "rup && sudo nix-channel --update && sudo nixos-rebuild switch --upgrade"
+alias up "rup && sudo nixos-rebuild switch --flake ~/.dotfiles#nixos && nix-collect-garbage -d && ns"
 alias v "vim"
 alias vr "ranger"
 alias vv "vim -u NONE"

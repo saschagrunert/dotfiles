@@ -45,7 +45,13 @@
     fwupd.enable = true;
     lact.enable = true;
 
-    pipewire.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
     printing = {
       enable = true;
       drivers = [
@@ -64,15 +70,6 @@
     locate = {
       enable = true;
       interval = "hourly";
-    };
-
-    pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull;
-      support32Bit = true;
-      extraConfig = ''
-        load-module module-switch-on-connect
-      '';
     };
 
     udev.extraRules = ''

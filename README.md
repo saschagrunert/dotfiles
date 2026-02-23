@@ -2,6 +2,10 @@
 
 ### My dotfiles, crafted with ❤️
 
+This repository is a [NixOS flake](https://nixos.wiki/wiki/Flakes) that manages
+both the system configuration and user environment via
+[home-manager](https://github.com/nix-community/home-manager).
+
 The following dependencies are needed to use all features from this dotfile
 repository:
 
@@ -155,7 +159,49 @@ repository:
   - [vim](https://github.com/vim):
     The editor
 
-### Vim plugins
+## Installation
+
+```fish
+> git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
+> cd ~/.dotfiles
+> make gitconfig-user USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
+> sudo ln -sfn ~/.dotfiles /etc/nixos
+> sudo nixos-rebuild switch --flake ~/.dotfiles#nixos
+```
+
+The `gitconfig-user` target creates `~/.gitconfig_user` with your name, email
+and GPG signing key.
+
+## Rebuilding
+
+After editing any configuration file, rebuild with:
+
+```fish
+> make switch
+```
+
+Or use the `up` alias which also updates Rust, collects garbage and enters
+the nix-shell.
+
+## Updating
+
+To update flake inputs (nixpkgs, home-manager) to their latest versions:
+
+```fish
+> nix flake update --flake ~/.dotfiles
+> make switch
+```
+
+To pull the latest dotfiles and update external dependencies:
+
+```fish
+> make upgrade
+```
+
+### Vim
+
+To install all necessary vim plugins you need to run `:PlugInstall` on initial
+startup of vim. To update them run `:PlugUpdate` or `:PlugUpdate!`.
 
 The following vim plugins are available via these dotfiles:
 
@@ -263,47 +309,6 @@ The following vim plugins are available via these dotfiles:
   Generate YouCompleteMe configuration files
 - [youcompleteme](https://github.com/Valloric/YouCompleteMe):
   Autocompletion for multiple languages
-
-## Installation
-
-To install all files into your home directory, simply execute:
-
-```fish
-> git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
-> cd ~/.dotfiles
-> make install USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
-```
-
-The variables `USER`, `EMAIL` and `SIGNKEY` specify additionally created git
-user data.
-
-### Vim
-
-To install all necessary vim plugins you need to run `:PlugInstall` on initial
-startup of vim.
-
-## Updating
-
-To update to the latest version of these dotfiles:
-
-```fish
-> make update
-```
-
-Alternatively you can run `make crontab` which installs a local cron job for
-updating the repository every hour.
-
-### Vim
-
-To update all necessary vim plugins you can run `:PlugUpdate` or `:PlugUpdate!`.
-
-## Uninstall
-
-To uninstall all created symlinks and data from your home directory, run:
-
-```fish
-> make uninstall
-```
 
 ## Screenshots
 
