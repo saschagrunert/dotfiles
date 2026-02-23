@@ -137,8 +137,6 @@ set path+=/usr/local/include
 
 let g:netrw_liststyle=1
 
-set regexpengine=2
-
 " fancy fillchars
 set fillchars+=vert:│
 

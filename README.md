@@ -24,8 +24,6 @@ repository:
     A fast and light image viewer
   - [i3](https://github.com/i3/i3):
     A tiling window manager
-  - [i3lock-fancy](https://github.com/meskarune/i3lock-fancy):
-    A fancy lock screen for i3
   - [i3status-rust](https://github.com/greshake/i3status-rust):
     A replacement for i3status
   - [ibus](https://github.com/ibus/ibus):
@@ -40,8 +38,6 @@ repository:
     The icon theme
   - [x11](https://www.x.org):
     Windowing system
-  - [xautolock](https://github.com/l0b0/xautolock):
-    Automatically locks the screen after a certain amount of time
 - **Vim**:
   - [alex](https://github.com/get-alex/alex):
     Needed for ALE Markdown/asciidoc linting and fixing
@@ -180,8 +176,8 @@ After editing any configuration file, rebuild with:
 > make switch
 ```
 
-Or use the `up` alias which also updates Rust, collects garbage and enters
-the nix-shell.
+Or use the `up` alias which also updates Rust, collects garbage and
+pre-caches the dev shell.
 
 ## Updating
 
