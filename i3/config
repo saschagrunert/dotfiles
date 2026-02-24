@@ -133,7 +133,7 @@ bar {
     }
 }
 
-# where to output the workspaces
+# Machine-specific: workspace to output mappings
 workspace $ws1 output DisplayPort-7
 workspace $ws2 output DisplayPort-9
 workspace $ws3 output DisplayPort-9

@@ -155,6 +155,32 @@ repository:
   - [vim](https://github.com/vim):
     The editor
 
+## Structure
+
+```
+flake.nix               # Nix flake entry point
+home.nix                # Home-manager user config (symlinks)
+nixos/
+├── configuration.nix   # Main NixOS config (imports all modules)
+├── hosts/
+│   └── desktop/        # Machine-specific config
+│       ├── hardware.nix
+│       ├── boot.nix
+│       └── lact.nix
+├── packages.nix        # System packages (grouped by purpose)
+├── services.nix        # System services
+├── network.nix
+├── security.nix
+├── users.nix
+├── locale.nix
+├── fonts.nix
+└── setup-screens.nix   # Monitor & wallpaper setup script
+```
+
+To add a new host, create a directory under `nixos/hosts/` with its own
+`hardware.nix` and `boot.nix`, then add a new `nixosConfigurations` entry
+in `flake.nix`.
+
 ## Installation
 
 ```fish

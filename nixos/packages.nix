@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs, ... }:
+{ config, lib, pkgs, nixpkgs, dotfilesPath, ... }:
 {
   imports = [
     "${nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
@@ -15,136 +15,172 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    (import ./setup-screens.nix { inherit writeShellScriptBin; })
+    (import ./setup-screens.nix { inherit writeShellScriptBin dotfilesPath; })
+
+    # Desktop & UI
     acpilight
     alacritty
     arandr
-    autorandr
     arc-theme
-    asciinema
-    autojump
-    bat
-    bats
-    binutils
-    bom
-    bpftools
-    buf
-    buildah
-    cachix
-    calc
-    capnproto
-    cargo-edit
-    cargo-watch
-    cfssl
-    clang-tools
-    clang_21
-    claude-code
-    cmake
-    cni-plugins
-    conmon
-    conmon-rs
-    conntrack-tools
-    cosign
-    cri-o
-    cri-tools
-    criu
-    crun
-    ctags
+    autorandr
     dmenu
     dunst
+    feh
+    google-chrome
+    j4-dmenu-desktop
+    lxappearance
+    pavucontrol
+    picom
+    xclip
+    xev
+    xsel
+
+    # System utilities
+    autojump
+    bat
+    calc
     eza
     fd
-    feh
     file
-    fuse-overlayfs
     fzf
+    htop
+    jq
+    parallel
+    pstree
+    ranger
+    ripgrep
+    tmux
+    unzip
+    wget
+    yq-go
+
+    # Development tools
+    binutils
+    claude-code
+    cmake
+    ctags
     gcc
-    gdb
     gh
-    ginkgo
     git
     git-lfs
     gnumake
+    graphviz
+    tig
+
+    # Go
     go_1_26
     gofumpt
     golangci-lint
-    google-chrome
-    google-cloud-sdk
     gopls
     gotools
-    graphviz
-    haskellPackages.alex
-    heaptrack
-    htop
-    imagemagick
-    inetutils
-    iptables
-    j4-dmenu-desktop
-    jq
-    jwt-cli
-    kind
-    kubectl
-    kubernetes
-    kustomize
-    ldns
-    libcgroup
-    lima
-    lm_sensors
-    lshw
-    lvm2
-    lxappearance
-    mediainfo
-    nix-index
-    nix-prefetch-git
-    nixos-shell
-    nixpkgs-fmt
-    nodePackages.prettier
-    nodejs
-    openssl
-    openvpn
-    oras
-    pahole
-    parallel
-    pavucontrol
-    peek
-    perlPackages.Apprainbarf
-    picom
-    proselint
-    protobuf
-    protolint
-    pstree
+
+    # Rust
+    cargo-edit
+    cargo-watch
+    rustup
+
+    # Python
     python3
     python3Packages.autopep8
     python3Packages.isort
     python3Packages.osc
     python3Packages.yapf
-    ranger
-    ripgrep
-    rpm
+
+    # Haskell
+    haskellPackages.alex
+
+    # Node.js
+    nodejs
+    nodePackages.prettier
+
+    # C/C++
+    clang-tools
+    clang_21
+
+    # Containers & virtualization
+    buildah
+    cni-plugins
+    conmon
+    conmon-rs
+    cri-o
+    cri-tools
+    criu
+    crun
+    fuse-overlayfs
+    lima
+    oras
     runc
-    rustup
-    shellcheck
-    shfmt
-    signal-desktop
     skopeo
     slirp4netns
-    socat
-    sysstat
-    tig
-    tmux
-    typos
-    unixtools.netstat
-    unzip
-    usbutils
     vagrant
-    valgrind
     virt-manager
-    wget
-    xclip
-    xev
-    xsel
+
+    # Kubernetes & cloud
+    cosign
+    google-cloud-sdk
+    kind
+    kubectl
+    kubernetes
+    kustomize
+
+    # Serialization & data
+    buf
+    capnproto
+    protobuf
+    protolint
+
+    # Networking & security
+    cfssl
+    conntrack-tools
+    inetutils
+    iptables
+    jwt-cli
+    ldns
+    openssl
+    openvpn
+    socat
+    unixtools.netstat
+
+    # Debugging & profiling
+    bpftools
+    gdb
+    heaptrack
+    libcgroup
+    lm_sensors
+    lshw
+    lvm2
+    pahole
+    sysstat
+    usbutils
+    valgrind
+
+    # Code quality & linting
+    bats
+    ginkgo
+    proselint
+    shellcheck
+    shfmt
+    typos
     yamllint
-    yq-go
+
+    # Media & documents
+    asciinema
+    imagemagick
+    mediainfo
+    peek
+
+    # Nix tools
+    cachix
+    nix-index
+    nix-prefetch-git
+    nixos-shell
+    nixpkgs-fmt
+
+    # Misc
+    bom
+    perlPackages.Apprainbarf
+    rpm
+    signal-desktop
     zoom-us
   ];
 }

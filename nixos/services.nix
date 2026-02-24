@@ -44,7 +44,6 @@
     };
 
     fwupd.enable = true;
-    lact.enable = true;
 
     pipewire = {
       enable = true;

@@ -13,11 +13,12 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      dotfilesPath = "/home/sascha/.dotfiles";
     in
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit nixpkgs; };
+        specialArgs = { inherit nixpkgs dotfilesPath; };
         modules = [
           ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
@@ -25,9 +26,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-backup";
-            home-manager.extraSpecialArgs = {
-              dotfilesPath = "/home/sascha/.dotfiles";
-            };
+            home-manager.extraSpecialArgs = { inherit dotfilesPath; };
             home-manager.users.sascha = import ./home.nix;
           }
         ];

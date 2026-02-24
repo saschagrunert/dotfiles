@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 {
   imports = [
-    ./hardware.nix
-    ./boot.nix
+    ./hosts/desktop
     ./network.nix
     ./security.nix
     ./users.nix
