@@ -3,16 +3,9 @@ return {
   { "tpope/vim-repeat", event = "VeryLazy" },
   { "tpope/vim-abolish", event = "VeryLazy" },
   { "tpope/vim-eunuch", cmd = { "Remove", "Rename", "Mkdir", "Move", "Chmod", "SudoWrite", "SudoEdit", "Wall" } },
-  { "tpope/vim-endwise", event = "InsertEnter" },
   { "tommcdo/vim-exchange", keys = { "cx", { "X", mode = "v" } } },
   { "tpope/vim-speeddating", keys = { "<C-a>", "<C-x>" } },
-  { "tpope/vim-characterize", keys = { "ga" } },
   { "tpope/vim-unimpaired", event = "VeryLazy" },
-  { "tpope/vim-scriptease", cmd = { "Messages", "Verbose", "Time" } },
-  {
-    "godlygeek/tabular",
-    cmd = "Tabularize",
-  },
   { "wellle/targets.vim", event = "VeryLazy" },
   {
     "windwp/nvim-autopairs",

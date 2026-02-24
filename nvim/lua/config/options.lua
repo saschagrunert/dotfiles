@@ -107,15 +107,6 @@ opt.breakindent = true
 -- Path
 opt.path:append("/usr/local/include")
 
--- Netrw
-vim.g.netrw_liststyle = 1
-
--- Markdown fenced code blocks
-vim.g.markdown_fenced_languages = {
-  "css", "erb=eruby", "javascript", "js=javascript",
-  "json=javascript", "ruby", "sass", "xml", "html",
-}
-
 -- Fillchars
 opt.fillchars:append({ vert = "│" })
 

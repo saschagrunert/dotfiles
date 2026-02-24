@@ -1,9 +1,11 @@
 local autocmd = vim.api.nvim_create_autocmd
 
--- Show diagnostic float on hover
+-- Show diagnostic float on hover (only when diagnostics exist)
 autocmd("CursorHold", {
   callback = function()
-    vim.diagnostic.open_float({ focusable = false })
+    if #vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }) > 0 then
+      vim.diagnostic.open_float({ focusable = false })
+    end
   end,
 })
 
@@ -70,33 +72,8 @@ autocmd("FileType", {
   end,
 })
 
--- Haskell settings
-autocmd("FileType", {
-  pattern = "haskell",
-  callback = function()
-    vim.g.haskell_enable_quantification = 1
-    vim.g.haskell_enable_recursivedo = 1
-    vim.g.haskell_enable_arrowsyntax = 1
-    vim.g.haskell_enable_pattern_synonyms = 1
-    vim.g.haskell_enable_typeroles = 1
-    vim.g.haskell_enable_static_pointers = 1
-    vim.g.haskell_backpack = 1
-    vim.g.haskell_classic_highlighting = 1
-    vim.g.cabal_indent_section = 2
-    vim.g.haskell_indent_if = 3
-    vim.g.haskell_indent_case = 2
-    vim.g.haskell_indent_let = 4
-    vim.g.haskell_indent_where = 6
-    vim.g.haskell_indent_before_where = 2
-    vim.g.haskell_indent_after_bare_where = 2
-    vim.g.haskell_indent_do = 3
-    vim.g.haskell_indent_in = 1
-    vim.g.haskell_indent_guard = 2
-  end,
-})
-
--- Lint on save/insert leave
-autocmd({ "BufWritePost", "InsertLeave" }, {
+-- Lint on save
+autocmd("BufWritePost", {
   callback = function()
     local ok, lint = pcall(require, "lint")
     if ok then lint.try_lint() end
