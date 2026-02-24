@@ -57,7 +57,6 @@
       enable = true;
       drivers = [
         pkgs.hplip
-        #pkgs.hplipWithPlugin
       ];
     };
 

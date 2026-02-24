@@ -32,7 +32,6 @@
       };
     };
     kernelModules = [ "kvm-amd" ];
-    #kernelPackages = pkgs.linuxPackages_latest;
     extraModulePackages = [ ];
     tmp = {
       useTmpfs = true;

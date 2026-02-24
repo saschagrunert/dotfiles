@@ -45,9 +45,9 @@ end
 # Run command in nix dev shell
 function ns
     if test (count $argv) -gt 0
-        nix develop ~/.dotfiles --command $argv
+        nix develop $DOTFILES --command $argv
     else
-        nix develop ~/.dotfiles --command fish
+        nix develop $DOTFILES --command fish
     end
 end
 
@@ -167,7 +167,7 @@ alias mm "make -j(nproc)"
 function nowrap
     cut -c-$COLUMNS
 end
-alias nup "nix flake update --flake ~/.dotfiles"
+alias nup "nix flake update --flake $DOTFILES"
 alias p "pwd"
 alias po "popd"
 alias pu "pushd"
@@ -179,7 +179,7 @@ alias ta "tmux attach"
 alias tg "cd ~ && tmux"
 alias tl "tmux list-sessions"
 alias ts "tmux new-session -s"
-alias up "rup && sudo nixos-rebuild switch --flake ~/.dotfiles#nixos && nix-collect-garbage -d && nix develop ~/.dotfiles --command true"
+alias up "rup && sudo nixos-rebuild switch --flake $DOTFILES#nixos && nix-collect-garbage -d && nix develop $DOTFILES --command true"
 alias v "vim"
 alias vr "ranger"
 alias vv "vim -u NONE"
