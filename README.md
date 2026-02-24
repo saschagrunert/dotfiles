@@ -38,55 +38,18 @@ repository:
     The icon theme
   - [x11](https://www.x.org):
     Windowing system
-- **Vim**:
-  - [alex](https://github.com/get-alex/alex):
-    Needed for ALE Markdown/asciidoc linting and fixing
-  - [cscope](http://cscope.sourceforge.net):
-    Tool for source code indexing and querying
-  - [ctags](http://ctags.sourceforge.net):
-    Generates tags file for source code discovery
-  - [floskell](https://github.com/ennocramer/floskell):
-    Needed for ALE Haskell linting and fixing
-  - [node](https://github.com/nodejs/node):
-    Needed for YouCompleteMe typescript/javascript support
-  - [npm](https://github.com/npm/cli):
-    Needed for YouCompleteMe typescript/javascript support
-  - [autopep8](https://github.com/hhatto/autopep8):
-    Needed for ALE python linting and fixing
-  - [clang-format](https://github.com/llvm-mirror/clang/tree/master/tools/clang-format):
-    Needed for ALE C/C++ linting and fixing
-  - [golangci-lint](https://github.com/golangci/golangci-lint):
-    Needed for ALE golang linting and fixing
-  - [hdevtools](https://github.com/hdevtools/hdevtools):
-    Needed for ALE haskell linting and fixing
-  - [hfmt](https://github.com/danstiner/hfmt):
-    Needed for ALE haskelllinting and fixing
-  - [hlint](https://github.com/ndmitchell/hlint):
-    Needed for ALE haskelllinting and fixing
-  - [isort](https://github.com/timothycrosley/isort):
-    Needed for ALE python linting and fixing
-  - [prettier](https://github.com/prettier/prettier):
-    Needed for general ALE linting and fixing
-  - [proselint](https://github.com/amperser/proselint):
-    Needed for ALE Markdown/asciidoc linting and fixing
-  - [rls](https://github.com/rust-lang/rls):
-    Needed for ALE rust linting and fixing
-  - [rustfmt](https://github.com/rust-lang/rustfmt):
-    Needed for ALE rust code formatting
-  - [shellcheck](https://github.com/koalaman/shellcheck):
-    Needed for ALE bash/sh linting and fixing
-  - [shfmt](https://github.com/mvdan/sh):
-    Needed for ALE bash/sh linting and fixing
-  - [textlint](https://github.com/textlint/textlint):
-    Needed for ALE Markdown/asciidoc linting and fixing
-  - [tflint](https://github.com/wata727/tflint):
-    Needed for ALE terraform linting and fixing
-  - [write-good](https://github.com/btford/write-good):
-    Needed for ALE Markdown/asciidoc linting and fixing
-  - [yapf](https://github.com/google/yapf):
-    Needed for ALE python linting and fixing
-  - [yamllint](https://github.com/adrienverge/yamllint):
-    Needed for ALE yaml linting and fixing
+- **Neovim** (managed via [lazy.nvim](https://github.com/folke/lazy.nvim)):
+  - Native LSP via [mason.nvim](https://github.com/williamboman/mason.nvim) +
+    [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+  - Completion via [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) +
+    [LuaSnip](https://github.com/L3MON4D3/LuaSnip)
+  - Formatting via [conform.nvim](https://github.com/stevearc/conform.nvim)
+  - Linting via [nvim-lint](https://github.com/mfussenegger/nvim-lint)
+  - Syntax via [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
+  - Fuzzy finding via [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+  - Git via [fugitive](https://github.com/tpope/vim-fugitive) +
+    [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
+  - Theme: [dracula.nvim](https://github.com/Mofiqul/dracula.nvim)
 - **Development**:
   - [autojump](https://github.com/wting/autojump):
     A cd command that learns
@@ -152,7 +115,7 @@ repository:
     Count lines of code quickly
   - [typos](https://github.com/crate-ci/typos):
     Source code spell checker
-  - [vim](https://github.com/vim):
+  - [neovim](https://github.com/neovim/neovim):
     The editor
 
 ## Structure
@@ -168,7 +131,7 @@ nixos/
 │       ├── boot.nix
 │       └── lact.nix
 ├── packages.nix        # System packages (grouped by purpose)
-├── programs.nix        # Program modules (fish, vim, gnupg, ...)
+├── programs.nix        # Program modules (fish, neovim, gnupg, ...)
 ├── virtualisation.nix  # Container runtimes (docker, podman, cri-o)
 ├── services.nix        # System services (X11, i3, pipewire, ...)
 ├── network.nix
@@ -222,121 +185,14 @@ To pull the latest dotfiles and update external dependencies:
 > make upgrade
 ```
 
-### Vim
+### Neovim
 
-To install all necessary vim plugins you need to run `:PlugInstall` on initial
-startup of vim. To update them run `:PlugUpdate` or `:PlugUpdate!`.
-
-The following vim plugins are available via these dotfiles:
-
-- [abolish](https://github.com/tpope/vim-abolish):
-  Easily search for, substitute, and abbreviate multiple variants of a word
-- [airline](https://github.com/vim-airline/vim-airline):
-  Statusline enhancements
-- [ale](https://github.com/dense-analysis/ale):
-  Asynchronous linter and fixer
-- [auto-pairs](https://github.com/jiangmiao/auto-pairs):
-  Insert or delete brackets, parens, quotes in pair
-- [bpftrace](https://github.com/mmarchini/bpftrace.vim):
-  BPFtrace syntax highlighting
-- [capnp](https://github.com/cstrahan/vim-capnp):
-  Cap'n Proto syntax highlighting
-- [characterize](https://github.com/tpope/vim-characterize):
-  Unicode character metadata
-- [commentary](https://github.com/tpope/vim-commentary):
-  Easy commenting
-- [ctrlp](https://github.com/ctrlpvim/ctrlp.vim):
-  Fuzzy file, buffer, mru, tag, etc finder.
-- [devicons](https://github.com/ryanoasis/vim-devicons):
-  Unicode characters for nerds
-- [dracula](https://github.com/saschagrunert/dracula):
-  Modified variant of the dracula color scheme
-- [easymotion](https://github.com/easymotion/vim-easymotion):
-  Efficient movements
-- [endwise](https://github.com/tpope/vim-endwise):
-  Wisely add endings
-- [eunuch](https://github.com/tpope/vim-eunuch):
-  Helpers for unix
-- [exchange](https://github.com/tommcdo/vim-exchange):
-  Easy text exchange operator
-- [fish](https://github.com/dag/vim-fish):
-  Fish shell syntax
-- [fugitive](https://github.com/tpope/vim-fugitive):
-  Git on steroids
-- [git](https://github.com/tpope/vim-git):
-  Git syntax and definitions
-- [gitgutter](https://github.com/airblade/vim-gitgutter):
-  Git diff in sign column
-- [go](https://github.com/fatih/vim-go):
-  Enhancements for golang
-- [haskell](https://github.com/neovimhaskell/haskell-vim):
-  Haskell syntax and definitions
-- [javascript](https://github.com/pangloss/vim-javascript):
-  JavaScript syntax and definitions
-- [jsonnet](https://github.com/google/vim-jsonnet):
-  Jsonnet syntax and definitions
-- [markdown](https://github.com/tpope/vim-markdown):
-  Markdown syntax and definitions
-- [nix](https://github.com/LnL7/vim-nix):
-  Nix syntax and definitions
-- [operator-user](https://github.com/kana/vim-operator-user):
-  Define your own operator easily
-- [repeat](https://github.com/tpope/vim-repeat):
-  Enable repeating supported plugin maps
-- [ripgrep](https://github.com/jremmen/vim-ripgrep):
-  Ripgrep search helper
-- [rust](https://github.com/rust-lang/rust.vim):
-  Rust syntax and definitions
-- [schlepp](https://github.com/zirrostig/vim-schlepp):
-  Easily moving text selections around
-- [scriptease](https://github.com/tpope/vim-scriptease):
-  A Vim plugin for Vim plugins
-- [shakespeare](https://github.com/pbrisbin/vim-syntax-shakespeare):
-  Shakespeare template syntax highlighting
-- [snippets](https://github.com/honza/vim-snippets):
-  Snippets for ultisnips
-- [speeddating](https://github.com/tpope/vim-speeddating):
-  Use CTRL-A/CTRL-X to increment dates, times, and more
-- [surround](https://github.com/tpope/vim-surround):
-  Quoting/parenthesizing made simple
-- [tabular](https://github.com/godlygeek/tabular):
-  Text filtering and alignment
-- [tagbar](https://github.com/majutsushi/tagbar):
-  Sidebar for tags
-- [terraform](https://github.com/hashivim/vim-terraform):
-  Terraform syntax and definitions
-- [targets](https://github.com/wellle/targets.vim):
-  Additional text objects
-- [textobj-comment](https://github.com/glts/vim-textobj-comment):
-  Textobject enhancement for comments
-- [textobj-lastpat](https://github.com/kana/vim-textobj-lastpat):
-  Textobject enhancement for last searched patterns
-- [textobj-user](https://github.com/kana/vim-textobj-user):
-  Enables custom textobjects
-- [textobj-variable-segment](https://github.com/Julian/vim-textobj-variable-segment):
-  Textobject enhancement for variables
-- [tmux-navigator](https://github.com/christoomey/vim-tmux-navigator):
-  Seamlessly switch between tmux panes and vim
-- [tmuxline](https://github.com/edkolev/tmuxline.vim):
-  Tmux status line modding
-- [toml](https://github.com/cespare/vim-toml):
-  TOML syntax and definitions
-- [typescript](https://github.com/leafgarland/typescript-vim):
-  Typescript syntax and definitions
-- [ultisnips](https://github.com/SirVer/ultisnips):
-  Snipped engine
-- [undotree](https://github.com/mbbill/undotree):
-  Graphica undo list representation
-- [unimpaired](https://github.com/tpope/vim-unimpaired):
-  Pairs of handy bracket mappings
-- [ycm-generator](https://github.com/rdnetto/YCM-Generator):
-  Generate YouCompleteMe configuration files
-- [youcompleteme](https://github.com/Valloric/YouCompleteMe):
-  Autocompletion for multiple languages
+Plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim) and
+install automatically on first launch. LSP servers are installed via
+[Mason](https://github.com/williamboman/mason.nvim) on first use.
 
 ## Screenshots
 
-![vim screenshot](.github/vim.png "Vim")
 ![alacritty screenshot](.github/alacritty.png "Alacritty")
 
 ## Contributing

@@ -18,7 +18,7 @@ in
     ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
     ".tigrc".source = link "${dotfilesPath}/tig/tigrc";
     ".tmux.conf".source = link "${dotfilesPath}/tmux/tmux.conf";
-    ".vim".source = link "${dotfilesPath}/vim";
+    ".tmux/scripts".source = link "${dotfilesPath}/tmux/scripts";
     ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
     ".profile".source = link "${dotfilesPath}/x11/profile";
     ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
@@ -35,6 +35,7 @@ in
     "i3".source = link "${dotfilesPath}/i3";
     "i3status-rust".source = link "${dotfilesPath}/i3status-rust";
     "picom".source = link "${dotfilesPath}/picom";
+    "nvim".source = link "${dotfilesPath}/nvim";
     "ranger".source = link "${dotfilesPath}/ranger";
   };
 }

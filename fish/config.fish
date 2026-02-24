@@ -1,5 +1,5 @@
-set -gx VISUAL vim
-set -gx EDITOR vim
+set -gx VISUAL nvim
+set -gx EDITOR nvim
 set -gx GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -gx DOTFILES ~/.dotfiles
 set -gx QT_STYLE_OVERRIDE gtk2

@@ -11,19 +11,19 @@
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
     ls = ls-files
 [merge]
-    tool = vimdiff
+    tool = nvimdiff
 [mergetool]
     prompt = false
 [push]
     default = upstream
 [diff]
-    tool = vimdiff2
+    tool = nvimdiff
 [difftool]
     prompt = false
 [http]
     postBuffer = 524288000
 [core]
-    editor = vim
+    editor = nvim
     excludesfile = ~/.gitignore_global
 [color]
     ui = auto

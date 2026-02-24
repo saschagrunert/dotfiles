@@ -30,7 +30,7 @@ gitconfig-user:
 
 check:
 	@echo "Checking symlinks..."
-	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.vim; do \
+	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim; do \
 		if [ -L "$$f" ]; then \
 			echo "  OK: $$f -> $$(readlink $$f)"; \
 		else \

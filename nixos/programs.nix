@@ -11,10 +11,11 @@
     mtr.enable = true;
     nix-ld.enable = true;
     nm-applet.enable = true;
-    vim = {
+    neovim = {
       enable = true;
       defaultEditor = true;
-      package = pkgs.vim-full;
+      viAlias = true;
+      vimAlias = true;
     };
   };
 }
