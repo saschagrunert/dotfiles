@@ -10,9 +10,12 @@ EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
-.PHONY: all switch gitconfig-user update upgrade check
+.PHONY: all build switch gitconfig-user update upgrade check
 
 all: gitconfig-user
+
+build:
+	nixos-rebuild build --flake $(CURDIR)\#nixos
 
 switch:
 	sudo nixos-rebuild switch --flake $(CURDIR)\#nixos
@@ -57,5 +60,10 @@ upgrade: update
 		-o bat/themes/Dracula.tmTheme
 	$(CURL) https://raw.githubusercontent.com/wting/autojump/master/bin/autojump.fish \
 		-o fish/functions/autojump.fish
-	$(GIT) add -A
+	$(GIT) add \
+		gdb/gdbinit \
+		fish/completions/kubectl.fish \
+		fish/functions/fzf_key_bindings.fish \
+		bat/themes/Dracula.tmTheme \
+		fish/functions/autojump.fish
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
