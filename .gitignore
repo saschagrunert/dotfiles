@@ -13,6 +13,4 @@ fish/fishd*
 ranger/bookmarks
 ranger/history
 ranger/tagged
-vim/backups
-vim/bundle
-vim/sessions
+__pycache__

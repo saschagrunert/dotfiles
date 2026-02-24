@@ -1,15 +1,5 @@
 [include]
     path = ~/.gitconfig_user
-[alias]
-    d = difftool
-    s = status
-    p = pull
-    c = clone
-    b = branch
-    co = checkout
-    lol = log --graph --decorate --pretty=oneline --abbrev-commit
-    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    ls = ls-files
 [merge]
     tool = nvimdiff
 [mergetool]

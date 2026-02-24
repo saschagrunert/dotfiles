@@ -26,11 +26,6 @@ device = "amdgpu_bl1"
 invert_icons = true
 
 [[block]]
-block = "battery"
-interval = 10
-format = "$percentage"
-
-[[block]]
 block = "disk_space"
 path = "/"
 info_type = "available"
