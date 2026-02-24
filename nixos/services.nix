@@ -1,36 +1,5 @@
 { config, lib, pkgs, ... }:
 {
-  virtualisation = {
-    containers = {
-      enable = true;
-      ociSeccompBpfHook.enable = true;
-    };
-    cri-o.enable = true;
-    docker.enable = true;
-    libvirtd.enable = true;
-    podman.enable = true;
-  };
-
-  systemd.services.crio.enable = false;
-
-  programs = {
-    bcc.enable = true;
-    fish.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-    light.enable = true;
-    mtr.enable = true;
-    nix-ld.enable = true;
-    nm-applet.enable = true;
-    vim = {
-      enable = true;
-      defaultEditor = true;
-      package = pkgs.vim-full;
-    };
-  };
-
   services = {
     autorandr.enable = true;
     blueman.enable = true;

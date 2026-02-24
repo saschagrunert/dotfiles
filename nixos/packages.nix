@@ -1,19 +1,5 @@
-{ config, lib, pkgs, nixpkgs, dotfilesPath, ... }:
+{ config, lib, pkgs, dotfilesPath, ... }:
 {
-  imports = [
-    "${nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
-  ];
-
-  nix = {
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      max-jobs = lib.mkDefault 8;
-      trusted-users = [ "root" "sascha" ];
-    };
-  };
-
-  nixpkgs.config.allowUnfree = true;
-
   environment.systemPackages = with pkgs; [
     (import ./setup-screens.nix { inherit writeShellScriptBin dotfilesPath; })
 

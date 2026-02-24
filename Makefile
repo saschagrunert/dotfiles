@@ -1,6 +1,6 @@
 # Used binaries
 GIT := git
-CURL := curl -sL
+CURL := curl -sfL
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
@@ -10,12 +10,12 @@ EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
-.PHONY: all switch gitconfig-user update upgrade
+.PHONY: all switch gitconfig-user update upgrade check
 
 all: gitconfig-user
 
 switch:
-	sudo nixos-rebuild switch --flake ~/.dotfiles\#nixos
+	sudo nixos-rebuild switch --flake $(CURDIR)\#nixos
 
 gitconfig-user:
 	rm -f $(GITCONFIG_USER_PATH)
@@ -24,6 +24,24 @@ gitconfig-user:
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
 	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
+
+check:
+	@echo "Checking symlinks..."
+	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.vim; do \
+		if [ -L "$$f" ]; then \
+			echo "  OK: $$f -> $$(readlink $$f)"; \
+		else \
+			echo "  MISSING: $$f"; \
+		fi; \
+	done
+	@echo "Checking commands..."
+	@for cmd in nix fish i3 git; do \
+		if command -v $$cmd >/dev/null 2>&1; then \
+			echo "  OK: $$cmd"; \
+		else \
+			echo "  MISSING: $$cmd"; \
+		fi; \
+	done
 
 update:
 	$(GIT) pull --rebase --autostash

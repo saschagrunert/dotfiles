@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-direction=$1
+direction=${1:?usage: workspace-scroll <next|prev>}
 workspaces=$(i3-msg -t get_workspaces)
 
 focused_num=$(echo "$workspaces" | jq '.[] | select(.focused==true) | .num')

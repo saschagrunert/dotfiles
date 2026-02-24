@@ -161,14 +161,16 @@ repository:
 flake.nix               # Nix flake entry point
 home.nix                # Home-manager user config (symlinks)
 nixos/
-├── configuration.nix   # Main NixOS config (imports all modules)
+├── configuration.nix   # Main NixOS config (nix settings, imports)
 ├── hosts/
 │   └── desktop/        # Machine-specific config
 │       ├── hardware.nix
 │       ├── boot.nix
 │       └── lact.nix
 ├── packages.nix        # System packages (grouped by purpose)
-├── services.nix        # System services
+├── programs.nix        # Program modules (fish, vim, gnupg, ...)
+├── virtualisation.nix  # Container runtimes (docker, podman, cri-o)
+├── services.nix        # System services (X11, i3, pipewire, ...)
 ├── network.nix
 ├── security.nix
 ├── users.nix
