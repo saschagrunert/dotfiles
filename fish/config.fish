@@ -70,4 +70,5 @@ set -g fish_cursor_insert block
 
 # Source optional functions only if they exist
 command -q zoxide && zoxide init fish | source
+alias j=z
 test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish
