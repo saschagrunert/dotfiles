@@ -10,7 +10,7 @@ EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check
+.PHONY: all build switch gitconfig-user update upgrade check check-nix
 
 all: gitconfig-user
 
@@ -46,6 +46,9 @@ check:
 		fi; \
 	done
 
+check-nix:
+	nix flake check --flake $(CURDIR)
+
 update:
 	$(GIT) pull --rebase --autostash
 
@@ -58,12 +61,9 @@ upgrade: update
 		-o fish/functions/fzf_key_bindings.fish
 	$(CURL) https://raw.githubusercontent.com/dracula/sublime/master/Dracula.tmTheme \
 		-o bat/themes/Dracula.tmTheme
-	$(CURL) https://raw.githubusercontent.com/wting/autojump/master/bin/autojump.fish \
-		-o fish/functions/autojump.fish
 	$(GIT) add \
 		gdb/gdbinit \
 		fish/completions/kubectl.fish \
 		fish/functions/fzf_key_bindings.fish \
-		bat/themes/Dracula.tmTheme \
-		fish/functions/autojump.fish
+		bat/themes/Dracula.tmTheme
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"

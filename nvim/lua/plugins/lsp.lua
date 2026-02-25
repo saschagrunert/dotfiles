@@ -19,6 +19,8 @@ return {
         "nil_ls",
         "bashls",
         "terraformls",
+        "yamlls",
+        "dockerls",
       },
     },
   },
@@ -56,6 +58,7 @@ return {
       vim.lsp.enable({
         "lua_ls", "gopls", "rust_analyzer", "clangd", "pyright",
         "ts_ls", "nil_ls", "bashls", "terraformls",
+        "yamlls", "dockerls",
       })
 
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -75,7 +78,6 @@ return {
           map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
           map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
           map("n", "cmt", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
-          map("n", "yct", vim.lsp.buf.type_definition, "Type definition")
         end,
       })
 

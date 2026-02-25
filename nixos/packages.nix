@@ -22,7 +22,6 @@
     xsel
 
     # System utilities
-    autojump
     bat
     calc
     eza
@@ -39,12 +38,14 @@
     unzip
     wget
     yq-go
+    zoxide
 
     # Development tools
     binutils
     claude-code
     cmake
     ctags
+    delta
     gcc
     gh
     git

@@ -51,8 +51,8 @@ repository:
     [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
   - Theme: [dracula.nvim](https://github.com/Mofiqul/dracula.nvim)
 - **Development**:
-  - [autojump](https://github.com/wting/autojump):
-    A cd command that learns
+  - [zoxide](https://github.com/ajeetdsouza/zoxide):
+    A smarter cd command
   - [bat](https://github.com/sharkdp/bat):
     Like `cat` with wings
   - [ccache](https://github.com/ccache/ccache):

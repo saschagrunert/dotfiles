@@ -19,8 +19,16 @@
     ui = auto
 [pull]
     rebase = true
+[fetch]
+    prune = true
+[push]
+    autoSetupRemote = true
 [rebase]
     autostash = true
+[merge]
+    conflictstyle = zdiff3
+[diff]
+    algorithm = histogram
 [gitreview]
     remote = origin
 [rerere]
@@ -32,6 +40,13 @@
 	required = true
 [pager]
 	branch = false
-	diff = false
+	diff = delta
+	log = delta
+	show = delta
+	blame = delta
+[delta]
+	line-numbers = true
+	navigate = true
+	syntax-theme = Dracula
 [safe]
 	directory = *

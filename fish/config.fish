@@ -69,5 +69,5 @@ set -g fish_cursor_default block
 set -g fish_cursor_insert block
 
 # Source optional functions only if they exist
-test -f ~/.config/fish/functions/autojump.fish && source ~/.config/fish/functions/autojump.fish
+command -q zoxide && zoxide init fish | source
 test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish

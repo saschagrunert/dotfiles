@@ -1,6 +1,6 @@
 # use alt als modifier
 set $mod Mod1
-font pango:MesloLGMDZ Nerd Font 8
+font pango:MesloLGSDZ Nerd Font 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -13,7 +13,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+x kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -l 20 -p '' -fn 'MesloLGMDZ Nerd Font-8' -nb '#282a36' -nf '#f8f8f2' -sf '#282a36' -sb '#bd93f9'"
+bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -i -l 20 -p '' -fn 'MesloLGSDZ Nerd Font-8' -nb '#282a36' -nf '#f8f8f2' -sf '#282a36' -sb '#bd93f9'"
 
 # change focus
 bindsym $mod+h focus left
