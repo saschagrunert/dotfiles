@@ -81,6 +81,11 @@
       };
 
       xkb.layout = "us";
+
+      serverFlagsSection = ''
+        Option "BlankTime" "0"
+        Option "DPMS" "false"
+      '';
     };
   };
 }
