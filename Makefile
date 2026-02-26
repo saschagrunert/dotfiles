@@ -14,11 +14,11 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix help
-
-all: gitconfig-user ## Run the default target (gitconfig-user).
+.PHONY: build switch gitconfig-user update upgrade check check-nix help
 
 ##@ Build targets:
+
+all: switch ## Build and switch to the NixOS configuration (default).
 
 build: ## Build the NixOS configuration.
 	nixos-rebuild build --flake $(CURDIR)\#nixos
