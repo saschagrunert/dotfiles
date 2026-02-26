@@ -1,6 +1,6 @@
 # use alt als modifier
 set $mod Mod1
-font pango:MesloLGSDZ Nerd Font 8
+font pango:MesloLGMDZ Nerd Font 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
