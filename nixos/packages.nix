@@ -72,6 +72,7 @@
     python3Packages.isort
     python3Packages.osc
     python3Packages.yapf
+    uv
 
     # Haskell
     haskellPackages.alex
