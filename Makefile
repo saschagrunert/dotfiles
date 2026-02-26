@@ -9,18 +9,26 @@ USER := Sascha Grunert
 EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
+# Colors
+COLOR := \033[36m
+NOCOLOR := \033[0m
+
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix
+.PHONY: all build switch gitconfig-user update upgrade check check-nix help
 
-all: gitconfig-user
+all: gitconfig-user ## Run the default target (gitconfig-user).
 
-build:
+##@ Build targets:
+
+build: ## Build the NixOS configuration.
 	nixos-rebuild build --flake $(CURDIR)\#nixos
 
-switch:
+switch: ## Build and switch to the NixOS configuration.
 	sudo nixos-rebuild switch --flake $(CURDIR)\#nixos
 
-gitconfig-user:
+##@ Setup targets:
+
+gitconfig-user: ## Generate the user-specific gitconfig.
 	rm -f $(GITCONFIG_USER_PATH)
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
@@ -28,7 +36,9 @@ gitconfig-user:
 	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
 	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
 
-check:
+##@ Validation targets:
+
+check: ## Check symlinks and required commands.
 	@echo "Checking symlinks..."
 	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim; do \
 		if [ -L "$$f" ]; then \
@@ -46,13 +56,15 @@ check:
 		fi; \
 	done
 
-check-nix:
+check-nix: ## Run nix flake checks.
 	nix flake check --flake $(CURDIR)
 
-update:
+##@ Update targets:
+
+update: ## Pull the latest changes from remote.
 	$(GIT) pull --rebase --autostash
 
-upgrade: update
+upgrade: update ## Update and upgrade external dependencies.
 	$(CURL) https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit \
 		-o gdb/gdbinit
 	$(CURL) https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/refs/heads/main/completions/kubectl.fish \
@@ -67,3 +79,21 @@ upgrade: update
 		fish/functions/fzf_key_bindings.fish \
 		bat/themes/Dracula.tmTheme
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
+
+##@ Help:
+
+help: ## Display this help.
+	@awk \
+		-v "col=$(COLOR)" -v "nocol=$(NOCOLOR)" \
+		' \
+			BEGIN { \
+				FS = ":.*##" ; \
+				printf "Usage:\n  make %s<target>%s\n", col, nocol \
+			} \
+			/^[a-zA-Z_-]+:.*?##/ { \
+				printf "  %s%-30s%s %s\n", col, $$1, nocol, $$2 \
+			} \
+			/^##@/ { \
+				printf "\n%s\n", substr($$0, 5) \
+			} \
+		' $(MAKEFILE_LIST)
