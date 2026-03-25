@@ -26,7 +26,14 @@ in
     ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
   };
 
-  xdg.configFile = {
+  xdg = {
+    userDirs = {
+      enable = true;
+      download = "$HOME/downloads";
+      pictures = "$HOME/pictures";
+    };
+
+    configFile = {
     "alacritty".source = link "${dotfilesPath}/alacritty";
     "bat".source = link "${dotfilesPath}/bat";
     "dunst".source = link "${dotfilesPath}/dunst";
@@ -37,5 +44,6 @@ in
     "picom".source = link "${dotfilesPath}/picom";
     "nvim".source = link "${dotfilesPath}/nvim";
     "ranger".source = link "${dotfilesPath}/ranger";
+    };
   };
 }
