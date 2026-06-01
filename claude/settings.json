@@ -9,7 +9,6 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-opus-4-6",
-  "skipDangerousModePermissionPrompt": true,
   "extraKnownMarketplaces": {
     "ai-helpers": {
       "source": {
@@ -17,5 +16,9 @@
         "repo": "openshift-eng/ai-helpers"
       }
     }
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "enabledPlugins": {
+    "node-cve@ai-helpers": true
   }
 }
