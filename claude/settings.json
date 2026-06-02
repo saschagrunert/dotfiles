@@ -9,6 +9,9 @@
     "defaultMode": "bypassPermissions"
   },
   "model": "claude-opus-4-6",
+  "enabledPlugins": {
+    "node-cve@ai-helpers": true
+  },
   "extraKnownMarketplaces": {
     "ai-helpers": {
       "source": {
@@ -17,8 +20,5 @@
       }
     }
   },
-  "skipDangerousModePermissionPrompt": true,
-  "enabledPlugins": {
-    "node-cve@ai-helpers": true
-  }
+  "skipDangerousModePermissionPrompt": true
 }
