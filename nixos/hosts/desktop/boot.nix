@@ -32,7 +32,11 @@
       };
     };
     kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
+    extraModulePackages = [
+      (pkgs.callPackage ../../packages/usbip-host-patched.nix {
+        kernel = config.boot.kernelPackages.kernel;
+      })
+    ];
     tmp = {
       useTmpfs = true;
     };
