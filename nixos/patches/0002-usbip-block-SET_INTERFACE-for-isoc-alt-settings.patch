@@ -1,0 +1,83 @@
+From: Sascha Grunert <sgrunert@redhat.com>
+Subject: [PATCH 2/2] usbip: block SET_INTERFACE for alt settings with isochronous endpoints
+
+USB/IP cannot forward isochronous transfers. When the client switches
+an interface to an alt setting that activates isochronous endpoints, the
+resulting transfers fail with -EPROTO. The repeated failures trigger
+usb_clear_halt calls that eventually cause the host controller to
+disconnect the device, leading to a reconnect-disconnect loop.
+
+Add altsetting_has_isoc() to check whether a target alt setting contains
+isochronous endpoints. Use it in tweak_set_interface_cmd() to intercept
+SET_INTERFACE requests: if the target alt setting has isochronous
+endpoints, return success to the client without executing the switch on
+the physical device. The device stays at alt 0, and the isochronous
+endpoints never activate.
+
+Tested with a Turtle Beach Velocity One Flight yoke (10f5:7001)
+forwarded to a remote VM via USB/IP. Before the fix, the device cycled
+through disconnect/reconnect every few seconds. After the fix, the
+device stays connected and all HID functionality works.
+
+Signed-off-by: Sascha Grunert <sgrunert@redhat.com>
+---
+ drivers/usb/usbip/stub_rx.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index 87e2c10..395d528 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -100,6 +100,28 @@ static int tweak_clear_halt_cmd(struct urb *urb)
+ 	return ret;
+ }
+
++static bool altsetting_has_isoc(struct usb_device *udev, __u16 interface,
++				__u16 alternate)
++{
++	struct usb_interface *intf;
++	struct usb_host_interface *alt;
++	int i;
++
++	intf = usb_ifnum_to_if(udev, interface);
++	if (!intf)
++		return false;
++
++	alt = usb_altnum_to_altsetting(intf, alternate);
++	if (!alt)
++		return false;
++
++	for (i = 0; i < alt->desc.bNumEndpoints; i++) {
++		if (usb_endpoint_xfer_isoc(&alt->endpoint[i].desc))
++			return true;
++	}
++	return false;
++}
++
+ static int tweak_set_interface_cmd(struct urb *urb)
+ {
+ 	struct usb_ctrlrequest *req;
+@@ -111,6 +133,20 @@ static int tweak_set_interface_cmd(struct urb *urb)
+ 	alternate = le16_to_cpu(req->wValue);
+ 	interface = le16_to_cpu(req->wIndex);
+
++	/*
++	 * USB/IP cannot forward isochronous transfers.  If the requested
++	 * alt setting activates isochronous endpoints, pretend the switch
++	 * succeeded without touching the device.  This prevents the
++	 * cascade of failed isoc URBs that leads to a device disconnect.
++	 */
++	if (alternate != 0 && altsetting_has_isoc(urb->dev, interface,
++						  alternate)) {
++		dev_info(&urb->dev->dev,
++			 "usb_set_interface blocked: inf %u alt %u (isoc)\n",
++			 interface, alternate);
++		return 0;
++	}
++
+ 	usbip_dbg_stub_rx("set_interface: inf %u alt %u\n",
+ 			  interface, alternate);
+
+--
+2.49.0
+

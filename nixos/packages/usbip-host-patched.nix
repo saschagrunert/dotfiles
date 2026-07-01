@@ -7,7 +7,8 @@ stdenv.mkDerivation {
   src = kernel.src;
 
   patches = [
-    ../patches/usbip-fix-stream-desync-on-invalid-endpoint.patch
+    ../patches/0001-usbip-drain-pending-PDU-payload-on-invalid-endpoint.patch
+    ../patches/0002-usbip-block-SET_INTERFACE-for-isoc-alt-settings.patch
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

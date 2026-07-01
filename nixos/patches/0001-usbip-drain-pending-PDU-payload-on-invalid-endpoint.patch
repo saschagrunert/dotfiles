@@ -1,61 +1,32 @@
+From: Sascha Grunert <sgrunert@redhat.com>
+Subject: [PATCH 1/2] usbip: drain pending PDU payload on invalid endpoint rejection
+
+When the USB/IP stub receives a CMD_SUBMIT for an endpoint that
+get_pipe() rejects (returns -1), stub_recv_cmd_submit() returns early
+without consuming the transfer buffer and ISO packet descriptors that
+follow the PDU header on the TCP stream.
+
+The next usbip_recv() call then interprets the leftover payload bytes as
+a new PDU header, which desynchronizes the protocol stream and tears
+down the connection.
+
+Add stub_recv_cmd_submit_drain() to consume the remaining payload
+(transfer buffer for OUT direction, ISO packet descriptors) before the
+early return, keeping the TCP stream in sync.
+
+Signed-off-by: Sascha Grunert <sgrunert@redhat.com>
+---
+ drivers/usb/usbip/stub_rx.c | 62 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 61 insertions(+), 1 deletion(-)
+
 diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-index 9aa30ef..395d528 100644
+index 9aa30ef..87e2c10 100644
 --- a/drivers/usb/usbip/stub_rx.c
 +++ b/drivers/usb/usbip/stub_rx.c
-@@ -100,6 +100,28 @@ static int tweak_clear_halt_cmd(struct urb *urb)
+@@ -461,6 +461,62 @@ static int stub_recv_xbuff(struct usbip_device *ud, struct stub_priv *priv)
  	return ret;
  }
- 
-+static bool altsetting_has_isoc(struct usb_device *udev, __u16 interface,
-+				__u16 alternate)
-+{
-+	struct usb_interface *intf;
-+	struct usb_host_interface *alt;
-+	int i;
-+
-+	intf = usb_ifnum_to_if(udev, interface);
-+	if (!intf)
-+		return false;
-+
-+	alt = usb_altnum_to_altsetting(intf, alternate);
-+	if (!alt)
-+		return false;
-+
-+	for (i = 0; i < alt->desc.bNumEndpoints; i++) {
-+		if (usb_endpoint_xfer_isoc(&alt->endpoint[i].desc))
-+			return true;
-+	}
-+	return false;
-+}
-+
- static int tweak_set_interface_cmd(struct urb *urb)
- {
- 	struct usb_ctrlrequest *req;
-@@ -111,6 +133,20 @@ static int tweak_set_interface_cmd(struct urb *urb)
- 	alternate = le16_to_cpu(req->wValue);
- 	interface = le16_to_cpu(req->wIndex);
- 
-+	/*
-+	 * USB/IP cannot forward isochronous transfers.  If the requested
-+	 * alt setting activates isochronous endpoints, pretend the switch
-+	 * succeeded without touching the device.  This prevents the
-+	 * cascade of failed isoc URBs that leads to a device disconnect.
-+	 */
-+	if (alternate != 0 && altsetting_has_isoc(urb->dev, interface,
-+						  alternate)) {
-+		dev_info(&urb->dev->dev,
-+			 "usb_set_interface blocked: inf %u alt %u (isoc)\n",
-+			 interface, alternate);
-+		return 0;
-+	}
-+
- 	usbip_dbg_stub_rx("set_interface: inf %u alt %u\n",
- 			  interface, alternate);
- 
-@@ -461,6 +497,62 @@ static int stub_recv_xbuff(struct usbip_device *ud, struct stub_priv *priv)
- 	return ret;
- }
- 
+
 +/*
 + * When get_pipe() rejects an endpoint (e.g. an isochronous endpoint that
 + * does not exist in the current alt setting), the transfer buffer and ISO
@@ -115,15 +86,18 @@ index 9aa30ef..395d528 100644
  static void stub_recv_cmd_submit(struct stub_device *sdev,
  				 struct usbip_header *pdu)
  {
-@@ -479,8 +571,10 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+@@ -479,8 +535,10 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
  	int ret, i;
  	int is_tweaked;
- 
+
 -	if (pipe == -1)
 +	if (pipe == -1) {
 +		stub_recv_cmd_submit_drain(ud, pdu);
  		return;
 +	}
- 
+
  	/*
  	 * Smatch reported the error case where use_sg is true and buf_len is 0.
+--
+2.49.0
+
