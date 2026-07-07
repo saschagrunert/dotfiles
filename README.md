@@ -6,16 +6,15 @@ This repository is a [NixOS flake](https://nixos.wiki/wiki/Flakes) that manages
 both the system configuration and user environment via
 [home-manager](https://github.com/nix-community/home-manager).
 
-The following dependencies are needed to use all features from this dotfile
-repository:
+## Key Components
 
 - **Desktop**:
-  - [alacritty](https://github.com/jwilm/alacritty):
+  - [alacritty](https://github.com/alacritty/alacritty):
     A cross-platform, GPU-accelerated terminal emulator
   - [arc](https://github.com/NicoHood/arc-theme):
     The GTK theme
-  - [bibata](https://github.com/KaizIqbal/Bibata_Cursor):
-    Beatiful cursor theme
+  - [bibata](https://github.com/ful1e5/Bibata_Cursor):
+    Beautiful cursor theme
   - [picom](https://github.com/yshui/picom):
     A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
@@ -51,24 +50,14 @@ repository:
     [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
   - Theme: [dracula.nvim](https://github.com/Mofiqul/dracula.nvim)
 - **Development**:
-  - [zoxide](https://github.com/ajeetdsouza/zoxide):
-    A smarter cd command
   - [bat](https://github.com/sharkdp/bat):
     Like `cat` with wings
-  - [ccache](https://github.com/ccache/ccache):
-    Compiler cache for gcc and clang
-  - [cht.sh](https://github.com/chubin/cheat.sh):
-    Command line stackoverflow queries
   - [claude](https://github.com/anthropics/claude-code):
     Anthropic's official CLI for Claude AI
-  - [clang](https://github.com/llvm-mirror/clang):
+  - [clang](https://github.com/llvm/llvm-project):
     The LLVM compiler frontend
-  - [cmake](https://github.com/Kitware/CMake):
-    Cross platform make tool
-  - [cppcheck](https://github.com/danmar/cppcheck):
-    Linter for C/C++ projects
-  - [cpplint](https://github.com/cpplint/cpplint):
-    Linter for C/C++ projects
+  - [delta](https://github.com/dandavison/delta):
+    A syntax-highlighting pager for git
   - [eza](https://github.com/eza-community/eza):
     Modern version of `ls`
   - [fd](https://github.com/sharkdp/fd):
@@ -79,57 +68,51 @@ repository:
     Command line fuzzy finder
   - [gdb](https://www.gnu.org/s/gdb):
     The debugger for various kind of projects
-  - [ghc](https://github.com/ghc/ghc):
-    The glasgow haskell compiler
   - [git](https://github.com/git/git):
     Revision control system
-  - [golang](https://github.com/golang):
-    The go programminng language
+  - [golang](https://go.dev):
+    The Go programming language
   - [htop](https://github.com/hishamhm/htop):
     Process manager for the terminal
   - [nix](https://nixos.org/nix):
     A powerful functional package manager
   - [nixos](https://nixos.org):
     Linux distribution built on Nix package manager
-  - [osc](https://github.com/openSUSE/osc):
-    Command Line Interface to work with an Open Build Service
-  - [python](https://github.com/python):
-    The python scripting language
-  - [rainbarf](https://github.com/creaktive/rainbarf):
-    CPU/RAM/battery stats chart bar for tmux
+  - [python](https://python.org):
+    The Python scripting language
   - [ranger](https://github.com/ranger/ranger):
     VIM-inspired filemanager for the console
   - [ripgrep](https://github.com/BurntSushi/ripgrep):
     Recursively searches directories for a regex pattern
-  - [rust](https://github.com/rust-lang/rust):
-    The rust programming language
-  - [rustup](https://github.com/rust-lang/rustup.rs):
+  - [rustup](https://github.com/rust-lang/rustup):
     Rust toolchain and component management
-  - [stack](https://github.com/commercialhaskell/stack):
-    The haskell tool stack
-  - [tig](https://www.openssh.com):
+  - [tig](https://github.com/jonas/tig):
     Command line git explorer
   - [tmux](https://github.com/tmux/tmux):
     Terminal multiplexer
-  - [tokei](https://github.com/Aaronepower/tokei):
-    Count lines of code quickly
   - [typos](https://github.com/crate-ci/typos):
     Source code spell checker
   - [neovim](https://github.com/neovim/neovim):
     The editor
+  - [zoxide](https://github.com/ajeetdsouza/zoxide):
+    A smarter cd command
+
+See [`nixos/packages.nix`](nixos/packages.nix) for the full list of installed
+packages, including container runtimes, Kubernetes tools, networking utilities,
+and debugging tools.
 
 ## Structure
 
 ```
 flake.nix               # Nix flake entry point
-home.nix                # Home-manager user config (symlinks)
+home.nix                # Home-manager user config (symlinks, systemd services)
 nixos/
 ├── configuration.nix   # Main NixOS config (nix settings, imports)
 ├── hosts/
 │   └── desktop/        # Machine-specific config
+│       ├── default.nix
 │       ├── hardware.nix
-│       ├── boot.nix
-│       └── lact.nix
+│       └── boot.nix
 ├── packages.nix        # System packages (grouped by purpose)
 ├── programs.nix        # Program modules (fish, neovim, gnupg, ...)
 ├── virtualisation.nix  # Container runtimes (docker, podman, cri-o)
@@ -152,7 +135,6 @@ in `flake.nix`.
 > git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
 > cd ~/.dotfiles
 > make gitconfig-user USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
-> sudo ln -sfn ~/.dotfiles /etc/nixos
 > sudo nixos-rebuild switch --flake ~/.dotfiles#nixos
 ```
 
