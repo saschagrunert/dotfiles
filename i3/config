@@ -5,8 +5,6 @@ font pango:MesloLGMDZ Nerd Font 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal
-# bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec alacritty
 
 # kill focused window
@@ -92,7 +90,6 @@ mode "resize" {
     bindsym j resize grow height 20 px or 20 ppt
     bindsym k resize shrink height 20 px or 20 ppt
     bindsym l resize grow width 20 px or 20 ppt
-    bindsym odiaeresis resize grow width 20 px or 20 ppt
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"

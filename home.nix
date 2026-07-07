@@ -26,6 +26,45 @@ in
     ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
   };
 
+  systemd.user.services.blueman-applet = {
+    Unit = {
+      Description = "Blueman Bluetooth applet";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.blueman}/bin/blueman-applet";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
+  systemd.user.services.picom = {
+    Unit = {
+      Description = "Picom compositor";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.picom}/bin/picom";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
+  systemd.user.services.ibus-daemon = {
+    Unit = {
+      Description = "IBus input method daemon";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.ibus-with-plugins}/bin/ibus-daemon --xim --replace";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   xdg = {
     userDirs = {
       enable = true;
