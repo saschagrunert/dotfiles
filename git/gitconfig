@@ -2,12 +2,15 @@
     path = ~/.gitconfig_user
 [merge]
     tool = nvimdiff
+    conflictstyle = zdiff3
 [mergetool]
     prompt = false
 [push]
     default = upstream
+    autoSetupRemote = true
 [diff]
     tool = nvimdiff
+    algorithm = histogram
 [difftool]
     prompt = false
 [http]
@@ -21,14 +24,8 @@
     rebase = true
 [fetch]
     prune = true
-[push]
-    autoSetupRemote = true
 [rebase]
     autostash = true
-[merge]
-    conflictstyle = zdiff3
-[diff]
-    algorithm = histogram
 [gitreview]
     remote = origin
 [rerere]
@@ -51,8 +48,8 @@
 [safe]
 	directory = *
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/run/current-system/sw/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !/run/current-system/sw/bin/gh auth git-credential

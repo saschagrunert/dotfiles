@@ -4,7 +4,6 @@
     (import ./setup-screens.nix { inherit writeShellScriptBin dotfilesPath; })
 
     # Desktop & UI
-    acpilight
     alacritty
     arandr
     arc-theme
@@ -18,8 +17,8 @@
     pavucontrol
     picom
     xclip
+    xdg-utils
     xev
-    xsel
 
     # System utilities
     bat
@@ -107,7 +106,6 @@
     cosign
     google-cloud-sdk
     kind
-    kubectl
     kubernetes
     kustomize
 

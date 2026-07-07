@@ -9,7 +9,6 @@
       "docker"
       "libvirtd"
       "networkmanager"
-      "vboxusers"
       "video"
       "wheel"
     ];
