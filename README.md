@@ -173,10 +173,6 @@ Plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim) and
 install automatically on first launch. LSP servers are installed via
 [Mason](https://github.com/williamboman/mason.nvim) on first use.
 
-## Screenshots
-
-![alacritty screenshot](.github/alacritty.png "Alacritty")
-
 ## Contributing
 
 You want to contribute to this project? Wow, thanks! So please just fork it and
