@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-flat_symbol="⤚"
-
 __parse_git_stats() {
     type git >/dev/null 2>&1
     if [ "$?" -ne 0 ]; then

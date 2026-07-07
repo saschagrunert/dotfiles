@@ -58,6 +58,6 @@ function k8s-test-run
     cd $GOPATH/src/k8s.io/kubernetes
     sudo -E _output/bin/e2e.test \
         --provider=local \
-        --host=https://$IP:6443 \
+        --host=https://$KUBE_MASTER_IP:6443 \
         $argv
 end

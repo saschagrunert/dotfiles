@@ -29,23 +29,25 @@ return {
       },
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
-        local map = function(mode, lhs, rhs, desc)
-          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+        local map = function(mode, lhs, rhs, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, lhs, rhs, opts)
         end
         map("n", "]c", function()
           if vim.wo.diff then return "]c" end
           vim.schedule(function() gs.next_hunk() end)
           return "<Ignore>"
-        end, "Next hunk")
+        end, { expr = true, desc = "Next hunk" })
         map("n", "[c", function()
           if vim.wo.diff then return "[c" end
           vim.schedule(function() gs.prev_hunk() end)
           return "<Ignore>"
-        end, "Prev hunk")
-        map("n", "<leader>gh", gs.stage_hunk, "Stage hunk")
-        map("n", "<leader>gu", gs.undo_stage_hunk, "Undo stage hunk")
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Inner hunk")
-        map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", "Outer hunk")
+        end, { expr = true, desc = "Prev hunk" })
+        map("n", "<leader>gh", gs.stage_hunk, { desc = "Stage hunk" })
+        map("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Inner hunk" })
+        map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Outer hunk" })
       end,
     },
   },

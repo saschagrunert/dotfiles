@@ -14,7 +14,6 @@ AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 BreakAfterReturnType: None
-BreakBeforeMultilineStrings: true
 BreakTemplateDeclarations: Yes
 BinPackArguments: true
 BinPackParameters: true

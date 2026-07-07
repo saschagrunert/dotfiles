@@ -16,7 +16,6 @@ FILE_EXTENSION_LOWER=$(echo ${FILE_EXTENSION} | tr '[:upper:]' '[:lower:]')
 # Settings
 HIGHLIGHT_SIZE_MAX=262143 # 256KiB
 HIGHLIGHT_TABWIDTH=4
-HIGHLIGHT_STYLE="$(dirname $(realpath $0))/dracula.theme"
 
 handle_extension() {
     case "${FILE_EXTENSION_LOWER}" in
@@ -95,13 +94,8 @@ handle_mime() {
         if [[ "$(stat --printf='%s' -- "${FILE_PATH}")" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
             exit 2
         fi
-        if [[ "$(tput colors)" -ge 256 ]]; then
-            local highlight_format='xterm256'
-        else
-            local highlight_format='ansi'
-        fi
-        highlight --replace-tabs="${HIGHLIGHT_TABWIDTH}" --out-format="${highlight_format}" \
-            --config-file="${HIGHLIGHT_STYLE}" --force -- "${FILE_PATH}" && exit 5
+        bat --color=always --style=plain --tabs="${HIGHLIGHT_TABWIDTH}" \
+            --terminal-width="${PV_WIDTH}" -- "${FILE_PATH}" && exit 5
         exit 2
         ;;
 

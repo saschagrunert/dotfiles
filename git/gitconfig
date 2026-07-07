@@ -43,8 +43,6 @@
     line-numbers = true
     navigate = true
     syntax-theme = Dracula
-[safe]
-    directory = *
 [credential "https://github.com"]
     helper =
     helper = !/run/current-system/sw/bin/gh auth git-credential
