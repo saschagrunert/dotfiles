@@ -10,8 +10,11 @@
   },
   "model": "claude-opus-4-6",
   "enabledPlugins": {
+    "node-team@ai-helpers": true,
+    "node-onboarding@ai-helpers": true,
     "node-cve@ai-helpers": true,
-    "node-team@ai-helpers": true
+    "node-bug@ai-helpers": true,
+    "node-rpm@ai-helpers": true
   },
   "extraKnownMarketplaces": {
     "ai-helpers": {
