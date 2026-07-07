@@ -73,9 +73,6 @@
     python3Packages.yapf
     jira-cli-go
 
-    # Haskell
-    haskellPackages.alex
-
     # Node.js
     nodejs
     nodePackages.prettier
@@ -156,7 +153,7 @@
     asciinema
     imagemagick
     mediainfo
-    peek
+    kooha
 
     # Nix tools
     cachix

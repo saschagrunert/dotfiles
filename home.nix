@@ -24,6 +24,9 @@ in
     ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
     ".ccache/ccache.conf".source = link "${dotfilesPath}/ccache/ccache.conf";
     ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
+    ".local/share/applications/shadow-pc.desktop".source = link "${dotfilesPath}/shadow/shadow-pc.desktop";
+    "games/shadow/shell.nix".source = link "${dotfilesPath}/shadow/shell.nix";
+    "games/shadow/alive.sh".source = link "${dotfilesPath}/shadow/alive.sh";
   };
 
   systemd.user.services.blueman-applet = {

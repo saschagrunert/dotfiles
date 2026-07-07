@@ -75,8 +75,8 @@ return {
           map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
-          map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
-          map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
+          map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
+          map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, "Prev diagnostic")
           map("n", "cmt", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
         end,
       })

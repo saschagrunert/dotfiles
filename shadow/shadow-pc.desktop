@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Shadow PC
+Comment=Shadow cloud gaming
+Exec=nix-shell /home/sascha/games/shadow/shell.nix
+Terminal=false
+Categories=Game;
