@@ -33,7 +33,6 @@ return {
       },
       formatters = {
         shfmt = { prepend_args = { "-i", "4" } },
-        rustfmt = { prepend_args = { "--edition=2021" } },
       },
     },
   },

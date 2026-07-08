@@ -4,17 +4,16 @@ tmp_file="${XDG_RUNTIME_DIR:-/tmp}/tmux-ip-${UID}.txt"
 
 getLanIP() {
 	if shell_is_bsd || shell_is_osx; then
-		all_nics=$(ifconfig 2>/dev/null | awk -F':' '/^[a-z]/ && !/^lo/ { print $1 }')
+		mapfile -t all_nics < <(ifconfig 2>/dev/null | awk -F':' '/^[a-z]/ && !/^lo/ { print $1 }')
 		for nic in "${all_nics[@]}"; do
-			ipv4s_on_nic=$(ifconfig "${nic}" 2>/dev/null | awk '$1 == "inet" { print $2 }')
+			mapfile -t ipv4s_on_nic < <(ifconfig "${nic}" 2>/dev/null | awk '$1 == "inet" { print $2 }')
 			for lan_ip in "${ipv4s_on_nic[@]}"; do
 				[[ -n "${lan_ip}" ]] && break
 			done
 			[[ -n "${lan_ip}" ]] && break
 		done
 	else
-		all_nics="$(ip addr show | cut -d ' ' -f2 | tr -d :)"
-		mapfile -t all_nics < <(printf '%s\n' "${all_nics[@]}" | grep -v '^lo$')
+		mapfile -t all_nics < <(ip addr show | cut -d ' ' -f2 | tr -d : | grep -v '^lo$')
 		for nic in "${all_nics[@]}"; do
 			lan_ip="$(ip addr show "${nic}" | grep '\<inet\>' | tr -s ' ' | cut -d ' ' -f3)"
 			lan_ip="${lan_ip%/*}"

@@ -104,25 +104,28 @@ and debugging tools.
 ## Structure
 
 ```text
-flake.nix               # Nix flake entry point
-home.nix                # Home-manager user config (symlinks, systemd services)
+flake.nix                      # Nix flake entry point
+home.nix                       # Home-manager user config
 nixos/
-├── configuration.nix   # Main NixOS config (nix settings, imports)
+├── configuration.nix          # Main NixOS config
 ├── hosts/
-│   └── desktop/        # Machine-specific config
-│       ├── default.nix
-│       ├── hardware.nix
-│       └── boot.nix
-├── packages.nix        # System packages (grouped by purpose)
-├── programs.nix        # Program modules (fish, neovim, gnupg, ...)
-├── virtualisation.nix  # Container runtimes (docker, podman, cri-o)
-├── services.nix        # System services (X11, i3, pipewire, ...)
-├── network.nix
-├── security.nix
-├── users.nix
-├── locale.nix
-├── fonts.nix
-└── setup-screens.nix   # Monitor & wallpaper setup script
+│   └── desktop/               # Machine-specific config
+│       ├── default.nix        # Host imports
+│       ├── hardware.nix       # Filesystems, kernel modules
+│       └── boot.nix           # Bootloader, initrd, kernel
+├── packages.nix               # System packages
+├── packages/                  # Custom package derivations
+│   └── usbip-host-patched.nix # Patched usbip kernel module
+├── patches/                   # Kernel patches
+├── programs.nix               # fish, neovim, gnupg, ...
+├── virtualisation.nix         # docker, podman, cri-o
+├── services.nix               # X11, i3, pipewire, ...
+├── network.nix                # Hostname, NetworkManager
+├── security.nix               # Kerberos, PKI, sudo
+├── users.nix                  # User accounts, groups, shell
+├── locale.nix                 # Locale, input method
+├── fonts.nix                  # Nerd Fonts, Noto, ...
+└── setup-screens.nix          # Monitor & wallpaper setup
 ```
 
 To add a new host, create a directory under `nixos/hosts/` with its own

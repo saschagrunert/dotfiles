@@ -15,7 +15,6 @@ opt.clipboard = "unnamedplus"
 opt.number = true
 
 -- Editing
-opt.backspace = "indent,eol,start"
 opt.history = 1000
 
 -- Highlight
@@ -27,24 +26,15 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.shiftround = true
-opt.autoindent = true
-opt.smarttab = true
 
 -- Tweaks
 opt.previewheight = 1
-opt.ruler = true
-opt.showcmd = true
-opt.hlsearch = true
 opt.ignorecase = true
 opt.smartcase = true
 opt.startofline = false
 opt.confirm = true
-opt.incsearch = true
 opt.showmatch = true
-opt.autoread = true
 opt.autowrite = true
-opt.lazyredraw = true
-opt.magic = true
 opt.switchbuf = "useopen,usetab"
 opt.title = true
 opt.titleold = ""
@@ -55,10 +45,6 @@ opt.timeout = true
 opt.timeoutlen = 2000
 opt.ttimeoutlen = 0
 opt.formatoptions:append("j")
-
--- No annoying sounds
-opt.errorbells = false
-opt.visualbell = false
 
 -- Folding
 opt.foldnestmax = 20
@@ -73,7 +59,6 @@ opt.undofile = true
 opt.swapfile = true
 opt.backup = true
 opt.writebackup = true
-opt.encoding = "utf8"
 opt.sessionoptions:remove({ "blank", "help" })
 
 -- Display
@@ -81,7 +66,6 @@ opt.list = true
 opt.listchars = { tab = "▸ ", trail = "·", extends = "❯", precedes = "❮" }
 
 -- Completion
-opt.wildmenu = true
 opt.wildignore:append("*.o,*.obj,*~,*vim/backups*,*DS_Store*,*.png,*.jpg,*.gif,*/tmp/*,*.so,*.swp,*.pcap,*.pyc,*.cmd,*.a,*.jar")
 
 -- Scrolling

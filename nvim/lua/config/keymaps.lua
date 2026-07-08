@@ -32,7 +32,7 @@ map("n", "<leader>bc", function() require("config.commands").buf_only(); vim.cmd
 
 -- Fast save
 map("n", "<leader>w", "<cmd>w<cr>")
-map("n", "<leader>W", "<cmd>W<cr>")
+map("n", "<leader>W", "<cmd>Wall<cr>")
 map("n", "<leader>S", "<cmd>SudoWrite<cr>")
 
 -- Hex editor
@@ -56,8 +56,7 @@ map("c", "<C-g>", "<C-c>")
 map("c", "<C-p>", "<Up>")
 map("c", "<C-n>", "<Down>")
 
--- Yank and search
-map("n", "Y", "y$")
+-- Search
 map("n", "&", "<cmd>&&<cr>")
 
 -- German keyboard: ö → [, ä → ]
@@ -106,8 +105,8 @@ map("i", "jj", "<ESC>")
 -- Blank lines
 map("n", "<leader>d", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
 map("n", "<leader>D", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
-map("n", "<leader>o", "<cmd>set paste<CR>m`o<Esc>``:set nopaste<CR>", { silent = true })
-map("n", "<leader>O", "<cmd>set paste<CR>m`O<Esc>``:set nopaste<CR>", { silent = true })
+map("n", "<leader>o", "m`o<Esc>``", { silent = true })
+map("n", "<leader>O", "m`O<Esc>``", { silent = true })
 
 -- Folding
 map("n", "zU", "zR")

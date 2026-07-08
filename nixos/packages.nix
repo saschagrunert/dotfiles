@@ -7,7 +7,6 @@
     alacritty
     arandr
     arc-theme
-    autorandr
     dmenu
     dunst
     feh
@@ -86,7 +85,6 @@
     cni-plugins
     conmon
     conmon-rs
-    cri-o
     cri-tools
     criu
     crun

@@ -1,7 +1,9 @@
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 -- Show diagnostic float on hover (only when diagnostics exist)
 autocmd("CursorHold", {
+  group = augroup("DiagnosticFloat", { clear = true }),
   callback = function()
     if #vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }) > 0 then
       vim.diagnostic.open_float({ focusable = false })
@@ -11,6 +13,7 @@ autocmd("CursorHold", {
 
 -- Filetype-specific indentation
 autocmd("FileType", {
+  group = augroup("FiletypeIndent", { clear = true }),
   pattern = { "typescript", "ruby", "rdoc", "cucumber", "haskell", "yaml" },
   callback = function()
     vim.opt_local.softtabstop = 2
@@ -21,6 +24,7 @@ autocmd("FileType", {
 
 -- Text files: textwidth
 autocmd("FileType", {
+  group = augroup("TextWidth", { clear = true }),
   pattern = { "plaintex", "text", "markdown", "tex" },
   callback = function()
     vim.opt_local.textwidth = 80
@@ -29,6 +33,7 @@ autocmd("FileType", {
 
 -- Return to last edit position
 autocmd("BufReadPost", {
+  group = augroup("LastEditPosition", { clear = true }),
   callback = function()
     local line = vim.fn.line("'\"")
     if line > 0 and line <= vim.fn.line("$") then
@@ -39,6 +44,7 @@ autocmd("BufReadPost", {
 
 -- Auto-adjust quickfix height
 autocmd("FileType", {
+  group = augroup("QuickfixHeight", { clear = true }),
   pattern = "qf",
   callback = function()
     vim.opt_local.wrap = false
@@ -48,16 +54,9 @@ autocmd("FileType", {
   end,
 })
 
--- Markdown: force filetype for .md files
-autocmd({ "BufNewFile", "BufReadPost" }, {
-  pattern = "*.md",
-  callback = function()
-    vim.bo.filetype = "markdown"
-  end,
-})
-
 -- Git commit: jj to save and close
 autocmd("FileType", {
+  group = augroup("GitCommit", { clear = true }),
   pattern = "gitcommit",
   callback = function()
     vim.keymap.set("i", "jj", "<ESC>ZZ", { buffer = true })
@@ -66,6 +65,7 @@ autocmd("FileType", {
 
 -- Go: use tabs for listchars
 autocmd("FileType", {
+  group = augroup("GoListchars", { clear = true }),
   pattern = "go",
   callback = function()
     vim.opt_local.listchars = { tab = "  ", trail = "·", extends = "❯", precedes = "❮" }
@@ -74,6 +74,7 @@ autocmd("FileType", {
 
 -- Lint on save
 autocmd("BufWritePost", {
+  group = augroup("LintOnSave", { clear = true }),
   callback = function()
     local ok, lint = pcall(require, "lint")
     if ok then lint.try_lint() end
@@ -81,12 +82,14 @@ autocmd("BufWritePost", {
 })
 
 -- Run commands per filetype
+local ft_runner_group = augroup("FiletypeRunners", { clear = true })
 local ft_runners = {
   bash = "bash", javascript = "node", perl = "perl",
   php = "php", python = "python", ruby = "ruby", sh = "sh",
 }
 for ft, cmd in pairs(ft_runners) do
   autocmd("FileType", {
+    group = ft_runner_group,
     pattern = ft,
     callback = function()
       vim.keymap.set("n", "<leader>r", "<cmd>write !" .. cmd .. "<cr>", { buffer = true, silent = true })
@@ -94,6 +97,7 @@ for ft, cmd in pairs(ft_runners) do
   })
 end
 autocmd("FileType", {
+  group = ft_runner_group,
   pattern = "c",
   callback = function()
     vim.keymap.set("n", "<leader>r", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buffer = true, silent = true })

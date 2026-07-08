@@ -1,4 +1,7 @@
 # Remove remote branch and prune local
 function grm
-    git push origin :$argv && gpl
+    for branch in $argv
+        git push origin :$branch
+    end
+    gpl
 end
