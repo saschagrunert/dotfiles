@@ -14,17 +14,17 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: build switch gitconfig-user update upgrade check check-nix help
+.PHONY: build switch gitconfig-user update upgrade check check-nix lint lint-fix help
 
 ##@ Build targets:
 
 all: switch ## Build and switch to the NixOS configuration (default).
 
 build: ## Build the NixOS configuration.
-	nixos-rebuild build --flake $(CURDIR)\#nixos
+	nixos-rebuild build --flake .\#nixos
 
 switch: ## Build and switch to the NixOS configuration.
-	sudo nixos-rebuild switch --flake $(CURDIR)\#nixos
+	sudo nixos-rebuild switch --flake .\#nixos
 
 ##@ Setup targets:
 
@@ -57,7 +57,17 @@ check: ## Check symlinks and required commands.
 	done
 
 check-nix: ## Run nix flake checks.
-	nix flake check --flake $(CURDIR)
+	nix flake check
+
+lint: ## Check formatting and lint all Nix files.
+	nix run nixpkgs\#nixpkgs-fmt -- --check ./**/*.nix ./*.nix
+	nix run nixpkgs\#statix -- check .
+	nix run nixpkgs\#deadnix -- ./**/*.nix ./*.nix
+
+lint-fix: ## Fix formatting and lint issues in all Nix files.
+	nix run nixpkgs\#nixpkgs-fmt -- ./**/*.nix ./*.nix
+	nix run nixpkgs\#statix -- fix .
+	nix run nixpkgs\#deadnix -- -e ./**/*.nix ./*.nix
 
 ##@ Update targets:
 

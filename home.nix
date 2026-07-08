@@ -84,16 +84,16 @@ in
     };
 
     configFile = {
-    "alacritty".source = link "${dotfilesPath}/alacritty";
-    "bat".source = link "${dotfilesPath}/bat";
-    "dunst".source = link "${dotfilesPath}/dunst";
-    "fish".source = link "${dotfilesPath}/fish";
-    "htop".source = link "${dotfilesPath}/htop";
-    "i3".source = link "${dotfilesPath}/i3";
-    "i3status-rust".source = link "${dotfilesPath}/i3status-rust";
-    "picom".source = link "${dotfilesPath}/picom";
-    "nvim".source = link "${dotfilesPath}/nvim";
-    "ranger".source = link "${dotfilesPath}/ranger";
+      "alacritty".source = link "${dotfilesPath}/alacritty";
+      "bat".source = link "${dotfilesPath}/bat";
+      "dunst".source = link "${dotfilesPath}/dunst";
+      "fish".source = link "${dotfilesPath}/fish";
+      "htop".source = link "${dotfilesPath}/htop";
+      "i3".source = link "${dotfilesPath}/i3";
+      "i3status-rust".source = link "${dotfilesPath}/i3status-rust";
+      "picom".source = link "${dotfilesPath}/picom";
+      "nvim".source = link "${dotfilesPath}/nvim";
+      "ranger".source = link "${dotfilesPath}/ranger";
     };
   };
 }

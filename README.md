@@ -1,6 +1,6 @@
 # Dotfiles
 
-### My dotfiles, crafted with ❤️
+## My dotfiles, crafted with ❤️
 
 This repository is a [NixOS flake](https://nixos.wiki/wiki/Flakes) that manages
 both the system configuration and user environment via
@@ -103,7 +103,7 @@ and debugging tools.
 
 ## Structure
 
-```
+```text
 flake.nix               # Nix flake entry point
 home.nix                # Home-manager user config (symlinks, systemd services)
 nixos/
