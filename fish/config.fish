@@ -49,10 +49,7 @@ function fish_greeting; end
 function fish_title; end
 function fish_mode_prompt; end
 
-if not set -q -U __fish_theme_configured
-    fish_config theme choose "Dracula"
-    set -U __fish_theme_configured 1
-end
+fish_config theme choose "Dracula"
 
 if functions -q fish_vi_key_bindings
     function fish_user_key_bindings
