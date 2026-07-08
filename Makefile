@@ -5,7 +5,7 @@ CURL := curl -sfL
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
 # User specific settings
-USER := Sascha Grunert
+GIT_USER := Sascha Grunert
 EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
@@ -30,7 +30,7 @@ switch: ## Build and switch to the NixOS configuration.
 
 gitconfig-user: ## Generate the user-specific gitconfig.
 	rm -f $(GITCONFIG_USER_PATH)
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(USER)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(GIT_USER)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true

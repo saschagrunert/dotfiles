@@ -82,14 +82,8 @@ opt.breakindent = true
 -- Path
 opt.path:append("/usr/local/include")
 
--- Fillchars
-opt.fillchars:append({ vert = "│" })
-
 -- Pattern memory
 opt.maxmempattern = 10000
-
--- 24-bit color
-opt.termguicolors = true
 
 -- Sign column
 opt.signcolumn = "yes"

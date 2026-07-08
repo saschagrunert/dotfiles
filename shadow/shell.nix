@@ -37,7 +37,7 @@ pkgs.mkShell {
     done
     sudo ${usbipd} -D
 
-    appimage-run /home/sascha/games/shadow/ShadowPC.AppImage
+    appimage-run $HOME/games/shadow/ShadowPC.AppImage
 
     # Cleanup USB/IP
     for busid in $USBIP_BUSIDS; do
