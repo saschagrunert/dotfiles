@@ -3,7 +3,7 @@ extend-exclude = [
     "icons/",
     "ranger/",
     "nvim/lazy-lock.json",
-    "nvim/after/plugin/abolish.lua",
+    "nvim/lua/plugins/editing.lua",
     "gdb/",
 ]
 
@@ -14,7 +14,3 @@ yot = "yot"
 ot = "ot"
 als = "als"
 frmat = "frmat"
-
-[default.extend-identifiers]
-overriden = "overriden"
-acitons = "acitons"

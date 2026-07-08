@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   services = {
     autorandr.enable = true;
@@ -38,7 +38,7 @@
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amd_backlight", MODE="0666", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
       ACTION=="bind", SUBSYSTEM=="usb", DRIVER=="snd-usb-audio", ATTRS{idVendor}=="10f5", ATTRS{idProduct}=="7001", RUN+="${pkgs.bash}/bin/bash -c 'echo %k > /sys/bus/usb/drivers/snd-usb-audio/unbind 2>/dev/null'"
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="10f5", ENV{DEVTYPE}=="usb_device", TAG+="usbip-autoexport", RUN+="${pkgs.bash}/bin/bash -c '${pkgs.linuxPackages.usbip}/bin/usbip bind -b %k 2>/dev/null || true'"
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="10f5", ENV{DEVTYPE}=="usb_device", TAG+="usbip-autoexport", RUN+="${pkgs.bash}/bin/bash -c '${config.boot.kernelPackages.usbip}/bin/usbip bind -b %k 2>/dev/null || true'"
     '';
 
     upower.enable = true;

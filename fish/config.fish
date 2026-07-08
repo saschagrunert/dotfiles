@@ -49,7 +49,10 @@ function fish_greeting; end
 function fish_title; end
 function fish_mode_prompt; end
 
-fish_config theme choose "Dracula"
+if not set -q -U __fish_theme_configured
+    fish_config theme choose "Dracula"
+    set -U __fish_theme_configured 1
+end
 
 if functions -q fish_vi_key_bindings
     function fish_user_key_bindings
@@ -67,6 +70,8 @@ set -g fish_cursor_default block
 set -g fish_cursor_insert block
 
 # Source optional functions only if they exist
-command -q zoxide && zoxide init fish | source
-alias j=z
+if command -q zoxide
+    zoxide init fish | source
+    alias j=z
+end
 test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish

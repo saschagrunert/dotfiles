@@ -20,6 +20,8 @@
     excludesfile = ~/.gitignore_global
 [color]
     ui = auto
+[init]
+    defaultBranch = main
 [pull]
     rebase = true
 [fetch]
@@ -33,6 +35,8 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
+[interactive]
+    diffFilter = delta --color-only
 [pager]
     branch = false
     diff = delta
