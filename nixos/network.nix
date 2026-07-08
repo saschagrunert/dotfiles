@@ -6,5 +6,6 @@
       enable = true;
       plugins = [ pkgs.networkmanager-openvpn ];
     };
+    firewall.trustedInterfaces = [ "tailscale0" ];
   };
 }

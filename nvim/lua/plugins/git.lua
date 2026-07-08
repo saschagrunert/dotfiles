@@ -45,7 +45,7 @@ return {
           return "<Ignore>"
         end, { expr = true, desc = "Prev hunk" })
         map("n", "<leader>gh", gs.stage_hunk, { desc = "Stage hunk" })
-        map("n", "<leader>gu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+        map("n", "<leader>gu", gs.reset_hunk, { desc = "Reset hunk" })
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Inner hunk" })
         map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Outer hunk" })
       end,

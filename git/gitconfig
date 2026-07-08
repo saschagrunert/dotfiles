@@ -11,6 +11,7 @@
 [diff]
     tool = nvimdiff
     algorithm = histogram
+    colorMoved = default
 [difftool]
     prompt = false
 [http]
@@ -22,6 +23,8 @@
     ui = auto
 [init]
     defaultBranch = main
+[transfer]
+    fsckObjects = true
 [pull]
     rebase = true
 [fetch]

@@ -1,6 +1,14 @@
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
+-- Highlight on yank
+autocmd("TextYankPost", {
+  group = augroup("HighlightYank", { clear = true }),
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
 -- Show diagnostic float on hover (only when diagnostics exist)
 autocmd("CursorHold", {
   group = augroup("DiagnosticFloat", { clear = true }),

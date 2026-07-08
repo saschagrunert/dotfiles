@@ -145,12 +145,12 @@ map("n", "'", "<cmd>bnext<cr>", { silent = true })
 map("n", '"', "<cmd>bprevious<cr>", { silent = true })
 
 -- Breaking habits (disable arrows in insert/visual)
-map("i", "<Left>", '<Esc><cmd>echoe "Dude!"<cr>')
-map("i", "<Right>", '<Esc><cmd>echoe "Dude!"<cr>')
-map("v", "<Left>", '<Esc><cmd>echoe "Dude!"<cr>')
-map("v", "<Right>", '<Esc><cmd>echoe "Dude!"<cr>')
-map("v", "<Up>", '<Esc><cmd>echoe "Dude!"<cr>')
-map("v", "<Down>", '<Esc><cmd>echoe "Dude!"<cr>')
+map("i", "<Left>", '<Esc><cmd>echo "Dude!"<cr>')
+map("i", "<Right>", '<Esc><cmd>echo "Dude!"<cr>')
+map("v", "<Left>", '<Esc><cmd>echo "Dude!"<cr>')
+map("v", "<Right>", '<Esc><cmd>echo "Dude!"<cr>')
+map("v", "<Up>", '<Esc><cmd>echo "Dude!"<cr>')
+map("v", "<Down>", '<Esc><cmd>echo "Dude!"<cr>')
 
 -- Disable backspace/space in normal
 map("", "<backspace>", "<nop>")

@@ -14,9 +14,6 @@ opt.clipboard = "unnamedplus"
 -- Line numbers
 opt.number = true
 
--- Editing
-opt.history = 1000
-
 -- Highlight
 opt.cursorline = true
 
@@ -31,7 +28,6 @@ opt.shiftround = true
 opt.previewheight = 1
 opt.ignorecase = true
 opt.smartcase = true
-opt.startofline = false
 opt.confirm = true
 opt.showmatch = true
 opt.autowrite = true
@@ -41,11 +37,8 @@ opt.titleold = ""
 opt.more = false
 opt.updatecount = 10
 opt.updatetime = 250
-opt.timeout = true
 opt.timeoutlen = 2000
 opt.ttimeoutlen = 0
-opt.formatoptions:append("j")
-
 -- Folding
 opt.foldnestmax = 20
 
@@ -71,7 +64,6 @@ opt.wildignore:append("*.o,*.obj,*~,*vim/backups*,*DS_Store*,*.png,*.jpg,*.gif,*
 -- Scrolling
 opt.scrolloff = 8
 opt.sidescrolloff = 15
-opt.sidescroll = 1
 opt.wrap = false
 opt.linebreak = true
 
@@ -82,7 +74,6 @@ opt.pumheight = 15
 opt.complete:append({ "U", "k", "kspell", "s" })
 
 -- Spell
-opt.spell = false
 opt.spelllang = "en_us"
 
 -- Indent after break
