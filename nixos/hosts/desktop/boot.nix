@@ -44,7 +44,7 @@
       timeout = 0;
       efi.canTouchEfiVariables = true;
       grub = {
-        configurationLimit = 2;
+        configurationLimit = 5;
         enable = true;
         efiSupport = true;
         enableCryptodisk = true;

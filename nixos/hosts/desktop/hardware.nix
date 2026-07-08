@@ -14,8 +14,6 @@
 
   swapDevices = [{ device = "/dev/disk/by-uuid/7b5f80d4-b31d-4619-b8c4-c3fcae0441a9"; }];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-
   environment.variables = {
     GDK_SCALE = "2";
     GDK_DPI_SCALE = "0.5";

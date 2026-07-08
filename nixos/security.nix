@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 {
   security = {
-    audit.enable = true;
-    auditd.enable = true;
     krb5 = {
       enable = true;
       settings = {
@@ -41,38 +39,4 @@
     };
   };
 
-  environment.etc = {
-    "audit/audit.rules".text = ''
-      -D
-
-      -a task,never
-    '';
-    "audit/auditd.conf".text = ''
-      local_events = yes
-      write_logs = yes
-      log_file = /var/log/audit/audit.log
-      log_group = wheel
-      log_format = ENRICHED
-      flush = INCREMENTAL_ASYNC
-      freq = 50
-      max_log_file = 8
-      num_logs = 5
-      priority_boost = 4
-      name_format = NONE
-      max_log_file_action = ROTATE
-      space_left = 75
-      space_left_action = SYSLOG
-      verify_email = yes
-      action_mail_acct = root
-      admin_space_left = 50
-      admin_space_left_action = SUSPEND
-      disk_full_action = SUSPEND
-      disk_error_action = SUSPEND
-      use_libwrap = yes
-      tcp_listen_queue = 5
-      tcp_max_per_addr = 1
-      tcp_client_max_idle = 0
-      distribute_network = no
-    '';
-  };
 }

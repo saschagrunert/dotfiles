@@ -29,16 +29,11 @@
     };
 
     journald = {
-      rateLimitInterval = "0";
-      rateLimitBurst = 0;
+      rateLimitInterval = "30s";
+      rateLimitBurst = 10000;
     };
 
     libinput.enable = true;
-
-    locate = {
-      enable = true;
-      interval = "hourly";
-    };
 
     udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amd_backlight", MODE="0666", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
