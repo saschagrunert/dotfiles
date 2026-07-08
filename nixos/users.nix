@@ -2,7 +2,6 @@
 {
   users.users.sascha = {
     isNormalUser = true;
-    home = "/home/sascha";
     description = "Sascha Grunert";
     extraGroups = [
       "audio"

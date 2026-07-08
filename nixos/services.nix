@@ -61,10 +61,6 @@
       enable = true;
       dpi = 150;
 
-      desktopManager = {
-        xterm.enable = false;
-      };
-
       displayManager = {
         lightdm = {
           enable = true;

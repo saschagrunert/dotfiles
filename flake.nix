@@ -32,6 +32,8 @@
         ];
       };
 
+      formatter.${system} = pkgs.nixpkgs-fmt;
+
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           (libseccomp.overrideAttrs (x: {
