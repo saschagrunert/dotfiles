@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 rainbarf \
-    --rgb \
-    --width=30 \
-    --battery \
-    --remaining \
-    --bright \
-    --skip 1
+	--rgb \
+	--width=30 \
+	--battery \
+	--remaining \
+	--bright \
+	--skip 1

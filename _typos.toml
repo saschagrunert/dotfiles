@@ -1,0 +1,20 @@
+[files]
+extend-exclude = [
+    "icons/",
+    "ranger/",
+    "nvim/lazy-lock.json",
+    "nvim/after/plugin/abolish.lua",
+    "gdb/",
+]
+
+[default.extend-words]
+crypted = "crypted"
+grup = "grup"
+yot = "yot"
+ot = "ot"
+als = "als"
+frmat = "frmat"
+
+[default.extend-identifiers]
+overriden = "overriden"
+acitons = "acitons"

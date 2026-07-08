@@ -84,5 +84,5 @@
     };
   };
 
-  systemd.services.tailscaled.wantedBy = lib.mkForce [];
+  systemd.services.tailscaled.wantedBy = lib.mkForce [ ];
 }
