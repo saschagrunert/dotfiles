@@ -34,5 +34,6 @@ _:
     };
     pki.certificateFiles = [ ./2022-IT-Root-CA.pem ];
     sudo.wheelNeedsPassword = false;
+    sudo.execWheelOnly = true;
   };
 }

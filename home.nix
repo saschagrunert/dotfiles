@@ -3,30 +3,37 @@ let
   link = config.lib.file.mkOutOfStoreSymlink;
 in
 {
-  home.stateVersion = "24.11";
+  home = {
+    stateVersion = "24.11";
 
-  home.file = {
-    ".hushlogin".text = "";
-    ".clang-format".source = link "${dotfilesPath}/clang/clang-format";
-    ".gdbinit".source = link "${dotfilesPath}/gdb/gdbinit";
-    ".gdbinit.d".source = link "${dotfilesPath}/gdb/gdbinit.d";
-    ".ghci".source = link "${dotfilesPath}/ghci/ghci";
-    ".gitconfig".source = link "${dotfilesPath}/git/gitconfig";
-    ".gitignore_global".source = link "${dotfilesPath}/git/gitignore_global";
-    ".gtkrc-2.0".source = link "${dotfilesPath}/gtk/gtkrc-2.0";
-    ".icons".source = link "${dotfilesPath}/icons";
-    ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
-    ".tigrc".source = link "${dotfilesPath}/tig/tigrc";
-    ".tmux.conf".source = link "${dotfilesPath}/tmux/tmux.conf";
-    ".tmux/scripts".source = link "${dotfilesPath}/tmux/scripts";
-    ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
-    ".profile".source = link "${dotfilesPath}/x11/profile";
-    ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
-    ".ccache/ccache.conf".source = link "${dotfilesPath}/ccache/ccache.conf";
-    ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
-    ".local/share/applications/shadow-pc.desktop".source = link "${dotfilesPath}/shadow/shadow-pc.desktop";
-    "games/shadow/shell.nix".source = link "${dotfilesPath}/shadow/shell.nix";
-    "games/shadow/alive.sh".source = link "${dotfilesPath}/shadow/alive.sh";
+    file = {
+      ".hushlogin".text = "";
+      ".clang-format".source = link "${dotfilesPath}/clang/clang-format";
+      ".gdbinit".source = link "${dotfilesPath}/gdb/gdbinit";
+      ".gdbinit.d".source = link "${dotfilesPath}/gdb/gdbinit.d";
+      ".ghci".source = link "${dotfilesPath}/ghci/ghci";
+      ".gitconfig".source = link "${dotfilesPath}/git/gitconfig";
+      ".gitignore_global".source = link "${dotfilesPath}/git/gitignore_global";
+      ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
+      ".tigrc".source = link "${dotfilesPath}/tig/tigrc";
+      ".tmux.conf".source = link "${dotfilesPath}/tmux/tmux.conf";
+      ".tmux/scripts".source = link "${dotfilesPath}/tmux/scripts";
+      ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
+      ".profile".source = link "${dotfilesPath}/x11/profile";
+      ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
+      ".ccache/ccache.conf".source = link "${dotfilesPath}/ccache/ccache.conf";
+      ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
+      "games/shadow/shell.nix".source = link "${dotfilesPath}/shadow/shell.nix";
+      "games/shadow/alive.sh".source = link "${dotfilesPath}/shadow/alive.sh";
+    };
+
+    pointerCursor = {
+      name = "Bibata-Original-Classic";
+      package = pkgs.bibata-cursors;
+      size = 24;
+      gtk.enable = true;
+      x11.enable = true;
+    };
   };
 
   systemd.user.services = {
@@ -70,9 +77,26 @@ in
     };
   };
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Arc-Dark";
+      package = pkgs.arc-theme;
+    };
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.papirus-icon-theme;
+    };
+    font = {
+      name = "Sans";
+      size = 10;
+    };
+  };
+
   xdg = {
     userDirs = {
       enable = true;
+      createDirectories = true;
       desktop = "$HOME/desktop";
       documents = "$HOME/documents";
       download = "$HOME/downloads";
@@ -81,6 +105,10 @@ in
       publicShare = "$HOME/public";
       templates = "$HOME/templates";
       videos = "$HOME/videos";
+    };
+
+    dataFile = {
+      "applications/shadow-pc.desktop".source = link "${dotfilesPath}/shadow/shadow-pc.desktop";
     };
 
     configFile = {

@@ -1,4 +1,6 @@
 # Update branch from remote
 function gup
-    git fetch $argv && git merge $argv/(gldb) && gp && gl
+    set -l remote $argv[1]
+    test -z "$remote" && set remote origin
+    git fetch $remote && git merge $remote/(gldb) && gp && gl
 end

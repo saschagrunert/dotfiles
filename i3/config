@@ -136,7 +136,7 @@ workspace $ws2 output DisplayPort-9
 workspace $ws3 output DisplayPort-9
 
 # take a screenshot
-bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot.png
+bindsym --release $mod+v exec --no-startup-id import ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # start application commands
 bindsym $mod+Shift+c exec google-chrome-stable
@@ -152,7 +152,7 @@ floating_minimum_size 10 x 10
 floating_maximum_size -1 x -1
 
 # assign to workspaces
-assign [class="google-chrome"] → $ws1
+assign [class="Google-chrome"] → $ws1
 assign [class="Alacritty"] → $ws2
 assign [class="Shadow PC"] → $ws3
 assign [class="Shadow PC - Display"] → $ws3

@@ -12,9 +12,9 @@ both the system configuration and user environment via
   - [alacritty](https://github.com/alacritty/alacritty):
     A cross-platform, GPU-accelerated terminal emulator
   - [arc](https://github.com/NicoHood/arc-theme):
-    The GTK theme
+    The GTK theme (managed via home-manager)
   - [bibata](https://github.com/ful1e5/Bibata_Cursor):
-    Beautiful cursor theme
+    Beautiful cursor theme (managed via home-manager)
   - [picom](https://github.com/yshui/picom):
     A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
@@ -34,7 +34,7 @@ both the system configuration and user environment via
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
     For managing network connections
   - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
-    The icon theme
+    The icon theme (managed via home-manager)
   - [x11](https://www.x.org):
     Windowing system
 - **Neovim** (managed via [lazy.nvim](https://github.com/folke/lazy.nvim)):

@@ -1,6 +1,5 @@
 [files]
 extend-exclude = [
-    "icons/",
     "ranger/",
     "nvim/lazy-lock.json",
     "nvim/lua/plugins/editing.lua",
@@ -13,4 +12,3 @@ grup = "grup"
 yot = "yot"
 ot = "ot"
 als = "als"
-frmat = "frmat"

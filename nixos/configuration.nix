@@ -14,17 +14,21 @@
     ./fonts.nix
   ];
 
-  nix.settings = {
-    auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
-    max-jobs = "auto";
-    trusted-users = [ "root" "sascha" ];
-  };
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+      max-jobs = "auto";
+      trusted-users = [ "root" "sascha" ];
+    };
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
+    optimise.automatic = true;
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
