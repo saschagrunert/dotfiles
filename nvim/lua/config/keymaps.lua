@@ -83,9 +83,6 @@ map("n", "p", "p`]", { silent = true })
 -- Select pasted text
 map("n", "gV", "`[v`]")
 
--- Replay last macro
-map("n", "Q", "@@")
-
 -- Upper/lower word
 map("n", "<leader>uu", "mQviwU`Q")
 map("n", "<leader>ud", "mQviwu`Q")

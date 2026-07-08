@@ -39,17 +39,6 @@ autocmd("FileType", {
   end,
 })
 
--- Return to last edit position
-autocmd("BufReadPost", {
-  group = augroup("LastEditPosition", { clear = true }),
-  callback = function()
-    local line = vim.fn.line("'\"")
-    if line > 0 and line <= vim.fn.line("$") then
-      vim.cmd('normal! g`"')
-    end
-  end,
-})
-
 -- Auto-adjust quickfix height
 autocmd("FileType", {
   group = augroup("QuickfixHeight", { clear = true }),

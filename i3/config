@@ -81,7 +81,7 @@ bindsym $mod+Shift+p restart
 bindsym $mod+p reload
 
 # shutdown computer
-bindsym $mod+Shift+s exec "i3-nagbar -t warning -m 'Shutdown the computer?' -b 'Yes' 'sudo shutdown -P now'"
+bindsym $mod+Shift+s exec "i3-nagbar -t warning -m 'Shutdown the computer?' -b 'Yes' 'systemctl poweroff'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {

@@ -69,14 +69,9 @@ return {
           end
           map("n", "gd", vim.lsp.buf.definition, "Go to definition")
           map("n", "gD", vim.lsp.buf.type_definition, "Type definition")
-          map("n", "gr", vim.lsp.buf.references, "References")
-          map("n", "gi", vim.lsp.buf.implementation, "Implementation")
-          map("n", "K", vim.lsp.buf.hover, "Hover")
           map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
-          map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, "Next diagnostic")
-          map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, "Prev diagnostic")
           map("n", "cmt", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
         end,
       })

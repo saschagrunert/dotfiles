@@ -28,7 +28,7 @@ return {
         changedelete = { text = "~" },
       },
       on_attach = function(bufnr)
-        local gs = package.loaded.gitsigns
+        local gs = require("gitsigns")
         local map = function(mode, lhs, rhs, opts)
           opts = opts or {}
           opts.buffer = bufnr
