@@ -1,4 +1,4 @@
-{ config, lib, pkgs, dotfilesPath, ... }:
+{ pkgs, dotfilesPath, ... }:
 {
   environment.systemPackages = with pkgs; [
     (import ./setup-screens.nix { inherit writeShellScriptBin dotfilesPath; })

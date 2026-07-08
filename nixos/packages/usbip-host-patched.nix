@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation {
   pname = "usbip-host-patched";
-  version = kernel.version;
+  inherit (kernel) version;
 
-  src = kernel.src;
+  inherit (kernel) src;
 
   patches = [
     ../patches/0001-usbip-drain-pending-PDU-payload-on-invalid-endpoint.patch

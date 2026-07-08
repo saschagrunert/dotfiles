@@ -34,7 +34,7 @@
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [
       (pkgs.callPackage ../../packages/usbip-host-patched.nix {
-        kernel = config.boot.kernelPackages.kernel;
+        inherit (config.boot.kernelPackages) kernel;
       })
     ];
     tmp = {

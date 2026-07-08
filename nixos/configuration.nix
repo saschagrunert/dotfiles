@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs, ... }:
+{ nixpkgs, ... }:
 {
   imports = [
     "${nixpkgs}/nixos/modules/installer/scan/not-detected.nix"

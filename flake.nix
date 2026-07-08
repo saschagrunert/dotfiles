@@ -9,7 +9,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -23,11 +23,13 @@
           ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "hm-backup";
-            home-manager.extraSpecialArgs = { inherit dotfilesPath; };
-            home-manager.users.sascha = import ./home.nix;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = { inherit dotfilesPath; };
+              users.sascha = import ./home.nix;
+            };
           }
         ];
       };
@@ -36,7 +38,7 @@
 
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
-          (libseccomp.overrideAttrs (x: {
+          (libseccomp.overrideAttrs (_x: {
             doCheck = false;
             dontDisableStatic = true;
           }))
