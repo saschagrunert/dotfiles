@@ -1,0 +1,7 @@
+*.fish
+*.lua
+*.nix
+*.py
+*.pyc
+flake.lock
+icons/

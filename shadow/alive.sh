@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p xdotool
+# shellcheck shell=bash
 set -euo pipefail
 
 INTERVAL="${1:-120}"
