@@ -89,7 +89,7 @@ for ft, cmd in pairs(ft_runners) do
     group = ft_runner_group,
     pattern = ft,
     callback = function()
-      vim.keymap.set("n", "<leader>r", "<cmd>write !" .. cmd .. "<cr>", { buffer = true, silent = true })
+      vim.keymap.set("n", "<leader>R", "<cmd>write !" .. cmd .. "<cr>", { buffer = true, silent = true })
     end,
   })
 end
@@ -97,6 +97,6 @@ autocmd("FileType", {
   group = ft_runner_group,
   pattern = "c",
   callback = function()
-    vim.keymap.set("n", "<leader>r", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buffer = true, silent = true })
+    vim.keymap.set("n", "<leader>R", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buffer = true, silent = true })
   end,
 })

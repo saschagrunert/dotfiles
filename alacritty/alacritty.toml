@@ -4,28 +4,28 @@ live_config_reload = true
 [colors]
 
 [colors.bright]
-black = "0x44475a"
-blue = "0xcaa9fa"
-cyan = "0x9aedfe"
-green = "0x5af78e"
-magenta = "0xff92d0"
-red = "0xff6e67"
-white = "0xe6e6e6"
-yellow = "0xf4f99d"
+black = "#44475a"
+blue = "#caa9fa"
+cyan = "#9aedfe"
+green = "#5af78e"
+magenta = "#ff92d0"
+red = "#ff6e67"
+white = "#e6e6e6"
+yellow = "#f4f99d"
 
 [colors.normal]
-black = "0x000000"
-blue = "0xcaa9fa"
-cyan = "0x8be9fd"
-green = "0x50fa7b"
-magenta = "0xff79c6"
-red = "0xff5555"
-white = "0xbfbfbf"
-yellow = "0xf1fa8c"
+black = "#000000"
+blue = "#caa9fa"
+cyan = "#8be9fd"
+green = "#50fa7b"
+magenta = "#ff79c6"
+red = "#ff5555"
+white = "#bfbfbf"
+yellow = "#f1fa8c"
 
 [colors.primary]
-background = "0x282a36"
-foreground = "0xf8f8f2"
+background = "#282a36"
+foreground = "#f8f8f2"
 
 [cursor.style]
 shape = "Block"

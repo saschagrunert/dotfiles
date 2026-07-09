@@ -336,7 +336,7 @@ function __fish_kubectl_get_ns_flags
     and echo $out
     and return 0
 
-    if contains -- $c $__kubectl_all_namespaces_flags
+    if contains -- $c $__fish_kubectl_all_namespaces_flags
       echo "--all-namespaces"
       return 0
     end
