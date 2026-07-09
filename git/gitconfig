@@ -31,6 +31,11 @@
     prune = true
 [rebase]
     autostash = true
+    autosquash = true
+[column]
+    ui = auto
+[branch]
+    sort = -committerdate
 [rerere]
     enabled = 1
 [filter "lfs"]

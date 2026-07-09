@@ -4,3 +4,4 @@
 *.py
 *.pyc
 flake.lock
+nvim/lazy-lock.json

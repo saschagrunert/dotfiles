@@ -14,7 +14,7 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix help
+.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix test help
 
 ##@ Build targets:
 
@@ -60,14 +60,19 @@ check-nix: ## Run nix flake checks.
 	nix flake check
 
 lint: ## Check formatting and lint all Nix files.
-	nix run nixpkgs\#nixpkgs-fmt -- --check $$(find . -name '*.nix')
+	nix run nixpkgs\#nixfmt -- --check $$(find . -name '*.nix')
 	nix run nixpkgs\#statix -- check .
 	nix run nixpkgs\#deadnix -- $$(find . -name '*.nix')
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
-	nix run nixpkgs\#nixpkgs-fmt -- $$(find . -name '*.nix')
+	nix run nixpkgs\#nixfmt -- $$(find . -name '*.nix')
 	nix run nixpkgs\#statix -- fix .
 	nix run nixpkgs\#deadnix -- -e $$(find . -name '*.nix')
+
+test: lint check-nix ## Run checks locally.
+	prettier --check .
+	typos
+	shfmt -d .
 
 ##@ Update targets:
 

@@ -1,4 +1,8 @@
-{ stdenv, lib, kernel }:
+{
+  stdenv,
+  lib,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "usbip-host-patched";

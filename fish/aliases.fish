@@ -3,70 +3,70 @@ alias ... "cd ../.."
 alias .... "cd ../../.."
 alias ..... "cd ../../../.."
 command -q bat && alias cat "bat"
-alias cl "claude"
-alias duf "du -sh *"
-alias f "fd"
-alias ff "fd --type f"
-alias g "git"
-alias ga "git add"
-alias gaa "git add -A"
-alias gb "git branch"
-alias gba "git branch -a"
-alias gbv "git branch -vv"
-alias gca "git commit -s --amend"
-alias gcan "git commit -s --amend --no-edit"
-alias gcaa "git commit -s -a --amend --no-edit"
-alias gcl "git clone"
-alias gcmsg "git commit -sm"
-alias gco "git checkout"
-alias gd "git diff"
-alias gdc "git diff --cached"
-alias glg "git log --stat --max-count=10"
-alias glgg "git log --graph --max-count=10"
-alias glgga "git log --graph --decorate --all"
-alias glo "git log --oneline --decorate --color"
-alias glog "git log --oneline --decorate --color --graph"
-alias glr "git pull --rebase"
-alias gm "git merge"
-alias gmn "git merge --no-ff"
-alias gp "git push"
-alias gpf "git push --force-with-lease"
-alias gr "git reset ."
-alias grc "git rebase --continue"
-alias grup "git remote update"
-alias gupb "gup base"
-alias grv "git remote -v"
-alias gsp "git stash pop"
-alias gss "git stash"
-alias gst "git status"
-alias ghn "gh api -X PUT notifications --silent"
-alias h "history"
-alias hs "history --search"
-alias k "kubectl"
-alias kk "kubectl config use-context"
-alias l "ls -l"
-alias la "ls -a"
-alias ll "l -a"
-alias llt "ll -T"
 command -q eza && alias ls "eza --git -bgF"
-alias lt "l -T"
-alias m "make"
-alias mc "make clean"
-alias md "mkdir -p"
+
+abbr -a cl claude
+abbr -a dush du -sh \*
+abbr -a f fd
+abbr -a ff fd --type f
+abbr -a g git
+abbr -a ga git add
+abbr -a gaa git add -A
+abbr -a gb git branch
+abbr -a gba git branch -a
+abbr -a gbv git branch -vv
+abbr -a gca git commit -s --amend
+abbr -a gcan git commit -s --amend --no-edit
+abbr -a gcaa git commit -s -a --amend --no-edit
+abbr -a gcl git clone
+abbr -a gcmsg git commit -sm
+abbr -a gco git checkout
+abbr -a gd git diff
+abbr -a gdc git diff --cached
+abbr -a glg git log --stat --max-count=10
+abbr -a glgg git log --graph --max-count=10
+abbr -a glgga git log --graph --decorate --all
+abbr -a glo git log --oneline --decorate --color
+abbr -a glog git log --oneline --decorate --color --graph
+abbr -a glr git pull --rebase
+abbr -a gm git merge
+abbr -a gmn git merge --no-ff
+abbr -a gp git push
+abbr -a gpf git push --force-with-lease
+abbr -a gr git reset .
+abbr -a grc git rebase --continue
+abbr -a grup git remote update
+abbr -a gupb gup base
+abbr -a grv git remote -v
+abbr -a gsp git stash pop
+abbr -a gss git stash
+abbr -a gst git status
+abbr -a ghn gh api -X PUT notifications --silent
+abbr -a h history
+abbr -a hs history --search
+abbr -a k kubectl
+abbr -a kk kubectl config use-context
+abbr -a l ls -l
+abbr -a la ls -a
+abbr -a ll ls -la
+abbr -a llt ls -laT
+abbr -a lt ls -lT
+abbr -a m make
+abbr -a mc make clean
+abbr -a md mkdir -p
 alias mm "make -j(nproc)"
-alias nup "nix flake update --flake $DOTFILES"
-alias p "pwd"
-alias po "popd"
-alias pu "pushd"
-alias r "rm -rf"
-alias rup "rustup update"
-alias screensleep "xset dpms force off"
-alias t "tail -f"
-alias ta "tmux attach"
-alias tg "cd ~ && tmux"
-alias tl "tmux list-sessions"
-alias ts "tmux new-session -s"
-alias up "rup && sudo nixos-rebuild switch --flake $DOTFILES#nixos && nix develop $DOTFILES --command true && nix-collect-garbage --delete-older-than 7d"
-alias v "nvim"
-alias vr "ranger"
-alias vv "nvim -u NONE"
+abbr -a nup nix flake update --flake \$DOTFILES
+abbr -a p pwd
+abbr -a po popd
+abbr -a pu pushd
+abbr -a rup rustup update
+abbr -a screensleep xset dpms force off
+abbr -a t tail -f
+abbr -a ta tmux attach
+abbr -a tg cd \~ \&\& tmux
+abbr -a tl tmux list-sessions
+abbr -a ts tmux new-session -s
+abbr -a up rustup update \&\& sudo nixos-rebuild switch --flake \$DOTFILES\#nixos \&\& nix develop \$DOTFILES --command true \&\& nix-collect-garbage --delete-older-than 7d
+abbr -a v nvim
+abbr -a vr ranger
+abbr -a vv nvim -u NONE
