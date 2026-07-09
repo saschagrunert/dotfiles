@@ -1,5 +1,4 @@
-_:
-{
+_: {
   virtualisation = {
     containers = {
       enable = true;

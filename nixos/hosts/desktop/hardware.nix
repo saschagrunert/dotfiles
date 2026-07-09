@@ -1,5 +1,4 @@
-_:
-{
+_: {
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/f436cabf-2f00-4ca2-aa5f-bebbeffb3a18";
@@ -8,11 +7,14 @@ _:
     "/boot" = {
       device = "/dev/disk/by-uuid/BA23-E4AC";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [
+        "fmask=0022"
+        "dmask=0022"
+      ];
     };
   };
 
-  swapDevices = [{ device = "/dev/disk/by-uuid/7b5f80d4-b31d-4619-b8c4-c3fcae0441a9"; }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/7b5f80d4-b31d-4619-b8c4-c3fcae0441a9"; } ];
 
   environment.variables = {
     GDK_SCALE = "2";

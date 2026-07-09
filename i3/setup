@@ -4,5 +4,5 @@ set -euo pipefail
 i3-msg exec setup-screens
 
 # Setup default applications
-i3-msg exec "alacritty -e fish -C \"tmux new-session -s work\""
+i3-msg exec "alacritty -e fish -C \"tmux new-session -s work\" || xterm"
 i3-msg exec "google-chrome-stable --force-device-scale-factor=1.5"

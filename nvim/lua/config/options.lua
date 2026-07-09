@@ -44,10 +44,12 @@ opt.foldnestmax = 20
 
 -- Persistent undo
 local backupdir = vim.fn.stdpath("data") .. "/backups"
+local swapdir = vim.fn.stdpath("data") .. "/swap"
 vim.fn.mkdir(backupdir, "p")
+vim.fn.mkdir(swapdir, "p")
 opt.undodir = backupdir
 opt.backupdir = backupdir
-opt.directory = "/tmp"
+opt.directory = swapdir
 opt.undofile = true
 opt.swapfile = true
 opt.backup = true

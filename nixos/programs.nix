@@ -1,5 +1,4 @@
-_:
-{
+_: {
   programs = {
     bcc.enable = true;
     fish.enable = true;

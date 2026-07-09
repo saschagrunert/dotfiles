@@ -33,7 +33,7 @@ format = " $icon $used/$total ($available)"
 
 [[block]]
 block = "temperature"
-interval = 1
+interval = 5
 format = " $average C "
 chip = "*-isa-*"
 
@@ -42,7 +42,7 @@ block = "net"
 # Hardware-specific: adjust per machine
 device = "wlp1s0"
 format = " $speed_down $speed_up "
-interval = 1
+interval = 5
 
 [[block]]
 block = "memory"
@@ -50,7 +50,7 @@ format = "$mem_used / $mem_total ($mem_used_percents) "
 
 [[block]]
 block = "cpu"
-interval = 1
+interval = 5
 format = " $utilization ($frequency) "
 
 [[block]]

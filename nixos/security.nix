@@ -1,5 +1,4 @@
-_:
-{
+_: {
   security = {
     krb5 = {
       enable = true;

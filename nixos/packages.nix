@@ -6,7 +6,6 @@
     # Desktop & UI
     alacritty
     arandr
-    arc-theme
     dmenu
     dunst
     feh
@@ -14,7 +13,6 @@
     j4-dmenu-desktop
     lxappearance
     pavucontrol
-    picom
     xclip
     xdg-utils
     xev
@@ -158,7 +156,7 @@
     nix-index
     nix-prefetch-git
     nixos-shell
-    nixpkgs-fmt
+    nixfmt
 
     # Misc
     bom

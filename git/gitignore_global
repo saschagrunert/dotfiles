@@ -2,8 +2,11 @@ cscope.*
 tags
 *.swp
 *.swo
+*.orig
 .DS_Store
 .vscode/
 .idea/
 .env
 .env.local
+.direnv/
+result
