@@ -152,8 +152,8 @@ After editing any configuration file, rebuild with:
 > make switch
 ```
 
-Or use the `up` alias which also updates Rust, collects garbage and
-pre-caches the dev shell.
+Or use the `up` abbreviation which also updates Rust, collects garbage
+and pre-caches the dev shell.
 
 ## Updating
 

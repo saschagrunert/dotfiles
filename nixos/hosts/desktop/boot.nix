@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 {
   boot = {
-    enableContainers = false;
     initrd = {
       availableKernelModules = [
         "ahci"
@@ -20,6 +19,7 @@
         crypted = {
           device = "/dev/disk/by-uuid/37979e33-77a8-4b2e-8bff-7d0ae8850266";
           preLVM = true;
+          allowDiscards = true;
         };
       };
     };

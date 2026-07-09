@@ -29,6 +29,9 @@
     rebase = true
 [fetch]
     prune = true
+    writeCommitGraph = true
+[maintenance]
+    strategy = incremental
 [rebase]
     autostash = true
     autosquash = true

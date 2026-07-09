@@ -5,5 +5,5 @@ function gsq
         echo "Failed to determine merge base" >&2
         return 1
     end
-    git reset $base && git add -A && git commit -s
+    git reset --soft $base && git commit -s
 end
