@@ -6,7 +6,6 @@ _: {
       enable = true;
       enableSSHSupport = true;
     };
-    light.enable = true;
     mtr.enable = true;
     nix-ld.enable = true;
     nm-applet.enable = true;

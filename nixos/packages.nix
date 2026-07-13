@@ -72,11 +72,11 @@
 
     # Node.js
     nodejs
-    nodePackages.prettier
+    prettier
 
     # C/C++
     clang-tools
-    clang_21
+    clang_22
 
     # Containers & virtualization
     buildah

@@ -9,6 +9,7 @@ let
 in
 {
   home = {
+    enableNixpkgsReleaseCheck = false;
     stateVersion = "24.11";
 
     file = {

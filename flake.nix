@@ -2,7 +2,7 @@
   description = "NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,7 +60,7 @@
           libselinux
           libtool
           linuxPackages_latest.bcc
-          llvmPackages_21.clang-unwrapped
+          llvmPackages_22.clang-unwrapped
           lvm2
           pkg-config
           systemd
