@@ -22,7 +22,7 @@ autocmd("CursorHold", {
 -- Filetype-specific indentation
 autocmd("FileType", {
   group = augroup("FiletypeIndent", { clear = true }),
-  pattern = { "typescript", "ruby", "rdoc", "cucumber", "haskell", "yaml" },
+  pattern = { "typescript", "yaml" },
   callback = function()
     vim.opt_local.softtabstop = 2
     vim.opt_local.tabstop = 2

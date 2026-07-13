@@ -34,19 +34,12 @@ blinking = "Off"
 [cursor]
 unfocused_hollow = true
 
-[env]
-TERM = "alacritty"
-
 [font]
 size = 9.0
 
 [font.bold]
 family = "MesloLGSDZ Nerd Font Mono"
 style = "Regular"
-
-[font.glyph_offset]
-x = 0
-y = 0
 
 [font.italic]
 family = "MesloLGSDZ Nerd Font Mono"
@@ -65,7 +58,6 @@ hide_when_typing = true
 
 [scrolling]
 history = 10000
-multiplier = 3
 
 [selection]
 save_to_clipboard = true
@@ -74,7 +66,6 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 [window]
 decorations = "full"
 dynamic_padding = false
-dynamic_title = true
 opacity = 1
 
 [window.dimensions]

@@ -38,10 +38,10 @@ both the system configuration and user environment via
   - [x11](https://www.x.org):
     Windowing system
 - **Neovim** (managed via [lazy.nvim](https://github.com/folke/lazy.nvim)):
-  - Native LSP via [mason.nvim](https://github.com/williamboman/mason.nvim) +
-    [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-  - Completion via [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) +
-    [LuaSnip](https://github.com/L3MON4D3/LuaSnip)
+  - Native LSP via [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+    (servers installed as Nix packages)
+  - Completion via [blink.cmp](https://github.com/Saghen/blink.cmp) +
+    [friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
   - Formatting via [conform.nvim](https://github.com/stevearc/conform.nvim)
   - Linting via [nvim-lint](https://github.com/mfussenegger/nvim-lint)
   - Syntax via [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
@@ -118,7 +118,7 @@ nixos/
 │   └── usbip-host-patched.nix # Patched usbip kernel module
 ├── patches/                   # Kernel patches
 ├── programs.nix               # fish, neovim, gnupg, ...
-├── virtualisation.nix         # docker, podman, cri-o
+├── virtualisation.nix         # podman, cri-o, libvirtd
 ├── services.nix               # X11, i3, pipewire, ...
 ├── network.nix                # Hostname, NetworkManager
 ├── security.nix               # Kerberos, PKI, sudo
@@ -173,8 +173,8 @@ To pull the latest dotfiles and update external dependencies:
 ### Neovim
 
 Plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim) and
-install automatically on first launch. LSP servers are installed via
-[Mason](https://github.com/williamboman/mason.nvim) on first use.
+install automatically on first launch. LSP servers are installed as Nix
+packages via `nixos/packages.nix`.
 
 ## Contributing
 
