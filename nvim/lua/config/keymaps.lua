@@ -100,8 +100,8 @@ map("n", "zh", "zH")
 map("i", "jj", "<ESC>")
 
 -- Blank lines
-map("n", "<leader>d", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
-map("n", "<leader>D", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
+map("n", "<leader>dd", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
+map("n", "<leader>dD", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
 map("n", "<leader>o", "m`o<Esc>``", { silent = true })
 map("n", "<leader>O", "m`O<Esc>``", { silent = true })
 

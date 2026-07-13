@@ -81,8 +81,8 @@ autocmd("BufWritePost", {
 -- Run commands per filetype
 local ft_runner_group = augroup("FiletypeRunners", { clear = true })
 local ft_runners = {
-  bash = "bash", javascript = "node", perl = "perl",
-  php = "php", python = "python", ruby = "ruby", sh = "sh",
+  bash = "bash", javascript = "node",
+  python = "python", sh = "sh",
 }
 for ft, cmd in pairs(ft_runners) do
   autocmd("FileType", {

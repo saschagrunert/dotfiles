@@ -137,7 +137,7 @@ in `flake.nix`.
 ```fish
 > git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
 > cd ~/.dotfiles
-> make gitconfig-user USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
+> make gitconfig-user GIT_USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
 > sudo nixos-rebuild switch --flake ~/.dotfiles#nixos
 ```
 

@@ -20,4 +20,5 @@ require("lazy").setup("plugins", {
   install = { colorscheme = { "dracula" } },
   change_detection = { notify = false },
   git = { url_format = "git@github.com:%s.git" },
+  rocks = { enabled = false },
 })

@@ -2,7 +2,7 @@
     width = 300
     height = (0, 300)
     origin = top-right
-    offset = 30x20
+    offset = (30, 20)
     notification_limit = 10
     font = MesloLGSDZ Nerd Font 8
     format = "<b>%s</b>\n%b"

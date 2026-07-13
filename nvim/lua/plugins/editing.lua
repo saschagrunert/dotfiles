@@ -80,7 +80,6 @@ return {
       { "l", "<Plug>SchleppRight", mode = "v" },
       { "<S-up>", "<Plug>SchleppIndentUp", mode = "v" },
       { "<S-down>", "<Plug>SchleppIndentDown", mode = "v" },
-      { "D", "<Plug>SchleppDup", mode = "v" },
       { "Dk", "<Plug>SchleppDupUp", mode = "v" },
       { "Dj", "<Plug>SchleppDupDown", mode = "v" },
       { "Dh", "<Plug>SchleppDupLeft", mode = "v" },

@@ -5,10 +5,11 @@ return {
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
+        bash = { "shellcheck" },
         go = { "golangcilint" },
         markdown = { "proselint" },
         sh = { "shellcheck" },
-        bash = { "shellcheck" },
+        yaml = { "yamllint" },
       }
     end,
   },
