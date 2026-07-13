@@ -47,7 +47,6 @@ return {
           map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
-          map("n", "cmt", "<cmd>Telescope lsp_document_symbols<cr>", "Document symbols")
         end,
       })
 

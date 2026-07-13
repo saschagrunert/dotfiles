@@ -10,7 +10,7 @@ return {
           "go", "gomod", "gosum", "hcl", "html",
           "javascript", "json", "jsonnet", "lua", "make",
           "markdown", "markdown_inline", "nix", "proto", "python",
-          "ruby", "rust", "terraform", "toml", "tsx",
+          "rust", "terraform", "toml", "tsx",
           "typescript", "vim", "vimdoc", "yaml",
         },
       })

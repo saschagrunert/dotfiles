@@ -140,7 +140,6 @@
     lshw
     lvm2
     pahole
-    sysstat
     usbutils
     valgrind
 
