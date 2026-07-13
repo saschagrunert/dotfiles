@@ -50,6 +50,17 @@
     graphviz
     tig
 
+    # LSP servers
+    bash-language-server
+    dockerfile-language-server-nodejs
+    lua-language-server
+    nil
+    pyright
+    rust-analyzer
+    terraform-ls
+    vtsls
+    yaml-language-server
+
     # Go
     go_1_26
     gofumpt

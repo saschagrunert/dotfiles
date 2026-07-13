@@ -1,37 +1,12 @@
 return {
   {
-    "williamboman/mason.nvim",
-    cmd = "Mason",
-    opts = {},
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
-    lazy = false,
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = {
-        "lua_ls",
-        "gopls",
-        "rust_analyzer",
-        "clangd",
-        "pyright",
-        "ts_ls",
-        "nil_ls",
-        "bashls",
-        "terraformls",
-        "yamlls",
-        "dockerls",
-      },
-    },
-  },
-  {
     "neovim/nvim-lspconfig",
     lazy = false,
     config = function()
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+      local ok, blink = pcall(require, "blink.cmp")
       if ok then
-        capabilities = cmp_lsp.default_capabilities(capabilities)
+        capabilities = blink.get_lsp_capabilities(capabilities)
       end
 
       vim.lsp.config("*", {
@@ -57,7 +32,7 @@ return {
 
       vim.lsp.enable({
         "lua_ls", "gopls", "rust_analyzer", "clangd", "pyright",
-        "ts_ls", "nil_ls", "bashls", "terraformls",
+        "vtsls", "nil_ls", "bashls", "terraformls",
         "yamlls", "dockerls",
       })
 

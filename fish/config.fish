@@ -10,7 +10,6 @@ if test -d ~/go
 end
 
 test -d ~/.cargo/bin && fish_add_path --path --move ~/.cargo/bin
-test -d ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin && fish_add_path --path --move ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin
 test -d ~/.local/bin && fish_add_path --path --move ~/.local/bin
 test -d ~/.npm-global/bin && fish_add_path --path --move ~/.npm-global/bin
 

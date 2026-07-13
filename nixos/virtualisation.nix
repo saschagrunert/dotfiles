@@ -5,7 +5,7 @@ _: {
       ociSeccompBpfHook.enable = true;
     };
     cri-o.enable = true;
-    docker.enable = true;
+    docker.enable = false;
     libvirtd.enable = true;
     podman.enable = true;
   };
