@@ -35,8 +35,6 @@
 [rebase]
     autostash = true
     autosquash = true
-[column]
-    ui = auto
 [branch]
     sort = -committerdate
 [rerere]
