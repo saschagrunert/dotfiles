@@ -13,9 +13,11 @@
     j4-dmenu-desktop
     lxappearance
     pavucontrol
+    signal-desktop
     xclip
     xdg-utils
     xev
+    zoom-us
 
     # System utilities
     bat
@@ -48,11 +50,11 @@
     git-lfs
     gnumake
     graphviz
+    rpm
     tig
 
     # LSP servers
     bash-language-server
-    dockerfile-language-server-nodejs
     lua-language-server
     nil
     pyright
@@ -74,12 +76,12 @@
     rustup
 
     # Python
+    jira-cli-go
     python3
     python3Packages.autopep8
     python3Packages.isort
     python3Packages.osc
     python3Packages.yapf
-    jira-cli-go
 
     # Node.js
     nodejs
@@ -90,7 +92,6 @@
     clang_22
 
     # Containers & virtualization
-    buildah
     cni-plugins
     conmon
     conmon-rs
@@ -98,7 +99,6 @@
     criu
     crun
     fuse-overlayfs
-    lima
     oras
     runc
     skopeo
@@ -159,21 +159,18 @@
     # Media & documents
     asciinema
     imagemagick
-    mediainfo
     kooha
+    mediainfo
 
     # Nix tools
     cachix
     nix-index
     nix-prefetch-git
-    nixos-shell
     nixfmt
+    nixos-shell
 
     # Misc
     bom
     perlPackages.Apprainbarf
-    rpm
-    signal-desktop
-    zoom-us
   ];
 }

@@ -124,7 +124,7 @@ nixos/
 ├── security.nix               # Kerberos, PKI, sudo
 ├── users.nix                  # User accounts, groups, shell
 ├── locale.nix                 # Locale, input method
-├── fonts.nix                  # Nerd Fonts, Noto, ...
+├── fonts.nix                  # Nerd Fonts, Roboto, ...
 └── setup-screens.nix          # Monitor & wallpaper setup
 ```
 

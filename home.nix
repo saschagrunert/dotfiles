@@ -17,7 +17,6 @@ in
       ".clang-format".source = link "${dotfilesPath}/clang/clang-format";
       ".gdbinit".source = link "${dotfilesPath}/gdb/gdbinit";
       ".gdbinit.d".source = link "${dotfilesPath}/gdb/gdbinit.d";
-      ".ghci".source = link "${dotfilesPath}/ghci/ghci";
       ".gitconfig".source = link "${dotfilesPath}/git/gitconfig";
       ".gitignore_global".source = link "${dotfilesPath}/git/gitignore_global";
       ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
@@ -27,7 +26,6 @@ in
       ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
       ".profile".source = link "${dotfilesPath}/x11/profile";
       ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
-      ".ccache/ccache.conf".source = link "${dotfilesPath}/ccache/ccache.conf";
       ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
       "games/shadow/shell.nix".source = link "${dotfilesPath}/shadow/shell.nix";
       "games/shadow/alive.sh".source = link "${dotfilesPath}/shadow/alive.sh";
