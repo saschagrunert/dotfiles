@@ -6,7 +6,6 @@ return {
       local lint = require("lint")
       lint.linters_by_ft = {
         go = { "golangcilint" },
-        haskell = { "hlint" },
         markdown = { "proselint" },
         sh = { "shellcheck" },
         bash = { "shellcheck" },

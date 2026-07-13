@@ -116,7 +116,6 @@ bar {
     status_command i3status-rs
     position top
     strip_workspace_numbers yes
-    # mode hide
     bindsym button4 exec ~/.config/i3/workspace-scroll prev
     bindsym button5 exec ~/.config/i3/workspace-scroll next
     colors {
@@ -145,8 +144,6 @@ bindsym $mod+y [urgent=latest] focus
 
 # floating window settings
 for_window [class="Arandr"] floating enable, fullscreen disable
-for_window [class="X-Plane"] floating enable, fullscreen disable
-for_window [class="xPilot"] floating enable, fullscreen disable
 for_window [class=".blueman-manager-wrapped"] floating enable, fullscreen disable
 floating_minimum_size 10 x 10
 floating_maximum_size -1 x -1

@@ -6,8 +6,8 @@ return {
     config = function()
       require("nvim-treesitter").setup({
         ensure_installed = {
-          "bash", "c", "cpp", "css", "dockerfile", "fish",
-          "go", "gomod", "gosum", "haskell", "hcl", "html",
+          "bash", "c", "cpp", "css", "fish",
+          "go", "gomod", "gosum", "hcl", "html",
           "javascript", "json", "jsonnet", "lua", "make",
           "markdown", "markdown_inline", "nix", "proto", "python",
           "ruby", "rust", "terraform", "toml", "tsx",

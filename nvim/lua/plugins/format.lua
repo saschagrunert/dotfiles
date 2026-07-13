@@ -13,7 +13,6 @@ return {
         cpp = { "clang-format" },
         css = { "prettier" },
         go = { "gofumpt" },
-        haskell = { "floskell" },
         html = { "prettier" },
         javascript = { "prettier" },
         json = { "prettier" },
