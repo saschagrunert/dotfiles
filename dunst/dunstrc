@@ -4,7 +4,7 @@
     origin = top-right
     offset = (30, 20)
     notification_limit = 10
-    font = MesloLGSDZ Nerd Font 8
+    font = Roboto 9
     format = "<b>%s</b>\n%b"
     alignment = left
     markup = full
