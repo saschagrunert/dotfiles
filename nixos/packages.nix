@@ -13,7 +13,6 @@
     j4-dmenu-desktop
     lxappearance
     pavucontrol
-    signal-desktop
     xclip
     xdg-utils
     xev
