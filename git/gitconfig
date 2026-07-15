@@ -21,6 +21,8 @@
     excludesfile = ~/.gitignore_global
 [color]
     ui = auto
+[commit]
+    verbose = true
 [init]
     defaultBranch = main
 [transfer]

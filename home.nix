@@ -9,7 +9,6 @@ let
 in
 {
   home = {
-    enableNixpkgsReleaseCheck = false;
     stateVersion = "24.11";
 
     file = {
@@ -32,6 +31,7 @@ in
     };
 
     pointerCursor = {
+      enable = true;
       name = "Bibata-Original-Classic";
       package = pkgs.bibata-cursors;
       size = 32;
@@ -83,6 +83,7 @@ in
 
   gtk = {
     enable = true;
+    gtk4.theme = null;
     theme = {
       name = "Arc-Dark";
       package = pkgs.arc-theme;
@@ -101,6 +102,7 @@ in
     userDirs = {
       enable = true;
       createDirectories = true;
+      setSessionVariables = true;
       desktop = "$HOME";
       documents = "$HOME/documents";
       download = "$HOME/downloads";

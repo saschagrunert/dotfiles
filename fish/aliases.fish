@@ -2,7 +2,7 @@ alias .. "cd .."
 alias ... "cd ../.."
 alias .... "cd ../../.."
 alias ..... "cd ../../../.."
-command -q bat && alias cat "bat"
+command -q bat && abbr -a cat bat
 command -q eza && alias ls "eza --git -bgF"
 
 abbr -a cl claude
@@ -54,7 +54,7 @@ abbr -a lt ls -lT
 abbr -a m make
 abbr -a mc make clean
 abbr -a md mkdir -p
-alias mm "make -j(nproc)"
+abbr -a mm "make -j(nproc)"
 abbr -a nup nix flake update --flake \$DOTFILES
 abbr -a p pwd
 abbr -a po popd

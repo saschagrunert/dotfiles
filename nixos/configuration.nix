@@ -27,6 +27,8 @@
       ];
     };
 
+    registry.nixpkgs.flake = nixpkgs;
+
     optimise.automatic = true;
 
     gc = {

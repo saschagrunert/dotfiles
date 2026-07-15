@@ -37,7 +37,7 @@ opt.titleold = ""
 opt.more = false
 opt.updatecount = 10
 opt.updatetime = 250
-opt.timeoutlen = 2000
+opt.timeoutlen = 500
 opt.ttimeoutlen = 0
 -- Folding
 opt.foldnestmax = 20
@@ -75,16 +75,13 @@ opt.linebreak = true
 opt.pumheight = 15
 
 -- Completion sources
-opt.complete:append({ "U", "k", "kspell", "s" })
+opt.complete:append({ "k", "kspell", "s" })
 
 -- Spell
 opt.spelllang = "en_us"
 
 -- Indent after break
 opt.breakindent = true
-
--- Path
-opt.path:append("/usr/local/include")
 
 -- Pattern memory
 opt.maxmempattern = 10000
