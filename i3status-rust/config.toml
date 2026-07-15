@@ -65,7 +65,15 @@ cmd = "pavucontrol"
 [[block]]
 block = "battery"
 format = " $icon  $percentage "
+charging_format = " $icon  $percentage "
+full_format = " $icon  $percentage "
+not_charging_format = " $icon  $percentage "
+empty_format = " $icon  $percentage "
 driver = "upower"
+
+[[block.click]]
+button = "left"
+cmd = "dunstify 'Battery' \"$(upower -i /org/freedesktop/UPower/devices/battery_BAT0)\""
 
 [[block]]
 block = "time"
