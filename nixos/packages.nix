@@ -80,7 +80,6 @@
     python3Packages.autopep8
     python3Packages.isort
     python3Packages.osc
-    python3Packages.yapf
 
     # Node.js
     nodejs

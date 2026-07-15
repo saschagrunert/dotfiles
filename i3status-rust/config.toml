@@ -1,5 +1,5 @@
 [icons]
-icons = "awesome6"
+icons = "material-nf"
 
 [theme]
 theme = "slick"
@@ -29,33 +29,34 @@ invert_icons = true
 block = "disk_space"
 path = "/"
 info_type = "available"
-format = " $icon $used/$total ($available)"
+format = " $icon  $used/$total ($available) "
 
 [[block]]
 block = "temperature"
 interval = 5
-format = " $average C "
+format = " $icon {$average}C "
 chip = "*-isa-*"
 
 [[block]]
 block = "net"
 # Hardware-specific: adjust per machine
 device = "wlp1s0"
-format = " $speed_down $speed_up "
+format = " $icon  $speed_down $speed_up "
 interval = 5
 
 [[block]]
 block = "memory"
-format = "$mem_used / $mem_total ($mem_used_percents) "
+format = " $icon $mem_used/$mem_total ($mem_used_percents) "
 
 [[block]]
 block = "cpu"
 interval = 5
-format = " $utilization ($frequency) "
+format = " $icon $utilization ($frequency) "
 
 [[block]]
 block = "sound"
 driver = "auto"
+format = " $icon  $volume "
 
 [[block.click]]
 button = "left"
@@ -63,10 +64,10 @@ cmd = "pavucontrol"
 
 [[block]]
 block = "battery"
-format = " $icon $percentage "
+format = " $icon  $percentage "
 driver = "upower"
 
 [[block]]
 block = "time"
 interval = 1
-format = " $icon $timestamp.datetime(f:'%H:%M:%S    %a %-d %b W%V') "
+format = " $icon $timestamp.datetime(f:'%H:%M:%S   %a %-d %b W%V') "

@@ -1,5 +1,7 @@
 set -gx GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -gx DOTFILES ~/.dotfiles
+set -gx EDITOR nvim
+set -gx VISUAL nvim
 
 if test -d ~/go
     set -gx GOPATH ~/go

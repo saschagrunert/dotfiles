@@ -37,9 +37,7 @@
         inherit (config.boot.kernelPackages) kernel;
       })
     ];
-    tmp = {
-      useTmpfs = true;
-    };
+    tmp.useTmpfs = true;
     loader = {
       timeout = 0;
       efi.canTouchEfiVariables = true;
