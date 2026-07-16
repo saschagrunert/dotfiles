@@ -51,7 +51,7 @@ format = " $icon $mem_used/$mem_total ($mem_used_percents) "
 [[block]]
 block = "cpu"
 interval = 5
-format = " $icon $utilization ($frequency) "
+format = " $icon $utilization ($frequency.eng(w:1)) "
 
 [[block]]
 block = "sound"
