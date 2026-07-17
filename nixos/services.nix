@@ -57,6 +57,15 @@
       };
     };
 
+    openssh = {
+      enable = true;
+      ports = [ 22 ];
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+      };
+    };
+
     sysstat.enable = true;
 
     tailscale.enable = true;
