@@ -3,7 +3,7 @@ alias ... "cd ../.."
 alias .... "cd ../../.."
 alias ..... "cd ../../../.."
 command -q bat && abbr -a cat bat
-command -q eza && alias ls "eza --git -bgF"
+command -q eza && alias ls "eza --git -bg --classify=always"
 
 abbr -a cl claude
 abbr -a dush du -sh \*
