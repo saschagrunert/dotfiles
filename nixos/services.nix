@@ -6,6 +6,12 @@
 }:
 {
   services = {
+    avahi = {
+      enable = true;
+      publish.enable = true;
+      publish.addresses = true;
+    };
+
     autorandr.enable = true;
     blueman.enable = true;
 
