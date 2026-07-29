@@ -51,6 +51,7 @@ set $ws3 "3: "
 # switch to workspace
 bindsym $mod+q workspace $ws1
 bindsym $mod+w workspace $ws2
+bindsym $mod+e workspace $ws3
 
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
@@ -65,6 +66,7 @@ bindsym $mod+9 workspace 9
 # move focused container to workspace
 bindsym $mod+Shift+q move container to workspace $ws1
 bindsym $mod+Shift+w move container to workspace $ws2
+bindsym $mod+Shift+e move container to workspace $ws3
 
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
