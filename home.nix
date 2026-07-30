@@ -111,6 +111,9 @@ in
       publicShare = "$HOME";
       templates = "$HOME";
       videos = "$HOME";
+      extraConfig = {
+        PROJECTS = "$HOME";
+      };
     };
 
     dataFile = {
