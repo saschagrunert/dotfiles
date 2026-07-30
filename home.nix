@@ -83,13 +83,16 @@ in
 
   gtk = {
     enable = true;
-    gtk4.theme = null;
+    gtk4.theme = {
+      name = "Dracula";
+      package = pkgs.dracula-theme;
+    };
     theme = {
-      name = "Arc-Dark";
-      package = pkgs.arc-theme;
+      name = "Dracula";
+      package = pkgs.dracula-theme;
     };
     iconTheme = {
-      name = "Papirus";
+      name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
     font = {

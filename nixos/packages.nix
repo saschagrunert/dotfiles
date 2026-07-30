@@ -49,6 +49,7 @@
     git-lfs
     gnumake
     graphviz
+    jira-cli-go
     rpm
     tig
 
@@ -75,7 +76,6 @@
     rustup
 
     # Python
-    jira-cli-go
     python3
     python3Packages.autopep8
     python3Packages.isort

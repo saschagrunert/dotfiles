@@ -1,5 +1,5 @@
 {
-  pkgs ? import <nixpkgs> { },
+  pkgs ? import (builtins.getFlake "nixpkgs") { },
 }:
 
 let
