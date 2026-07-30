@@ -9,7 +9,9 @@ function gup
         && git push \
         || return $status
 
-    test "$remote" != origin && git fetch --prune origin || return $status
+    if test "$remote" != origin
+        git fetch --prune origin || return $status
+    end
 
     for branch in (git branch --merged $default_branch | grep -v '^\*' | string trim | grep -v "^$default_branch\$")
         git branch -d $branch
