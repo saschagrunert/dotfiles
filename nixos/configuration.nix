@@ -20,7 +20,6 @@
         "nix-command"
         "flakes"
       ];
-      max-jobs = "auto";
       trusted-users = [
         "root"
         "sascha"

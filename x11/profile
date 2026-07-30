@@ -1,2 +1,2 @@
 #!/bin/sh
-export QT_QPA_PLATFORMTHEME=gtk2
+export QT_QPA_PLATFORMTHEME=gtk3
