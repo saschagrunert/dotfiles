@@ -96,7 +96,7 @@ in
       package = pkgs.papirus-icon-theme;
     };
     font = {
-      name = "Sans";
+      name = "Roboto";
       size = 10;
     };
   };
