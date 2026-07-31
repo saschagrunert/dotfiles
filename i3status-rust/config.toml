@@ -56,11 +56,15 @@ format = " $icon $utilization ($frequency.eng(w:1)) "
 [[block]]
 block = "sound"
 driver = "auto"
-format = " $icon  $volume "
+format = " $icon  {$volume |}"
 
 [[block.click]]
 button = "left"
 cmd = "pavucontrol"
+
+[[block.click]]
+button = "right"
+cmd = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
 
 [[block]]
 block = "battery"
