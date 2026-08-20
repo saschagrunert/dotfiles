@@ -114,9 +114,6 @@ nixos/
 │       ├── hardware.nix       # Filesystems, kernel modules
 │       └── boot.nix           # Bootloader, initrd, kernel
 ├── packages.nix               # System packages
-├── packages/                  # Custom package derivations
-│   └── usbip-host-patched.nix # Patched usbip kernel module
-├── patches/                   # Kernel patches
 ├── programs.nix               # fish, neovim, gnupg, ...
 ├── virtualisation.nix         # podman, cri-o, libvirtd
 ├── services.nix               # X11, i3, pipewire, ...

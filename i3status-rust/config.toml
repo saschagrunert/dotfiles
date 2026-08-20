@@ -20,12 +20,6 @@ separator_bg = "auto"
 separator_fg = "auto"
 
 [[block]]
-block = "backlight"
-# Hardware-specific: adjust per machine
-device = "amdgpu_bl1"
-invert_icons = true
-
-[[block]]
 block = "disk_space"
 path = "/"
 info_type = "available"
@@ -40,7 +34,7 @@ chip = "*-isa-*"
 [[block]]
 block = "net"
 # Hardware-specific: adjust per machine
-device = "wlp1s0"
+device = "wlp10s0"
 format = " $icon  $speed_down $speed_up "
 interval = 5
 
@@ -65,19 +59,6 @@ cmd = "pavucontrol"
 [[block.click]]
 button = "right"
 cmd = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-
-[[block]]
-block = "battery"
-format = " $icon  $percentage "
-charging_format = " $icon  $percentage "
-full_format = " $icon  $percentage "
-not_charging_format = " $icon  $percentage "
-empty_format = " $icon  $percentage "
-driver = "upower"
-
-[[block.click]]
-button = "left"
-cmd = "dunstify 'Battery' \"$(upower -i /org/freedesktop/UPower/devices/battery_BAT0)\""
 
 [[block]]
 block = "time"

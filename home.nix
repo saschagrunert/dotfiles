@@ -27,8 +27,6 @@ in
       ".profile".source = dotfile "x11/profile";
       ".xinitrc".source = dotfile "x11/xinitrc";
       ".claude/settings.json".source = dotfile "claude/settings.json";
-      "games/shadow/shell.nix".source = dotfile "shadow/shell.nix";
-      "games/shadow/alive.sh".source = dotfile "shadow/alive.sh";
     };
 
     pointerCursor = {
@@ -118,10 +116,6 @@ in
       extraConfig = {
         PROJECTS = "$HOME";
       };
-    };
-
-    dataFile = {
-      "applications/shadow-pc.desktop".source = dotfile "shadow/shadow-pc.desktop";
     };
 
     configFile = {

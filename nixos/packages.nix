@@ -150,9 +150,6 @@
     typos
     yamllint
 
-    # Head tracking
-    opentrack
-
     # Media & documents
     asciinema
     imagemagick

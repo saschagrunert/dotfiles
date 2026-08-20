@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -45,23 +44,6 @@
     };
 
     libinput.enable = true;
-
-    udev.extraRules = ''
-      ACTION=="bind", SUBSYSTEM=="usb", DRIVER=="snd-usb-audio", ATTRS{idVendor}=="10f5", ATTRS{idProduct}=="7001", RUN+="${pkgs.bash}/bin/bash -c 'echo %k > /sys/bus/usb/drivers/snd-usb-audio/unbind 2>/dev/null'"
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="10f5", ENV{DEVTYPE}=="usb_device", TAG+="usbip-autoexport", RUN+="${pkgs.bash}/bin/bash -c '${config.boot.kernelPackages.usbip}/bin/usbip bind -b %k 2>/dev/null || true'"
-    '';
-
-    upower.enable = true;
-
-    tlp = {
-      enable = true;
-      settings = {
-        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-        CPU_SCALING_GOVERNOR_ON_AC = "performance";
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MAX_PERF_ON_BAT = 60;
-      };
-    };
 
     openssh = {
       enable = true;

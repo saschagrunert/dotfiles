@@ -153,8 +153,6 @@ floating_maximum_size -1 x -1
 # assign to workspaces
 assign [class="Google-chrome"] → $ws1
 assign [class="Alacritty"] → $ws2
-assign [class="Shadow PC"] → $ws3
-assign [class="Shadow PC - Display"] → $ws3
 
 # other window settings
 default_border pixel 1

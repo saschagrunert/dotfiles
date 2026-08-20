@@ -1,13 +1,11 @@
-{ config, pkgs, ... }:
-{
+_: {
   boot = {
     initrd = {
       availableKernelModules = [
         "ahci"
         "nvme"
-        "rtsx_pci_sdmmc"
         "sd_mod"
-        "thunderbolt"
+        "usbhid"
         "usb_storage"
         "xhci_pci"
       ];
@@ -17,7 +15,7 @@
       ];
       luks.devices = {
         crypted = {
-          device = "/dev/disk/by-uuid/37979e33-77a8-4b2e-8bff-7d0ae8850266";
+          device = "/dev/disk/by-uuid/8696c19a-d6f5-49f3-85f3-14ffcad011fa";
           preLVM = true;
           allowDiscards = true;
         };
@@ -32,14 +30,9 @@
       };
     };
     kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [
-      (pkgs.callPackage ../../packages/usbip-host-patched.nix {
-        inherit (config.boot.kernelPackages) kernel;
-      })
-    ];
     tmp.useTmpfs = true;
     loader = {
-      timeout = 0;
+      timeout = 6;
       efi.canTouchEfiVariables = true;
       grub = {
         configurationLimit = 5;
@@ -47,6 +40,7 @@
         efiSupport = true;
         enableCryptodisk = true;
         device = "nodev";
+        useOSProber = true;
       };
     };
   };
