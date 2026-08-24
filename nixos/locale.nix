@@ -5,9 +5,7 @@
     inputMethod = {
       enable = true;
       type = "ibus";
-      ibus.engines = with pkgs.ibus-engines; [
-        typing-booster
-      ];
+      ibus.engines = [ pkgs.ibus-engines.typing-booster ];
     };
   };
 

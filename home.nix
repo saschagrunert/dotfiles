@@ -6,6 +6,7 @@
 }:
 let
   link = config.lib.file.mkOutOfStoreSymlink;
+  dotfile = path: link "${dotfilesPath}/${path}";
 in
 {
   home = {
@@ -13,21 +14,21 @@ in
 
     file = {
       ".hushlogin".text = "";
-      ".clang-format".source = link "${dotfilesPath}/clang/clang-format";
-      ".gdbinit".source = link "${dotfilesPath}/gdb/gdbinit";
-      ".gdbinit.d".source = link "${dotfilesPath}/gdb/gdbinit.d";
-      ".gitconfig".source = link "${dotfilesPath}/git/gitconfig";
-      ".gitignore_global".source = link "${dotfilesPath}/git/gitignore_global";
-      ".rustfmt.toml".source = link "${dotfilesPath}/rustfmt/rustfmt.toml";
-      ".tigrc".source = link "${dotfilesPath}/tig/tigrc";
-      ".tmux.conf".source = link "${dotfilesPath}/tmux/tmux.conf";
-      ".tmux/scripts".source = link "${dotfilesPath}/tmux/scripts";
-      ".Xdefaults".source = link "${dotfilesPath}/x11/Xdefaults";
-      ".profile".source = link "${dotfilesPath}/x11/profile";
-      ".xinitrc".source = link "${dotfilesPath}/x11/xinitrc";
-      ".claude/settings.json".source = link "${dotfilesPath}/claude/settings.json";
-      "games/shadow/shell.nix".source = link "${dotfilesPath}/shadow/shell.nix";
-      "games/shadow/alive.sh".source = link "${dotfilesPath}/shadow/alive.sh";
+      ".clang-format".source = dotfile "clang/clang-format";
+      ".gdbinit".source = dotfile "gdb/gdbinit";
+      ".gdbinit.d".source = dotfile "gdb/gdbinit.d";
+      ".gitconfig".source = dotfile "git/gitconfig";
+      ".gitignore_global".source = dotfile "git/gitignore_global";
+      ".rustfmt.toml".source = dotfile "rustfmt/rustfmt.toml";
+      ".tigrc".source = dotfile "tig/tigrc";
+      ".tmux.conf".source = dotfile "tmux/tmux.conf";
+      ".tmux/scripts".source = dotfile "tmux/scripts";
+      ".Xdefaults".source = dotfile "x11/Xdefaults";
+      ".profile".source = dotfile "x11/profile";
+      ".xinitrc".source = dotfile "x11/xinitrc";
+      ".claude/settings.json".source = dotfile "claude/settings.json";
+      "games/shadow/shell.nix".source = dotfile "shadow/shell.nix";
+      "games/shadow/alive.sh".source = dotfile "shadow/alive.sh";
     };
 
     pointerCursor = {
@@ -120,20 +121,20 @@ in
     };
 
     dataFile = {
-      "applications/shadow-pc.desktop".source = link "${dotfilesPath}/shadow/shadow-pc.desktop";
+      "applications/shadow-pc.desktop".source = dotfile "shadow/shadow-pc.desktop";
     };
 
     configFile = {
-      "alacritty".source = link "${dotfilesPath}/alacritty";
-      "bat".source = link "${dotfilesPath}/bat";
-      "dunst".source = link "${dotfilesPath}/dunst";
-      "fish".source = link "${dotfilesPath}/fish";
-      "htop".source = link "${dotfilesPath}/htop";
-      "i3".source = link "${dotfilesPath}/i3";
-      "i3status-rust".source = link "${dotfilesPath}/i3status-rust";
-      "picom".source = link "${dotfilesPath}/picom";
-      "nvim".source = link "${dotfilesPath}/nvim";
-      "ranger".source = link "${dotfilesPath}/ranger";
+      "alacritty".source = dotfile "alacritty";
+      "bat".source = dotfile "bat";
+      "dunst".source = dotfile "dunst";
+      "fish".source = dotfile "fish";
+      "htop".source = dotfile "htop";
+      "i3".source = dotfile "i3";
+      "i3status-rust".source = dotfile "i3status-rust";
+      "picom".source = dotfile "picom";
+      "nvim".source = dotfile "nvim";
+      "ranger".source = dotfile "ranger";
     };
   };
 }
