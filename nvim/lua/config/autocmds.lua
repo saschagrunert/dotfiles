@@ -69,9 +69,9 @@ autocmd("FileType", {
   end,
 })
 
--- Lint on save
-autocmd("BufWritePost", {
-  group = augroup("LintOnSave", { clear = true }),
+-- Lint on save and open
+autocmd({ "BufWritePost", "BufReadPost" }, {
+  group = augroup("Lint", { clear = true }),
   callback = function()
     local ok, lint = pcall(require, "lint")
     if ok then lint.try_lint() end

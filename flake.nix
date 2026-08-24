@@ -37,40 +37,6 @@
 
       formatter.${system} = pkgs.nixfmt;
 
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          (libseccomp.overrideAttrs (_x: {
-            doCheck = false;
-            dontDisableStatic = true;
-          }))
-          (zstd.override { static = true; })
-          autoconf
-          automake
-          btrfs-progs
-          dbus
-          elfutils
-          glibc
-          glibc.static
-          gpgme
-          jansson
-          krb5
-          libapparmor
-          libbpf
-          libcap
-          libselinux
-          libtool
-          linuxPackages_latest.bcc
-          llvmPackages_22.clang-unwrapped
-          lvm2
-          pkg-config
-          systemd
-          yajl
-          zlib
-          zlib.static
-        ];
-        shellHook = ''
-          export CFLAGS=$NIX_CFLAGS_COMPILE
-        '';
-      };
+      devShells.${system}.default = import ./dev-shell.nix { inherit pkgs; };
     };
 }

@@ -7,8 +7,8 @@ __parse_git_stats() {
 		return
 	fi
 	[[ -z $(git rev-parse --git-dir 2>/dev/null) ]] && return
-	staged=$(git ls-files --modified | wc -l)
-	echo "$staged"
+	modified=$(git ls-files --modified | wc -l)
+	echo "$modified"
 }
 
 tmux_path=$(tmux display -p "#{pane_current_path}")

@@ -1,10 +1,10 @@
 { pkgs, ... }:
 {
   fonts = {
-    packages = with pkgs; [
-      nerd-fonts.meslo-lg
-      roboto
-      roboto-slab
+    packages = [
+      pkgs.nerd-fonts.meslo-lg
+      pkgs.roboto
+      pkgs.roboto-slab
     ];
 
     fontconfig = {
