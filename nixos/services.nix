@@ -18,6 +18,7 @@
       defaultSession = "none+i3";
     };
 
+    fstrim.enable = true;
     fwupd.enable = true;
 
     pipewire = {
