@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   services = {
     avahi = {
@@ -53,8 +49,6 @@
 
     sysstat.enable = true;
 
-    tailscale.enable = true;
-
     xserver = {
       enable = true;
       dpi = 150;
@@ -81,6 +75,4 @@
       '';
     };
   };
-
-  systemd.services.tailscaled.wantedBy = lib.mkForce [ ];
 }
