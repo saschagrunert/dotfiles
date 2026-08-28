@@ -53,19 +53,6 @@ in
       Install.WantedBy = [ "graphical-session.target" ];
     };
 
-    picom = {
-      Unit = {
-        Description = "Picom compositor";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.picom}/bin/picom";
-        Restart = "on-failure";
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
-    };
-
     ibus-daemon = {
       Unit = {
         Description = "IBus input method daemon";
@@ -126,7 +113,6 @@ in
       "htop".source = dotfile "htop";
       "i3".source = dotfile "i3";
       "i3status-rust".source = dotfile "i3status-rust";
-      "picom".source = dotfile "picom";
       "nvim".source = dotfile "nvim";
       "ranger".source = dotfile "ranger";
     };
