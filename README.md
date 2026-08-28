@@ -15,8 +15,6 @@ both the system configuration and user environment via
     The GTK theme (managed via home-manager)
   - [bibata](https://github.com/ful1e5/Bibata_Cursor):
     Beautiful cursor theme (managed via home-manager)
-  - [picom](https://github.com/yshui/picom):
-    A compositor for X11
   - [dunst](https://github.com/dunst-project/dunst):
     Lightweight and customizable notification daemon
   - [feh](https://github.com/derf/feh):
