@@ -29,7 +29,7 @@ format = " $icon  $used/$total ($available) "
 block = "temperature"
 interval = 5
 format = " $icon {$average}C "
-chip = "*-isa-*"
+chip = "k10temp-*"
 
 [[block]]
 block = "net"

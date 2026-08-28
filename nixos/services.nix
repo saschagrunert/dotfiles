@@ -43,8 +43,6 @@
       rateLimitBurst = 10000;
     };
 
-    libinput.enable = true;
-
     openssh = {
       enable = true;
       settings = {
