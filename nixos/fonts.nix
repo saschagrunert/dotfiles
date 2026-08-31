@@ -3,6 +3,7 @@
   fonts = {
     packages = [
       pkgs.nerd-fonts.meslo-lg
+      pkgs.noto-fonts
       pkgs.noto-fonts-color-emoji
       pkgs.roboto
       pkgs.roboto-slab

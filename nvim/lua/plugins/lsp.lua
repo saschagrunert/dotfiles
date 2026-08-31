@@ -33,7 +33,7 @@ return {
       vim.lsp.enable({
         "lua_ls", "gopls", "rust_analyzer", "clangd", "pyright",
         "vtsls", "nil_ls", "bashls", "terraformls",
-        "yamlls",
+        "yamlls", "jsonls", "taplo",
       })
 
       vim.api.nvim_create_autocmd("LspAttach", {
