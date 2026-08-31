@@ -107,10 +107,10 @@ clang/                         # Clang-format config
 claude/                        # Claude Code settings
 fish/                          # Shell config, functions, completions
 fuzzel/                        # Application launcher config
-mako/                          # Notification daemon config
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
 htop/                          # Process viewer config
+mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
 ranger/                        # File manager config and themes
 rustfmt/                       # Rust formatter config
