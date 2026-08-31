@@ -12,6 +12,7 @@
     tool = nvimdiff
     algorithm = histogram
     colorMoved = default
+    renames = copies
     submodule = log
 [difftool]
     prompt = false

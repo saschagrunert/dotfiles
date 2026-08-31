@@ -16,7 +16,7 @@ window#waybar {
   border: none;
   border-radius: 0;
   border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 #workspaces button.focused {
@@ -48,7 +48,7 @@ window#waybar {
   margin: 4px 3px;
   border-radius: 4px;
   background-color: #44475a;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 #disk:hover,
@@ -68,6 +68,45 @@ window#waybar {
 
 #pulseaudio.muted {
   color: #6272a4;
+}
+
+#window {
+  color: #6272a4;
+  font-style: italic;
+  margin-left: 12px;
+}
+
+#idle_inhibitor {
+  padding: 0 10px;
+  margin: 4px 3px;
+  border-radius: 4px;
+  background-color: #44475a;
+  transition: background-color 0.3s ease;
+}
+
+#idle_inhibitor.activated {
+  color: #f1fa8c;
+}
+
+#idle_inhibitor:hover {
+  background-color: rgba(189, 147, 249, 0.15);
+}
+
+#mode {
+  background-color: rgba(255, 85, 85, 0.2);
+  color: #ff5555;
+  font-weight: bold;
+}
+
+tooltip {
+  background-color: #282a36;
+  border: 1px solid #bd93f9;
+  border-radius: 8px;
+  color: #f8f8f2;
+}
+
+tooltip label {
+  padding: 4px 8px;
 }
 
 #tray {

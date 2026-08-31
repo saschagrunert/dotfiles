@@ -63,7 +63,7 @@
     yaml-language-server
 
     # Go
-    go_1_26
+    go_1_27
     gofumpt
     golangci-lint
     gopls

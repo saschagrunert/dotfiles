@@ -27,6 +27,8 @@ return {
         sh = { "shfmt" },
         terraform = { "terraform_fmt" },
         typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        javascriptreact = { "prettier" },
         yaml = { "prettier" },
       },
       format_after_save = {

@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-left": ["sway/workspaces"],
+  "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-right": [
     "disk",
     "temperature",
@@ -9,9 +9,16 @@
     "memory",
     "cpu",
     "pulseaudio",
+    "idle_inhibitor",
     "clock",
     "tray",
   ],
+  "sway/window": {
+    "max-length": 300,
+  },
+  "sway/mode": {
+    "format": "<span color='#ff5555' size='large'>󰩨</span> {}",
+  },
   "sway/workspaces": {
     "strip-characters": "0123456789:",
     "format": "<span size='x-large'>{name}</span>",
@@ -45,12 +52,21 @@
   },
   "pulseaudio": {
     "format": "<span color='#50fa7b' size='large'>{icon}</span> {volume}%",
-    "format-muted": "<span size='large'>󰖁</span>",
+    "format-muted": "<span color='#6272a4' size='large'>󰖁</span>",
     "format-icons": {
       "default": ["󰖀", "󰕾"],
     },
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+  "idle_inhibitor": {
+    "format": "<span size='large'>{icon}</span>",
+    "format-icons": {
+      "activated": "󰅶",
+      "deactivated": "󰾪",
+    },
+    "tooltip-format-activated": "Idle inhibitor: on",
+    "tooltip-format-deactivated": "Idle inhibitor: off",
   },
   "clock": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S <span color='#bd93f9' size='large'>󰃭</span> %a %d %b W%V}",

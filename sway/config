@@ -131,6 +131,7 @@ workspace $ws2 output HDMI-A-2
 # take a screenshot
 bindsym $mod+v exec grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
 bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy
+bindsym $mod+Ctrl+v exec grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # move workspace to other output
 bindsym $mod+Ctrl+h move workspace to output left
@@ -166,8 +167,7 @@ client.urgent           $red        $red        $bg         $red        $red
 # idle management
 exec swayidle -w \
     timeout 600 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    after-resume 'swaymsg "output * dpms on"'
+    resume 'swaymsg "output * dpms on"'
 
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
 

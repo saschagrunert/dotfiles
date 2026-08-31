@@ -4,7 +4,7 @@ return {
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     config = function()
-      require("nvim-treesitter").setup({
+      require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "bash", "c", "cpp", "css", "diff",
           "dockerfile", "fish", "go", "gomod", "gosum",

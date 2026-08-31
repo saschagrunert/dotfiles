@@ -27,6 +27,8 @@
     monitor = 0
     browser = xdg-open
     corner_radius = 8
+    gap_size = 4
+    icon_theme = Papirus-Dark
     mouse_left_click = close_current
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
@@ -44,4 +46,5 @@
 [urgency_critical]
     background = "#282a36cc"
     foreground = "#ff5555"
+    frame_color = "#ff5555"
     timeout = 0

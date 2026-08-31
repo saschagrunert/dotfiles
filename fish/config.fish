@@ -72,4 +72,7 @@ set -g fish_cursor_insert block
 if command -q zoxide
     zoxide init fish --cmd j | source
 end
+if command -q direnv
+    direnv hook fish | source
+end
 test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish

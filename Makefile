@@ -40,7 +40,7 @@ gitconfig-user: ## Generate the user-specific gitconfig.
 
 check: ## Check symlinks and required commands.
 	@echo "Checking symlinks..."
-	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim; do \
+	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim ~/.config/sway ~/.config/waybar ~/.config/dunst ~/.config/alacritty; do \
 		if [ -L "$$f" ]; then \
 			echo "  OK: $$f -> $$(readlink $$f)"; \
 		else \
@@ -62,7 +62,7 @@ check-nix: ## Run nix flake checks.
 lint: ## Check formatting and lint all Nix files.
 	nix run nixpkgs\#nixfmt -- --check $$(find . -name '*.nix')
 	nix run nixpkgs\#statix -- check .
-	nix run nixpkgs\#deadnix -- $$(find . -name '*.nix')
+	nix run nixpkgs\#deadnix -- --fail $$(find . -name '*.nix')
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
 	nix run nixpkgs\#nixfmt -- $$(find . -name '*.nix')
@@ -73,7 +73,7 @@ test: lint check-nix ## Run checks locally.
 	prettier --check .
 	typos
 	shfmt -d .
-	shellcheck $$(find . -name '*.sh') sway/setup
+	shellcheck $$(find . -name '*.sh') sway/setup sway/workspace-scroll
 	fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
 
 ##@ Update targets:

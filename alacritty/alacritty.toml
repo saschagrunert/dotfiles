@@ -57,10 +57,6 @@ style = "Italic"
 family = "MesloLGSDZ Nerd Font Mono"
 style = "Regular"
 
-[font.offset]
-x = 0
-y = 0
-
 [mouse]
 hide_when_typing = true
 
