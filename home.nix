@@ -116,6 +116,7 @@ in
       "alacritty".source = dotfile "alacritty";
       "bat".source = dotfile "bat";
       "mako".source = dotfile "mako";
+      "fuzzel".source = dotfile "fuzzel";
       "fish".source = dotfile "fish";
       "htop".source = dotfile "htop";
       "sway".source = dotfile "sway";

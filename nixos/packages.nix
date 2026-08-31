@@ -3,12 +3,11 @@
   environment.systemPackages = with pkgs; [
     # Desktop & UI
     alacritty
-    bemenu
+    fuzzel
     libnotify
     mako
     google-chrome
     grim
-    j4-dmenu-desktop
     pavucontrol
     piper
     slurp

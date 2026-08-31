@@ -23,8 +23,8 @@ both the system configuration and user environment via
     Highly customizable Wayland bar for sway
   - [ibus](https://github.com/ibus/ibus):
     Intelligent Input Bus
-  - [bemenu](https://github.com/Cloudef/bemenu):
-    Dynamic menu library and client program for Wayland
+  - [fuzzel](https://codeberg.org/dnkl/fuzzel):
+    Wayland-native application launcher
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
     Iconic fonts (managed via NixOS packages)
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
@@ -105,8 +105,9 @@ alacritty/                     # Terminal emulator config
 bat/                           # Syntax highlighting themes
 clang/                         # Clang-format config
 claude/                        # Claude Code settings
-mako/                          # Notification daemon config
 fish/                          # Shell config, functions, completions
+fuzzel/                        # Application launcher config
+mako/                          # Notification daemon config
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
 htop/                          # Process viewer config

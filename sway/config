@@ -36,8 +36,8 @@ bindsym $mod+Return exec alacritty
 # kill focused window
 bindsym $mod+x kill
 
-# start bemenu (a program launcher)
-bindsym $mod+d exec j4-dmenu-desktop --dmenu="bemenu -i -l 20 -p '' --fn 'MesloLGSDZ Nerd Font 9' -H 24 --tb '$bg' --tf '$purple' --fb '$bg' --ff '$fg' --nb '$bg' --nf '#c8cdd5' --hb '$purple' --hf '$bg' --sb '$purple' --sf '$bg' --ab '$bg' --af '#c8cdd5'"
+# start fuzzel (application launcher)
+bindsym $mod+d exec fuzzel
 
 # change focus
 bindsym $mod+h focus left
