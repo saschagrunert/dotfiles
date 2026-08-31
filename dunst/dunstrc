@@ -12,8 +12,8 @@
     frame_width = 1
     separator_color = frame
     separator_height = 2
-    padding = 8
-    horizontal_padding = 8
+    padding = 12
+    horizontal_padding = 12
     icon_position = left
     max_icon_size = 48
     show_age_threshold = 60
@@ -29,6 +29,7 @@
     corner_radius = 8
     gap_size = 4
     icon_theme = Papirus-Dark
+    enable_recursive_icon_lookup = true
     mouse_left_click = close_current
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all

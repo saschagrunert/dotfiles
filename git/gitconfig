@@ -14,6 +14,7 @@
     colorMoved = default
     renames = copies
     submodule = log
+    wsErrorHighlight = all
 [difftool]
     prompt = false
 [http]
@@ -54,6 +55,8 @@
     fetchJobs = 0
 [tag]
     sort = version:refname
+[stash]
+    showPatch = true
 [rerere]
     enabled = 1
 [filter "lfs"]
@@ -62,7 +65,7 @@
     process = git-lfs filter-process
     required = true
 [interactive]
-    diffFilter = delta --color-only
+    diffFilter = delta --color-only --paging=never
 [pager]
     branch = false
     diff = delta

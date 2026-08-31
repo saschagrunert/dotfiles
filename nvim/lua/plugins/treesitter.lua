@@ -5,6 +5,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("nvim-treesitter.configs").setup({
+        indent = { enable = true },
         ensure_installed = {
           "bash", "c", "cpp", "css", "diff",
           "dockerfile", "fish", "go", "gomod", "gosum",

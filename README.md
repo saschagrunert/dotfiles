@@ -100,10 +100,26 @@ and debugging tools.
 ```text
 flake.nix                      # Nix flake entry point
 home.nix                       # Home-manager user config
+Makefile                       # Build, lint, test, upgrade
+alacritty/                     # Terminal emulator config
+bat/                           # Syntax highlighting themes
+clang/                         # Clang-format config
+claude/                        # Claude Code settings
+dunst/                         # Notification daemon config
+fish/                          # Shell config, functions, completions
+gdb/                           # GDB dashboard and init scripts
+git/                           # gitconfig, gitignore
+htop/                          # Process viewer config
+nvim/                          # Neovim config (lazy.nvim plugins)
+ranger/                        # File manager config and themes
+rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
 ├── setup                      # Session startup script
 └── workspace-scroll           # Workspace scroll helper
+tig/                           # Git text-mode interface config
+tmux/                          # Terminal multiplexer config
+wallpaper/                     # Desktop wallpapers
 waybar/
 ├── config.jsonc               # Waybar module config
 └── style.css                  # Waybar styling
@@ -115,7 +131,7 @@ nixos/
 │       ├── hardware.nix       # Filesystems, kernel modules
 │       └── boot.nix           # Bootloader, initrd, kernel
 ├── packages.nix               # System packages
-├── programs.nix               # fish, neovim, gnupg, ...
+├── programs.nix               # fish, neovim, gnupg, direnv, ...
 ├── virtualisation.nix         # podman, cri-o, libvirtd
 ├── services.nix               # Sway, greetd, pipewire, ...
 ├── network.nix                # Hostname, NetworkManager
@@ -147,6 +163,14 @@ After editing any configuration file, rebuild with:
 
 ```fish
 > make switch
+```
+
+To validate the configuration locally:
+
+```fish
+> make test     # lint, nix flake check, prettier, typos, shfmt, shellcheck
+> make check    # verify symlinks and required commands
+> make lint     # nixfmt, statix, deadnix
 ```
 
 Or use the `up` abbreviation which also updates Rust, collects garbage

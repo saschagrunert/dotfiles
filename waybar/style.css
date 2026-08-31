@@ -42,6 +42,7 @@ window#waybar {
 #memory,
 #cpu,
 #pulseaudio,
+#idle_inhibitor,
 #clock,
 #tray {
   padding: 0 10px;
@@ -57,6 +58,7 @@ window#waybar {
 #memory:hover,
 #cpu:hover,
 #pulseaudio:hover,
+#idle_inhibitor:hover,
 #clock:hover {
   background-color: rgba(189, 147, 249, 0.15);
 }
@@ -76,23 +78,14 @@ window#waybar {
   margin-left: 12px;
 }
 
-#idle_inhibitor {
-  padding: 0 10px;
-  margin: 4px 3px;
-  border-radius: 4px;
-  background-color: #44475a;
-  transition: background-color 0.3s ease;
-}
-
 #idle_inhibitor.activated {
   color: #f1fa8c;
 }
 
-#idle_inhibitor:hover {
-  background-color: rgba(189, 147, 249, 0.15);
-}
-
 #mode {
+  padding: 0 10px;
+  margin: 4px 3px;
+  border-radius: 4px;
   background-color: rgba(255, 85, 85, 0.2);
   color: #ff5555;
   font-weight: bold;

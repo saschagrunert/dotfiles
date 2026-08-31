@@ -39,6 +39,7 @@
   "network": {
     "interface": "wlp10s0",
     "format": "<span color='#8be9fd' size='large'>󰤥</span> {bandwidthDownBytes} {bandwidthUpBytes}",
+    "format-disconnected": "<span color='#6272a4' size='large'>󰤭</span> disconnected",
     "tooltip": false,
     "interval": 5,
   },
@@ -56,14 +57,15 @@
     "format-icons": {
       "default": ["󰖀", "󰕾"],
     },
+    "scroll-step": 5,
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
   },
   "idle_inhibitor": {
     "format": "<span size='large'>{icon}</span>",
     "format-icons": {
-      "activated": "󰅶",
-      "deactivated": "󰾪",
+      "activated": "<span color='#f1fa8c'>󰅶</span>",
+      "deactivated": "<span color='#6272a4'>󰾪</span>",
     },
     "tooltip-format-activated": "Idle inhibitor: on",
     "tooltip-format-deactivated": "Idle inhibitor: off",

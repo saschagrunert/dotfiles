@@ -1,7 +1,7 @@
 Description = "Dracula"
 
 Default = { Colour="#f8f8f2" }
-Canvas  = { Colour="#2b2b2b" }
+Canvas  = { Colour="#282a36" }
 Number  = { Colour="#bd93f9" }
 Escape  = { Colour="#8be9fd" }
 String  = { Colour="#f1fa8c" }

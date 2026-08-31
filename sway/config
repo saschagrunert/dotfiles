@@ -22,6 +22,8 @@ input type:pointer {
 }
 input type:keyboard {
     xkb_layout us
+    repeat_delay 300
+    repeat_rate 50
 }
 
 seat * xcursor_theme Bibata-Original-Classic 24
@@ -147,6 +149,7 @@ for_window [app_id=".*"] inhibit_idle fullscreen
 for_window [class=".*"] inhibit_idle fullscreen
 for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".blueman-manager-wrapped"] floating enable, fullscreen disable
+for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen disable
 
 # assign to workspaces
 assign [app_id="google-chrome"] workspace $ws1
