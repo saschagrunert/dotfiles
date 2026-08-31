@@ -170,4 +170,5 @@ client.urgent           $red        $red        $bg         $red
 client.background       $bg
 
 # run auto setup
+exec --no-startup-id xcompmgr
 exec ~/.config/i3/setup

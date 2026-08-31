@@ -13,6 +13,7 @@
     j4-dmenu-desktop
     lxappearance
     pavucontrol
+    xcompmgr
     xclip
     xdg-utils
     xev

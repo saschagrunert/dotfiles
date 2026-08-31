@@ -71,8 +71,8 @@
       xkb.layout = "us";
 
       serverFlagsSection = ''
-        Option "BlankTime" "0"
-        Option "DPMS" "false"
+        Option "OffTime" "10"
+        Option "DPMS" "true"
       '';
     };
   };
