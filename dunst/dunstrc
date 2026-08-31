@@ -14,7 +14,7 @@
     separator_height = 2
     padding = 8
     horizontal_padding = 8
-    icon_position = left
+    icon_placement = left
     max_icon_size = 64
     show_age_threshold = 60
     show_indicators = yes
@@ -23,7 +23,7 @@
     idle_threshold = 120
     history_length = 20
     sticky_history = yes
-    follow = keyboard
+    follow = mouse
     monitor = 0
     browser = xdg-open
     corner_radius = 0
@@ -32,16 +32,16 @@
     mouse_right_click = close_all
 
 [urgency_low]
-    background = "#282a36"
+    background = "#282a36cc"
     foreground = "#f8f8f2"
     timeout = 5
 
 [urgency_normal]
-    background = "#282a36"
+    background = "#282a36cc"
     foreground = "#f8f8f2"
     timeout = 5
 
 [urgency_critical]
-    background = "#282a36"
+    background = "#282a36cc"
     foreground = "#ff5555"
     timeout = 0

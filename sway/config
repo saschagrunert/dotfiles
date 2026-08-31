@@ -1,6 +1,6 @@
 # use alt as modifier
 set $mod Mod1
-font pango:MesloLGSDZ Nerd Font 8
+font "MesloLGSDZ Nerd Font 8"
 
 # Output configuration (dual 4K)
 output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
@@ -136,21 +136,18 @@ bindsym $mod+Shift+c exec google-chrome-stable
 bindsym $mod+y [urgent=latest] focus
 
 # floating window settings
+for_window [app_id=".*"] inhibit_idle fullscreen
+for_window [class=".*"] inhibit_idle fullscreen
 for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".blueman-manager-wrapped"] floating enable, fullscreen disable
 
 # assign to workspaces
 assign [app_id="google-chrome"] workspace $ws1
-assign [class="Google-chrome"] workspace $ws1
 assign [app_id="Alacritty"] workspace $ws2
 
 # other window settings
 default_border none
 default_floating_border pixel 1
-default_orientation horizontal
-workspace_layout default
-gaps inner 0
-focus_wrapping no
 
 swaynag_command swaynag --background $bg --text $fg --button-background $purple --border $selection --border-bottom $selection
 
@@ -163,8 +160,9 @@ client.urgent           $red        $red        $bg         $red        $red
 # idle management
 exec swayidle -w \
     timeout 600 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"'
+    resume 'swaymsg "output * dpms on"' \
+    after-resume 'swaymsg "output * dpms on"'
 
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
 
 exec ~/.config/sway/setup

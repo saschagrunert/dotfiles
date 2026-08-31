@@ -100,6 +100,13 @@ and debugging tools.
 ```text
 flake.nix                      # Nix flake entry point
 home.nix                       # Home-manager user config
+sway/
+├── config                     # Sway compositor config
+├── setup                      # Session startup script
+└── workspace-scroll           # Workspace scroll helper
+waybar/
+├── config.jsonc               # Waybar module config
+└── style.css                  # Waybar styling
 nixos/
 ├── configuration.nix          # Main NixOS config
 ├── hosts/

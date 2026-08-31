@@ -48,10 +48,6 @@ window#waybar {
   background-color: #44475a;
 }
 
-#clock {
-  color: #bd93f9;
-}
-
 #temperature.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);

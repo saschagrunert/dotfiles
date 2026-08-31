@@ -13,25 +13,26 @@
     "tray",
   ],
   "sway/workspaces": {
-    "disable-scroll-wraparound": true,
-    "enable-bar-scroll": true,
-    "strip-characters": ["0123456789:"],
+    "strip-characters": "0123456789:",
     "format": "<span size='x-large'>{name}</span>",
   },
   "disk": {
     "path": "/",
     "format": "<span size='large'>󰋊</span> {used}/{total} ({free})",
+    "tooltip": false,
     "interval": 30,
   },
   "temperature": {
     "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
     "input-filename": "temp1_input",
     "format": "<span size='large'>󱃃</span> {temperatureC}°C",
+    "tooltip": false,
     "interval": 5,
   },
   "network": {
     "interface": "wlp10s0",
     "format": "<span size='large'>󰤥</span> {bandwidthDownBytes} {bandwidthUpBytes}",
+    "tooltip": false,
     "interval": 5,
   },
   "memory": {
@@ -52,8 +53,11 @@
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
   },
   "clock": {
-    "format": "<span size='large'>󰅐</span> {:%H:%M:%S / %a %d %b W%V}",
+    "format": "<span size='large'>󰅐</span> {:%H:%M:%S <span size='large'>󰃭</span> %a %d %b W%V}",
+    "tooltip": false,
     "interval": 1,
+    "on-scroll-up": "~/.config/sway/workspace-scroll prev",
+    "on-scroll-down": "~/.config/sway/workspace-scroll next",
   },
   "tray": {
     "spacing": 8,

@@ -14,8 +14,6 @@
     wdisplays
     wev
     wl-clipboard
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-wlr
     xdg-utils
     zoom-us
 
