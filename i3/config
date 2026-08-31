@@ -161,6 +161,7 @@ for_window [class=".*"] border pixel 1
 default_orientation horizontal
 workspace_layout default
 hide_edge_borders both
+focus_wrapping no
 
 #class                  border      backgr.     text        split
 client.focused          $purple     $purple     $bg         $purple

@@ -10,7 +10,7 @@ let
 in
 {
   home = {
-    stateVersion = "24.11";
+    stateVersion = "25.05";
 
     file = {
       ".hushlogin".text = "";

@@ -1,13 +1,18 @@
 { pkgs }:
 pkgs.mkShell {
+  nativeBuildInputs = [
+    pkgs.autoconf
+    pkgs.automake
+    pkgs.libtool
+    pkgs.llvmPackages_22.clang-unwrapped
+    pkgs.pkg-config
+  ];
   buildInputs = [
     (pkgs.libseccomp.overrideAttrs (_x: {
       doCheck = false;
       dontDisableStatic = true;
     }))
     (pkgs.zstd.override { static = true; })
-    pkgs.autoconf
-    pkgs.automake
     pkgs.btrfs-progs
     pkgs.dbus
     pkgs.elfutils
@@ -20,11 +25,8 @@ pkgs.mkShell {
     pkgs.libbpf
     pkgs.libcap
     pkgs.libselinux
-    pkgs.libtool
     pkgs.linuxPackages_latest.bcc
-    pkgs.llvmPackages_22.clang-unwrapped
     pkgs.lvm2
-    pkgs.pkg-config
     pkgs.systemd
     pkgs.yajl
     pkgs.zlib

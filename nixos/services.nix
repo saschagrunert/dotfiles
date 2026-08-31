@@ -37,7 +37,7 @@
 
     journald = {
       rateLimitInterval = "30s";
-      rateLimitBurst = 10000;
+      rateLimitBurst = 3000;
     };
 
     openssh = {
@@ -45,9 +45,13 @@
       settings = {
         PermitRootLogin = "no";
         PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        X11Forwarding = false;
       };
     };
 
+    earlyoom.enable = true;
+    thermald.enable = true;
     sysstat.enable = true;
 
     libinput = {

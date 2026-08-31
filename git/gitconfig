@@ -12,6 +12,7 @@
     tool = nvimdiff
     algorithm = histogram
     colorMoved = default
+    submodule = log
 [difftool]
     prompt = false
 [http]
@@ -19,7 +20,7 @@
 [core]
     editor = nvim
     excludesfile = ~/.gitignore_global
-[color]
+[column]
     ui = auto
 [commit]
     verbose = true
@@ -32,6 +33,7 @@
 [fetch]
     prune = true
     writeCommitGraph = true
+    parallel = 0
 [maintenance]
     strategy = incremental
 [rebase]
@@ -39,6 +41,18 @@
     autosquash = true
 [branch]
     sort = -committerdate
+[feature]
+    manyFiles = true
+[log]
+    date = iso
+[pack]
+    threads = 0
+[status]
+    submoduleSummary = true
+[submodule]
+    fetchJobs = 0
+[tag]
+    sort = version:refname
 [rerere]
     enabled = 1
 [filter "lfs"]

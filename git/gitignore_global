@@ -10,3 +10,7 @@ tags
 .env.local
 .direnv/
 result
+node_modules/
+.cache/
+*.o
+*.a

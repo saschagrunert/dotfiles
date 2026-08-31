@@ -1,5 +1,5 @@
 return {
-  { "tpope/vim-surround", event = "VeryLazy" },
+  { "kylechui/nvim-surround", version = "*", event = "VeryLazy", opts = {} },
   { "tpope/vim-repeat", event = "VeryLazy" },
   {
     "tpope/vim-abolish",

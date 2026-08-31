@@ -1,7 +1,7 @@
-alias .. "cd .."
-alias ... "cd ../.."
-alias .... "cd ../../.."
-alias ..... "cd ../../../.."
+abbr -a .. cd ..
+abbr -a ... cd ../..
+abbr -a .... cd ../../..
+abbr -a ..... cd ../../../..
 command -q bat && abbr -a cat bat
 command -q eza && alias ls "eza --git -bg --classify=always"
 

@@ -47,6 +47,8 @@ return {
           map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
+          map("n", "<leader>ih", function() vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr })) end, "Toggle inlay hints")
+          map("n", "gr", function() require("telescope.builtin").lsp_references() end, "References")
         end,
       })
 

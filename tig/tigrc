@@ -51,6 +51,7 @@ set mouse-wheel-cursor  = no         # Prefer moving the cursor to scrolling the
 # User-defined commands
 bind main   C   ?git cherry-pick %(commit)
 bind status C   !git commit -s
+bind status A   !git commit -s --amend
 bind stash  A   ?git stash apply %(stash)
 bind stash  P   ?git stash pop %(stash)
 bind stash  !   ?git stash drop %(stash)

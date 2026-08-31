@@ -7,7 +7,7 @@
       plugins = [ pkgs.networkmanager-openvpn ];
     };
     firewall = {
-      trustedInterfaces = [ "tailscale0" ];
+      enable = true;
       allowedTCPPorts = [ 22 ];
     };
   };

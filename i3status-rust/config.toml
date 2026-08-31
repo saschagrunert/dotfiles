@@ -33,7 +33,6 @@ chip = "k10temp-*"
 
 [[block]]
 block = "net"
-# Hardware-specific: adjust per machine
 device = "wlp10s0"
 format = " $icon  $speed_down $speed_up "
 interval = 5

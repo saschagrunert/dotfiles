@@ -62,9 +62,6 @@ opt.sessionoptions:remove({ "blank", "help" })
 opt.list = true
 opt.listchars = { tab = "▸ ", trail = "·", extends = "❯", precedes = "❮" }
 
--- Completion
-opt.wildignore:append("*.o,*.obj,*~,*vim/backups*,*DS_Store*,*.png,*.jpg,*.gif,*/tmp/*,*.so,*.swp,*.pcap,*.pyc,*.cmd,*.a,*.jar")
-
 -- Scrolling
 opt.scrolloff = 8
 opt.sidescrolloff = 15
@@ -73,9 +70,6 @@ opt.linebreak = true
 
 -- Popup menu
 opt.pumheight = 15
-
--- Completion sources
-opt.complete:append({ "k", "kspell", "s" })
 
 -- Spell
 opt.spelllang = "en_us"
@@ -88,6 +82,3 @@ opt.maxmempattern = 10000
 
 -- Sign column
 opt.signcolumn = "yes"
-
--- Completion menu
-opt.completeopt = "menu,menuone,noselect"

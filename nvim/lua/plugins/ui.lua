@@ -4,7 +4,8 @@ return {
     event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      local bg = "#282a36"
+      local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+      local bg = normal.bg and string.format("#%06x", normal.bg) or "#282a36"
       require("bufferline").setup({
         options = {
           mode = "buffers",

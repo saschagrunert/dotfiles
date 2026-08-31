@@ -165,12 +165,13 @@ end
 -- Toggle syntax-based folding
 function M.toggle_folding()
   if not vim.b.outline_mode or vim.b.outline_mode == 0 then
-    vim.notify("Enabling syntax based folding.")
-    vim.opt_local.foldmethod = "syntax"
+    vim.notify("Enabling treesitter based folding.")
+    vim.opt_local.foldmethod = "expr"
+    vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     vim.opt_local.foldenable = true
     vim.b.outline_mode = 1
   else
-    vim.notify("Disabling syntax based folding.")
+    vim.notify("Disabling treesitter based folding.")
     vim.opt_local.foldmethod = "manual"
     vim.opt_local.foldenable = false
     vim.b.outline_mode = 0
