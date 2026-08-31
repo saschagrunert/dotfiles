@@ -50,6 +50,11 @@
 
     sysstat.enable = true;
 
+    libinput = {
+      enable = true;
+      mouse.accelProfile = "flat";
+    };
+
     xserver = {
       enable = true;
       dpi = 150;
