@@ -13,6 +13,7 @@
     j4-dmenu-desktop
     lxappearance
     pavucontrol
+    piper
     xcompmgr
     xclip
     xdg-utils

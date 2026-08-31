@@ -59,6 +59,8 @@
       mouse.accelProfile = "flat";
     };
 
+    ratbagd.enable = true;
+
     xserver = {
       enable = true;
       dpi = 150;
