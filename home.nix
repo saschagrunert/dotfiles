@@ -115,7 +115,7 @@ in
     configFile = {
       "alacritty".source = dotfile "alacritty";
       "bat".source = dotfile "bat";
-      "dunst".source = dotfile "dunst";
+      "mako".source = dotfile "mako";
       "fish".source = dotfile "fish";
       "htop".source = dotfile "htop";
       "sway".source = dotfile "sway";

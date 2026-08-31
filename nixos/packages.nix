@@ -4,7 +4,8 @@
     # Desktop & UI
     alacritty
     bemenu
-    dunst
+    libnotify
+    mako
     google-chrome
     grim
     j4-dmenu-desktop

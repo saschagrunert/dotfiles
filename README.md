@@ -15,8 +15,8 @@ both the system configuration and user environment via
     The GTK theme (managed via home-manager)
   - [bibata](https://github.com/ful1e5/Bibata_Cursor):
     Beautiful cursor theme (managed via home-manager)
-  - [dunst](https://github.com/dunst-project/dunst):
-    Lightweight and customizable notification daemon
+  - [mako](https://github.com/emersion/mako):
+    Lightweight Wayland notification daemon
   - [sway](https://github.com/swaywm/sway):
     A Wayland compositor and tiling window manager
   - [waybar](https://github.com/Alexays/Waybar):
@@ -105,7 +105,7 @@ alacritty/                     # Terminal emulator config
 bat/                           # Syntax highlighting themes
 clang/                         # Clang-format config
 claude/                        # Claude Code settings
-dunst/                         # Notification daemon config
+mako/                          # Notification daemon config
 fish/                          # Shell config, functions, completions
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
