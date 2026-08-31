@@ -37,7 +37,7 @@ window#waybar {
 }
 
 #disk,
-#temperature,
+#custom-temps,
 #network,
 #memory,
 #cpu,
@@ -53,7 +53,7 @@ window#waybar {
 }
 
 #disk:hover,
-#temperature:hover,
+#custom-temps:hover,
 #network:hover,
 #memory:hover,
 #cpu:hover,
@@ -63,7 +63,7 @@ window#waybar {
   background-color: rgba(189, 147, 249, 0.15);
 }
 
-#temperature.critical {
+#custom-temps.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
 }

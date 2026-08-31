@@ -57,6 +57,9 @@ bindsym $mod+z splith
 # split in vertical orientation
 bindsym $mod+n splitv
 
+# cycle through layout modes
+bindsym $mod+e layout toggle split tabbed stacking
+
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
@@ -69,6 +72,10 @@ bindsym $mod+space focus mode_toggle
 # focus the parent/child container
 bindsym $mod+a focus parent
 bindsym $mod+Shift+a focus child
+
+# scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
 
 set $ws1 "1:󰖟"
 set $ws2 "2:"
@@ -144,16 +151,24 @@ bindsym $mod+Shift+c exec google-chrome-stable
 
 bindsym $mod+y [urgent=latest] focus
 
+# notification control
+bindsym $mod+grave exec dunstctl close
+bindsym $mod+Shift+grave exec dunstctl history-pop
+bindsym $mod+Ctrl+grave exec dunstctl context
+
 # floating window settings
 for_window [app_id=".*"] inhibit_idle fullscreen
 for_window [class=".*"] inhibit_idle fullscreen
 for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".blueman-manager-wrapped"] floating enable, fullscreen disable
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen disable
+for_window [app_id="nm-connection-editor"] floating enable, fullscreen disable
 
 # assign to workspaces
 assign [app_id="google-chrome"] workspace $ws1
 assign [app_id="Alacritty"] workspace $ws2
+
+workspace_auto_back_and_forth yes
 
 # other window settings
 default_border none

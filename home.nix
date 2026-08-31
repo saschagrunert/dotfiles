@@ -12,6 +12,11 @@ in
   home = {
     stateVersion = "25.05";
 
+    sessionVariables = {
+      BROWSER = "google-chrome-stable";
+      TERMINAL = "alacritty";
+    };
+
     file = {
       ".hushlogin".text = "";
       ".clang-format".source = dotfile "clang/clang-format";
@@ -78,6 +83,18 @@ in
   };
 
   xdg = {
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/html" = "google-chrome.desktop";
+        "x-scheme-handler/http" = "google-chrome.desktop";
+        "x-scheme-handler/https" = "google-chrome.desktop";
+        "x-scheme-handler/mailto" = "google-chrome.desktop";
+        "image/png" = "google-chrome.desktop";
+        "image/jpeg" = "google-chrome.desktop";
+        "application/pdf" = "google-chrome.desktop";
+      };
+    };
     userDirs = {
       enable = true;
       createDirectories = true;

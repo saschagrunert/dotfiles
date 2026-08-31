@@ -22,12 +22,15 @@
       ];
       max-jobs = "auto";
       cores = 0;
+      keep-outputs = true;
+      keep-derivations = true;
       trusted-users = [
         "root"
         "sascha"
       ];
     };
 
+    nixPath = [ "nixpkgs=${nixpkgs}" ];
     registry.nixpkgs.flake = nixpkgs;
 
     optimise.automatic = true;

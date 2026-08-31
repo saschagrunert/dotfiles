@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+read_temp() {
+	local val
+	val=$(cat "$1" 2>/dev/null) || val=0
+	echo $((val / 1000))
+}
+
+cpu=$(read_temp /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon*/temp1_input)
+gpu=$(read_temp /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon/hwmon*/temp1_input)
+nvme=$(read_temp /sys/devices/pci0000:00/0000:00:01.2/0000:04:00.0/nvme/nvme0/hwmon*/temp1_input)
+
+class=""
+if [ "$cpu" -ge 85 ] || [ "$gpu" -ge 90 ] || [ "$nvme" -ge 70 ]; then
+	class="critical"
+fi
+
+text="<span color='#f1fa8c' size='large'>󰻠</span> ${cpu}°C"
+text+="  <span color='#ffb86c' size='large'>󰢮</span> ${gpu}°C"
+text+="  <span color='#8be9fd' size='large'>󰆼</span> ${nvme}°C"
+
+tooltip="CPU: ${cpu}°C\nGPU: ${gpu}°C\nNVMe: ${nvme}°C"
+
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"

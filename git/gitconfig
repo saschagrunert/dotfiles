@@ -3,11 +3,13 @@
 [merge]
     tool = nvimdiff
     conflictstyle = zdiff3
+    log = true
 [mergetool]
     prompt = false
 [push]
     default = upstream
     autoSetupRemote = true
+    useForceIfIncludes = true
 [diff]
     tool = nvimdiff
     algorithm = histogram
@@ -22,6 +24,7 @@
 [core]
     editor = nvim
     excludesfile = ~/.gitignore_global
+    fsmonitor = true
 [column]
     ui = auto
 [commit]
@@ -41,6 +44,7 @@
 [rebase]
     autostash = true
     autosquash = true
+    updateRefs = true
 [branch]
     sort = -committerdate
 [feature]

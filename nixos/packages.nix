@@ -106,6 +106,7 @@
     # Kubernetes & cloud
     cosign
     google-cloud-sdk
+    helm
     kind
     kubernetes
     kustomize

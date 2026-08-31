@@ -29,10 +29,15 @@ _: {
         "net.ipv4.ip_unprivileged_port_start" = 0;
         "vm.swappiness" = 10;
         "vm.vfs_cache_pressure" = 50;
+        "net.bridge.bridge-nf-call-iptables" = 1;
+        "net.bridge.bridge-nf-call-ip6tables" = 1;
         "fs.inotify.max_user_watches" = 524288;
       };
     };
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [
+      "br_netfilter"
+      "kvm-amd"
+    ];
     tmp.useTmpfs = true;
     loader = {
       timeout = 6;

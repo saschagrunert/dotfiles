@@ -3,6 +3,7 @@
   fonts = {
     packages = [
       pkgs.nerd-fonts.meslo-lg
+      pkgs.noto-fonts-color-emoji
       pkgs.roboto
       pkgs.roboto-slab
     ];
@@ -12,6 +13,7 @@
         serif = [ "Roboto Slab" ];
         sansSerif = [ "Roboto" ];
         monospace = [ "MesloLGSDZ Nerd Font" ];
+        emoji = [ "Noto Color Emoji" ];
       };
     };
   };

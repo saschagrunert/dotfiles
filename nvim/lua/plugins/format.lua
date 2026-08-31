@@ -35,7 +35,7 @@ return {
         lsp_format = "fallback",
       },
       formatters = {
-        shfmt = { prepend_args = { "-i", "4" } },
+        shfmt = { prepend_args = { "-i", "0" } },
       },
     },
   },

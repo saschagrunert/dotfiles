@@ -39,22 +39,26 @@ gitconfig-user: ## Generate the user-specific gitconfig.
 ##@ Validation targets:
 
 check: ## Check symlinks and required commands.
-	@echo "Checking symlinks..."
-	@for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim ~/.config/sway ~/.config/waybar ~/.config/dunst ~/.config/alacritty; do \
+	@fail=0; \
+	echo "Checking symlinks..."; \
+	for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim ~/.config/sway ~/.config/waybar ~/.config/dunst ~/.config/alacritty; do \
 		if [ -L "$$f" ]; then \
 			echo "  OK: $$f -> $$(readlink $$f)"; \
 		else \
 			echo "  MISSING: $$f"; \
+			fail=1; \
 		fi; \
-	done
-	@echo "Checking commands..."
-	@for cmd in nix fish sway git; do \
+	done; \
+	echo "Checking commands..."; \
+	for cmd in nix fish sway git; do \
 		if command -v $$cmd >/dev/null 2>&1; then \
 			echo "  OK: $$cmd"; \
 		else \
 			echo "  MISSING: $$cmd"; \
+			fail=1; \
 		fi; \
-	done
+	done; \
+	exit $$fail
 
 check-nix: ## Run nix flake checks.
 	nix flake check
@@ -73,7 +77,7 @@ test: lint check-nix ## Run checks locally.
 	prettier --check .
 	typos
 	shfmt -d .
-	shellcheck $$(find . -name '*.sh') sway/setup sway/workspace-scroll
+	shellcheck $$(find . -name '*.sh') sway/setup sway/temps sway/workspace-scroll
 	fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
 
 ##@ Update targets:

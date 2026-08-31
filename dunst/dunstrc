@@ -14,8 +14,12 @@
     separator_height = 2
     padding = 12
     horizontal_padding = 12
+    text_icon_padding = 8
     icon_position = left
+    min_icon_size = 32
     max_icon_size = 48
+    ellipsize = end
+    highlight = "#bd93f9"
     show_age_threshold = 60
     show_indicators = yes
     word_wrap = yes
@@ -36,7 +40,7 @@
 
 [urgency_low]
     background = "#282a36cc"
-    foreground = "#f8f8f2"
+    foreground = "#6272a4"
     timeout = 5
 
 [urgency_normal]
