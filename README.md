@@ -116,6 +116,7 @@ rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
 ├── setup                      # Session startup script
+├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper
 tig/                           # Git text-mode interface config
 tmux/                          # Terminal multiplexer config
