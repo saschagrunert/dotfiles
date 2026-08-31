@@ -6,6 +6,10 @@ _: {
       enable = true;
       enableSSHSupport = true;
     };
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
     mtr.enable = true;
     nix-ld.enable = true;
     nm-applet = {

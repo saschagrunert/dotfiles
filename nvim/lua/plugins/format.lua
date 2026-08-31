@@ -12,6 +12,7 @@ return {
         c = { "clang-format" },
         cpp = { "clang-format" },
         css = { "prettier" },
+        fish = { "fish_indent" },
         go = { "gofumpt" },
         html = { "prettier" },
         javascript = { "prettier" },
@@ -26,6 +27,7 @@ return {
         sh = { "shfmt" },
         terraform = { "terraform_fmt" },
         typescript = { "prettier" },
+        yaml = { "prettier" },
       },
       format_after_save = {
         lsp_format = "fallback",

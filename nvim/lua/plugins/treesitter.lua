@@ -6,12 +6,12 @@ return {
     config = function()
       require("nvim-treesitter").setup({
         ensure_installed = {
-          "bash", "c", "cpp", "css", "fish",
-          "go", "gomod", "gosum", "hcl", "html",
-          "javascript", "json", "jsonnet", "lua", "make",
-          "markdown", "markdown_inline", "nix", "proto", "python",
-          "rust", "terraform", "toml", "tsx",
-          "typescript", "vim", "vimdoc", "yaml",
+          "bash", "c", "cpp", "css", "diff",
+          "dockerfile", "fish", "go", "gomod", "gosum",
+          "hcl", "html", "javascript", "json", "jsonnet",
+          "lua", "make", "markdown", "markdown_inline", "nix",
+          "proto", "python", "regex", "rust", "terraform",
+          "toml", "tsx", "typescript", "vim", "vimdoc", "yaml",
         },
       })
 

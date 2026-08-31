@@ -2,6 +2,13 @@
 set $mod Mod1
 font "MesloLGSDZ Nerd Font 8"
 
+# colors
+set $bg         #282a36
+set $selection  #44475a
+set $fg         #f8f8f2
+set $purple     #bd93f9
+set $red        #ff5555
+
 # Output configuration (dual 4K)
 output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
 output HDMI-A-2 resolution 3840x2160@60Hz position 2560,0 scale 1.5
@@ -28,7 +35,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+x kill
 
 # start bemenu (a program launcher)
-bindsym $mod+d exec j4-dmenu-desktop --dmenu="bemenu -i -l 20 -p '' --fn 'MesloLGSDZ Nerd Font 8' --tb '#282a36' --tf '#f8f8f2' --fb '#282a36' --ff '#f8f8f2' --nb '#282a36' --nf '#f8f8f2' --hb '#bd93f9' --hf '#282a36' --sb '#bd93f9' --sf '#282a36'"
+bindsym $mod+d exec j4-dmenu-desktop --dmenu="bemenu -i -l 20 -p '' --fn 'MesloLGSDZ Nerd Font 9' -H 24 --tb '$bg' --tf '$purple' --fb '$bg' --ff '$fg' --nb '$bg' --nf '#c8cdd5' --hb '$purple' --hf '$bg' --sb '$purple' --sf '$bg' --ab '$bg' --af '#c8cdd5'"
 
 # change focus
 bindsym $mod+h focus left
@@ -57,8 +64,9 @@ bindsym $mod+Ctrl+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
-# focus the parent container
+# focus the parent/child container
 bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus child
 
 set $ws1 "1:󰖟"
 set $ws2 "2:"
@@ -112,13 +120,6 @@ mode "resize" {
 
 bindsym $mod+i mode "resize"
 
-# colors
-set $bg         #282a36
-set $selection  #44475a
-set $fg         #f8f8f2
-set $purple     #bd93f9
-set $red        #ff5555
-
 bar {
     swaybar_command waybar
 }
@@ -129,6 +130,11 @@ workspace $ws2 output HDMI-A-2
 
 # take a screenshot
 bindsym $mod+v exec grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy
+
+# move workspace to other output
+bindsym $mod+Ctrl+h move workspace to output left
+bindsym $mod+Ctrl+l move workspace to output right
 
 # start application commands
 bindsym $mod+Shift+c exec google-chrome-stable

@@ -52,7 +52,6 @@
     };
 
     earlyoom.enable = true;
-    thermald.enable = true;
     sysstat.enable = true;
 
     ratbagd.enable = true;

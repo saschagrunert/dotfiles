@@ -18,33 +18,33 @@
   },
   "disk": {
     "path": "/",
-    "format": "<span size='large'>󰋊</span> {used}/{total} ({free})",
+    "format": "<span color='#50fa7b' size='large'>󰋊</span> {used}/{total} ({free})",
     "tooltip": false,
     "interval": 30,
   },
   "temperature": {
     "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
     "input-filename": "temp1_input",
-    "format": "<span size='large'>󱃃</span> {temperatureC}°C",
+    "format": "<span color='#f1fa8c' size='large'>󱃃</span> {temperatureC}°C",
     "tooltip": false,
     "interval": 5,
   },
   "network": {
     "interface": "wlp10s0",
-    "format": "<span size='large'>󰤥</span> {bandwidthDownBytes} {bandwidthUpBytes}",
+    "format": "<span color='#8be9fd' size='large'>󰤥</span> {bandwidthDownBytes} {bandwidthUpBytes}",
     "tooltip": false,
     "interval": 5,
   },
   "memory": {
-    "format": "<span size='large'>󰍛</span> {used:0.0f}GB/{total:0.0f}GB ({percentage}%)",
+    "format": "<span color='#ff79c6' size='large'>󰍛</span> {used:0.0f}GB/{total:0.0f}GB ({percentage}%)",
     "interval": 5,
   },
   "cpu": {
-    "format": "<span size='large'>󰾆</span> {usage}% ({avg_frequency}GHz)",
+    "format": "<span color='#ffb86c' size='large'>󰾆</span> {usage}% ({avg_frequency}GHz)",
     "interval": 5,
   },
   "pulseaudio": {
-    "format": "<span size='large'>{icon}</span> {volume}%",
+    "format": "<span color='#50fa7b' size='large'>{icon}</span> {volume}%",
     "format-muted": "<span size='large'>󰖁</span>",
     "format-icons": {
       "default": ["󰖀", "󰕾"],
@@ -53,7 +53,7 @@
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
   },
   "clock": {
-    "format": "<span size='large'>󰅐</span> {:%H:%M:%S <span size='large'>󰃭</span> %a %d %b W%V}",
+    "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S <span color='#bd93f9' size='large'>󰃭</span> %a %d %b W%V}",
     "tooltip": false,
     "interval": 1,
     "on-scroll-up": "~/.config/sway/workspace-scroll prev",

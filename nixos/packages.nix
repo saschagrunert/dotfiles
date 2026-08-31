@@ -133,10 +133,13 @@
     gdb
     heaptrack
     libcgroup
+    perf
     lm_sensors
     lshw
     lvm2
     pahole
+    strace
+    tcpdump
     usbutils
     valgrind
 

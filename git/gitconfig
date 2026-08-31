@@ -71,6 +71,7 @@
 [delta]
     line-numbers = true
     navigate = true
+    hyperlinks = true
     syntax-theme = Dracula
 [credential "https://github.com"]
     helper =
