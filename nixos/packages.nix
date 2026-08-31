@@ -58,7 +58,9 @@
     nil
     pyright
     rust-analyzer
+    taplo
     terraform-ls
+    vscode-langservers-extracted
     vtsls
     yaml-language-server
 

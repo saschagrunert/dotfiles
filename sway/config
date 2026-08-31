@@ -152,9 +152,9 @@ bindsym $mod+Shift+c exec google-chrome-stable
 bindsym $mod+y [urgent=latest] focus
 
 # notification control
-bindsym $mod+grave exec dunstctl close
-bindsym $mod+Shift+grave exec dunstctl history-pop
-bindsym $mod+Ctrl+grave exec dunstctl context
+bindsym $mod+b exec dunstctl close
+bindsym $mod+Shift+b exec dunstctl history-pop
+bindsym $mod+Ctrl+b exec dunstctl context
 
 # floating window settings
 for_window [app_id=".*"] inhibit_idle fullscreen
@@ -189,4 +189,5 @@ exec swayidle -w \
 
 exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
 
-exec ~/.config/sway/setup
+exec alacritty -e fish -C 'tmux new-session -A -s work'
+exec google-chrome-stable

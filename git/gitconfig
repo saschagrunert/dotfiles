@@ -24,7 +24,6 @@
 [core]
     editor = nvim
     excludesfile = ~/.gitignore_global
-    fsmonitor = true
 [column]
     ui = auto
 [commit]

@@ -77,7 +77,7 @@ test: lint check-nix ## Run checks locally.
 	prettier --check .
 	typos
 	shfmt -d .
-	shellcheck $$(find . -name '*.sh') sway/setup sway/temps sway/workspace-scroll
+	shellcheck $$(find . -name '*.sh') sway/temps sway/workspace-scroll
 	fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
 
 ##@ Update targets:
