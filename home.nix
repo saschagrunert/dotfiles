@@ -23,9 +23,6 @@ in
       ".tigrc".source = dotfile "tig/tigrc";
       ".tmux.conf".source = dotfile "tmux/tmux.conf";
       ".tmux/scripts".source = dotfile "tmux/scripts";
-      ".Xdefaults".source = dotfile "x11/Xdefaults";
-      ".profile".source = dotfile "x11/profile";
-      ".xinitrc".source = dotfile "x11/xinitrc";
       ".claude/settings.json".source = dotfile "claude/settings.json";
     };
 
@@ -33,25 +30,12 @@ in
       enable = true;
       name = "Bibata-Original-Classic";
       package = pkgs.bibata-cursors;
-      size = 32;
+      size = 24;
       gtk.enable = true;
-      x11.enable = true;
     };
   };
 
   systemd.user.services = {
-    blueman-applet = {
-      Unit = {
-        Description = "Blueman Bluetooth applet";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.blueman}/bin/blueman-applet";
-        Restart = "on-failure";
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
-    };
 
     ibus-daemon = {
       Unit = {
@@ -60,7 +44,7 @@ in
         After = [ "graphical-session.target" ];
       };
       Service = {
-        ExecStart = "${pkgs.ibus-with-plugins}/bin/ibus-daemon --xim --replace";
+        ExecStart = "${pkgs.ibus-with-plugins}/bin/ibus-daemon --replace";
         Restart = "on-failure";
       };
       Install.WantedBy = [ "graphical-session.target" ];
@@ -111,8 +95,8 @@ in
       "dunst".source = dotfile "dunst";
       "fish".source = dotfile "fish";
       "htop".source = dotfile "htop";
-      "i3".source = dotfile "i3";
-      "i3status-rust".source = dotfile "i3status-rust";
+      "sway".source = dotfile "sway";
+      "waybar".source = dotfile "waybar";
       "nvim".source = dotfile "nvim";
       "ranger".source = dotfile "ranger";
     };

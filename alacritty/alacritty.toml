@@ -35,7 +35,7 @@ blinking = "Off"
 unfocused_hollow = true
 
 [font]
-size = 9.0
+size = 11.0
 
 [font.bold]
 family = "MesloLGSDZ Nerd Font Mono"

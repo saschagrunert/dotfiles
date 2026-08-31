@@ -1,23 +1,22 @@
-{ pkgs, dotfilesPath, ... }:
+{ pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [
-    (import ./setup-screens.nix { inherit writeShellScriptBin dotfilesPath; })
-
     # Desktop & UI
     alacritty
-    arandr
-    dmenu
+    bemenu
     dunst
-    feh
     google-chrome
+    grim
     j4-dmenu-desktop
-    lxappearance
     pavucontrol
     piper
-    xcompmgr
-    xclip
+    slurp
+    wdisplays
+    wev
+    wl-clipboard
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-wlr
     xdg-utils
-    xev
     zoom-us
 
     # System utilities

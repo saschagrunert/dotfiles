@@ -1,0 +1,66 @@
+* {
+  font-family: "MesloLGSDZ Nerd Font Mono";
+  font-size: 12px;
+  min-height: 0;
+}
+
+window#waybar {
+  background-color: #282a36;
+  color: #f8f8f2;
+}
+
+#workspaces button {
+  padding: 0 12px;
+  color: #f8f8f2;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+}
+
+#workspaces button.focused {
+  background-color: rgba(189, 147, 249, 0.2);
+  border-bottom: 2px solid #bd93f9;
+  color: #bd93f9;
+}
+
+#workspaces button.urgent {
+  background-color: rgba(255, 85, 85, 0.2);
+  border-bottom: 2px solid #ff5555;
+  color: #ff5555;
+}
+
+#workspaces button:hover {
+  background-color: rgba(68, 71, 90, 0.4);
+}
+
+#disk,
+#temperature,
+#network,
+#memory,
+#cpu,
+#pulseaudio,
+#clock,
+#tray {
+  padding: 0 8px;
+  margin: 4px 2px;
+  border-radius: 4px;
+  background-color: #44475a;
+}
+
+#clock {
+  color: #bd93f9;
+}
+
+#temperature.critical {
+  color: #ff5555;
+  background-color: rgba(255, 85, 85, 0.2);
+}
+
+#pulseaudio.muted {
+  color: #6272a4;
+}
+
+#tray {
+  background-color: transparent;
+}

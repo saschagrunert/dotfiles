@@ -48,7 +48,7 @@ check: ## Check symlinks and required commands.
 		fi; \
 	done
 	@echo "Checking commands..."
-	@for cmd in nix fish i3 git; do \
+	@for cmd in nix fish sway git; do \
 		if command -v $$cmd >/dev/null 2>&1; then \
 			echo "  OK: $$cmd"; \
 		else \
@@ -73,7 +73,7 @@ test: lint check-nix ## Run checks locally.
 	prettier --check .
 	typos
 	shfmt -d .
-	shellcheck $$(find . -name '*.sh')
+	shellcheck $$(find . -name '*.sh') sway/setup sway/workspace-scroll
 	fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
 
 ##@ Update targets:

@@ -1,0 +1,170 @@
+# use alt as modifier
+set $mod Mod1
+font pango:MesloLGSDZ Nerd Font 8
+
+# Output configuration (dual 4K)
+output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
+output HDMI-A-2 resolution 3840x2160@60Hz position 2560,0 scale 1.5
+
+# Wallpaper
+output * bg ~/.dotfiles/wallpaper/blurred.jpg fill
+
+# Input configuration
+input type:pointer {
+    accel_profile flat
+}
+input type:keyboard {
+    xkb_layout us
+}
+
+seat * xcursor_theme Bibata-Original-Classic 24
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod normal
+
+bindsym $mod+Return exec alacritty
+
+# kill focused window
+bindsym $mod+x kill
+
+# start bemenu (a program launcher)
+bindsym $mod+d exec j4-dmenu-desktop --dmenu="bemenu -i -l 20 -p '' --fn 'MesloLGSDZ Nerd Font 8' --tb '#282a36' --tf '#f8f8f2' --fb '#282a36' --ff '#f8f8f2' --nb '#282a36' --nf '#f8f8f2' --hb '#bd93f9' --hf '#282a36' --sb '#bd93f9' --sf '#282a36'"
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# split in horizontal orientation
+bindsym $mod+z splith
+
+# split in vertical orientation
+bindsym $mod+n splitv
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# toggle tiling / floating
+bindsym $mod+Ctrl+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+set $ws1 "1:󰖟"
+set $ws2 "2:"
+
+# switch to workspace
+bindsym $mod+q workspace $ws1
+bindsym $mod+w workspace $ws2
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+
+# move focused container to workspace
+bindsym $mod+Shift+q move container to workspace $ws1
+bindsym $mod+Shift+w move container to workspace $ws2
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+
+# reload sway configuration
+bindsym $mod+p reload
+
+# shutdown computer
+bindsym $mod+Shift+s exec swaynag -t warning -m 'Shutdown the computer?' -b 'Yes' 'systemctl poweroff'
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+    bindsym h resize shrink width 20 px
+    bindsym j resize grow height 20 px
+    bindsym k resize shrink height 20 px
+    bindsym l resize grow width 20 px
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+i mode "resize"
+
+# colors
+set $bg         #282a36
+set $selection  #44475a
+set $fg         #f8f8f2
+set $purple     #bd93f9
+set $red        #ff5555
+
+bar {
+    swaybar_command waybar
+}
+
+# Machine-specific: workspace to output mappings
+workspace $ws1 output HDMI-A-1
+workspace $ws2 output HDMI-A-2
+
+# take a screenshot
+bindsym $mod+v exec grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
+
+# start application commands
+bindsym $mod+Shift+c exec google-chrome-stable
+
+bindsym $mod+y [urgent=latest] focus
+
+# floating window settings
+for_window [app_id="wdisplays"] floating enable, fullscreen disable
+for_window [app_id=".blueman-manager-wrapped"] floating enable, fullscreen disable
+
+# assign to workspaces
+assign [app_id="google-chrome"] workspace $ws1
+assign [class="Google-chrome"] workspace $ws1
+assign [app_id="Alacritty"] workspace $ws2
+
+# other window settings
+default_border none
+default_floating_border pixel 1
+default_orientation horizontal
+workspace_layout default
+gaps inner 0
+focus_wrapping no
+
+swaynag_command swaynag --background $bg --text $fg --button-background $purple --border $selection --border-bottom $selection
+
+#class                  border      backgr.     text        indicator   child_border
+client.focused          $purple     $purple     $bg         $purple     $purple
+client.focused_inactive $bg         $bg         $fg         $bg         $bg
+client.unfocused        $bg         $bg         $fg         $bg         $bg
+client.urgent           $red        $red        $bg         $red        $red
+
+# idle management
+exec swayidle -w \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"'
+
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY
+
+exec ~/.config/sway/setup
