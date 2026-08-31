@@ -108,7 +108,6 @@
     # Kubernetes & cloud
     cosign
     google-cloud-sdk
-    helm
     kind
     kubernetes
     kustomize
@@ -134,7 +133,6 @@
     # Debugging & profiling
     bpftools
     gdb
-    heaptrack
     libcgroup
     perf
     lm_sensors
