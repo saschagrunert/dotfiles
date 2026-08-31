@@ -1,0 +1,61 @@
+{
+  "layer": "top",
+  "position": "top",
+  "modules-left": ["sway/workspaces"],
+  "modules-right": [
+    "disk",
+    "temperature",
+    "network",
+    "memory",
+    "cpu",
+    "pulseaudio",
+    "clock",
+    "tray",
+  ],
+  "sway/workspaces": {
+    "disable-scroll-wraparound": true,
+    "enable-bar-scroll": true,
+    "strip-characters": ["0123456789:"],
+    "format": "<span size='x-large'>{name}</span>",
+  },
+  "disk": {
+    "path": "/",
+    "format": "<span size='large'>󰋊</span> {used}/{total} ({free})",
+    "interval": 30,
+  },
+  "temperature": {
+    "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+    "input-filename": "temp1_input",
+    "format": "<span size='large'>󱃃</span> {temperatureC}°C",
+    "interval": 5,
+  },
+  "network": {
+    "interface": "wlp10s0",
+    "format": "<span size='large'>󰤥</span> {bandwidthDownBytes} {bandwidthUpBytes}",
+    "interval": 5,
+  },
+  "memory": {
+    "format": "<span size='large'>󰍛</span> {used:0.0f}GB/{total:0.0f}GB ({percentage}%)",
+    "interval": 5,
+  },
+  "cpu": {
+    "format": "<span size='large'>󰾆</span> {usage}% ({avg_frequency}GHz)",
+    "interval": 5,
+  },
+  "pulseaudio": {
+    "format": "<span size='large'>{icon}</span> {volume}%",
+    "format-muted": "<span size='large'>󰖁</span>",
+    "format-icons": {
+      "default": ["󰖀", "󰕾"],
+    },
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+  "clock": {
+    "format": "<span size='large'>󰅐</span> {:%H:%M:%S / %a %d %b W%V}",
+    "interval": 1,
+  },
+  "tray": {
+    "spacing": 8,
+  },
+}

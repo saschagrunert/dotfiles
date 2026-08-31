@@ -23,7 +23,7 @@
     idle_threshold = 120
     history_length = 20
     sticky_history = yes
-    follow = mouse
+    follow = keyboard
     monitor = 0
     browser = xdg-open
     corner_radius = 0

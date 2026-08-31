@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Setup tray applets
+swaymsg exec "nm-applet --indicator"
+
+# Setup default applications
+swaymsg exec "alacritty -e fish -C 'tmux new-session -s work'"
+swaymsg exec "google-chrome-stable --ozone-platform=wayland"

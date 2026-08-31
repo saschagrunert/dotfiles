@@ -17,9 +17,11 @@ _: {
   swapDevices = [ { device = "/dev/disk/by-uuid/dfaff609-4075-4842-bfb7-2d6e03ad5ee9"; } ];
 
   environment.variables = {
-    GDK_SCALE = "2";
-    GDK_DPI_SCALE = "0.5";
     QT_AUTO_SCREEN_SCALE_FACTOR = "1";
+    QT_QPA_PLATFORM = "wayland";
+    QT_QPA_PLATFORMTHEME = "gtk3";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
+    MOZ_ENABLE_WAYLAND = "1";
   };
 
   hardware = {

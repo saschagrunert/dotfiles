@@ -11,30 +11,26 @@ both the system configuration and user environment via
 - **Desktop**:
   - [alacritty](https://github.com/alacritty/alacritty):
     A cross-platform, GPU-accelerated terminal emulator
-  - [arc](https://github.com/NicoHood/arc-theme):
+  - [dracula](https://github.com/dracula/gtk):
     The GTK theme (managed via home-manager)
   - [bibata](https://github.com/ful1e5/Bibata_Cursor):
     Beautiful cursor theme (managed via home-manager)
   - [dunst](https://github.com/dunst-project/dunst):
     Lightweight and customizable notification daemon
-  - [feh](https://github.com/derf/feh):
-    A fast and light image viewer
-  - [i3](https://github.com/i3/i3):
-    A tiling window manager
-  - [i3status-rust](https://github.com/greshake/i3status-rust):
-    A replacement for i3status
+  - [sway](https://github.com/swaywm/sway):
+    A Wayland compositor and tiling window manager
+  - [waybar](https://github.com/Alexays/Waybar):
+    Highly customizable Wayland bar for sway
   - [ibus](https://github.com/ibus/ibus):
     Intelligent Input Bus
-  - [j4-dmenu](https://github.com/enkore/j4-dmenu-desktop):
-    The desktop menu
+  - [bemenu](https://github.com/Cloudef/bemenu):
+    Dynamic menu library and client program for Wayland
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
     Iconic fonts (managed via NixOS packages)
   - [networkManager](https://github.com/NetworkManager/NetworkManager):
     For managing network connections
   - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
     The icon theme (managed via home-manager)
-  - [x11](https://www.x.org):
-    Windowing system
 - **Neovim** (managed via [lazy.nvim](https://github.com/folke/lazy.nvim)):
   - Native LSP via [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
     (servers installed as Nix packages)
@@ -114,13 +110,12 @@ nixos/
 ├── packages.nix               # System packages
 ├── programs.nix               # fish, neovim, gnupg, ...
 ├── virtualisation.nix         # podman, cri-o, libvirtd
-├── services.nix               # X11, i3, pipewire, ...
+├── services.nix               # Sway, greetd, pipewire, ...
 ├── network.nix                # Hostname, NetworkManager
 ├── security.nix               # Kerberos, PKI, sudo
 ├── users.nix                  # User accounts, groups, shell
 ├── locale.nix                 # Locale, input method
-├── fonts.nix                  # Nerd Fonts, Roboto, ...
-└── setup-screens.nix          # Monitor & wallpaper setup
+└── fonts.nix                  # Nerd Fonts, Roboto, ...
 ```
 
 To add a new host, create a directory under `nixos/hosts/` with its own

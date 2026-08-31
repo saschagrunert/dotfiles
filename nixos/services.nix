@@ -7,15 +7,16 @@
       publish.addresses = true;
     };
 
-    autorandr.enable = true;
     blueman.enable = true;
 
-    displayManager = {
-      autoLogin = {
-        enable = true;
-        user = "sascha";
+    greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = "${pkgs.sway}/bin/sway";
+          user = "sascha";
+        };
       };
-      defaultSession = "none+i3";
     };
 
     fstrim.enable = true;
@@ -60,31 +61,15 @@
     };
 
     ratbagd.enable = true;
+  };
 
-    xserver = {
-      enable = true;
-      dpi = 150;
-
-      displayManager = {
-        lightdm = {
-          enable = true;
-          greeter.enable = false;
-        };
-      };
-
-      videoDrivers = [ "amdgpu" ];
-
-      windowManager.i3 = {
-        enable = true;
-        extraPackages = [ pkgs.i3status-rust ];
-      };
-
-      xkb.layout = "us";
-
-      serverFlagsSection = ''
-        Option "OffTime" "10"
-        Option "DPMS" "true"
-      '';
-    };
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraPackages = with pkgs; [
+      swayidle
+      swaybg
+      waybar
+    ];
   };
 }
