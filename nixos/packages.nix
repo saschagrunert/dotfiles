@@ -4,10 +4,10 @@
     # Desktop & UI
     alacritty
     fuzzel
-    libnotify
-    mako
     google-chrome
     grim
+    libnotify
+    mako
     papirus-icon-theme
     pavucontrol
     piper
@@ -83,8 +83,8 @@
     prettier
 
     # C/C++
-    llvmPackages_22.clang-tools
     clang_22
+    llvmPackages_22.clang-tools
 
     # Containers & virtualization
     cni-plugins
@@ -130,11 +130,11 @@
     bpftools
     gdb
     libcgroup
-    perf
     lm_sensors
     lshw
     lvm2
     pahole
+    perf
     strace
     tcpdump
     usbutils

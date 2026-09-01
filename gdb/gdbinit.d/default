@@ -7,8 +7,8 @@ set history save
 set auto-load safe-path ~/.gdbinit.d:~/.dotfiles/gdb
 
 python
-import glob, gdb
-for p in glob.glob("/home/sascha/.rustup/toolchains/*/lib/rustlib/etc/gdb_load_rust_pretty_printers.py"):
+import glob, os, gdb
+for p in glob.glob(os.path.expanduser("~/.rustup/toolchains/*/lib/rustlib/etc/gdb_load_rust_pretty_printers.py")):
     gdb.execute("source " + p)
     break
 end

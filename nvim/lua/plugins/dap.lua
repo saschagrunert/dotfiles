@@ -25,11 +25,19 @@ return {
       require("dap-go").setup()
       require("dap-python").setup("python3")
 
+      local codelldb_path = vim.fn.exepath("codelldb")
+      if codelldb_path == "" then
+        local ext = "/share/vscode/extensions/vadimcn.vscode-lldb"
+        for _, p in ipairs(vim.fn.glob("/nix/store/*-vscode-extension-vadimcn-vscode-lldb-*" .. ext .. "/adapter/codelldb", false, true)) do
+          codelldb_path = p
+          break
+        end
+      end
       dap.adapters.codelldb = {
         type = "server",
         port = "${port}",
         executable = {
-          command = "codelldb",
+          command = codelldb_path,
           args = { "--port", "${port}" },
         },
       }

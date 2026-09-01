@@ -28,7 +28,7 @@ return {
         rust = { "rustfmt" },
         scss = { "prettier" },
         sh = { "shfmt" },
-        terraform = { "terraform_fmt" },
+        terraform = { lsp_format = "prefer" },
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
         javascriptreact = { "prettier" },
