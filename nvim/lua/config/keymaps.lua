@@ -1,48 +1,48 @@
 local map = vim.keymap.set
 
 -- Tabs
-map("n", "<leader>n", "<cmd>tabnew<cr>")
-map("n", "<leader>k", "<cmd>tabclose<cr>")
-map("n", "<leader>to", "<cmd>tabonly<cr>")
-map("n", "]v", "<cmd>tabnext<cr>")
-map("n", "[v", "<cmd>tabprevious<cr>")
-map("n", "]V", "<cmd>tablast<cr>")
-map("n", "[V", "<cmd>tabfirst<cr>")
+map("n", "<leader>n", "<cmd>tabnew<cr>", { desc = "New tab" })
+map("n", "<leader>k", "<cmd>tabclose<cr>", { desc = "Close tab" })
+map("n", "<leader>to", "<cmd>tabonly<cr>", { desc = "Close other tabs" })
+map("n", "]v", "<cmd>tabnext<cr>", { desc = "Next tab" })
+map("n", "[v", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
+map("n", "]V", "<cmd>tablast<cr>", { desc = "Last tab" })
+map("n", "[V", "<cmd>tabfirst<cr>", { desc = "First tab" })
 
 -- Windows
-map("n", "<C-c>", "<C-W>c")
-map("n", "<C-n>", "<C-W>n")
-map("n", "<C-W>z", "<cmd>wincmd z<bar>cclose<bar>lclose<cr>")
-map("n", "<leader>v", "<C-w>v", { silent = true })
-map("n", "<leader>s", "<C-w>s", { silent = true })
-map("n", "<leader>V", "<c-w>t<c-w>H", { silent = true })
-map("n", "<leader>H", "<c-w>t<c-w>K", { silent = true })
+map("n", "<C-c>", "<C-W>c", { desc = "Close window" })
+map("n", "<C-n>", "<C-W>n", { desc = "New window" })
+map("n", "<C-W>z", "<cmd>wincmd z<bar>cclose<bar>lclose<cr>", { desc = "Close preview/qf/loc" })
+map("n", "<leader>v", "<C-w>v", { silent = true, desc = "Split vertical" })
+map("n", "<leader>s", "<C-w>s", { silent = true, desc = "Split horizontal" })
+map("n", "<leader>V", "<c-w>t<c-w>H", { silent = true, desc = "Layout vertical" })
+map("n", "<leader>H", "<c-w>t<c-w>K", { silent = true, desc = "Layout horizontal" })
 
 -- Window resizing (uses ResizeWindow from commands.lua)
-map("n", "<Left>", function() require("config.commands").resize_window("h") end, { silent = true })
-map("n", "<Right>", function() require("config.commands").resize_window("l") end, { silent = true })
-map("n", "<Up>", function() require("config.commands").resize_window("k") end, { silent = true })
-map("n", "<Down>", function() require("config.commands").resize_window("j") end, { silent = true })
+map("n", "<Left>", function() require("config.commands").resize_window("h") end, { silent = true, desc = "Resize left" })
+map("n", "<Right>", function() require("config.commands").resize_window("l") end, { silent = true, desc = "Resize right" })
+map("n", "<Up>", function() require("config.commands").resize_window("k") end, { silent = true, desc = "Resize up" })
+map("n", "<Down>", function() require("config.commands").resize_window("j") end, { silent = true, desc = "Resize down" })
 
 -- Buffers
-map("n", "<leader>bd", "<cmd>bd<cr>", { silent = true })
-map("n", "<leader>bw", function() require("config.commands").wipeout(false) end, { silent = true })
-map("n", "<leader>bo", function() require("config.commands").buf_only() end, { silent = true })
-map("n", "<leader>bc", function() require("config.commands").buf_only(); vim.cmd("bd") end, { silent = true })
+map("n", "<leader>bd", "<cmd>bd<cr>", { silent = true, desc = "Delete buffer" })
+map("n", "<leader>bw", function() require("config.commands").wipeout(false) end, { silent = true, desc = "Wipeout buffer" })
+map("n", "<leader>bo", function() require("config.commands").buf_only() end, { silent = true, desc = "Close other buffers" })
+map("n", "<leader>bc", function() require("config.commands").buf_only(); vim.cmd("bd") end, { silent = true, desc = "Close all buffers" })
 
 -- Fast save
-map("n", "<leader>w", "<cmd>w<cr>")
-map("n", "<leader>W", "<cmd>Wall<cr>")
-map("n", "<leader>S", "<cmd>SudoWrite<cr>")
+map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+map("n", "<leader>W", "<cmd>Wall<cr>", { desc = "Save all" })
+map("n", "<leader>S", "<cmd>SudoWrite<cr>", { desc = "Sudo save" })
 
 -- Hex editor
-map("n", "<leader>x", function() require("config.commands").toggle_hex() end)
+map("n", "<leader>x", function() require("config.commands").toggle_hex() end, { desc = "Toggle hex" })
 
 -- Settings toggles
 map("n", "yoe", "<cmd>set expandtab!<bar>set expandtab?<cr>")
 map("n", "yom", "<cmd>Matches<cr>")
 map("n", "yot", function() require("config.commands").toggle_color_column() end)
-map("n", "<leader>h", "<cmd>nohlsearch<cr>", { silent = true })
+map("n", "<leader>h", "<cmd>nohlsearch<cr>", { silent = true, desc = "Clear search highlight" })
 
 -- Command line
 map("c", "<C-a>", "<Home>")
@@ -87,10 +87,10 @@ map("n", "gV", "`[v`]")
 map("n", "<leader>uu", "mQviwU`Q")
 map("n", "<leader>ud", "mQviwu`Q")
 
-map("n", "<leader>p", "<cmd>e!<cr>")
+map("n", "<leader>p", "<cmd>e!<cr>", { desc = "Reload file" })
 
 -- Underline
-map("n", "<leader>ul", "<cmd>t.<CR>Vr=", { silent = true })
+map("n", "<leader>ul", "<cmd>t.<CR>Vr=", { silent = true, desc = "Underline heading" })
 
 -- Horizontal scroll
 map("n", "zl", "zL")
@@ -100,14 +100,14 @@ map("n", "zh", "zH")
 map("i", "jj", "<ESC>")
 
 -- Blank lines
-map("n", "<leader>dd", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
-map("n", "<leader>dD", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true })
-map("n", "<leader>o", "m`o<Esc>``", { silent = true })
-map("n", "<leader>O", "m`O<Esc>``", { silent = true })
+map("n", "<leader>dd", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true, desc = "Delete blank lines below" })
+map("n", "<leader>dD", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true, desc = "Delete blank lines above" })
+map("n", "<leader>o", "m`o<Esc>``", { silent = true, desc = "Blank line below" })
+map("n", "<leader>O", "m`O<Esc>``", { silent = true, desc = "Blank line above" })
 
 -- Folding
 map("n", "zU", "zR")
-map("n", "<leader>f", function() require("config.commands").toggle_folding() end)
+map("n", "<leader>f", function() require("config.commands").toggle_folding() end, { desc = "Toggle folding" })
 
 -- Visual search
 map("x", "*", [[:<C-u>call v:lua.require('config.commands').visual_search('/')<CR>/<C-R>=@/<CR><CR>]])
@@ -117,8 +117,8 @@ map("x", "#", [[:<C-u>call v:lua.require('config.commands').visual_search('?')<C
 map("n", "<leader>l", function()
   vim.diagnostic.setloclist({ open = false })
   require("config.commands").toggle_list("Location List", "l")
-end, { silent = true })
-map("n", "<leader>q", function() require("config.commands").toggle_list("Quickfix List", "c") end, { silent = true })
+end, { silent = true, desc = "Toggle location list" })
+map("n", "<leader>q", function() require("config.commands").toggle_list("Quickfix List", "c") end, { silent = true, desc = "Toggle quickfix" })
 
 -- Jump mappings
 map("n", "]g", "]}")
@@ -154,5 +154,5 @@ map("", "<backspace>", "<nop>")
 map("", "<space>", "<nop>")
 
 -- Exit
-map("n", "<leader>a", "<cmd>qa<cr>")
+map("n", "<leader>a", "<cmd>qa<cr>", { desc = "Quit all" })
 

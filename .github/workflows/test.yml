@@ -59,7 +59,7 @@ jobs:
       - run: |
           find . -name '*.sh' -not -path './.git/*' -print0 | xargs -0 --no-run-if-empty shellcheck
           find tmux/scripts -type f -not -name '*.sh' -print0 | xargs -0 --no-run-if-empty shellcheck
-          shellcheck sway/temps sway/workspace-scroll
+          shellcheck sway/dnd sway/idle sway/power sway/temps sway/workspace-scroll
 
   shfmt:
     runs-on: ubuntu-latest

@@ -32,6 +32,7 @@ _: {
       };
     };
     pki.certificateFiles = [ ./2022-IT-Root-CA.pem ];
+    rtkit.enable = true;
     sudo.wheelNeedsPassword = false;
     sudo.execWheelOnly = true;
   };

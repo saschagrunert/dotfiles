@@ -31,12 +31,15 @@ return {
             prompt_position = "top",
           },
           sorting_strategy = "ascending",
-          file_ignore_patterns = { "vendor/", "node_modules/", ".git/" },
+          file_ignore_patterns = { "vendor/", "node_modules/", "%.git/" },
         },
         pickers = {
           find_files = {
             hidden = true,
             find_command = { "rg", "--files", "--hidden", "--glob", "!.git" },
+          },
+          live_grep = {
+            additional_args = { "--hidden", "--glob", "!.git" },
           },
         },
       })

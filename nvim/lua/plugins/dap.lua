@@ -14,6 +14,7 @@ return {
       { "<leader>do", function() require("dap").step_over() end, desc = "Step over" },
       { "<leader>dO", function() require("dap").step_out() end, desc = "Step out" },
       { "<leader>dr", function() require("dap").repl.open() end, desc = "REPL" },
+      { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
       { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
     },
     config = function()

@@ -10,7 +10,7 @@
     "memory",
     "cpu",
     "pulseaudio",
-    "idle_inhibitor",
+    "custom/idle",
     "custom/dnd",
     "clock#time",
     "clock#date",
@@ -58,10 +58,12 @@
     "format": "<span color='#ff79c6' size='large'>󰘚</span> {used:0.0f}GB ({percentage}%)",
     "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB",
     "interval": 5,
+    "states": { "warning": 80, "critical": 95 },
   },
   "cpu": {
     "format": "<span color='#ffb86c' size='large'>󰾆</span> {usage}% ({avg_frequency}GHz)",
     "interval": 5,
+    "states": { "warning": 80, "critical": 95 },
   },
   "pulseaudio": {
     "format": "<span color='#50fa7b' size='large'>{icon}</span> {volume}%",
@@ -76,17 +78,18 @@
   "custom/dnd": {
     "exec": "~/.config/sway/dnd",
     "return-type": "json",
-    "interval": 1,
-    "on-click": "makoctl mode -t do-not-disturb",
+    "interval": 0,
+    "signal": 1,
+    "on-click": "makoctl mode -t do-not-disturb && pkill -RTMIN+1 waybar",
+    "on-click-right": "makoctl mode -t do-not-disturb && pkill -RTMIN+1 waybar",
   },
-  "idle_inhibitor": {
-    "format": "<span size='large'>{icon}</span>",
-    "format-icons": {
-      "activated": "<span color='#f1fa8c'>󰅶</span>",
-      "deactivated": "<span color='#6272a4'>󰾪</span>",
-    },
-    "tooltip-format-activated": "Idle inhibitor: on",
-    "tooltip-format-deactivated": "Idle inhibitor: off",
+  "custom/idle": {
+    "exec": "~/.config/sway/idle",
+    "return-type": "json",
+    "interval": 0,
+    "signal": 2,
+    "on-click": "~/.config/sway/idle toggle && pkill -RTMIN+2 waybar",
+    "on-click-right": "~/.config/sway/idle toggle && pkill -RTMIN+2 waybar",
   },
   "clock#time": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S}",

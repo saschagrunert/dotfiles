@@ -20,6 +20,23 @@ return {
         },
       })
 
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            gofumpt = true,
+            staticcheck = true,
+            analyses = { unusedparams = true, unusedwrite = true, nilness = true },
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+            directoryFilters = { "-vendor" },
+          },
+        },
+      })
+
       vim.lsp.config("rust_analyzer", {
         settings = {
           ["rust-analyzer"] = {

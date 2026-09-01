@@ -74,10 +74,10 @@ return {
   {
     "zirrostig/vim-schlepp",
     keys = {
-      { "k", "<Plug>SchleppUp", mode = "v" },
-      { "j", "<Plug>SchleppDown", mode = "v" },
-      { "h", "<Plug>SchleppLeft", mode = "v" },
-      { "l", "<Plug>SchleppRight", mode = "v" },
+      { "<A-k>", "<Plug>SchleppUp", mode = "v" },
+      { "<A-j>", "<Plug>SchleppDown", mode = "v" },
+      { "<A-h>", "<Plug>SchleppLeft", mode = "v" },
+      { "<A-l>", "<Plug>SchleppRight", mode = "v" },
       { "<S-up>", "<Plug>SchleppIndentUp", mode = "v" },
       { "<S-down>", "<Plug>SchleppIndentDown", mode = "v" },
       { "Dk", "<Plug>SchleppDupUp", mode = "v" },

@@ -15,7 +15,7 @@ __parse_git_stats() {
 		local ret="↓ $behind"
 	fi
 	if [[ $ahead -gt 0 ]]; then
-		local ret="${ret} ↑ $ahead"
+		local ret="${ret:+$ret }↑ $ahead"
 	fi
 	echo "$ret"
 }

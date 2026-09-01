@@ -4,7 +4,7 @@ pkgs.mkShell {
     pkgs.autoconf
     pkgs.automake
     pkgs.libtool
-    pkgs.llvmPackages_22.clang-unwrapped
+    pkgs.llvmPackages_22.clang
     pkgs.pkg-config
   ];
   buildInputs = [
