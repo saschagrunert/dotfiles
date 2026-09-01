@@ -41,13 +41,16 @@ gitconfig-user: ## Generate the user-specific gitconfig.
 check: ## Check symlinks and required commands.
 	@fail=0; \
 	echo "Checking symlinks..."; \
-	for f in ~/.gdbinit ~/.gitconfig ~/.tmux.conf ~/.config/nvim ~/.config/sway ~/.config/waybar ~/.config/mako ~/.config/alacritty; do \
-		if [ -L "$$f" ]; then \
-			echo "  OK: $$f -> $$(readlink $$f)"; \
-		else \
-			echo "  MISSING: $$f"; \
-			fail=1; \
-		fi; \
+	for f in $$(find ~ -maxdepth 3 -type l 2>/dev/null | sort); do \
+		target=$$(readlink "$$f"); \
+		case "$$target" in *home-manager-files*) \
+			if [ -e "$$f" ]; then \
+				echo "  OK: $$f"; \
+			else \
+				echo "  BROKEN: $$f -> $$target"; \
+				fail=1; \
+			fi ;; \
+		esac; \
 	done; \
 	echo "Checking commands..."; \
 	for cmd in nix fish sway git; do \

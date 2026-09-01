@@ -21,7 +21,7 @@ return {
         markdown = { "prettier" },
         nix = { "nixfmt" },
         proto = { "clang-format" },
-        python = { "isort", "autopep8" },
+        python = { "ruff_format" },
         rust = { "rustfmt" },
         scss = { "prettier" },
         sh = { "shfmt" },

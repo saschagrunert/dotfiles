@@ -57,8 +57,8 @@ bindsym $mod+z splith
 # split in vertical orientation
 bindsym $mod+n splitv
 
-# cycle through layout modes
-bindsym $mod+e layout toggle split tabbed stacking
+bindsym $mod+e workspace 1
+bindsym $mod+Shift+e move container to workspace 1
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -77,42 +77,31 @@ bindsym $mod+Shift+a focus child
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
-set $ws1 "1:󰖟"
-set $ws2 "2:"
+set $ws_browser "0:󰖟"
+set $ws_terminal "0:"
 
 # switch to workspace
-bindsym $mod+q workspace $ws1
-bindsym $mod+w workspace $ws2
+bindsym $mod+q workspace $ws_browser
+bindsym $mod+w workspace $ws_terminal
 
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
 bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
 
 # move focused container to workspace
-bindsym $mod+Shift+q move container to workspace $ws1
-bindsym $mod+Shift+w move container to workspace $ws2
+bindsym $mod+Shift+q move container to workspace $ws_browser
+bindsym $mod+Shift+w move container to workspace $ws_terminal
 
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
 
 # reload sway configuration
 bindsym $mod+p reload
-
-# shutdown computer
-bindsym $mod+Shift+s exec swaynag -t warning -m 'Shutdown the computer?' -b 'Yes' 'systemctl poweroff'
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -134,8 +123,8 @@ bar {
 }
 
 # Machine-specific: workspace to output mappings
-workspace $ws1 output HDMI-A-1
-workspace $ws2 output HDMI-A-2
+workspace $ws_browser output HDMI-A-1
+workspace $ws_terminal output HDMI-A-2
 
 # take a screenshot
 bindsym $mod+v exec grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
@@ -165,8 +154,8 @@ for_window [app_id="nm-connection-editor"] floating enable, fullscreen disable
 for_window [app_id="emoji-picker"] floating enable, fullscreen disable
 
 # assign to workspaces
-assign [app_id="google-chrome"] workspace $ws1
-assign [app_id="Alacritty"] workspace $ws2
+assign [app_id="google-chrome"] workspace $ws_browser
+assign [app_id="Alacritty"] workspace $ws_terminal
 
 workspace_auto_back_and_forth yes
 
@@ -182,13 +171,7 @@ client.focused_inactive $bg         $bg         $fg         $bg         $bg
 client.unfocused        $bg         $bg         $fg         $bg         $bg
 client.urgent           $red        $red        $bg         $red        $red
 
-# idle management
-exec swayidle -w \
-    timeout 600 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"'
-
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
-exec mako
+include /etc/sway/config.d/*
 
 exec alacritty -e fish -C 'tmux new-session -A -s work'
 exec google-chrome-stable

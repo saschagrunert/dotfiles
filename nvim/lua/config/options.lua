@@ -38,7 +38,7 @@ opt.more = false
 opt.updatecount = 10
 opt.updatetime = 250
 opt.timeoutlen = 500
-opt.ttimeoutlen = 0
+opt.ttimeoutlen = 5
 -- Folding
 opt.foldnestmax = 20
 

@@ -1,12 +1,7 @@
-{ pkgs, ... }:
+{ ... }:
 {
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    inputMethod = {
-      enable = true;
-      type = "ibus";
-      ibus.engines = [ pkgs.ibus-engines.typing-booster ];
-    };
   };
 
   console = {

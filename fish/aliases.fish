@@ -66,7 +66,7 @@ abbr -a ta tmux attach
 abbr -a tg cd \~ \&\& tmux
 abbr -a tl tmux list-sessions
 abbr -a ts tmux new-session -s
-abbr -a up nix flake update --flake \$DOTFILES \&\& rustup update \&\& sudo nixos-rebuild switch --flake \$DOTFILES\#nixos \&\& nix develop \$DOTFILES --command true \&\& nix-collect-garbage --delete-older-than 7d
+abbr -a up nix flake update --flake \$DOTFILES \&\& sudo nixos-rebuild switch --flake \$DOTFILES\#nixos \&\& rustup update \&\& nix develop \$DOTFILES --command true \&\& nix-collect-garbage --delete-older-than 7d
 abbr -a v nvim
 abbr -a vr ranger
 abbr -a vv nvim -u NONE

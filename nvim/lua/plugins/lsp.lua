@@ -3,11 +3,9 @@ return {
     "neovim/nvim-lspconfig",
     lazy = false,
     config = function()
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
       local ok, blink = pcall(require, "blink.cmp")
-      if ok then
-        capabilities = blink.get_lsp_capabilities(capabilities)
-      end
+      local capabilities = ok and blink.get_lsp_capabilities()
+        or vim.lsp.protocol.make_client_capabilities()
 
       vim.lsp.config("*", {
         capabilities = capabilities,

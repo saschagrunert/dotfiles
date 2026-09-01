@@ -78,16 +78,15 @@
 
     # Python
     python3
-    python3Packages.autopep8
-    python3Packages.isort
     python3Packages.osc
+    ruff
 
     # Node.js
     nodejs
     prettier
 
     # C/C++
-    clang-tools
+    llvmPackages_22.clang-tools
     clang_22
 
     # Containers & virtualization

@@ -1,5 +1,7 @@
-_: {
+{ pkgs, ... }:
+{
   boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
     initrd = {
       availableKernelModules = [
         "ahci"

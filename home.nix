@@ -42,14 +42,31 @@ in
 
   systemd.user.services = {
 
-    ibus-daemon = {
+    mako = {
       Unit = {
-        Description = "IBus input method daemon";
+        Description = "Mako notification daemon";
         PartOf = [ "graphical-session.target" ];
         After = [ "graphical-session.target" ];
       };
       Service = {
-        ExecStart = "${pkgs.ibus-with-plugins}/bin/ibus-daemon --replace";
+        ExecStart = "${pkgs.mako}/bin/mako";
+        Restart = "on-failure";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
+
+    swayidle = {
+      Unit = {
+        Description = "Sway idle management daemon";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = toString (pkgs.writeShellScript "swayidle-start" ''
+          ${pkgs.swayidle}/bin/swayidle -w \
+            timeout 600 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"'
+        '');
         Restart = "on-failure";
       };
       Install.WantedBy = [ "graphical-session.target" ];

@@ -21,13 +21,14 @@
     "format": "<span color='#ff5555' size='large'>󰩨</span> {}",
   },
   "sway/workspaces": {
-    "strip-characters": "0123456789:",
+    "strip-characters": "0:",
     "format": "<span size='x-large'>{name}</span>",
+    "disable-scroll-wraparound": true,
   },
   "disk": {
     "path": "/",
     "format": "<span color='#50fa7b' size='large'>󰋊</span> {percentage_used}% ({free} free)",
-    "tooltip": false,
+    "tooltip-format": "{used} / {total}",
     "interval": 30,
   },
   "custom/temps": {
@@ -36,16 +37,16 @@
     "interval": 5,
   },
   "network": {
-    "interface": "wlp10s0",
     "format": "<span color='#8be9fd' size='large'>󰤥</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
     "format-disconnected": "<span color='#6272a4' size='large'>󰤭</span> disconnected",
-    "tooltip": false,
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}",
+    "tooltip-format-disconnected": "Disconnected",
     "interval": 5,
     "on-click": "nm-connection-editor",
   },
   "memory": {
     "format": "<span color='#ff79c6' size='large'>󰍛</span> {used:0.0f}GB ({percentage}%)",
-    "tooltip": false,
+    "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB",
     "interval": 5,
   },
   "cpu": {
@@ -80,7 +81,17 @@
   },
   "clock#date": {
     "format": "<span color='#bd93f9' size='large'>󰃭</span> {:%a %d %b W%V}",
-    "tooltip": false,
+    "tooltip-format": "{calendar}",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "left",
+      "format": {
+        "months": "<span color='#f8f8f2'><b>{}</b></span>",
+        "weeks": "<span color='#6272a4'>{}</span>",
+        "weekdays": "<span color='#bd93f9'><b>{}</b></span>",
+        "today": "<span color='#ff79c6'><b>{}</b></span>",
+      },
+    },
     "interval": 60,
     "on-scroll-up": "~/.config/sway/workspace-scroll prev",
     "on-scroll-down": "~/.config/sway/workspace-scroll next",

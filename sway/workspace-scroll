@@ -5,25 +5,23 @@ direction=${1:?usage: workspace-scroll <next|prev>}
 workspaces=$(swaymsg -t get_workspaces)
 
 focused_num=$(echo "$workspaces" | jq '.[] | select(.focused==true) | .num')
+[ -z "$focused_num" ] && exit 0
+
 focused_output=$(echo "$workspaces" | jq -r '.[] | select(.focused==true) | .output')
 
-output_nums=$(echo "$workspaces" | jq --arg out "$focused_output" '[.[] | select(.output==$out) | .num] | sort')
-
 if [ "$direction" = "next" ]; then
-	max_on_output=$(echo "$output_nums" | jq 'max')
-	if [ "$focused_num" -eq "$max_on_output" ]; then
-		global_max=$(echo "$workspaces" | jq '[.[].num] | max')
-		next=$((global_max + 1))
-		[ "$next" -gt 9 ] && exit 0
-		swaymsg workspace "$next"
-	else
-		swaymsg workspace next_on_output
+	if [ "$focused_num" -lt 1 ]; then
+		swaymsg workspace 1
+	elif [ "$focused_num" -lt 5 ]; then
+		swaymsg workspace "$((focused_num + 1))"
 	fi
 elif [ "$direction" = "prev" ]; then
-	min_on_output=$(echo "$output_nums" | jq 'min')
-	if [ "$focused_num" -eq "$min_on_output" ]; then
-		:
-	else
-		swaymsg workspace prev_on_output
+	if [ "$focused_num" -gt 1 ]; then
+		swaymsg workspace "$((focused_num - 1))"
+	elif [ "$focused_num" -le 1 ]; then
+		symbol=$(echo "$workspaces" | jq -r --arg out "$focused_output" '.[] | select(.output==$out and .num==0) | .name')
+		if [ -n "$symbol" ]; then
+			swaymsg "workspace \"$symbol\""
+		fi
 	fi
 fi

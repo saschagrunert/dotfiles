@@ -4,8 +4,6 @@ return {
     event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
-      local bg = normal.bg and string.format("#%06x", normal.bg) or "#282a36"
       require("bufferline").setup({
         options = {
           mode = "buffers",
@@ -15,7 +13,13 @@ return {
           separator_style = "thin",
         },
       })
-      vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bg })
+      local function set_fill_bg()
+        local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+        local bg = normal.bg and string.format("#%06x", normal.bg) or "#282a36"
+        vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bg })
+      end
+      set_fill_bg()
+      vim.api.nvim_create_autocmd("ColorScheme", { callback = set_fill_bg })
     end,
   },
   {

@@ -21,8 +21,6 @@ both the system configuration and user environment via
     A Wayland compositor and tiling window manager
   - [waybar](https://github.com/Alexays/Waybar):
     Highly customizable Wayland bar for sway
-  - [ibus](https://github.com/ibus/ibus):
-    Intelligent Input Bus
   - [fuzzel](https://codeberg.org/dnkl/fuzzel):
     Wayland-native application launcher
   - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
