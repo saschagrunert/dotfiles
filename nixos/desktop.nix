@@ -16,7 +16,6 @@
     enable = true;
     wrapperFeatures.gtk = true;
     extraPackages = with pkgs; [
-      swayidle
       waybar
     ];
   };

@@ -11,11 +11,12 @@ __parse_git_stats() {
 	set -- $(git rev-list --left-right --count $tracking_branch...HEAD)
 	behind=$1
 	ahead=$2
+	local ret=""
 	if [[ $behind -gt 0 ]]; then
-		local ret="↓ $behind"
+		ret="↓ $behind"
 	fi
 	if [[ $ahead -gt 0 ]]; then
-		local ret="${ret:+$ret }↑ $ahead"
+		ret="${ret:+$ret }↑ $ahead"
 	fi
 	echo "$ret"
 }

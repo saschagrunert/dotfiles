@@ -8,6 +8,7 @@
     mako
     google-chrome
     grim
+    papirus-icon-theme
     pavucontrol
     piper
     slurp

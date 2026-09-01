@@ -8,6 +8,7 @@
       "kvm"
       "libvirtd"
       "networkmanager"
+      "podman"
       "video"
       "wheel"
     ];
