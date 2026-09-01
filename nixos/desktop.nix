@@ -8,6 +8,10 @@
     NIXOS_OZONE_WL = "1";
   };
 
+  services.udev.extraRules = ''
+    SUBSYSTEM=="powercap", KERNEL=="intel-rapl:0", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chmod a+r /sys/class/powercap/intel-rapl:0/energy_uj"
+  '';
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;

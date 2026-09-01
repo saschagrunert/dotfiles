@@ -1,11 +1,6 @@
 { pkgs, ... }:
 {
   services = {
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-    };
-
     blueman.enable = true;
 
     fail2ban.enable = true;

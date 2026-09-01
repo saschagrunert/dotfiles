@@ -5,6 +5,7 @@
   "modules-right": [
     "disk",
     "custom/temps",
+    "custom/power",
     "network",
     "memory",
     "cpu",
@@ -39,6 +40,11 @@
     "return-type": "json",
     "interval": 5,
   },
+  "custom/power": {
+    "exec": "~/.config/sway/power",
+    "return-type": "json",
+    "interval": 5,
+  },
   "network": {
     "format-ethernet": "<span color='#8be9fd' size='large'>󰈀</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
     "format-wifi": "<span color='#8be9fd' size='large'>󰤥</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
@@ -49,7 +55,7 @@
     "on-click": "nm-connection-editor",
   },
   "memory": {
-    "format": "<span color='#ff79c6' size='large'>󰍛</span> {used:0.0f}GB ({percentage}%)",
+    "format": "<span color='#ff79c6' size='large'>󰘚</span> {used:0.0f}GB ({percentage}%)",
     "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB",
     "interval": 5,
   },

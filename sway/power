@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cpu_watts() {
+	local rapl=/sys/class/powercap/intel-rapl:0/energy_uj
+	if [ ! -r "$rapl" ]; then
+		echo "N/A"
+		return
+	fi
+	local e1 e2
+	e1=$(cat "$rapl")
+	sleep 1
+	e2=$(cat "$rapl")
+	local diff=$((e2 - e1))
+	if [ "$diff" -lt 0 ]; then
+		local max
+		max=$(cat /sys/class/powercap/intel-rapl:0/max_energy_range_uj)
+		diff=$((diff + max))
+	fi
+	echo $(((diff + 500000) / 1000000))
+}
+
+gpu_watts() {
+	for f in /sys/class/hwmon/hwmon*/name; do
+		if [ "$(cat "$f" 2>/dev/null)" = "amdgpu" ]; then
+			local dir
+			dir=$(dirname "$f")
+			local device
+			device=$(readlink -f "$dir/device" 2>/dev/null)
+			if [[ "$device" == */0000:03:00.0 ]]; then
+				local val
+				val=$(cat "$dir/power1_average" 2>/dev/null) || val=0
+				echo $(((val + 500000) / 1000000))
+				return
+			fi
+		fi
+	done
+	echo "0"
+}
+
+cpu=$(cpu_watts)
+gpu=$(gpu_watts)
+
+cpu_label="${cpu}W"
+if [ "$cpu" = "N/A" ]; then
+	cpu_label="-"
+fi
+
+text="<span color='#f1fa8c' size='large'>󰻠</span> ${cpu_label}  <span color='#ffb86c' size='large'>󰢮</span> ${gpu}W"
+tooltip="CPU: ${cpu_label}\nGPU: ${gpu}W"
+
+printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$tooltip"

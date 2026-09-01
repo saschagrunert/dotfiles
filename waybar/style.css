@@ -38,6 +38,7 @@ window#waybar {
 
 #disk,
 #custom-temps,
+#custom-power,
 #network,
 #memory,
 #cpu,
@@ -55,6 +56,7 @@ window#waybar {
 
 #disk:hover,
 #custom-temps:hover,
+#custom-power:hover,
 #network:hover,
 #memory:hover,
 #cpu:hover,
