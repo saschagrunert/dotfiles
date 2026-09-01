@@ -46,6 +46,7 @@ in
       Service = {
         ExecStart = "${pkgs.mako}/bin/mako";
         Restart = "on-failure";
+        RestartSec = 2;
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };
