@@ -88,6 +88,7 @@ window#waybar {
   color: #6272a4;
   font-style: italic;
   margin-left: 12px;
+  min-width: 400px;
 }
 
 #custom-idle.on {
