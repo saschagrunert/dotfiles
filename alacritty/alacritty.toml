@@ -46,7 +46,7 @@ shape = "Block"
 blinking = "Off"
 
 [font]
-size = 9.0
+size = 10.0
 
 [font.bold]
 family = "MesloLGSDZ Nerd Font Mono"
