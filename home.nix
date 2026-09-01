@@ -66,6 +66,7 @@ in
           ''
         );
         Restart = "on-failure";
+        RestartSec = 2;
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };
