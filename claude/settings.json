@@ -2,7 +2,8 @@
   "env": {
     "ANTHROPIC_VERTEX_PROJECT_ID": "itpc-gcp-hcm-pe-eng-claude",
     "CLOUD_ML_REGION": "us-east5",
-    "CLAUDE_CODE_USE_VERTEX": "1"
+    "CLAUDE_CODE_USE_VERTEX": "1",
+    "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH": "/run/current-system/sw/bin/google-chrome-stable"
   },
   "includeCoAuthoredBy": false,
   "permissions": {

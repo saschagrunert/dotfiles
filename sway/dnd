@@ -2,13 +2,13 @@
 set -euo pipefail
 
 if makoctl mode | grep -q do-not-disturb; then
-    text="<span color='#f1fa8c' size='large'>󰂛</span>"
-    tooltip="Do not disturb: on"
-    class="on"
+	text="<span color='#f1fa8c' size='large'>󰂛</span>"
+	tooltip="Do not disturb: on"
+	class="on"
 else
-    text="<span color='#6272a4' size='large'>󰂚</span>"
-    tooltip="Do not disturb: off"
-    class="off"
+	text="<span color='#6272a4' size='large'>󰂚</span>"
+	tooltip="Do not disturb: off"
+	class="off"
 fi
 
 printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"

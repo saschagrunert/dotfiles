@@ -2,7 +2,10 @@
 set -euo pipefail
 
 direction=${1:?usage: workspace-scroll <next|prev>}
-[[ "$direction" =~ ^(next|prev)$ ]] || { echo "invalid direction: $direction" >&2; exit 1; }
+[[ "$direction" =~ ^(next|prev)$ ]] || {
+	echo "invalid direction: $direction" >&2
+	exit 1
+}
 workspaces=$(swaymsg -t get_workspaces)
 
 focused_num=$(echo "$workspaces" | jq '.[] | select(.focused==true) | .num')
