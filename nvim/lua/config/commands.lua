@@ -64,7 +64,7 @@ end
 
 -- Toggle quickfix/location list
 function M.toggle_list(bufname, pfx)
-  local buflist = vim.fn.execute("silent! ls")
+  local buflist = vim.fn.execute("silent! ls!")
   for _, line in ipairs(vim.split(buflist, "\n")) do
     if line:find(bufname) then
       local bufnum = tonumber(line:match("(%d+)"))
@@ -155,8 +155,8 @@ function M.wipeout(bang)
   local cmd = bang and "bw!" or "bw"
   for b = 1, vim.fn.bufnr("$") do
     if vim.fn.buflisted(b) == 1 and not visible[b] then
-      pcall(vim.cmd, cmd .. " " .. b)
-      tally = tally + 1
+      local ok = pcall(vim.cmd, cmd .. " " .. b)
+      if ok then tally = tally + 1 end
     end
   end
   vim.notify("Deleted " .. tally .. " buffers")
@@ -193,7 +193,7 @@ end
 
 -- Commands
 vim.api.nvim_create_user_command("Matches", ":%s///gn", {})
-vim.api.nvim_create_user_command("KillWhitespace", ":%s/\\s\\+$//", {})
+vim.api.nvim_create_user_command("KillWhitespace", ":%s/\\s\\+$//e", {})
 vim.api.nvim_create_user_command("Hexmode", function() M.toggle_hex() end, { bar = true })
 vim.api.nvim_create_user_command("BufOnly", function(opts)
   M.buf_only()

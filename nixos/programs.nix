@@ -12,10 +12,7 @@ _: {
     };
     mtr.enable = true;
     nix-ld.enable = true;
-    nm-applet = {
-      enable = true;
-      indicator = true;
-    };
+    nm-applet.enable = true;
     neovim = {
       enable = true;
       defaultEditor = true;

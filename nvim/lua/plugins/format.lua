@@ -7,6 +7,9 @@ return {
       { "<leader>cf", function() require("conform").format({ async = true }) end, desc = "Format buffer" },
     },
     opts = {
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
       formatters_by_ft = {
         bash = { "shfmt" },
         c = { "clang-format" },
@@ -31,9 +34,7 @@ return {
         javascriptreact = { "prettier" },
         yaml = { "prettier" },
       },
-      format_after_save = {
-        lsp_format = "fallback",
-      },
+      format_after_save = {},
       formatters = {
         shfmt = { prepend_args = { "-i", "0" } },
       },

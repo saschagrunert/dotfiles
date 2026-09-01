@@ -16,3 +16,7 @@ node_modules/
 .cache/
 *.o
 *.a
+*.so
+*.pyc
+__pycache__/
+.ruff_cache/

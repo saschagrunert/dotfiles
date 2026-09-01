@@ -23,6 +23,9 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber.extraConfig."10-disable-battery" = {
+        "wireplumber.profiles".main."monitor.bluez.seat-monitoring" = "disabled";
+      };
     };
 
     journald = {

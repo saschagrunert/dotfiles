@@ -11,4 +11,6 @@
       allowedTCPPorts = [ 22 ];
     };
   };
+
+  services.resolved.enable = true;
 }

@@ -62,13 +62,13 @@ map("n", "&", "<cmd>&&<cr>")
 -- German keyboard: ö → [, ä → ]
 for c = 65, 90 do
   local ch = string.char(c)
-  map({ "n", "x" }, "ö" .. ch, "[" .. ch, { remap = true })
-  map({ "n", "x" }, "ä" .. ch, "]" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true })
 end
 for c = 97, 122 do
   local ch = string.char(c)
-  map({ "n", "x" }, "ö" .. ch, "[" .. ch, { remap = true })
-  map({ "n", "x" }, "ä" .. ch, "]" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true })
 end
 
 -- Visual indent (keep selection)

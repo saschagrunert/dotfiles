@@ -12,11 +12,6 @@ in
   home = {
     stateVersion = "25.05";
 
-    sessionVariables = {
-      BROWSER = "google-chrome-stable";
-      TERMINAL = "alacritty";
-    };
-
     file = {
       ".hushlogin".text = "";
       ".clang-format".source = dotfile "clang/clang-format";

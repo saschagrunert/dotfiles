@@ -13,7 +13,7 @@ function gup
         git fetch --prune --no-tags origin "+refs/heads/*:refs/remotes/origin/*" || return $status
     end
 
-    for branch in (git branch --merged $default_branch | grep -v '^\*' | string trim | grep -v "^$default_branch\$")
+    for branch in (git branch --merged $default_branch | grep -v '^[*+]' | string trim | grep -v "^$default_branch\$")
         git branch -d $branch
     end
 

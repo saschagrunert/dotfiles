@@ -70,7 +70,7 @@ autocmd("FileType", {
   group = augroup("GitCommit", { clear = true }),
   pattern = "gitcommit",
   callback = function()
-    vim.keymap.set("i", "jj", "<ESC>ZZ", { buf = 0 })
+    vim.keymap.set("i", "jj", "<ESC>ZZ", { buffer = 0 })
   end,
 })
 
@@ -103,7 +103,7 @@ for ft, cmd in pairs(ft_runners) do
     group = ft_runner_group,
     pattern = ft,
     callback = function()
-      vim.keymap.set("n", "<leader>R", "<cmd>write !" .. cmd .. "<cr>", { buf = 0, silent = true })
+      vim.keymap.set("n", "<leader>R", "<cmd>write !" .. cmd .. "<cr>", { buffer = 0, silent = true })
     end,
   })
 end
@@ -111,6 +111,6 @@ autocmd("FileType", {
   group = ft_runner_group,
   pattern = "c",
   callback = function()
-    vim.keymap.set("n", "<leader>R", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buf = 0, silent = true })
+    vim.keymap.set("n", "<leader>R", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buffer = 0, silent = true })
   end,
 })
