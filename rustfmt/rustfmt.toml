@@ -1,3 +1,2 @@
-edition = "2021"
 max_width = 80
 newline_style = "Unix"

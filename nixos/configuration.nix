@@ -3,6 +3,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./hosts/desktop
+    ./desktop.nix
     ./network.nix
     ./security.nix
     ./users.nix

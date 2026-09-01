@@ -64,28 +64,6 @@ handle_extension() {
 	esac
 }
 
-handle_image() {
-	local mimetype="${1}"
-	case "${mimetype}" in
-
-	# Image
-	image/*)
-		local orientation
-		orientation="$(identify -format '%[EXIF:Orientation]\n' -- "${FILE_PATH}")"
-		# If orientation data is present and the image actually
-		# needs rotating ("1" means no rotation)...
-		if [[ -n "$orientation" && "$orientation" != 1 ]]; then
-			# ...auto-rotate the image according to the EXIF data.
-			convert -- "${FILE_PATH}" -auto-orient "${IMAGE_CACHE_PATH}" && exit 6
-		fi
-
-		# `w3mimgdisplay` will be called for all images (unless overridden as above),
-		# but might fail for unsupported types.
-		exit 7
-		;;
-	esac
-}
-
 handle_mime() {
 	local mimetype="${1}"
 	case "${mimetype}" in
@@ -102,7 +80,7 @@ handle_mime() {
 
 	# Image
 	image/*)
-		# Preview as text conversion
+		chafa -f symbols -s "${PV_WIDTH}x" -- "${FILE_PATH}" && exit 5
 		exiftool "${FILE_PATH}" && exit 5
 		exit 1
 		;;
@@ -122,9 +100,6 @@ handle_fallback() {
 }
 
 MIMETYPE="$(file --dereference --brief --mime-type -- "${FILE_PATH}")"
-if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
-	handle_image "${MIMETYPE}"
-fi
 handle_extension
 handle_mime "${MIMETYPE}"
 handle_fallback

@@ -70,8 +70,6 @@
     gotools
 
     # Rust
-    cargo-edit
-    cargo-watch
     rustup
 
     # Python
@@ -152,6 +150,7 @@
 
     # Media & documents
     asciinema
+    chafa
     imagemagick
     kooha
     mediainfo

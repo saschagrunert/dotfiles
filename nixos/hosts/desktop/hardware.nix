@@ -17,14 +17,6 @@ _: {
 
   swapDevices = [ { device = "/dev/disk/by-uuid/dfaff609-4075-4842-bfb7-2d6e03ad5ee9"; } ];
 
-  environment.variables = {
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    QT_QPA_PLATFORM = "wayland";
-    QT_QPA_PLATFORMTHEME = "gtk3";
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    NIXOS_OZONE_WL = "1";
-  };
-
   hardware = {
     xpadneo.enable = true;
     bluetooth.enable = true;

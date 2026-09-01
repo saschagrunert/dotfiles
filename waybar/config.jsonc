@@ -10,6 +10,7 @@
     "cpu",
     "pulseaudio",
     "idle_inhibitor",
+    "custom/dnd",
     "clock#time",
     "clock#date",
     "tray",
@@ -65,6 +66,12 @@
     "scroll-step": 5,
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+  "custom/dnd": {
+    "exec": "~/.config/sway/dnd",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "makoctl mode -t do-not-disturb",
   },
   "idle_inhibitor": {
     "format": "<span size='large'>{icon}</span>",

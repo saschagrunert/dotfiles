@@ -43,6 +43,7 @@ window#waybar {
 #cpu,
 #pulseaudio,
 #idle_inhibitor,
+#custom-dnd,
 #clock,
 #tray {
   padding: 0 10px;
@@ -59,6 +60,7 @@ window#waybar {
 #cpu:hover,
 #pulseaudio:hover,
 #idle_inhibitor:hover,
+#custom-dnd:hover,
 #clock:hover {
   background-color: rgba(189, 147, 249, 0.15);
 }
@@ -81,6 +83,10 @@ window#waybar {
 
 #idle_inhibitor.activated {
   color: #f1fa8c;
+}
+
+#custom-dnd.on {
+  background-color: rgba(241, 250, 140, 0.15);
 }
 
 #mode {

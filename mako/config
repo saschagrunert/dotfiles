@@ -25,3 +25,6 @@ border-color=#6272a4
 border-color=#ff5555
 text-color=#ff5555
 default-timeout=0
+
+[mode=do-not-disturb]
+invisible=1

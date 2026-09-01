@@ -26,4 +26,4 @@ class j(Command):
         directory = subprocess.check_output(["zoxide", "query", "--", self.arg(1)])
         directory = directory.decode("utf-8", "ignore")
         directory = directory.rstrip('\n')
-        self.fm.execute_console("cd " + directory)
+        self.fm.execute_console("cd '" + directory.replace("'", "'\\''") + "'")
