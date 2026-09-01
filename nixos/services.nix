@@ -3,11 +3,12 @@
   services = {
     avahi = {
       enable = true;
-      publish.enable = true;
-      publish.addresses = true;
+      nssmdns4 = true;
     };
 
     blueman.enable = true;
+
+    fail2ban.enable = true;
 
     greetd = {
       enable = true;
@@ -27,13 +28,6 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-    };
-
-    printing = {
-      enable = true;
-      drivers = [
-        pkgs.hplip
-      ];
     };
 
     journald = {

@@ -13,7 +13,7 @@
       defaultFonts = {
         serif = [ "Roboto Slab" ];
         sansSerif = [ "Roboto" ];
-        monospace = [ "MesloLGSDZ Nerd Font" ];
+        monospace = [ "MesloLGSDZ Nerd Font Mono" ];
         emoji = [ "Noto Color Emoji" ];
       };
     };

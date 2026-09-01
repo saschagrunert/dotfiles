@@ -16,6 +16,8 @@
   ],
   "sway/window": {
     "max-length": 300,
+    "on-scroll-up": "~/.config/sway/workspace-scroll prev",
+    "on-scroll-down": "~/.config/sway/workspace-scroll next",
   },
   "sway/mode": {
     "format": "<span color='#ff5555' size='large'>󰩨</span> {}",
@@ -37,7 +39,8 @@
     "interval": 5,
   },
   "network": {
-    "format": "<span color='#8be9fd' size='large'>󰤥</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-ethernet": "<span color='#8be9fd' size='large'>󰈀</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-wifi": "<span color='#8be9fd' size='large'>󰤥</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
     "format-disconnected": "<span color='#6272a4' size='large'>󰤭</span> disconnected",
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}",
     "tooltip-format-disconnected": "Disconnected",

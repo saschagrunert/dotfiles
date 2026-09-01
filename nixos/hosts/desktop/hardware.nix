@@ -23,7 +23,6 @@ _: {
     QT_QPA_PLATFORMTHEME = "gtk3";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     NIXOS_OZONE_WL = "1";
-    SDL_VIDEODRIVER = "wayland";
   };
 
   hardware = {

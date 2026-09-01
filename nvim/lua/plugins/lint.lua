@@ -9,6 +9,7 @@ return {
         go = { "golangcilint" },
         markdown = { "proselint" },
         nix = { "statix" },
+        python = { "ruff" },
         sh = { "shellcheck" },
         yaml = { "yamllint" },
       }

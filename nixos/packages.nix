@@ -40,7 +40,6 @@
     binutils
     claude-code
     cmake
-    ctags
     delta
     gcc
     gh
@@ -57,7 +56,6 @@
     lua-language-server
     nil
     pyright
-    rust-analyzer
     taplo
     terraform-ls
     vscode-langservers-extracted
@@ -160,10 +158,12 @@
 
     # Nix tools
     cachix
+    deadnix
     nix-index
     nix-prefetch-git
     nixfmt
     nixos-shell
+    statix
 
     # Misc
     bom

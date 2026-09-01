@@ -18,14 +18,13 @@ opt.number = true
 opt.cursorline = true
 
 -- Indentation
-opt.smartindent = true
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.shiftround = true
 
 -- Tweaks
-opt.previewheight = 1
+opt.previewheight = 5
 opt.ignorecase = true
 opt.smartcase = true
 opt.confirm = true

@@ -6,7 +6,10 @@ _: {
     };
     cri-o.enable = true;
 
-    libvirtd.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu.swtpm.enable = true;
+    };
     podman = {
       enable = true;
       dockerCompat = true;

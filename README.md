@@ -136,7 +136,7 @@ nixos/
 ├── network.nix                # Hostname, NetworkManager
 ├── security.nix               # Kerberos, PKI, sudo
 ├── users.nix                  # User accounts, groups, shell
-├── locale.nix                 # Locale, input method
+├── locale.nix                 # Locale, timezone
 └── fonts.nix                  # Nerd Fonts, Roboto, ...
 ```
 

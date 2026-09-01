@@ -43,7 +43,7 @@ abbr -a gss git stash
 abbr -a gst git status
 abbr -a ghn gh api -X PUT notifications --silent
 abbr -a h history
-abbr -a hs history --search
+abbr -a hs history search
 abbr -a k kubectl
 abbr -a kk kubectl config use-context
 abbr -a l ls -l
@@ -66,7 +66,7 @@ abbr -a ta tmux attach
 abbr -a tg cd \~ \&\& tmux
 abbr -a tl tmux list-sessions
 abbr -a ts tmux new-session -s
-abbr -a up nix flake update --flake \$DOTFILES \&\& sudo nixos-rebuild switch --flake \$DOTFILES\#nixos \&\& rustup update \&\& nix develop \$DOTFILES --command true \&\& nix-collect-garbage --delete-older-than 7d
+abbr -a up nix flake update --flake \$DOTFILES \&\& sudo nixos-rebuild switch --flake \$DOTFILES\#nixos \&\& rustup update \&\& nix develop \$DOTFILES --command true \&\& sudo nix-collect-garbage --delete-older-than 7d
 abbr -a v nvim
 abbr -a vr ranger
 abbr -a vv nvim -u NONE

@@ -13,7 +13,7 @@ return {
         cpp = { "clang-format" },
         css = { "prettier" },
         fish = { "fish_indent" },
-        go = { "gofumpt" },
+        go = { "goimports", "gofumpt" },
         html = { "prettier" },
         javascript = { "prettier" },
         json = { "prettier" },

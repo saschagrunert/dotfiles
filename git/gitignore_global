@@ -9,7 +9,9 @@ tags
 .env
 .env.local
 .direnv/
-result
+result*
+target/
+__debug_bin*
 node_modules/
 .cache/
 *.o

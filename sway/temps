@@ -4,7 +4,7 @@ set -euo pipefail
 find_temp() {
 	local name=$1
 	for f in /sys/class/hwmon/hwmon*/name; do
-		if [ "$(cat "$f")" = "$name" ]; then
+		if [ "$(cat "$f" 2>/dev/null)" = "$name" ]; then
 			local dir
 			dir=$(dirname "$f")
 			local val
@@ -18,7 +18,7 @@ find_temp() {
 
 find_gpu_temp() {
 	for f in /sys/class/hwmon/hwmon*/name; do
-		if [ "$(cat "$f")" = "amdgpu" ]; then
+		if [ "$(cat "$f" 2>/dev/null)" = "amdgpu" ]; then
 			local dir
 			dir=$(dirname "$f")
 			local device

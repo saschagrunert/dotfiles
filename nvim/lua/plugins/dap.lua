@@ -24,6 +24,21 @@ return {
       require("dap-go").setup()
       require("dap-python").setup("python3")
 
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        executable = {
+          command = "codelldb",
+          args = { "--port", "${port}" },
+        },
+      }
+      local codelldb_config = {
+        { name = "Launch", type = "codelldb", request = "launch", program = function() return vim.fn.input("Path: ", vim.fn.getcwd() .. "/", "file") end, cwd = "${workspaceFolder}" },
+      }
+      dap.configurations.c = codelldb_config
+      dap.configurations.cpp = codelldb_config
+      dap.configurations.rust = codelldb_config
+
       dap.listeners.before.attach.dapui_config = function() dapui.open() end
       dap.listeners.before.launch.dapui_config = function() dapui.open() end
       dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end

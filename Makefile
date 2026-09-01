@@ -67,20 +67,21 @@ check-nix: ## Run nix flake checks.
 	nix flake check
 
 lint: ## Check formatting and lint all Nix files.
-	nix run nixpkgs\#nixfmt -- --check $$(find . -name '*.nix')
-	nix run nixpkgs\#statix -- check .
-	nix run nixpkgs\#deadnix -- --fail $$(find . -name '*.nix')
+	nixfmt --check $$(find . -name '*.nix')
+	statix check .
+	deadnix --fail $$(find . -name '*.nix')
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
-	nix run nixpkgs\#nixfmt -- $$(find . -name '*.nix')
-	nix run nixpkgs\#statix -- fix .
-	nix run nixpkgs\#deadnix -- -e $$(find . -name '*.nix')
+	nixfmt $$(find . -name '*.nix')
+	statix fix .
+	deadnix -e $$(find . -name '*.nix')
 
 test: lint check-nix ## Run checks locally.
 	prettier --check .
 	typos
 	shfmt -d .
 	shellcheck $$(find . -name '*.sh') sway/temps sway/workspace-scroll
+	find tmux/scripts -type f -not -name '*.sh' | xargs shellcheck
 	fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
 
 ##@ Update targets:

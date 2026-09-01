@@ -20,7 +20,6 @@ group-by=app-name
 
 [urgency=low]
 border-color=#6272a4
-text-color=#6272a4
 
 [urgency=critical]
 border-color=#ff5555

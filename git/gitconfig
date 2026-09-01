@@ -26,6 +26,7 @@
     excludesfile = ~/.gitignore_global
 [column]
     ui = auto
+    branch = never
 [commit]
     verbose = true
 [init]
@@ -36,6 +37,7 @@
     rebase = true
 [fetch]
     prune = true
+    pruneTags = true
     writeCommitGraph = true
     parallel = 0
 [maintenance]
