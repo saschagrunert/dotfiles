@@ -11,7 +11,7 @@
     "cpu",
     "pulseaudio",
     "pulseaudio#source",
-    "custom/idle",
+    "idle_inhibitor",
     "custom/dnd",
     "clock#time",
     "clock#date",
@@ -78,10 +78,13 @@
   },
   "pulseaudio#source": {
     "format": "{format_source}",
-    "format-source": "<span color='#50fa7b' size='large'>󰍬</span> {volume}%",
+    "format-muted": "{format_source}",
+    "format-source": "<span color='#ff79c6' size='large'>󰍬</span> {volume}%",
     "format-source-muted": "<span color='#6272a4' size='large'>󰍭</span>",
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-    "tooltip-format": "Microphone: {source_volume}%",
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
   },
   "custom/dnd": {
     "exec": "~/.config/sway/dnd",
@@ -90,12 +93,14 @@
     "on-click": "makoctl mode -t do-not-disturb",
     "on-click-right": "makoctl mode -t do-not-disturb",
   },
-  "custom/idle": {
-    "exec": "~/.config/sway/idle",
-    "return-type": "json",
-    "interval": 5,
-    "on-click": "~/.config/sway/idle toggle",
-    "on-click-right": "~/.config/sway/idle toggle",
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "<span color='#f1fa8c' size='large'>󰅶</span>",
+      "deactivated": "<span color='#6272a4' size='large'>󰾪</span>",
+    },
+    "tooltip-format-activated": "Idle inhibitor: on",
+    "tooltip-format-deactivated": "Idle inhibitor: off",
   },
   "clock#time": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S}",

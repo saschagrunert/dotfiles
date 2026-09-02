@@ -1,4 +1,8 @@
-{ pkgs, username, ... }:
+{
+  config,
+  username,
+  ...
+}:
 {
   services = {
     blueman.enable = true;
@@ -17,7 +21,7 @@
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.sway}/bin/sway";
+          command = "${config.programs.sway.package}/bin/sway";
           user = username;
         };
       };

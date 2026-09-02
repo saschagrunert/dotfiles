@@ -43,7 +43,7 @@ window#waybar {
 #memory,
 #cpu,
 #pulseaudio,
-#custom-idle,
+#idle_inhibitor,
 #custom-dnd,
 #clock,
 #tray {
@@ -61,7 +61,7 @@ window#waybar {
 #memory:hover,
 #cpu:hover,
 #pulseaudio:hover,
-#custom-idle:hover,
+#idle_inhibitor:hover,
 #custom-dnd:hover,
 #clock:hover {
   background-color: rgba(189, 147, 249, 0.15);
@@ -83,7 +83,7 @@ window#waybar {
   font-weight: bold;
 }
 
-#pulseaudio.muted {
+#pulseaudio.muted:not(.source) {
   color: #6272a4;
   font-weight: bold;
 }
@@ -95,7 +95,7 @@ window#waybar {
   min-width: 400px;
 }
 
-#custom-idle.on,
+#idle_inhibitor.activated,
 #custom-dnd.on {
   background-color: rgba(241, 250, 140, 0.15);
 }
