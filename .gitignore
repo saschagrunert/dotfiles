@@ -9,3 +9,4 @@ ranger/history
 ranger/tagged
 result
 *.hm-backup
+__pycache__/

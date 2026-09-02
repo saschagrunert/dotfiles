@@ -21,14 +21,18 @@ cpu_watts() {
 	now_ns=$(date +%s%N)
 
 	if [ -f "$cache" ]; then
-		local prev_uj prev_ns
-		read -r prev_uj prev_ns <"$cache" || true
+		local prev_uj prev_ns prev_watts
+		read -r prev_uj prev_ns prev_watts <"$cache" || true
 		if [ -z "${prev_uj:-}" ] || [ -z "${prev_ns:-}" ]; then
 			echo "N/A"
-			echo "$now_uj $now_ns" >"$cache"
+			echo "$now_uj $now_ns N/A" >"$cache"
 			return
 		fi
 		local d_uj=$((now_uj - prev_uj))
+		if [ "$d_uj" -eq 0 ]; then
+			echo "${prev_watts:-N/A}"
+			return
+		fi
 		if [ "$d_uj" -lt 0 ]; then
 			local max
 			max=$(cat "$rapl/max_energy_range_uj")
@@ -36,15 +40,16 @@ cpu_watts() {
 		fi
 		local d_ns=$((now_ns - prev_ns))
 		if [ "$d_ns" -gt 0 ]; then
-			echo $(((d_uj * 1000 + d_ns / 2) / d_ns))
+			local watts=$(((d_uj * 1000 + d_ns / 2) / d_ns))
+			echo "$watts"
+			echo "$now_uj $now_ns $watts" >"$cache"
 		else
-			echo "N/A"
+			echo "${prev_watts:-N/A}"
 		fi
 	else
 		echo "N/A"
+		echo "$now_uj $now_ns N/A" >"$cache"
 	fi
-
-	echo "$now_uj $now_ns" >"$cache"
 }
 
 gpu_watts() {
