@@ -176,8 +176,7 @@ To validate the configuration locally:
 > make lint     # nixfmt, statix, deadnix
 ```
 
-Or use the `up` abbreviation which also updates Rust, collects garbage
-and pre-caches the dev shell.
+Or use the `up` function which also updates Rust and collects garbage.
 
 ## Updating
 

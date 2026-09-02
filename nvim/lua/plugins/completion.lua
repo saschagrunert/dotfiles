@@ -37,6 +37,7 @@ return {
         documentation = { auto_show = true },
       },
       snippets = { preset = "default" },
+      signature = { enabled = true },
     },
   },
 }

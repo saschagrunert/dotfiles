@@ -32,6 +32,16 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      spec = {
+        { "<leader>b", group = "Buffers" },
+        { "<leader>d", group = "Debug" },
+        { "<leader>g", group = "Git" },
+        { "<leader>u", group = "Case" },
+        { "<leader>r", group = "Replace" },
+        { "<leader>c", group = "Code" },
+        { "<leader>t", group = "Tabs" },
+      },
+    },
   },
 }

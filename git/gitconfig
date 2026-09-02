@@ -33,12 +33,12 @@
     defaultBranch = main
 [transfer]
     fsckObjects = true
+    credentialsInUrl = warn
 [pull]
     rebase = true
 [fetch]
     prune = true
     pruneTags = true
-    writeCommitGraph = true
     parallel = 0
 [maintenance]
     strategy = incremental
@@ -60,6 +60,7 @@
     fetchJobs = 0
 [tag]
     sort = version:refname
+    gpgSign = true
 [stash]
     showPatch = true
 [rerere]

@@ -4,7 +4,13 @@ return {
     event = "BufWritePre",
     cmd = "ConformInfo",
     keys = {
-      { "<leader>cf", function() require("conform").format({ async = true }) end, desc = "Format buffer" },
+      {
+        "<leader>cf",
+        function()
+          require("conform").format({ async = true })
+        end,
+        desc = "Format buffer",
+      },
     },
     opts = {
       default_format_opts = {
@@ -12,6 +18,7 @@ return {
       },
       formatters_by_ft = {
         bash = { "shfmt" },
+        lua = { "stylua" },
         c = { "clang-format" },
         cpp = { "clang-format" },
         css = { "prettier" },

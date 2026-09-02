@@ -25,7 +25,7 @@ test -d ~/.cargo/bin && fish_add_path --path --move ~/.cargo/bin
 test -d ~/.local/bin && fish_add_path --path --move ~/.local/bin
 test -d ~/.npm-global/bin && fish_add_path --path --move ~/.npm-global/bin
 
-source ~/.config/fish/aliases.fish
+source (status dirname)/aliases.fish
 
 function fish_prompt
     set -l last_status $status
@@ -76,6 +76,21 @@ set -g fish_cursor_default block
 set -g fish_cursor_insert block
 
 # Source optional functions only if they exist
-zoxide init fish --cmd j | source
-direnv hook fish | source
+set -l _zoxide_cache ~/.cache/fish/zoxide.fish
+if command -q zoxide
+    if not test -f $_zoxide_cache; or test (command -v zoxide) -nt $_zoxide_cache
+        mkdir -p ~/.cache/fish
+        zoxide init fish --cmd j >$_zoxide_cache
+    end
+    source $_zoxide_cache
+end
+
+set -l _direnv_cache ~/.cache/fish/direnv.fish
+if command -q direnv
+    if not test -f $_direnv_cache; or test (command -v direnv) -nt $_direnv_cache
+        mkdir -p ~/.cache/fish
+        direnv hook fish >$_direnv_cache
+    end
+    source $_direnv_cache
+end
 test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish

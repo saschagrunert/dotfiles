@@ -9,7 +9,7 @@ border-color=#bd93f9
 background-color=#282a36e6
 text-color=#f8f8f2
 default-timeout=5000
-icon-path=/run/current-system/sw/share/icons/hicolor
+icon-path=/etc/profiles/per-user/sascha/share/icons/Papirus-Dark:/run/current-system/sw/share/icons/hicolor
 max-icon-size=48
 layer=overlay
 anchor=top-right
@@ -17,9 +17,11 @@ format=<b>%s</b>\n%b
 max-visible=5
 sort=-time
 group-by=app-name
+progress-color=over #44475a
 
 [urgency=low]
 border-color=#6272a4
+default-timeout=3000
 
 [urgency=critical]
 border-color=#ff5555

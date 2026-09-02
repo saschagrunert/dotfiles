@@ -6,7 +6,7 @@ lan_ip=""
 tmp_file="${XDG_RUNTIME_DIR:-/tmp}/tmux-ip-${UID}.txt"
 
 getLanIP() {
-	mapfile -t all_nics < <(ip addr show | cut -d ' ' -f2 | tr -d : | grep -v '^lo$')
+	mapfile -t all_nics < <(ip addr show | cut -d ' ' -f2 | tr -d : | grep -v '^lo$' | grep .)
 	for nic in "${all_nics[@]}"; do
 		lan_ip="$(ip addr show "${nic}" | grep '\<inet\>' | tr -s ' ' | cut -d ' ' -f3)" || true
 		lan_ip="${lan_ip%/*}"

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+shopt -s nullglob
 
 cpu_watts() {
 	local rapl=""
@@ -30,12 +31,17 @@ cpu_watts() {
 		fi
 		local d_uj=$((now_uj - prev_uj))
 		if [ "$d_uj" -eq 0 ]; then
-			echo "${prev_watts:-N/A}"
+			echo "${prev_watts:-0}"
+			echo "$now_uj $now_ns ${prev_watts:-0}" >"$cache"
 			return
 		fi
 		if [ "$d_uj" -lt 0 ]; then
 			local max
-			max=$(cat "$rapl/max_energy_range_uj")
+			max=$(cat "$rapl/max_energy_range_uj" 2>/dev/null) || {
+				echo "N/A"
+				echo "$now_uj $now_ns N/A" >"$cache"
+				return
+			}
 			d_uj=$((d_uj + max))
 		fi
 		local d_ns=$((now_ns - prev_ns))

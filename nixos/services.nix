@@ -40,7 +40,6 @@
     };
 
     journald = {
-      rateLimitInterval = "30s";
       rateLimitBurst = 3000;
       extraConfig = "SystemMaxUse=500M";
     };

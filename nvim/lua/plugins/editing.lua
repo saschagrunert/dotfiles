@@ -43,7 +43,10 @@ return {
         { "seperat{e,es,ed,ing,ely,ion,ions,or}", "separat{}" },
         { "segument{,s,ed,ation}", "segment{}" },
         { "Tqbf", "The quick brown fox jumps over the lazy dog." },
-        { "Lipsum", "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua." },
+        {
+          "Lipsum",
+          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+        },
       }
       for _, pair in ipairs(abbreviations) do
         vim.cmd("Abolish " .. pair[1] .. " " .. pair[2])

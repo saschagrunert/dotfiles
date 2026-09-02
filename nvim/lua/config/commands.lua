@@ -153,7 +153,9 @@ function M.wipeout(bang)
   for b = 1, vim.fn.bufnr("$") do
     if vim.fn.buflisted(b) == 1 and not visible[b] then
       local ok = pcall(vim.cmd, cmd .. " " .. b)
-      if ok then tally = tally + 1 end
+      if ok then
+        tally = tally + 1
+      end
     end
   end
   vim.notify("Deleted " .. tally .. " buffers")
@@ -189,16 +191,23 @@ function M.quickfix_filenames()
 end
 
 -- Commands
-vim.api.nvim_create_user_command("Matches", ":%s///gn", {})
+vim.api.nvim_create_user_command("Matches", function()
+  local ok, _ = pcall(vim.cmd, "%s///gn")
+  if not ok then
+    vim.notify("No search pattern", vim.log.levels.WARN)
+  end
+end, {})
 vim.api.nvim_create_user_command("KillWhitespace", ":%s/\\s\\+$//e", {})
-vim.api.nvim_create_user_command("Hexmode", function() M.toggle_hex() end, { bar = true })
+vim.api.nvim_create_user_command("Hexmode", function()
+  M.toggle_hex()
+end, { bar = true })
 vim.api.nvim_create_user_command("BufOnly", function(opts)
   M.buf_only(opts.bang)
 end, { bang = true })
 vim.api.nvim_create_user_command("Wipeout", function(opts)
   M.wipeout(opts.bang)
 end, { bang = true })
-vim.api.nvim_create_user_command("PrettyJSON", ":%!python -m json.tool", {})
+vim.api.nvim_create_user_command("PrettyJSON", ":%!python3 -m json.tool", {})
 vim.api.nvim_create_user_command("Qargs", function()
   vim.cmd("args " .. M.quickfix_filenames())
 end, { bar = true })

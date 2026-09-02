@@ -5,7 +5,7 @@ mod_symbol="~"
 
 __parse_git_stats() {
 	if [[ -z $(git rev-parse --git-dir 2>/dev/null) ]]; then return; fi
-	modified=$(git ls-files --modified | wc -l)
+	modified=$(git ls-files --modified | wc -l | tr -d ' ')
 	echo "$modified"
 }
 

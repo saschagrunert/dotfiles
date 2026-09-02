@@ -4,8 +4,7 @@ return {
     lazy = false,
     config = function()
       local ok, blink = pcall(require, "blink.cmp")
-      local capabilities = ok and blink.get_lsp_capabilities()
-        or vim.lsp.protocol.make_client_capabilities()
+      local capabilities = ok and blink.get_lsp_capabilities() or vim.lsp.protocol.make_client_capabilities()
 
       vim.lsp.config("*", {
         capabilities = capabilities,
@@ -45,10 +44,29 @@ return {
         },
       })
 
+      vim.lsp.config("yamlls", {
+        settings = {
+          yaml = {
+            schemas = {
+              kubernetes = { "k8s/**/*.yaml", "manifests/**/*.yaml", "deploy/**/*.yaml" },
+            },
+            schemaStore = { enable = true },
+          },
+        },
+      })
+
       vim.lsp.enable({
-        "lua_ls", "gopls", "rust_analyzer", "clangd", "pyright",
-        "vtsls", "nil_ls", "bashls",
-        "yamlls", "jsonls", "taplo",
+        "lua_ls",
+        "gopls",
+        "rust_analyzer",
+        "clangd",
+        "pyright",
+        "vtsls",
+        "nil_ls",
+        "bashls",
+        "yamlls",
+        "jsonls",
+        "taplo",
       })
 
       local lsp_group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true })
@@ -59,14 +77,17 @@ return {
           local map = function(mode, lhs, rhs, desc)
             vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
           end
-          map("n", "gd", vim.lsp.buf.definition, "Go to definition")
           map("n", "gD", vim.lsp.buf.type_definition, "Type definition")
           map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
-          map("n", "<leader>ih", function() vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr })) end, "Toggle inlay hints")
+          map("n", "<leader>ih", function()
+            vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr }))
+          end, "Toggle inlay hints")
           map("n", "gI", vim.lsp.buf.implementation, "Go to implementation")
-          map("n", "gr", function() require("telescope.builtin").lsp_references() end, "References")
+          map("n", "gr", function()
+            require("telescope.builtin").lsp_references()
+          end, "References")
         end,
       })
 
@@ -81,6 +102,7 @@ return {
         },
         virtual_text = false,
         float = { border = "rounded" },
+        severity_sort = true,
       })
     end,
   },

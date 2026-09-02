@@ -7,8 +7,10 @@ function grm
     echo "Delete remote branches: $argv? [y/N]"
     read -l confirm
     test "$confirm" = y || test "$confirm" = Y || return 1
+    set -l failed 0
     for branch in $argv
-        git push origin :$branch
+        git push origin :$branch; or set failed 1
     end
     gpl
+    return $failed
 end

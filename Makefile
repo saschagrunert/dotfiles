@@ -17,7 +17,7 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix test clean help
+.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix markdown-lint test clean help
 
 ##@ Build targets:
 
@@ -42,7 +42,7 @@ gitconfig-user: ## Generate the user-specific gitconfig.
 ##@ Validation targets:
 
 check: ## Check symlinks and required commands.
-	@fail=0; \
+	fail=0; \
 	echo "Checking symlinks..."; \
 	for f in $$(find ~ -maxdepth 3 -type l 2>/dev/null | sort); do \
 		target=$$(readlink "$$f"); \
@@ -79,14 +79,17 @@ lint-fix: ## Fix formatting and lint issues in all Nix files.
 	nix shell nixpkgs\#statix -c statix fix .
 	nix shell nixpkgs\#deadnix -c deadnix -e $(NIX_FILES)
 
-test: lint check-nix ## Run checks locally.
+markdown-lint: ## Lint markdown files.
+	nix shell nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 README.md
+
+test: lint check-nix markdown-lint ## Run checks locally.
 	npx prettier@3.5.3 --check .
 	nix shell nixpkgs\#typos -c typos
 	nix shell nixpkgs\#shfmt -c shfmt -d .
 	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/power sway/temps sway/workspace-scroll
-	nix shell nixpkgs\#shellcheck -c sh -c 'find tmux/scripts -type f -not -name "*.sh" | xargs shellcheck'
-	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
-	nix shell nixpkgs\#fish -c fish_indent --check $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
+	nix shell nixpkgs\#shellcheck -c sh -c 'find tmux/scripts -type f -not -name "*.sh" -print0 | xargs -0 --no-run-if-empty shellcheck'
+	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
+	nix shell nixpkgs\#fish -c fish_indent --check $$(find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
 
 ##@ Update targets:
 
@@ -118,7 +121,7 @@ clean: ## Remove generated configuration files.
 ##@ Help:
 
 help: ## Display this help.
-	@awk \
+	awk \
 		-v "col=$(COLOR)" -v "nocol=$(NOCOLOR)" \
 		' \
 			BEGIN { \

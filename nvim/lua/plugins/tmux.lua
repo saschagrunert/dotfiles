@@ -13,9 +13,10 @@ return {
   },
   {
     "edkolev/tmuxline.vim",
-    event = "VimEnter",
-    cmd = { "Tmuxline", "TmuxlineSnapshot" },
-    cond = function() return vim.env.TMUX ~= nil end,
+    event = "VeryLazy",
+    cond = function()
+      return vim.env.TMUX ~= nil
+    end,
     init = function()
       local s = "~/.tmux/scripts"
       vim.g.tmuxline_preset = {
@@ -23,7 +24,19 @@ return {
         b = "#F",
         c = {
           "#(" .. s .. "/pwd)",
-          "#(" .. s .. "/branch)#(" .. s .. "/modified)#(" .. s .. "/staged)#(" .. s .. "/stashed)#(" .. s .. "/compare) #(" .. s .. "/rainbarf)#[fg=#44475a,bg=#44475a]",
+          "#("
+            .. s
+            .. "/branch)#("
+            .. s
+            .. "/modified)#("
+            .. s
+            .. "/staged)#("
+            .. s
+            .. "/stashed)#("
+            .. s
+            .. "/compare) #("
+            .. s
+            .. "/rainbarf)#[fg=#44475a,bg=#44475a]",
         },
         win = { "#I", "#W" },
         cwin = { "#I", "#W" },

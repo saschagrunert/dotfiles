@@ -4,13 +4,13 @@ TERM = "alacritty"
 [colors]
 
 [colors.bright]
-black = "#44475a"
+black = "#6272a4"
 blue = "#d6acff"
 cyan = "#a4ffff"
 green = "#69ff94"
 magenta = "#ff92df"
 red = "#ff6e6e"
-white = "#e6e6e6"
+white = "#ffffff"
 yellow = "#ffffa5"
 
 [colors.normal]
@@ -35,6 +35,10 @@ text = "#282a36"
 background = "#44475a"
 text = "#f8f8f2"
 
+[colors.footer_bar]
+foreground = "#282a36"
+background = "#f8f8f2"
+
 [cursor.style]
 shape = "Block"
 blinking = "Off"
@@ -55,6 +59,15 @@ history = 50000
 [selection]
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[[hints.enabled]]
+command = "xdg-open"
+hyperlinks = true
+post_processing = true
+persist = false
+mouse.enabled = true
+binding = { key = "U", mods = "Control|Shift" }
+regex = "(mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh://|ftp://)[^\u0000-\u001f<>\"\\s{-}\\^`]+"
 
 [window]
 decorations = "none"

@@ -4,7 +4,5 @@ set -euo pipefail
 rainbarf \
 	--rgb \
 	--width=30 \
-	--battery \
-	--remaining \
 	--bright \
 	--skip 1

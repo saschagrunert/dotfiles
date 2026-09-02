@@ -4,6 +4,7 @@ set print pretty
 
 set history filename ~/.gdb_history
 set history save
+set history size unlimited
 set auto-load safe-path ~/.gdbinit.d:~/.dotfiles/gdb
 
 python

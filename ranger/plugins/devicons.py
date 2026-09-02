@@ -130,6 +130,19 @@ file_node_extensions = {
     'xz'       : '',
     'yml'      : '',
     'zip'      : '',
+    'nix'      : '',
+    'toml'     : '',
+    'proto'    : '',
+    'mod'      : '',
+    'sum'      : '',
+    'dockerfile': '',
+    'containerfile': '',
+    'lock'     : '',
+    'tf'       : '',
+    'zig'      : '',
+    'vue'      : '',
+    'svelte'   : '',
+    'tsx'      : '',
 }
 
 dir_node_exact_matches = {

@@ -14,9 +14,11 @@ autocmd("CursorHold", {
   group = augroup("DiagnosticFloat", { clear = true }),
   callback = function()
     local buf = vim.api.nvim_get_current_buf()
-    if vim.bo[buf].buftype ~= "" then return end
+    if vim.bo[buf].buftype ~= "" then
+      return
+    end
     if #vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }) > 0 then
-      vim.diagnostic.open_float({ focusable = false })
+      vim.diagnostic.open_float({ focusable = false, border = "rounded" })
     end
   end,
 })
@@ -25,6 +27,10 @@ autocmd("CursorHold", {
 autocmd("BufReadPost", {
   group = augroup("RestoreCursor", { clear = true }),
   callback = function(args)
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    if name:match("COMMIT_EDITMSG$") or name:match("git%-rebase%-todo$") then
+      return
+    end
     local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
     local line_count = vim.api.nvim_buf_line_count(args.buf)
     if mark[1] > 0 and mark[1] <= line_count then
@@ -36,7 +42,19 @@ autocmd("BufReadPost", {
 -- Filetype-specific indentation
 autocmd("FileType", {
   group = augroup("FiletypeIndent", { clear = true }),
-  pattern = { "css", "html", "javascript", "javascriptreact", "json", "lua", "nix", "typescript", "typescriptreact", "yaml" },
+  pattern = {
+    "css",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "lua",
+    "nix",
+    "toml",
+    "typescript",
+    "typescriptreact",
+    "yaml",
+  },
   callback = function()
     vim.opt_local.softtabstop = 2
     vim.opt_local.tabstop = 2
@@ -88,22 +106,29 @@ autocmd({ "BufWritePost", "BufReadPost" }, {
   group = augroup("Lint", { clear = true }),
   callback = function()
     local ok, lint = pcall(require, "lint")
-    if ok then lint.try_lint() end
+    if ok then
+      lint.try_lint()
+    end
   end,
 })
 
 -- Run commands per filetype
 local ft_runner_group = augroup("FiletypeRunners", { clear = true })
 local ft_runners = {
-  bash = "bash", javascript = "node",
-  python = "python", sh = "sh",
+  bash = "bash",
+  javascript = "node",
+  python = "python",
+  sh = "sh",
 }
 for ft, cmd in pairs(ft_runners) do
   autocmd("FileType", {
     group = ft_runner_group,
     pattern = ft,
     callback = function()
-      vim.keymap.set("n", "<leader>R", "<cmd>write !" .. cmd .. "<cr>", { buffer = 0, silent = true })
+      vim.keymap.set("n", "<leader>R", function()
+        vim.cmd("write")
+        vim.cmd("!" .. cmd .. " " .. vim.fn.shellescape(vim.fn.expand("%")))
+      end, { buffer = 0, silent = true })
     end,
   })
 end
@@ -111,6 +136,11 @@ autocmd("FileType", {
   group = ft_runner_group,
   pattern = "c",
   callback = function()
-    vim.keymap.set("n", "<leader>R", "<cmd>write | !gcc -o %:r -Wall -std=c99 % && ./%:r<cr>", { buffer = 0, silent = true })
+    vim.keymap.set("n", "<leader>R", function()
+      local file = vim.fn.shellescape(vim.fn.expand("%"))
+      local base = vim.fn.shellescape(vim.fn.expand("%:r"))
+      vim.cmd("write")
+      vim.cmd("!gcc -o " .. base .. " -Wall -std=c99 " .. file .. " && ./" .. base)
+    end, { buffer = 0, silent = true })
   end,
 })

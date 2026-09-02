@@ -36,9 +36,6 @@ opt.more = false
 opt.updatetime = 250
 opt.timeoutlen = 500
 opt.ttimeoutlen = 5
--- Folding
-opt.foldnestmax = 20
-
 -- Persistent undo
 local backupdir = vim.fn.stdpath("data") .. "/backups"
 local undodir = vim.fn.stdpath("data") .. "/undo"
@@ -50,9 +47,7 @@ opt.undodir = undodir
 opt.backupdir = backupdir
 opt.directory = swapdir
 opt.undofile = true
-opt.swapfile = true
 opt.backup = true
-opt.writebackup = true
 opt.sessionoptions:remove({ "blank", "help" })
 
 -- Display
@@ -78,6 +73,3 @@ opt.maxmempattern = 10000
 
 -- Sign column
 opt.signcolumn = "yes"
-
--- True color
-opt.termguicolors = true
