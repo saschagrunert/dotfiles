@@ -7,6 +7,7 @@
 let
   link = config.lib.file.mkOutOfStoreSymlink;
   dotfile = path: link "${dotfilesPath}/${path}";
+  idleTimeout = 600;
 in
 {
   home = {
@@ -47,6 +48,9 @@ in
         ExecStart = "${pkgs.mako}/bin/mako";
         Restart = "on-failure";
         RestartSec = 2;
+        NoNewPrivileges = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };
@@ -61,12 +65,15 @@ in
         ExecStart = toString (
           pkgs.writeShellScript "swayidle-start" ''
             ${pkgs.swayidle}/bin/swayidle -w \
-              timeout 600 'swaymsg "output * dpms off"' \
+              timeout ${toString idleTimeout} 'swaymsg "output * dpms off"' \
               resume 'swaymsg "output * dpms on"'
           ''
         );
         Restart = "on-failure";
         RestartSec = 2;
+        NoNewPrivileges = true;
+        RestrictNamespaces = true;
+        MemoryDenyWriteExecute = true;
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };

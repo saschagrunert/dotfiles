@@ -12,5 +12,11 @@
     };
   };
 
-  services.resolved.enable = true;
+  services.resolved = {
+    enable = true;
+    settings.Resolve = {
+      DNSSEC = "allow-downgrade";
+      DNSOverTLS = "opportunistic";
+    };
+  };
 }

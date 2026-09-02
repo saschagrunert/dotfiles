@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-staged_symbol=" "
+stashed_symbol=" "
 
 __parse_git_stats() {
 	if ! type git >/dev/null 2>&1; then
 		return
 	fi
-	[[ -z $(git stash list 2>/dev/null) ]] && return
+	if [[ -z $(git stash list 2>/dev/null) ]]; then return; fi
 	stashed=$(git stash list | wc -l)
 	echo "$stashed"
 }
@@ -20,5 +21,5 @@ if [ -n "${git_stats=$(__parse_git_stats)}" ]; then
 fi
 if [[ -n "$stats" && $stats -gt 0 ]]; then
 	stats="${stats#"${stats%%[![:space:]]*}"}"
-	echo "${staged_symbol}${stats} "
+	echo "${stashed_symbol}${stats} "
 fi

@@ -8,7 +8,7 @@ return {
     },
     keys = {
       { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
-      { "<S-TAB>", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
+      { "<S-Tab>", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
       { "cpc", "<cmd>Telescope tags<cr>", desc = "Tags" },
       { "cpi", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer lines" },
       { "cpk", "<cmd>Telescope marks<cr>", desc = "Marks" },

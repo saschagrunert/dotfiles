@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
-  users.users.sascha = {
+  users.users.${username} = {
     isNormalUser = true;
     description = "Sascha Grunert";
     extraGroups = [

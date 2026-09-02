@@ -9,12 +9,15 @@ GIT_USER := Sascha Grunert
 EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
+# Nix files
+NIX_FILES := $(shell find . -name '*.nix')
+
 # Colors
 COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix test help
+.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix test clean help
 
 ##@ Build targets:
 
@@ -67,22 +70,23 @@ check-nix: ## Run nix flake checks.
 	nix flake check
 
 lint: ## Check formatting and lint all Nix files.
-	nix shell nixpkgs\#nixfmt -c nixfmt --check $$(find . -name '*.nix')
+	nix shell nixpkgs\#nixfmt -c nixfmt --check $(NIX_FILES)
 	nix shell nixpkgs\#statix -c statix check .
-	nix shell nixpkgs\#deadnix -c deadnix --fail $$(find . -name '*.nix')
+	nix shell nixpkgs\#deadnix -c deadnix --fail $(NIX_FILES)
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
-	nix shell nixpkgs\#nixfmt -c nixfmt $$(find . -name '*.nix')
+	nix shell nixpkgs\#nixfmt -c nixfmt $(NIX_FILES)
 	nix shell nixpkgs\#statix -c statix fix .
-	nix shell nixpkgs\#deadnix -c deadnix -e $$(find . -name '*.nix')
+	nix shell nixpkgs\#deadnix -c deadnix -e $(NIX_FILES)
 
 test: lint check-nix ## Run checks locally.
-	npx prettier@3 --check .
+	npx prettier@3.5.3 --check .
 	nix shell nixpkgs\#typos -c typos
 	nix shell nixpkgs\#shfmt -c shfmt -d .
-	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh') sway/dnd sway/idle sway/power sway/temps sway/workspace-scroll
+	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/idle sway/power sway/temps sway/workspace-scroll
 	nix shell nixpkgs\#shellcheck -c sh -c 'find tmux/scripts -type f -not -name "*.sh" | xargs shellcheck'
-	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish')
+	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
+	nix shell nixpkgs\#fish -c fish_indent --check $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
 
 ##@ Update targets:
 
@@ -104,6 +108,11 @@ upgrade: update ## Update and upgrade external dependencies.
 		fish/functions/fzf_key_bindings.fish \
 		bat/themes/Dracula.tmTheme
 	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
+
+##@ Cleanup targets:
+
+clean: ## Remove generated configuration files.
+	rm -f $(GITCONFIG_USER_PATH)
 
 ##@ Help:
 

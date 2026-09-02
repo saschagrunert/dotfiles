@@ -1,4 +1,9 @@
-{ nixpkgs, modulesPath, ... }:
+{
+  nixpkgs,
+  modulesPath,
+  username,
+  ...
+}:
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -24,10 +29,10 @@
       max-jobs = "auto";
       cores = 0;
       keep-outputs = true;
-      keep-derivations = true;
+      keep-derivations = false;
       trusted-users = [
         "root"
-        "sascha"
+        username
       ];
     };
 
@@ -38,6 +43,7 @@
 
     gc = {
       automatic = true;
+      persistent = true;
       dates = "weekly";
       options = "--delete-older-than 14d";
     };

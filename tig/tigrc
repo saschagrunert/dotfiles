@@ -45,8 +45,6 @@ set split-view-width    = 50%        # Width of right-most view for vertical spl
 set editor-line-number  = yes        # Automatically pass line number to editor?
 set history-size        = 500        # Size of persistent history, 0 to disable
 set mouse               = no         # Enable mouse support?
-set mouse-scroll        = 3          # Number of lines to scroll via the mouse
-set mouse-wheel-cursor  = no         # Prefer moving the cursor to scrolling the view?
 
 # User-defined commands
 bind main   C   ?git cherry-pick %(commit)
@@ -211,7 +209,7 @@ color "    Acked-by"        yellow  default
 color "    Tested-by"       yellow  default
 color "    Reviewed-by"     yellow  default
 color default               default default normal
-color cursor                white   black   bold
+color cursor                white   238     bold
 color status                green   default
 color delimiter             magenta default
 color date                  blue    default
@@ -236,9 +234,9 @@ color main-tracked          yellow  default bold
 color main-ref              cyan    default
 color main-head             cyan    default bold
 color stat-none             default default
-color stat-staged           magenta default
-color stat-unstaged         magenta default
-color stat-untracked        magenta default
+color stat-staged           green   default
+color stat-unstaged         yellow  default
+color stat-untracked        cyan    default
 color help-group            blue    default
 color help-action           yellow  default
 color diff-stat             blue    default

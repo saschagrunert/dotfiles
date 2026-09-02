@@ -41,6 +41,8 @@ nvme=$(find_temp nvme)
 class=""
 if [ "$cpu" -ge 85 ] || [ "$gpu" -ge 90 ] || [ "$nvme" -ge 70 ]; then
 	class="critical"
+elif [ "$cpu" -ge 75 ] || [ "$gpu" -ge 80 ] || [ "$nvme" -ge 60 ]; then
+	class="warning"
 fi
 
 text="<span color='#f1fa8c' size='large'>󰻠</span> ${cpu}°C"

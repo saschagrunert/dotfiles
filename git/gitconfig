@@ -19,11 +19,11 @@
     wsErrorHighlight = all
 [difftool]
     prompt = false
-[http]
-    postBuffer = 524288000
 [core]
     editor = nvim
     excludesfile = ~/.gitignore_global
+[help]
+    autoCorrect = prompt
 [column]
     ui = auto
     branch = never
@@ -63,7 +63,7 @@
 [stash]
     showPatch = true
 [rerere]
-    enabled = 1
+    enabled = true
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f

@@ -3,6 +3,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -35,7 +36,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: npx prettier@3 --check .
+      - run: npx prettier@3.5.3 --check .
 
   typos:
     runs-on: ubuntu-latest
@@ -76,4 +77,5 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
       - uses: DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d # v14
-      - run: nix shell nixpkgs#fish -c bash -c 'find fish -name "*.fish" -exec fish --no-execute {} +'
+      - run: nix shell nixpkgs#fish -c bash -c 'find fish -name "*.fish" ! -name "fzf_key_bindings.fish" ! -name "kubectl.fish" -exec fish --no-execute {} +'
+      - run: nix shell nixpkgs#fish -c bash -c 'find fish -name "*.fish" ! -name "fzf_key_bindings.fish" ! -name "kubectl.fish" -exec fish_indent --check {} +'

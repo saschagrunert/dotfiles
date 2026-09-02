@@ -16,6 +16,8 @@ return {
       { "<leader>dr", function() require("dap").repl.open() end, desc = "REPL" },
       { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
       { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+      { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Conditional breakpoint" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Run last" },
     },
     config = function()
       local dap = require("dap")
@@ -50,8 +52,8 @@ return {
 
       dap.listeners.before.attach.dapui_config = function() dapui.open() end
       dap.listeners.before.launch.dapui_config = function() dapui.open() end
-      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
-      dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
+      dap.listeners.after.event_terminated.dapui_config = function() dapui.close() end
+      dap.listeners.after.event_exited.dapui_config = function() dapui.close() end
     end,
   },
 }

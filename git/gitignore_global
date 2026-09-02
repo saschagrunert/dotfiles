@@ -1,7 +1,6 @@
 cscope.*
 tags
-*.swp
-*.swo
+*.sw?
 *.orig
 .DS_Store
 .vscode/
@@ -17,6 +16,11 @@ node_modules/
 *.o
 *.a
 *.so
-*.pyc
+*.py[cod]
 __pycache__/
 .ruff_cache/
+vendor/
+coverage/
+dist/
+*.log
+*.out

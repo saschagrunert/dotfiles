@@ -1,7 +1,7 @@
 from ranger.gui.colorscheme import ColorScheme
 from ranger.gui.color import *
 
-BACKGROUND = 17
+BACKGROUND = 236
 LINE = 59
 FOREGROUND = 231
 COMMENT = 61

@@ -35,46 +35,41 @@ function fish_prompt
     set -l blue (set_color 8be9fd)
     set -l yellow (set_color f1fa8c)
 
-    set -l iprompt "> "
-    set -l nprompt "> "
-    set -l vprompt "> "
+    set -l prompt "> "
     set -l prompt_color
 
-    if functions -q fish_vi_key_bindings
-        switch $fish_bind_mode
-            case default
-                set prompt_color $blue $nprompt
-            case visual
-                set prompt_color $yellow $vprompt
-            case '*'
-                test $last_status = 0 && set prompt_color $purple $iprompt || set prompt_color $red $iprompt
-        end
-    else
-        test $last_status = 0 && set prompt_color $purple $iprompt || set prompt_color $red $iprompt
+    switch $fish_bind_mode
+        case default
+            set prompt_color $blue $prompt
+        case visual
+            set prompt_color $yellow $prompt
+        case '*'
+            test $last_status = 0 && set prompt_color $purple $prompt || set prompt_color $red $prompt
     end
 
     echo -n -s $prompt_color $normal
 end
 
-function fish_greeting; end
-function fish_title; end
-function fish_mode_prompt; end
+function fish_greeting
+end
+function fish_title
+end
+function fish_mode_prompt
+end
 
 if not set -q __fish_theme_configured
-    fish_config theme choose "Dracula"
+    fish_config theme choose Dracula
     set -U __fish_theme_configured 1
 end
 
-if functions -q fish_vi_key_bindings
-    function fish_user_key_bindings
-        fish_vi_key_bindings
-        bind -M insert \ca beginning-of-line
-        bind -M insert \ce end-of-line
-        bind -M insert \cp up-or-search
-        bind -M insert \cn down-or-search
-        fzf_key_bindings
-        bind -M insert \cg fzf-cd-widget
-    end
+function fish_user_key_bindings
+    fish_vi_key_bindings
+    bind -M insert \ca beginning-of-line
+    bind -M insert \ce end-of-line
+    bind -M insert \cp up-or-search
+    bind -M insert \cn down-or-search
+    fzf_key_bindings
+    bind -M insert \cg fzf-cd-widget
 end
 
 set -g fish_cursor_default block

@@ -51,7 +51,9 @@ return {
         "yamlls", "jsonls", "taplo",
       })
 
+      local lsp_group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true })
       vim.api.nvim_create_autocmd("LspAttach", {
+        group = lsp_group,
         callback = function(args)
           local bufnr = args.buf
           local map = function(mode, lhs, rhs, desc)
@@ -63,6 +65,7 @@ return {
           map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
           map("n", "<leader>ih", function() vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr })) end, "Toggle inlay hints")
+          map("n", "gI", vim.lsp.buf.implementation, "Go to implementation")
           map("n", "gr", function() require("telescope.builtin").lsp_references() end, "References")
         end,
       })

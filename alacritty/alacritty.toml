@@ -1,6 +1,3 @@
-[general]
-live_config_reload = true
-
 [env]
 TERM = "alacritty"
 
@@ -8,22 +5,22 @@ TERM = "alacritty"
 
 [colors.bright]
 black = "#44475a"
-blue = "#caa9fa"
-cyan = "#9aedfe"
-green = "#5af78e"
-magenta = "#ff92d0"
-red = "#ff6e67"
+blue = "#d6acff"
+cyan = "#a4ffff"
+green = "#69ff94"
+magenta = "#ff92df"
+red = "#ff6e6e"
 white = "#e6e6e6"
-yellow = "#f4f99d"
+yellow = "#ffffa5"
 
 [colors.normal]
-black = "#000000"
+black = "#21222c"
 blue = "#bd93f9"
 cyan = "#8be9fd"
 green = "#50fa7b"
 magenta = "#ff79c6"
 red = "#ff5555"
-white = "#bfbfbf"
+white = "#f8f8f2"
 yellow = "#f1fa8c"
 
 [colors.primary]
@@ -48,14 +45,6 @@ blinking = "Off"
 [font]
 size = 10.0
 
-[font.bold]
-family = "MesloLGSDZ Nerd Font Mono"
-style = "Bold"
-
-[font.italic]
-family = "MesloLGSDZ Nerd Font Mono"
-style = "Italic"
-
 [font.normal]
 family = "MesloLGSDZ Nerd Font Mono"
 style = "Regular"
@@ -64,7 +53,7 @@ style = "Regular"
 hide_when_typing = true
 
 [scrolling]
-history = 10000
+history = 50000
 
 [selection]
 save_to_clipboard = true
@@ -72,7 +61,7 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [window]
 decorations = "none"
-dynamic_padding = false
+dynamic_padding = true
 opacity = 0.9
 
 [window.dimensions]

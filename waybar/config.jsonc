@@ -10,6 +10,7 @@
     "memory",
     "cpu",
     "pulseaudio",
+    "pulseaudio#source",
     "custom/idle",
     "custom/dnd",
     "clock#time",
@@ -74,6 +75,13 @@
     "scroll-step": 5,
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+  },
+  "pulseaudio#source": {
+    "format": "{format_source}",
+    "format-source": "<span color='#50fa7b' size='large'>󰍬</span> {volume}%",
+    "format-source-muted": "<span color='#6272a4' size='large'>󰍭</span>",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "tooltip-format": "Microphone: {source_volume}%",
   },
   "custom/dnd": {
     "exec": "~/.config/sway/dnd",

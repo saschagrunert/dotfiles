@@ -2,19 +2,25 @@
 set -euo pipefail
 
 cpu_watts() {
-	local rapl=/sys/class/powercap/intel-rapl:0/energy_uj
-	if [ ! -r "$rapl" ]; then
+	local rapl=""
+	for p in /sys/class/powercap/intel-rapl:0 /sys/class/powercap/amd_rapl:0; do
+		if [ -r "$p/energy_uj" ]; then
+			rapl="$p"
+			break
+		fi
+	done
+	if [ -z "$rapl" ]; then
 		echo "N/A"
 		return
 	fi
 	local e1 e2
-	e1=$(cat "$rapl")
+	e1=$(cat "$rapl/energy_uj")
 	sleep 1
-	e2=$(cat "$rapl")
+	e2=$(cat "$rapl/energy_uj")
 	local diff=$((e2 - e1))
 	if [ "$diff" -lt 0 ]; then
 		local max
-		max=$(cat /sys/class/powercap/intel-rapl:0/max_energy_range_uj)
+		max=$(cat "$rapl/max_energy_range_uj")
 		diff=$((diff + max))
 	fi
 	echo $(((diff + 500000) / 1000000))

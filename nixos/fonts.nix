@@ -7,6 +7,7 @@
       pkgs.noto-fonts-color-emoji
       pkgs.roboto
       pkgs.roboto-slab
+      pkgs.noto-fonts-cjk-sans
     ];
 
     fontconfig = {

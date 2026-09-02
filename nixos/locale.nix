@@ -5,6 +5,7 @@ _: {
 
   console = {
     font = "Lat2-Terminus16";
+    keyMap = "us";
   };
 
   time.timeZone = "Europe/Berlin";

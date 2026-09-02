@@ -1,16 +1,24 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   services = {
     blueman.enable = true;
 
-    fail2ban.enable = true;
+    fail2ban = {
+      enable = true;
+      jails.sshd.settings = {
+        enabled = true;
+        maxretry = 3;
+        findtime = 600;
+        bantime = 3600;
+      };
+    };
 
     greetd = {
       enable = true;
       settings = {
         default_session = {
           command = "${pkgs.sway}/bin/sway";
-          user = "sascha";
+          user = username;
         };
       };
     };
@@ -44,7 +52,12 @@
       };
     };
 
-    earlyoom.enable = true;
+    earlyoom = {
+      enable = true;
+      freeMemThreshold = 5;
+      freeSwapThreshold = 10;
+      enableNotifications = true;
+    };
     sysstat.enable = true;
 
     ratbagd.enable = true;

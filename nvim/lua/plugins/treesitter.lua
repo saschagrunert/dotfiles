@@ -6,16 +6,17 @@ return {
     config = function()
       require("nvim-treesitter").setup({})
 
+      local ts_group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
+
       vim.api.nvim_create_autocmd("FileType", {
+        group = ts_group,
         callback = function()
           pcall(vim.treesitter.start)
-          if pcall(require, "nvim-treesitter.indent") then
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          end
         end,
       })
 
       vim.api.nvim_create_autocmd("User", {
+        group = ts_group,
         pattern = "TSUpdate",
         once = true,
         callback = function()

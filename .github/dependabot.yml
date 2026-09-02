@@ -4,6 +4,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    assignees:
+      - saschagrunert
     groups:
       github-actions:
         patterns:

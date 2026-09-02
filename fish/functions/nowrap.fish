@@ -1,4 +1,4 @@
 # Cut output to terminal width
 function nowrap
-    cut -c-$COLUMNS
+    string shorten -m $COLUMNS -c ""
 end

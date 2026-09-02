@@ -19,7 +19,8 @@ return {
         vim.api.nvim_set_hl(0, "BufferLineFill", { bg = bg })
       end
       set_fill_bg()
-      vim.api.nvim_create_autocmd("ColorScheme", { callback = set_fill_bg })
+      local bufferline_group = vim.api.nvim_create_augroup("BufferLineFill", { clear = true })
+      vim.api.nvim_create_autocmd("ColorScheme", { group = bufferline_group, callback = set_fill_bg })
     end,
   },
   {

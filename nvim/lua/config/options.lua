@@ -63,7 +63,6 @@ opt.listchars = { tab = "▸ ", trail = "·", extends = "❯", precedes = "❮" 
 opt.scrolloff = 8
 opt.sidescrolloff = 15
 opt.wrap = false
-opt.linebreak = true
 
 -- Popup menu
 opt.pumheight = 15
@@ -79,3 +78,6 @@ opt.maxmempattern = 10000
 
 -- Sign column
 opt.signcolumn = "yes"
+
+-- True color
+opt.termguicolors = true

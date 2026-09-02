@@ -72,29 +72,30 @@ window#waybar {
 #memory.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
+  font-weight: bold;
 }
 
+#custom-temps.warning,
 #cpu.warning,
 #memory.warning {
   color: #ffb86c;
   background-color: rgba(255, 184, 108, 0.15);
+  font-weight: bold;
 }
 
 #pulseaudio.muted {
   color: #6272a4;
+  font-weight: bold;
 }
 
 #window {
-  color: #6272a4;
+  color: #f8f8f2;
   font-style: italic;
   margin-left: 12px;
   min-width: 400px;
 }
 
-#custom-idle.on {
-  background-color: rgba(241, 250, 140, 0.15);
-}
-
+#custom-idle.on,
 #custom-dnd.on {
   background-color: rgba(241, 250, 140, 0.15);
 }

@@ -1,6 +1,6 @@
 # use alt as modifier
 set $mod Mod1
-font "MesloLGSDZ Nerd Font 8"
+font "MesloLGSDZ Nerd Font Mono 8"
 
 # colors
 set $bg         #282a36
@@ -14,7 +14,8 @@ output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
 output HDMI-A-2 resolution 3840x2160@60Hz position 2560,0 scale 1.5
 
 # Wallpaper
-output * bg ~/.dotfiles/wallpaper/blurred.jpg fill
+set $wallpaper ~/.dotfiles/wallpaper/blurred.jpg
+output * bg $wallpaper fill
 
 # Input configuration
 input type:pointer {
@@ -127,9 +128,9 @@ workspace $ws_browser output HDMI-A-1
 workspace $ws_terminal output HDMI-A-2
 
 # take a screenshot
-bindsym $mod+v exec grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
 bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy
-bindsym $mod+Ctrl+v exec grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # move workspace to other output
 bindsym $mod+Ctrl+h move workspace to output left
@@ -147,6 +148,10 @@ bindsym $mod+Shift+b exec makoctl restore
 # floating window settings
 for_window [app_id=".*"] inhibit_idle fullscreen
 for_window [class=".*"] inhibit_idle fullscreen
+for_window [app_id="zoom"] floating enable
+for_window [class="zoom"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_role="dialog"] floating enable
 for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".*blueman.*"] floating enable, fullscreen disable
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen disable

@@ -37,6 +37,9 @@
         "net.bridge.bridge-nf-call-iptables" = 1;
         "net.bridge.bridge-nf-call-ip6tables" = 1;
         "fs.inotify.max_user_watches" = 524288;
+        "fs.inotify.max_user_instances" = 1024;
+        "net.core.default_qdisc" = "fq";
+        "net.ipv4.tcp_congestion_control" = "bbr";
       };
     };
     kernelModules = [
@@ -44,10 +47,12 @@
       "kvm-amd"
     ];
     tmp.useTmpfs = true;
+    tmp.tmpfsSize = "75%";
     loader = {
       timeout = 6;
       efi.canTouchEfiVariables = true;
       grub = {
+        # Keep only the current generation to save disk space
         configurationLimit = 1;
         enable = true;
         efiSupport = true;

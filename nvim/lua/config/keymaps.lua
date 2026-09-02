@@ -39,9 +39,9 @@ map("n", "<leader>S", "<cmd>SudoWrite<cr>", { desc = "Sudo save" })
 map("n", "<leader>x", function() require("config.commands").toggle_hex() end, { desc = "Toggle hex" })
 
 -- Settings toggles
-map("n", "yoe", "<cmd>set expandtab!<bar>set expandtab?<cr>")
-map("n", "yom", "<cmd>Matches<cr>")
-map("n", "yot", function() require("config.commands").toggle_color_column() end)
+map("n", "yoe", "<cmd>set expandtab!<bar>set expandtab?<cr>", { desc = "Toggle expandtab" })
+map("n", "yom", "<cmd>Matches<cr>", { desc = "Show match count" })
+map("n", "yot", function() require("config.commands").toggle_color_column() end, { desc = "Toggle color column" })
 map("n", "<leader>h", "<cmd>nohlsearch<cr>", { silent = true, desc = "Clear search highlight" })
 
 -- Command line

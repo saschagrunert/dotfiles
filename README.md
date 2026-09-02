@@ -96,6 +96,7 @@ and debugging tools.
 ## Structure
 
 ```text
+dev-shell.nix                  # Nix development shell
 flake.nix                      # Nix flake entry point
 home.nix                       # Home-manager user config
 Makefile                       # Build, lint, test, upgrade
@@ -114,6 +115,9 @@ ranger/                        # File manager config and themes
 rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
+├── dnd                        # Do-not-disturb toggle
+├── idle                       # Idle inhibitor toggle
+├── power                      # Power consumption monitor
 ├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper
 tig/                           # Git text-mode interface config
@@ -124,6 +128,7 @@ waybar/
 └── style.css                  # Waybar styling
 nixos/
 ├── configuration.nix          # Main NixOS config
+├── desktop.nix                # Sway, XDG portals, greetd
 ├── hosts/
 │   └── desktop/               # Machine-specific config
 │       ├── default.nix        # Host imports
