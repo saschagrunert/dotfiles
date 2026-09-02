@@ -6,10 +6,7 @@
       enable = true;
       plugins = [ pkgs.networkmanager-openvpn ];
     };
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 22 ];
-    };
+    firewall.allowedTCPPorts = [ 22 ];
   };
 
   services.resolved = {

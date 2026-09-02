@@ -26,14 +26,9 @@
         "nix-command"
         "flakes"
       ];
-      max-jobs = "auto";
-      cores = 0;
       keep-outputs = true;
       keep-derivations = false;
-      trusted-users = [
-        "root"
-        username
-      ];
+      trusted-users = [ username ];
     };
 
     nixPath = [ "nixpkgs=${nixpkgs}" ];

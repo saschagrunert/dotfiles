@@ -10,7 +10,6 @@
     fail2ban = {
       enable = true;
       jails.sshd.settings = {
-        enabled = true;
         maxretry = 3;
         findtime = 600;
         bantime = 3600;
