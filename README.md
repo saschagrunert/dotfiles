@@ -96,8 +96,8 @@ and debugging tools.
 ## Structure
 
 ```text
-dev-shell.nix                  # Nix development shell
 flake.nix                      # Nix flake entry point
+shells.nix                     # Dev shells (base + per-project)
 home.nix                       # Home-manager user config
 Makefile                       # Build, lint, test, upgrade
 alacritty/                     # Terminal emulator config
@@ -194,6 +194,24 @@ To pull the latest dotfiles and update external dependencies:
 ```fish
 > make upgrade
 ```
+
+## Development Shells
+
+The flake provides two dev shells via `shells.nix`:
+
+- **default**: Base C development environment (clang, pkg-config, glibc) used by
+  the `ns` fish function for ad-hoc commands.
+- **project**: Dynamically inherits build dependencies from any project that has
+  a `nix/overlay.nix` and `nix/derivation.nix`. Used via
+  [direnv](https://direnv.net) with a per-project `.envrc`:
+
+```bash
+use flake ~/.dotfiles#project --impure
+```
+
+When entering the project directory, direnv automatically activates the shell
+with the correct dependencies. The `--impure` flag is required because the
+shell reads `$PWD` to locate the project's nix files at evaluation time.
 
 ### Neovim
 
