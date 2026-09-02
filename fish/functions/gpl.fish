@@ -5,4 +5,5 @@ function gpl
         test "$branch" = "$current" && continue
         git branch -D $branch
     end
+    return 0
 end
