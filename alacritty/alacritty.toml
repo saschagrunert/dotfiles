@@ -39,10 +39,6 @@ text = "#f8f8f2"
 shape = "Block"
 blinking = "Off"
 
-[cursor.unfocused_style]
-shape = "HollowBlock"
-blinking = "Off"
-
 [font]
 size = 10.0
 
