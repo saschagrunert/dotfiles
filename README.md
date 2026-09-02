@@ -8,86 +8,28 @@ both the system configuration and user environment via
 
 ## Key Components
 
-- **Desktop**:
-  - [alacritty](https://github.com/alacritty/alacritty):
-    A cross-platform, GPU-accelerated terminal emulator
-  - [dracula](https://github.com/dracula/gtk):
-    The GTK theme (managed via home-manager)
-  - [bibata](https://github.com/ful1e5/Bibata_Cursor):
-    Beautiful cursor theme (managed via home-manager)
-  - [mako](https://github.com/emersion/mako):
-    Lightweight Wayland notification daemon
-  - [sway](https://github.com/swaywm/sway):
-    A Wayland compositor and tiling window manager
-  - [waybar](https://github.com/Alexays/Waybar):
-    Highly customizable Wayland bar for sway
-  - [fuzzel](https://codeberg.org/dnkl/fuzzel):
-    Wayland-native application launcher
-  - [nerd-fonts](https://github.com/ryanoasis/nerd-fonts):
-    Iconic fonts (managed via NixOS packages)
-  - [networkManager](https://github.com/NetworkManager/NetworkManager):
-    For managing network connections
-  - [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme):
-    The icon theme (managed via home-manager)
-- **Neovim** (managed via [lazy.nvim](https://github.com/folke/lazy.nvim)):
-  - Native LSP via [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-    (servers installed as Nix packages)
-  - Completion via [blink.cmp](https://github.com/Saghen/blink.cmp) +
-    [friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
-  - Formatting via [conform.nvim](https://github.com/stevearc/conform.nvim)
-  - Linting via [nvim-lint](https://github.com/mfussenegger/nvim-lint)
-  - Syntax via [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
-  - Fuzzy finding via [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
-  - Git via [fugitive](https://github.com/tpope/vim-fugitive) +
-    [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
-  - Theme: [dracula.nvim](https://github.com/Mofiqul/dracula.nvim)
-- **Development**:
-  - [bat](https://github.com/sharkdp/bat):
-    Like `cat` with wings
-  - [claude](https://github.com/anthropics/claude-code):
-    Anthropic's official CLI for Claude AI
-  - [clang](https://github.com/llvm/llvm-project):
-    The LLVM compiler frontend
-  - [delta](https://github.com/dandavison/delta):
-    A syntax-highlighting pager for git
-  - [eza](https://github.com/eza-community/eza):
-    Modern version of `ls`
-  - [fd](https://github.com/sharkdp/fd):
-    A fast alternative to `find`
-  - [fish](https://github.com/fish-shell/fish-shell):
-    The interactive shell
-  - [fzf](https://github.com/junegunn/fzf):
-    Command line fuzzy finder
-  - [gdb](https://www.gnu.org/s/gdb):
-    The debugger for various kind of projects
-  - [git](https://github.com/git/git):
-    Revision control system
-  - [golang](https://go.dev):
-    The Go programming language
-  - [htop](https://github.com/hishamhm/htop):
-    Process manager for the terminal
-  - [nix](https://nixos.org/nix):
-    A powerful functional package manager
-  - [nixos](https://nixos.org):
-    Linux distribution built on Nix package manager
-  - [python](https://python.org):
-    The Python scripting language
-  - [ranger](https://github.com/ranger/ranger):
-    VIM-inspired filemanager for the console
-  - [ripgrep](https://github.com/BurntSushi/ripgrep):
-    Recursively searches directories for a regex pattern
-  - [rustup](https://github.com/rust-lang/rustup):
-    Rust toolchain and component management
-  - [tig](https://github.com/jonas/tig):
-    Command line git explorer
-  - [tmux](https://github.com/tmux/tmux):
-    Terminal multiplexer
-  - [typos](https://github.com/crate-ci/typos):
-    Source code spell checker
-  - [neovim](https://github.com/neovim/neovim):
-    The editor
-  - [zoxide](https://github.com/ajeetdsouza/zoxide):
-    A smarter cd command
+- **Desktop**: [sway](https://github.com/swaywm/sway) (Wayland compositor),
+  [waybar](https://github.com/Alexays/Waybar),
+  [alacritty](https://github.com/alacritty/alacritty),
+  [mako](https://github.com/emersion/mako),
+  [fuzzel](https://codeberg.org/dnkl/fuzzel).
+  Themed with [dracula](https://github.com/dracula/gtk) (GTK),
+  [bibata](https://github.com/ful1e5/Bibata_Cursor) (cursor),
+  [papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) (icons).
+- **Editor**: [neovim](https://github.com/neovim/neovim) with
+  [lazy.nvim](https://github.com/folke/lazy.nvim),
+  native LSP, [blink.cmp](https://github.com/Saghen/blink.cmp),
+  [conform.nvim](https://github.com/stevearc/conform.nvim),
+  [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter),
+  [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim),
+  [dracula.nvim](https://github.com/Mofiqul/dracula.nvim).
+- **Shell and tools**: [fish](https://github.com/fish-shell/fish-shell),
+  [tmux](https://github.com/tmux/tmux),
+  [git](https://github.com/git/git) + [delta](https://github.com/dandavison/delta),
+  [ranger](https://github.com/ranger/ranger),
+  [fzf](https://github.com/junegunn/fzf),
+  [zoxide](https://github.com/ajeetdsouza/zoxide),
+  [ripgrep](https://github.com/BurntSushi/ripgrep).
 
 See [`nixos/packages.nix`](nixos/packages.nix) for the full list of installed
 packages, including container runtimes, Kubernetes tools, networking utilities,
@@ -171,7 +113,7 @@ After editing any configuration file, rebuild with:
 To validate the configuration locally:
 
 ```fish
-> make test     # lint, nix flake check, markdown-lint, prettier, typos, shfmt, shellcheck
+> make test     # lint, flake check, markdown, prettier, typos, shfmt, shellcheck
 > make check    # verify symlinks and required commands
 > make lint     # nixfmt, statix, deadnix
 ```
