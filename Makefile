@@ -83,7 +83,7 @@ test: lint check-nix ## Run checks locally.
 	npx prettier@3.5.3 --check .
 	nix shell nixpkgs\#typos -c typos
 	nix shell nixpkgs\#shfmt -c shfmt -d .
-	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/idle sway/power sway/temps sway/workspace-scroll
+	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/power sway/temps sway/workspace-scroll
 	nix shell nixpkgs\#shellcheck -c sh -c 'find tmux/scripts -type f -not -name "*.sh" | xargs shellcheck'
 	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
 	nix shell nixpkgs\#fish -c fish_indent --check $$(find . -name '*.fish' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
