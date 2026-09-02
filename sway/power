@@ -13,17 +13,38 @@ cpu_watts() {
 		echo "N/A"
 		return
 	fi
-	local e1 e2
-	e1=$(cat "$rapl/energy_uj")
-	sleep 1
-	e2=$(cat "$rapl/energy_uj")
-	local diff=$((e2 - e1))
-	if [ "$diff" -lt 0 ]; then
-		local max
-		max=$(cat "$rapl/max_energy_range_uj")
-		diff=$((diff + max))
+
+	local cache="${XDG_RUNTIME_DIR:-/tmp}/waybar-power-rapl"
+	local now_uj
+	now_uj=$(cat "$rapl/energy_uj")
+	local now_ns
+	now_ns=$(date +%s%N)
+
+	if [ -f "$cache" ]; then
+		local prev_uj prev_ns
+		read -r prev_uj prev_ns <"$cache" || true
+		if [ -z "${prev_uj:-}" ] || [ -z "${prev_ns:-}" ]; then
+			echo "N/A"
+			echo "$now_uj $now_ns" >"$cache"
+			return
+		fi
+		local d_uj=$((now_uj - prev_uj))
+		if [ "$d_uj" -lt 0 ]; then
+			local max
+			max=$(cat "$rapl/max_energy_range_uj")
+			d_uj=$((d_uj + max))
+		fi
+		local d_ns=$((now_ns - prev_ns))
+		if [ "$d_ns" -gt 0 ]; then
+			echo $(((d_uj * 1000 + d_ns / 2) / d_ns))
+		else
+			echo "N/A"
+		fi
+	else
+		echo "N/A"
 	fi
-	echo $(((diff + 500000) / 1000000))
+
+	echo "$now_uj $now_ns" >"$cache"
 }
 
 gpu_watts() {
