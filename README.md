@@ -116,7 +116,6 @@ rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
 ├── dnd                        # Do-not-disturb toggle
-├── idle                       # Idle inhibitor toggle
 ├── power                      # Power consumption monitor
 ├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper

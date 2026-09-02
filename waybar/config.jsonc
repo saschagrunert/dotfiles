@@ -91,7 +91,7 @@
     "return-type": "json",
     "interval": 5,
     "on-click": "makoctl mode -t do-not-disturb",
-    "on-click-right": "makoctl mode -t do-not-disturb",
+    "on-click-right": "makoctl dismiss -a",
   },
   "idle_inhibitor": {
     "format": "{icon}",

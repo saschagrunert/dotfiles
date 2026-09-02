@@ -13,7 +13,9 @@ function gup
         git fetch --prune --no-tags origin "+refs/heads/*:refs/remotes/origin/*" || return $status
     end
 
+    set -l current (git branch --show-current)
     for branch in (git branch --merged $default_branch | grep -v '^[*+]' | string trim | grep -v "^$default_branch\$")
+        test "$branch" = "$current" && continue
         git branch -d $branch
     end
 
