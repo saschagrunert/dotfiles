@@ -12,10 +12,8 @@
     piper
     slurp
     wdisplays
-    wev
     wl-clipboard
     xdg-utils
-    zoom-us
 
     # System utilities
     bat
@@ -39,14 +37,12 @@
     # Development tools
     binutils
     claude-code
-    cmake
     delta
     gcc
     gh
     git
     git-lfs
     gnumake
-    graphviz
     jira-cli-go
     rpm
     tig
@@ -57,7 +53,6 @@
     nil
     pyright
     taplo
-    terraform-ls
     vscode-langservers-extracted
     vtsls
     yaml-language-server
@@ -126,18 +121,14 @@
     unixtools.netstat
 
     # Debugging & profiling
-    bpftools
     gdb
-    libcgroup
     lm_sensors
     lshw
     lvm2
-    pahole
     perf
     strace
     tcpdump
     usbutils
-    valgrind
 
     # Code quality & linting
     bats
@@ -149,8 +140,6 @@
     yamllint
 
     # Media & documents
-    asciinema
-    chafa
     imagemagick
     kooha
     mediainfo

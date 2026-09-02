@@ -148,8 +148,6 @@ bindsym $mod+Shift+b exec makoctl restore
 # floating window settings
 for_window [app_id=".*"] inhibit_idle fullscreen
 for_window [class=".*"] inhibit_idle fullscreen
-for_window [app_id="zoom"] floating enable
-for_window [class="zoom"] floating enable
 for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".*blueman.*"] floating enable, fullscreen disable
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen disable

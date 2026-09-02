@@ -82,7 +82,6 @@ handle_mime() {
 
 	# Image
 	image/*)
-		chafa -f symbols -s "${PV_WIDTH}x" -- "${FILE_PATH}" && exit 5
 		exiftool "${FILE_PATH}" && exit 5
 		exit 1
 		;;
