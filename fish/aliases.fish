@@ -2,8 +2,14 @@ abbr -a .. cd ..
 abbr -a ... cd ../..
 abbr -a .... cd ../../..
 abbr -a ..... cd ../../../..
-command -q bat && abbr -a cat bat
-command -q eza && abbr -a ls "eza --git -bg --classify=always"
+abbr -a cat bat
+set -l _eza "eza --git -bg --classify=always"
+abbr -a ls "$_eza"
+abbr -a l "$_eza -l"
+abbr -a la "$_eza -a"
+abbr -a ll "$_eza -la"
+abbr -a lt "$_eza -lT"
+abbr -a llt "$_eza -laT"
 
 abbr -a cl claude
 abbr -a dush du -sh \*
@@ -46,11 +52,6 @@ abbr -a h history
 abbr -a hs history search
 abbr -a k kubectl
 abbr -a kk kubectl config use-context
-abbr -a l ls -l
-abbr -a la ls -a
-abbr -a ll ls -la
-abbr -a llt ls -laT
-abbr -a lt ls -lT
 abbr -a m make
 abbr -a mc make clean
 abbr -a md mkdir -p

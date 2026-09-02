@@ -46,10 +46,6 @@ function M.resize_window(dir)
       vim.cmd(crr_win .. "wincmd w")
     elseif M.has_window("k") then
       vim.cmd("5wincmd +")
-    elseif M.has_window("j") then
-      vim.cmd("5wincmd j")
-      vim.cmd("5wincmd +")
-      vim.cmd(crr_win .. "wincmd w")
     end
   elseif dir == "j" then
     if M.has_window("j") then
@@ -128,13 +124,14 @@ function M.visual_search(cmdtype)
 end
 
 -- Close all buffers except current
-function M.buf_only()
+function M.buf_only(bang)
   local current = vim.fn.bufnr("%")
   local last = vim.fn.bufnr("$")
   local count = 0
+  local cmd = bang and "bdel!" or "bdel"
   for i = 1, last do
     if i ~= current and vim.fn.buflisted(i) == 1 then
-      local ok = pcall(vim.cmd, "bdel " .. i)
+      local ok = pcall(vim.cmd, cmd .. " " .. i)
       if ok and vim.fn.buflisted(i) == 0 then
         count = count + 1
       end
@@ -196,7 +193,7 @@ vim.api.nvim_create_user_command("Matches", ":%s///gn", {})
 vim.api.nvim_create_user_command("KillWhitespace", ":%s/\\s\\+$//e", {})
 vim.api.nvim_create_user_command("Hexmode", function() M.toggle_hex() end, { bar = true })
 vim.api.nvim_create_user_command("BufOnly", function(opts)
-  M.buf_only()
+  M.buf_only(opts.bang)
 end, { bang = true })
 vim.api.nvim_create_user_command("Wipeout", function(opts)
   M.wipeout(opts.bang)

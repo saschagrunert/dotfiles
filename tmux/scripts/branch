@@ -4,9 +4,6 @@ set -euo pipefail
 branch_symbol=""
 
 __parse_git_branch() {
-	if ! type git >/dev/null 2>&1; then
-		return
-	fi
 	branch=$(git symbolic-ref HEAD 2>/dev/null) || true
 	if [[ -z $branch ]]; then
 		branch=":$(git rev-parse --short HEAD 2>/dev/null)" || return

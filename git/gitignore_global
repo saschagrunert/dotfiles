@@ -8,7 +8,8 @@ tags
 .env
 .env.local
 .direnv/
-result*
+result
+result-*
 target/
 __debug_bin*
 node_modules/

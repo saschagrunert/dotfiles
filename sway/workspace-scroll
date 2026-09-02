@@ -23,7 +23,7 @@ elif [ "$direction" = "prev" ]; then
 	if [ "$focused_num" -gt 1 ]; then
 		swaymsg workspace "$((focused_num - 1))"
 	elif [ "$focused_num" -le 1 ]; then
-		symbol=$(echo "$workspaces" | jq -r --arg out "$focused_output" '.[] | select(.output==$out and .num==0) | .name')
+		symbol=$(echo "$workspaces" | jq -r --arg out "$focused_output" '[.[] | select(.output==$out and .num==0) | .name] | first // empty')
 		if [ -n "$symbol" ]; then
 			swaymsg "workspace \"$symbol\""
 		fi

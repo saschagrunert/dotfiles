@@ -100,6 +100,7 @@ upgrade: update ## Update and upgrade external dependencies.
 		-o fish/completions/kubectl.fish
 	$(CURL) https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.fish \
 		-o fish/functions/fzf_key_bindings.fish
+	sed -i '/^# Run setup/,$$d' fish/functions/fzf_key_bindings.fish
 	$(CURL) https://raw.githubusercontent.com/dracula/sublime/master/Dracula.tmTheme \
 		-o bat/themes/Dracula.tmTheme
 	$(GIT) add \
@@ -107,7 +108,7 @@ upgrade: update ## Update and upgrade external dependencies.
 		fish/completions/kubectl.fish \
 		fish/functions/fzf_key_bindings.fish \
 		bat/themes/Dracula.tmTheme
-	$(GIT) diff-index --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
+	$(GIT) diff-index --cached --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 
 ##@ Cleanup targets:
 

@@ -2,9 +2,6 @@
 set -euo pipefail
 
 __parse_git_stats() {
-	if ! type git >/dev/null 2>&1; then
-		return
-	fi
 	if [[ -z $(git rev-parse --git-dir 2>/dev/null) ]]; then return; fi
 	tracking_branch=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)") || return
 	if [[ -z $tracking_branch ]]; then return; fi

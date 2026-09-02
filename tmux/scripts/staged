@@ -4,9 +4,6 @@ set -euo pipefail
 staged_symbol="⊕ "
 
 __parse_git_stats() {
-	if ! type git >/dev/null 2>&1; then
-		return
-	fi
 	if [[ -z $(git rev-parse --git-dir 2>/dev/null) ]]; then return; fi
 	staged=$(git diff --staged --name-status | wc -l)
 	echo "$staged"

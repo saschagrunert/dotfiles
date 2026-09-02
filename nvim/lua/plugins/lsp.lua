@@ -40,7 +40,7 @@ return {
       vim.lsp.config("rust_analyzer", {
         settings = {
           ["rust-analyzer"] = {
-            checkOnSave = { command = "clippy" },
+            check = { command = "clippy" },
           },
         },
       })

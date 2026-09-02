@@ -10,3 +10,13 @@ function ns
         nix develop $DOTFILES --command fish
     end
 end
+
+complete -c ns -f -a '(
+    set -l tokens (commandline -opc)
+    set -l subcmd (string join " " -- $tokens[2..] (commandline -ct))
+    if test -z "$subcmd"
+        complete -C ""
+    else
+        complete -C "$subcmd"
+    end
+)'

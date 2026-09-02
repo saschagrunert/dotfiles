@@ -8,7 +8,6 @@
     grim
     libnotify
     mako
-    papirus-icon-theme
     pavucontrol
     piper
     slurp
