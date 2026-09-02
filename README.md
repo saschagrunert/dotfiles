@@ -171,7 +171,7 @@ After editing any configuration file, rebuild with:
 To validate the configuration locally:
 
 ```fish
-> make test     # lint, nix flake check, prettier, typos, shfmt, shellcheck
+> make test     # lint, nix flake check, markdown-lint, prettier, typos, shfmt, shellcheck
 > make check    # verify symlinks and required commands
 > make lint     # nixfmt, statix, deadnix
 ```
