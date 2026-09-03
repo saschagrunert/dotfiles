@@ -1,9 +1,23 @@
 {
   config,
+  pkgs,
   username,
   ...
 }:
 {
+  systemd.services.chrome-graceful-shutdown = {
+    description = "Gracefully stop Chrome before shutdown";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStop = pkgs.writeShellScript "stop-chrome" ''
+        ${pkgs.procps}/bin/pkill -SIGTERM --exact chrome || true
+        ${pkgs.procps}/bin/pidwait --exact chrome || true
+      '';
+    };
+  };
+
   services = {
     blueman.enable = true;
 
