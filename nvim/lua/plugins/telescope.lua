@@ -36,7 +36,7 @@ return {
         pickers = {
           find_files = {
             hidden = true,
-            find_command = { "rg", "--files", "--hidden", "--glob", "!.git" },
+            find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
           },
           live_grep = {
             additional_args = { "--hidden", "--glob", "!.git" },

@@ -6,7 +6,7 @@
     QT_QPA_PLATFORMTHEME = "gtk3";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     NIXOS_OZONE_WL = "1";
-    GDK_BACKEND = "wayland,x11";
+    GDK_BACKEND = "wayland";
     _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
