@@ -24,19 +24,13 @@ return {
         b = "#F",
         c = {
           "#(" .. s .. "/pwd)",
-          "#("
-            .. s
-            .. "/branch)#("
-            .. s
-            .. "/modified)#("
-            .. s
-            .. "/staged)#("
-            .. s
-            .. "/stashed)#("
-            .. s
-            .. "/compare) #("
-            .. s
-            .. "/rainbarf)#[fg=#44475a,bg=#44475a]",
+          "#(" .. s .. "/branch)"
+            .. "#(" .. s .. "/modified)"
+            .. "#(" .. s .. "/staged)"
+            .. "#(" .. s .. "/stashed)"
+            .. "#(" .. s .. "/compare)"
+            .. " #(" .. s .. "/rainbarf)"
+            .. "#[fg=#44475a,bg=#44475a]",
         },
         win = { "#I", "#W" },
         cwin = { "#I", "#W" },
@@ -51,12 +45,13 @@ return {
         b = { "#f8f8f2", "#6272a4", "" },
         c = { "#f8f8f2", "#44475a", "" },
         bg = { "#282a36", "#282a36", "" },
+        win = { "#f8f8f2", "#44475a", "" },
         cwin = { "#282a36", "#bd93f9", "" },
-        win = { "#f8f8f2", "#282a36", "" },
         x = { "#f8f8f2", "#44475a", "" },
         y = { "#f8f8f2", "#6272a4", "" },
         z = { "#282a36", "#bd93f9", "" },
       })
+      vim.fn.system("tmux source-file ~/.tmux.conf")
     end,
   },
 }
