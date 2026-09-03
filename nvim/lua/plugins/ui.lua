@@ -35,7 +35,10 @@ return {
     opts = {
       spec = {
         { "<leader>b", group = "Buffers" },
+        { "<leader>d", group = "Delete" },
         { "<leader>g", group = "Git" },
+        { "<leader>i", group = "Inlay" },
+        { "<leader>s", group = "Split" },
         { "<leader>u", group = "Case" },
         { "<leader>r", group = "Replace" },
         { "<leader>c", group = "Code" },

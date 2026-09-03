@@ -53,11 +53,16 @@ opt.sessionoptions:remove({ "blank", "help" })
 -- Display
 opt.list = true
 opt.listchars = { tab = "▸ ", trail = "·", extends = "❯", precedes = "❮" }
+opt.fillchars = { eob = " ", fold = " ", diff = "╱" }
 
 -- Scrolling
 opt.scrolloff = 8
 opt.sidescrolloff = 15
 opt.wrap = false
+opt.smoothscroll = true
+
+-- Splits
+opt.splitkeep = "screen"
 
 -- Popup menu
 opt.pumheight = 15

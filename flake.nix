@@ -42,6 +42,6 @@
 
       formatter.${system} = pkgs.nixfmt;
 
-      devShells.${system} = import ./shells.nix { inherit pkgs; };
+      devShells.${system} = import ./shells.nix { inherit pkgs nixpkgs system; };
     };
 }

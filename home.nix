@@ -65,8 +65,8 @@ in
         ExecStart = toString (
           pkgs.writeShellScript "swayidle-start" ''
             ${pkgs.swayidle}/bin/swayidle -w \
-              timeout ${toString idleTimeout} 'swaymsg "output * dpms off"' \
-              resume 'swaymsg "output * dpms on"'
+              timeout ${toString idleTimeout} '${pkgs.sway}/bin/swaymsg "output * dpms off"' \
+              resume '${pkgs.sway}/bin/swaymsg "output * dpms on"'
           ''
         );
         Restart = "on-failure";

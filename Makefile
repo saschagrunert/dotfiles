@@ -116,7 +116,7 @@ upgrade: update ## Update and upgrade external dependencies.
 ##@ Cleanup targets:
 
 clean: ## Remove generated configuration files.
-	rm -f $(GITCONFIG_USER_PATH)
+	rm -f $(GITCONFIG_USER_PATH) result
 
 ##@ Help:
 

@@ -9,20 +9,6 @@ autocmd("TextYankPost", {
   end,
 })
 
--- Show diagnostic float on hover (only when diagnostics exist)
-autocmd("CursorHold", {
-  group = augroup("DiagnosticFloat", { clear = true }),
-  callback = function()
-    local buf = vim.api.nvim_get_current_buf()
-    if vim.bo[buf].buftype ~= "" then
-      return
-    end
-    if #vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }) > 0 then
-      vim.diagnostic.open_float({ focusable = false, border = "rounded" })
-    end
-  end,
-})
-
 -- Restore cursor position on file reopen
 autocmd("BufReadPost", {
   group = augroup("RestoreCursor", { clear = true }),

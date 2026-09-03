@@ -223,8 +223,8 @@ color file                  default default
 color grep.file             blue    default
 color file-size             default default
 color line-number           cyan    default
-color title-blur            black   blue
-color title-focus           black   blue    bold
+color title-blur            black   magenta
+color title-focus           black   magenta bold
 color main-commit           default default
 color main-tag              magenta default bold
 color main-local-tag        magenta default

@@ -5,6 +5,7 @@ function tailc
         return 1
     end
     set -l lines (math (tput lines) - 2)
-    set -l escaped_url (string replace -a "'" "'\\''" -- $argv[1])
-    watch -n1 -- "curl -sf -- '$escaped_url' | tail -n $lines"
+    set -gx __TAILC_URL $argv[1]
+    watch -n1 -- 'curl -sf -- "$__TAILC_URL" | tail -n '$lines
+    set -e __TAILC_URL
 end

@@ -23,8 +23,6 @@ end
 
 test -d ~/.cargo/bin && fish_add_path --path --move ~/.cargo/bin
 test -d ~/.local/bin && fish_add_path --path --move ~/.local/bin
-test -d ~/.npm-global/bin && fish_add_path --path --move ~/.npm-global/bin
-
 source (status dirname)/aliases.fish
 
 function fish_prompt
