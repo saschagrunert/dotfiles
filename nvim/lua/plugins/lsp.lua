@@ -100,7 +100,7 @@ return {
             [vim.diagnostic.severity.HINT] = "➤",
           },
         },
-        virtual_text = false,
+        virtual_text = { current_line = true },
         float = { border = "rounded" },
         severity_sort = true,
       })

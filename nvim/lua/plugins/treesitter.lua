@@ -29,6 +29,8 @@ return {
             "diff",
             "dockerfile",
             "fish",
+            "git_config",
+            "gitcommit",
             "go",
             "gomod",
             "gosum",

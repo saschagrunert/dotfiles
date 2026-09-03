@@ -3,7 +3,10 @@ _: {
     "/" = {
       device = "/dev/disk/by-uuid/e5214043-e0a0-44f0-8fb3-f717ba26bd0e";
       fsType = "ext4";
-      options = [ "noatime" "x-systemd.device-timeout=5min" ];
+      options = [
+        "noatime"
+        "x-systemd.device-timeout=5min"
+      ];
     };
     "/boot" = {
       device = "/dev/disk/by-uuid/8A2E-D229";
