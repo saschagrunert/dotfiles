@@ -13,7 +13,7 @@
     enable = true;
     settings.Resolve = {
       DNSSEC = "allow-downgrade";
-      DNSOverTLS = "opportunistic";
+      DNSOverTLS = false;
     };
   };
 }
