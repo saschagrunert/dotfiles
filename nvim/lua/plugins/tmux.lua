@@ -21,7 +21,7 @@ return {
       local s = "~/.tmux/scripts"
       vim.g.tmuxline_preset = {
         a = "#{?client_prefix,[PREFIX] - ,}#S",
-        b = "#F",
+        b = "",
         c = {
           "#(" .. s .. "/pwd)",
           "#(" .. s .. "/branch)"
@@ -42,7 +42,7 @@ return {
     config = function()
       vim.fn["tmuxline#api#set_theme"]({
         a = { "#282a36", "#bd93f9", "" },
-        b = { "#f8f8f2", "#6272a4", "" },
+        b = { "#282a36", "#282a36", "" },
         c = { "#f8f8f2", "#44475a", "" },
         bg = { "#282a36", "#282a36", "" },
         win = { "#f8f8f2", "#44475a", "" },
@@ -51,7 +51,20 @@ return {
         y = { "#f8f8f2", "#6272a4", "" },
         z = { "#282a36", "#bd93f9", "" },
       })
-      vim.fn.system("tmux source-file ~/.tmux.conf")
+      local l = "\u{e0b6}"
+      local r = "\u{e0b4}"
+      vim.fn.system(
+        "tmux"
+          .. " set -gw window-status-format '"
+          .. "#[fg=#44475a,bg=#282a36]" .. l
+          .. "#[fg=#f8f8f2,bg=#44475a] #I:#{=10:window_name} "
+          .. "#[fg=#44475a,bg=#282a36]" .. r .. "'"
+          .. " \\; set -gw window-status-current-format '"
+          .. "#[fg=#bd93f9,bg=#282a36]" .. l
+          .. "#[fg=#282a36,bg=#bd93f9,bold] #I:#{=10:window_name} "
+          .. "#[fg=#bd93f9,bg=#282a36]" .. r .. "'"
+          .. ' \\; set -g window-status-separator " "'
+      )
     end,
   },
 }
