@@ -5,7 +5,7 @@
 }
 
 window#waybar {
-  background-color: #282a36;
+  background-color: rgba(40, 42, 54, 0.8);
   color: #f8f8f2;
 }
 
