@@ -72,7 +72,7 @@ regex = "(mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh://
 [window]
 decorations = "none"
 dynamic_padding = true
-opacity = 0.9
+opacity = 0.85
 
 [window.dimensions]
 columns = 130

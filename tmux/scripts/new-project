@@ -1,6 +1,6 @@
 #!/bin/sh
 if [ -n "$1" ]; then
-    tmux new-window -n "$1"
+	tmux new-window -n "$1"
 else
-    tmux new-window
+	tmux new-window
 fi

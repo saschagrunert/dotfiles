@@ -5,7 +5,7 @@
 }
 
 window#waybar {
-  background-color: rgba(40, 42, 54, 0.8);
+  background-color: rgba(40, 42, 54, 0.85);
   color: #f8f8f2;
 }
 
@@ -43,6 +43,7 @@ window#waybar {
 #memory,
 #cpu,
 #pulseaudio,
+#pulseaudio.source,
 #idle_inhibitor,
 #custom-dnd,
 #clock,
@@ -61,6 +62,7 @@ window#waybar {
 #memory:hover,
 #cpu:hover,
 #pulseaudio:hover,
+#pulseaudio.source:hover,
 #idle_inhibitor:hover,
 #custom-dnd:hover,
 #clock:hover {
@@ -110,8 +112,8 @@ window#waybar {
 }
 
 tooltip {
-  background-color: #282a36;
-  border: 1px solid #bd93f9;
+  background-color: rgba(40, 42, 54, 0.85);
+  border: 1px solid rgba(189, 147, 249, 0.85);
   border-radius: 6px;
   color: #f8f8f2;
 }

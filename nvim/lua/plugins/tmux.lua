@@ -24,12 +24,24 @@ return {
         b = "",
         c = {
           "#(" .. s .. "/pwd)",
-          "#(" .. s .. "/branch)"
-            .. "#(" .. s .. "/modified)"
-            .. "#(" .. s .. "/staged)"
-            .. "#(" .. s .. "/stashed)"
-            .. "#(" .. s .. "/compare)"
-            .. " #(" .. s .. "/rainbarf)"
+          "#("
+            .. s
+            .. "/branch)"
+            .. "#("
+            .. s
+            .. "/modified)"
+            .. "#("
+            .. s
+            .. "/staged)"
+            .. "#("
+            .. s
+            .. "/stashed)"
+            .. "#("
+            .. s
+            .. "/compare)"
+            .. " #("
+            .. s
+            .. "/rainbarf)"
             .. "#[fg=#44475a,bg=#44475a]",
         },
         win = { "#I", "#W" },
@@ -56,13 +68,19 @@ return {
       vim.fn.system(
         "tmux"
           .. " set -gw window-status-format '"
-          .. "#[fg=#44475a,bg=#282a36]" .. l
+          .. "#[fg=#44475a,bg=#282a36]"
+          .. l
           .. "#[fg=#f8f8f2,bg=#44475a] #I:#{=10:window_name} "
-          .. "#[fg=#44475a,bg=#282a36]" .. r .. "'"
+          .. "#[fg=#44475a,bg=#282a36]"
+          .. r
+          .. "'"
           .. " \\; set -gw window-status-current-format '"
-          .. "#[fg=#bd93f9,bg=#282a36]" .. l
+          .. "#[fg=#bd93f9,bg=#282a36]"
+          .. l
           .. "#[fg=#282a36,bg=#bd93f9,bold] #I:#{=10:window_name} "
-          .. "#[fg=#bd93f9,bg=#282a36]" .. r .. "'"
+          .. "#[fg=#bd93f9,bg=#282a36]"
+          .. r
+          .. "'"
           .. ' \\; set -g window-status-separator " "'
       )
     end,
