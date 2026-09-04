@@ -48,9 +48,11 @@
   },
   "network": {
     "format-ethernet": "<span color='#8be9fd' size='large'>󰈀</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "format-wifi": "<span color='#8be9fd' size='large'>󰤥</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-wifi": "<span color='#8be9fd' size='large'>{icon}</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "format-disconnected": "<span color='#6272a4' size='large'>󰤭</span> disconnected",
-    "tooltip-format": "{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ifname}: {ipaddr}/{cidr}\nGateway: {gwaddr}\nFrequency: {frequency}GHz",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 5,
     "on-click": "nm-connection-editor",

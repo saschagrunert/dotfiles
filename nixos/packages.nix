@@ -8,6 +8,7 @@
     grim
     libnotify
     mako
+    networkmanagerapplet
     pavucontrol
     piper
     slurp
