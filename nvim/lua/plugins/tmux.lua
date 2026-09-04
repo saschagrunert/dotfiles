@@ -24,25 +24,7 @@ return {
         b = "",
         c = {
           "#(" .. s .. "/pwd)",
-          "#("
-            .. s
-            .. "/branch)"
-            .. "#("
-            .. s
-            .. "/modified)"
-            .. "#("
-            .. s
-            .. "/staged)"
-            .. "#("
-            .. s
-            .. "/stashed)"
-            .. "#("
-            .. s
-            .. "/compare)"
-            .. " #("
-            .. s
-            .. "/rainbarf)"
-            .. "#[fg=#44475a,bg=#44475a]",
+          "#(" .. s .. "/git-status) #(" .. s .. "/rainbarf)#[fg=#44475a,bg=#44475a]",
         },
         win = { "#I", "#W" },
         cwin = { "#I", "#W" },
