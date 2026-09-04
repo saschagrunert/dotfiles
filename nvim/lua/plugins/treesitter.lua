@@ -31,7 +31,7 @@ return {
 
       local next_maps = {
         ["]f"] = "@function.outer",
-        ["]c"] = "@class.outer",
+        ["]C"] = "@class.outer",
         ["]a"] = "@parameter.outer",
       }
       for key, query in pairs(next_maps) do
@@ -42,7 +42,7 @@ return {
 
       local prev_maps = {
         ["[f"] = "@function.outer",
-        ["[c"] = "@class.outer",
+        ["[C"] = "@class.outer",
         ["[a"] = "@parameter.outer",
       }
       for key, query in pairs(prev_maps) do

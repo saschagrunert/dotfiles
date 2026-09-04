@@ -76,18 +76,22 @@ set -g fish_cursor_insert block
 # Source optional functions only if they exist
 set -l _zoxide_cache ~/.cache/fish/zoxide.fish
 if command -q zoxide
-    if not test -f $_zoxide_cache; or test (command -v zoxide) -nt $_zoxide_cache
+    set -l _zoxide_bin (realpath (command -v zoxide))
+    if not test -f $_zoxide_cache; or not string match -q "# $_zoxide_bin" (head -1 $_zoxide_cache)
         mkdir -p ~/.cache/fish
-        zoxide init fish --cmd j >$_zoxide_cache
+        echo "# $_zoxide_bin" >$_zoxide_cache
+        zoxide init fish --cmd j >>$_zoxide_cache
     end
     source $_zoxide_cache
 end
 
 set -l _direnv_cache ~/.cache/fish/direnv.fish
 if command -q direnv
-    if not test -f $_direnv_cache; or test (command -v direnv) -nt $_direnv_cache
+    set -l _direnv_bin (realpath (command -v direnv))
+    if not test -f $_direnv_cache; or not string match -q "# $_direnv_bin" (head -1 $_direnv_cache)
         mkdir -p ~/.cache/fish
-        direnv hook fish >$_direnv_cache
+        echo "# $_direnv_bin" >$_direnv_cache
+        direnv hook fish >>$_direnv_cache
     end
     source $_direnv_cache
 end
