@@ -97,16 +97,25 @@ function M.toggle_hex()
     vim.b.oldft = vim.bo.filetype
     vim.b.oldbin = vim.bo.binary
     vim.bo.binary = true
+    local ok = pcall(vim.cmd, "%!xxd -g 1")
+    if not ok then
+      vim.bo.binary = vim.b.oldbin or false
+      vim.notify("xxd failed", vim.log.levels.ERROR)
+      return
+    end
     vim.bo.filetype = "xxd"
     vim.b.editHex = true
-    vim.cmd("%!xxd -g 1")
   else
+    local ok = pcall(vim.cmd, "%!xxd -r")
+    if not ok then
+      vim.notify("xxd -r failed", vim.log.levels.ERROR)
+      return
+    end
     vim.bo.filetype = vim.b.oldft or ""
     if not vim.b.oldbin then
       vim.bo.binary = false
     end
     vim.b.editHex = false
-    vim.cmd("%!xxd -r")
   end
 
   vim.bo.modified = modified
@@ -207,7 +216,13 @@ end, { bang = true })
 vim.api.nvim_create_user_command("Wipeout", function(opts)
   M.wipeout(opts.bang)
 end, { bang = true })
-vim.api.nvim_create_user_command("PrettyJSON", ":%!python3 -m json.tool", {})
+vim.api.nvim_create_user_command("PrettyJSON", function()
+  local ok = pcall(vim.cmd, "%!python3 -m json.tool")
+  if not ok then
+    vim.cmd("undo")
+    vim.notify("python3 json.tool failed", vim.log.levels.ERROR)
+  end
+end, {})
 vim.api.nvim_create_user_command("Qargs", function()
   vim.cmd("args " .. M.quickfix_filenames())
 end, { bar = true })

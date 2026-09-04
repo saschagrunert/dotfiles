@@ -8,31 +8,48 @@ return {
       require("nvim-treesitter").setup({})
 
       require("nvim-treesitter-textobjects").setup({
-        select = {
-          lookahead = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-          },
-        },
-        move = {
-          set_jumps = true,
-          goto_next_start = {
-            ["]f"] = "@function.outer",
-            ["]c"] = "@class.outer",
-            ["]a"] = "@parameter.outer",
-          },
-          goto_previous_start = {
-            ["[f"] = "@function.outer",
-            ["[c"] = "@class.outer",
-            ["[a"] = "@parameter.outer",
-          },
-        },
+        select = { lookahead = true },
+        move = { set_jumps = true },
       })
+
+      local select = require("nvim-treesitter-textobjects.select")
+      local move = require("nvim-treesitter-textobjects.move")
+
+      local select_maps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+        ["aa"] = "@parameter.outer",
+        ["ia"] = "@parameter.inner",
+      }
+      for key, query in pairs(select_maps) do
+        vim.keymap.set({ "x", "o" }, key, function()
+          select.select_textobject(query, "textobjects")
+        end)
+      end
+
+      local next_maps = {
+        ["]f"] = "@function.outer",
+        ["]c"] = "@class.outer",
+        ["]a"] = "@parameter.outer",
+      }
+      for key, query in pairs(next_maps) do
+        vim.keymap.set({ "n", "x", "o" }, key, function()
+          move.goto_next_start(query, "textobjects")
+        end)
+      end
+
+      local prev_maps = {
+        ["[f"] = "@function.outer",
+        ["[c"] = "@class.outer",
+        ["[a"] = "@parameter.outer",
+      }
+      for key, query in pairs(prev_maps) do
+        vim.keymap.set({ "n", "x", "o" }, key, function()
+          move.goto_previous_start(query, "textobjects")
+        end)
+      end
 
       local ts_group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 

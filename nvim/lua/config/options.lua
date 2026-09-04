@@ -63,6 +63,8 @@ opt.smoothscroll = true
 
 -- Splits
 opt.splitkeep = "screen"
+opt.splitright = true
+opt.splitbelow = true
 
 -- Popup menu
 opt.pumheight = 15
@@ -75,6 +77,18 @@ opt.breakindent = true
 
 -- Pattern memory
 opt.maxmempattern = 10000
+
+-- Folding
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevelstart = 99
+
+-- Diff
+opt.diffopt:append("linematch:60")
+opt.diffopt:append("algorithm:histogram")
+
+-- Jump
+opt.jumpoptions = "stack"
 
 -- Sign column
 opt.signcolumn = "yes"

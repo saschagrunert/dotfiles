@@ -5,6 +5,7 @@
     networkmanager = {
       enable = true;
       plugins = [ pkgs.networkmanager-openvpn ];
+      wifi.powersave = false;
     };
     firewall.allowedTCPPorts = [ 22 ];
   };
