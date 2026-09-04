@@ -37,4 +37,4 @@ getWanIP() {
 getLanIP
 getWanIP
 
-echo "${wan_ip} / ${lan_ip-N/a}"
+echo "${wan_ip} / ${lan_ip:-N/a}"

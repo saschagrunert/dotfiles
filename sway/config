@@ -129,9 +129,9 @@ workspace $ws_browser output HDMI-A-1
 workspace $ws_terminal output HDMI-A-2
 
 # take a screenshot
-bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
-bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy
-bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
+bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied"
+bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 
 # move workspace to other output
 bindsym $mod+Ctrl+h move workspace to output left

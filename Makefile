@@ -83,7 +83,7 @@ markdown-lint: ## Lint markdown files.
 	nix shell nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 README.md
 
 test: lint check-nix markdown-lint ## Run checks locally.
-	npx prettier@3.5.3 --check .
+	npx --yes prettier@3 --check .
 	nix shell nixpkgs\#typos -c typos
 	nix shell nixpkgs\#shfmt -c shfmt -d .
 	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/power sway/temps sway/workspace-scroll
