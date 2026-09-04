@@ -29,6 +29,7 @@
     branch = never
 [commit]
     verbose = true
+    gpgSign = true
 [init]
     defaultBranch = main
 [transfer]
