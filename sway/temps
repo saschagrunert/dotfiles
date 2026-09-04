@@ -46,10 +46,10 @@ elif [ "$cpu" -ge 75 ] || [ "$gpu" -ge 80 ] || [ "$nvme" -ge 60 ]; then
 	class="warning"
 fi
 
-text="<span color='#f1fa8c' size='large'>󰻠</span> ${cpu}°C"
-text+="  <span color='#ffb86c' size='large'>󰢮</span> ${gpu}°C"
-text+="  <span color='#8be9fd' size='large'>󰆼</span> ${nvme}°C"
+text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d°C" "$cpu")
+text+=$(printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d°C" "$gpu")
+text+=$(printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d°C" "$nvme")
 
-tooltip="CPU: ${cpu}°C\nGPU: ${gpu}°C\nNVMe: ${nvme}°C"
+tooltip="CPU:  $(printf '%3d' "$cpu")°C\nGPU:  $(printf '%3d' "$gpu")°C\nNVMe: $(printf '%3d' "$nvme")°C"
 
 printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"

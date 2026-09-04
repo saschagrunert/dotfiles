@@ -79,12 +79,13 @@ gpu_watts() {
 cpu=$(cpu_watts)
 gpu=$(gpu_watts)
 
-cpu_label="${cpu}W"
 if [ "$cpu" = "N/A" ]; then
-	cpu_label="-"
+	cpu_label="  -"
+else
+	cpu_label=$(printf "%3dW" "$cpu")
 fi
 
-text="<span color='#f1fa8c' size='large'>󰻠</span> ${cpu_label}  <span color='#ffb86c' size='large'>󰢮</span> ${gpu}W"
-tooltip="CPU: ${cpu_label}\nGPU: ${gpu}W"
+text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %s  <span color='#ffb86c' size='large'>󰢮</span> %3dW" "$cpu_label" "$gpu")
+tooltip="CPU: ${cpu_label}\nGPU: $(printf '%3d' "$gpu")W"
 
 printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$tooltip"
