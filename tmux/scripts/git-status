@@ -8,9 +8,9 @@ git_dir=$(git rev-parse --git-dir 2>/dev/null) || exit 0
 [[ -z "$git_dir" ]] && exit 0
 
 branch_symbol=""
-mod_symbol="~"
-staged_symbol="⊕ "
-stashed_symbol=" "
+mod_symbol="󰏫 "
+staged_symbol="󰐗 "
+stashed_symbol="󰆓 "
 
 out=""
 
