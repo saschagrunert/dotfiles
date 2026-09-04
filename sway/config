@@ -175,7 +175,7 @@ client.urgent           $red        $red        $bg         $red        $red
 include /etc/sway/config.d/*
 
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
-exec_always ratbagctl "hollering-marmot" resolution 2 dpi set 1600
+exec_always ratbagctl "hollering-marmot" resolution 1 dpi set 1600
 exec_always ratbagctl "hollering-marmot" led 0 set mode cycle duration 8000 brightness 255
 exec_always ratbagctl "hollering-marmot" led 1 set mode cycle duration 8000 brightness 255
 exec alacritty -e fish -C 'tmux new-session -A -s work'
