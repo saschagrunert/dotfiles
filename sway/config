@@ -153,6 +153,7 @@ for_window [app_id="wdisplays"] floating enable, fullscreen disable
 for_window [app_id=".*blueman.*"] floating enable, fullscreen disable
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen disable
 for_window [app_id="nm-connection-editor"] floating enable, fullscreen disable
+for_window [app_id="piper"] floating enable, fullscreen disable
 
 # assign to workspaces
 assign [app_id="google-chrome"] workspace $ws_browser

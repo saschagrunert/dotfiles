@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmux_path=$(tmux display -p "#{pane_current_path}")
+cd "$tmux_path" || exit
+
+git_dir=$(git rev-parse --git-dir 2>/dev/null) || exit 0
+[[ -z "$git_dir" ]] && exit 0
+
+branch_symbol=""
+mod_symbol="~"
+staged_symbol="⊕ "
+stashed_symbol=" "
+
+out=""
+
+# Branch
+branch=$(git symbolic-ref --short HEAD 2>/dev/null) || true
+short_hash=$(git rev-parse --short HEAD 2>/dev/null) || exit 0
+if [[ -n "$branch" ]]; then
+	out="${branch_symbol} ${branch} (${short_hash}) "
+else
+	out="${branch_symbol} :${short_hash} "
+fi
+
+# Modified
+modified=$(git ls-files --modified | wc -l | tr -d ' ')
+if [[ "$modified" -gt 0 ]]; then
+	out+="${mod_symbol}${modified} "
+fi
+
+# Staged
+staged=$(git diff --staged --name-status | wc -l | tr -d ' ')
+if [[ "$staged" -gt 0 ]]; then
+	out+="${staged_symbol}${staged} "
+fi
+
+# Stashed
+stashed=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$stashed" -gt 0 ]]; then
+	out+="${stashed_symbol}${stashed} "
+fi
+
+# Ahead/behind
+tracking=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)" 2>/dev/null) || true
+if [[ -n "$tracking" ]]; then
+	read -r behind ahead < <(git rev-list --left-right --count "${tracking}...HEAD" 2>/dev/null) || true
+	if [[ "${behind:-0}" -gt 0 ]]; then
+		out+="↓ ${behind} "
+	fi
+	if [[ "${ahead:-0}" -gt 0 ]]; then
+		out+="↑ ${ahead} "
+	fi
+fi
+
+echo -n "$out"
