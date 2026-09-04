@@ -19,7 +19,8 @@ output * bg $wallpaper fill
 
 # Input configuration
 input type:pointer {
-    accel_profile flat
+    accel_profile adaptive
+    pointer_accel -0.2
 }
 input type:keyboard {
     xkb_layout us
