@@ -25,7 +25,7 @@
 [help]
     autoCorrect = prompt
 [column]
-    ui = auto
+    ui = never
     branch = never
 [commit]
     verbose = true
