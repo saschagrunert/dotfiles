@@ -13,8 +13,11 @@
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStop = pkgs.writeShellScript "stop-chrome" ''
-        ${pkgs.procps}/bin/pkill -SIGTERM --exact chrome || true
-        ${pkgs.procps}/bin/pidwait --timeout 30 --exact chrome || true
+        main_pid=$(${pkgs.procps}/bin/pgrep --oldest --exact chrome) || true
+        if [ -n "$main_pid" ]; then
+          kill -SIGTERM "$main_pid"
+          ${pkgs.procps}/bin/pidwait --timeout 30 --exact chrome || true
+        fi
       '';
       TimeoutStopSec = 45;
     };

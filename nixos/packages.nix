@@ -104,12 +104,6 @@
     kubernetes
     kustomize
 
-    # Serialization & data
-    buf
-    capnproto
-    protobuf
-    protolint
-
     # Networking & security
     cfssl
     conntrack-tools
@@ -159,7 +153,6 @@
     statix
 
     # Misc
-    bom
     perlPackages.Apprainbarf
   ];
 }
