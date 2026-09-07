@@ -1,6 +1,7 @@
 # Used binaries
 GIT := git
 CURL := curl -sfL
+NIX_SHELL := nix shell
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
@@ -9,15 +10,20 @@ GIT_USER := Sascha Grunert
 EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
-# Nix files
-NIX_FILES := $(shell find . -name '*.nix')
+# Files
+NIX_FILES := $(shell find . -name '*.nix' -not -path './.git/*')
+FISH_FILES := $(shell find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish')
+SHELL_FILES := $(shell find . -name '*.sh' -not -path './.git/*') \
+	$(shell find tmux/scripts -type f -not -name '*.sh') \
+	sway/dnd sway/power sway/temps sway/workspace-scroll
 
 # Colors
 COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix markdown-lint test clean help
+.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix \
+	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint test clean help
 
 ##@ Build targets:
 
@@ -31,13 +37,12 @@ switch: ## Build and switch to the NixOS configuration.
 
 ##@ Setup targets:
 
-gitconfig-user: ## Generate the user-specific gitconfig.
-	rm -f $(GITCONFIG_USER_PATH)
+gitconfig-user: ## Generate the user-specific gitconfig (keeps other settings in the file).
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(GIT_USER)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) commit.gpgsign true
-	echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
+	grep -q '^# vi: syn=gitconfig' $(GITCONFIG_USER_PATH) || \
+		echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
 
 ##@ Validation targets:
 
@@ -70,26 +75,41 @@ check-nix: ## Run nix flake checks.
 	nix flake check
 
 lint: ## Check formatting and lint all Nix files.
-	nix shell nixpkgs\#nixfmt -c nixfmt --check $(NIX_FILES)
-	nix shell nixpkgs\#statix -c statix check .
-	nix shell nixpkgs\#deadnix -c deadnix --fail $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#nixfmt -c nixfmt --check $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#statix -c statix check .
+	$(NIX_SHELL) nixpkgs\#deadnix -c deadnix --fail $(NIX_FILES)
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
-	nix shell nixpkgs\#nixfmt -c nixfmt $(NIX_FILES)
-	nix shell nixpkgs\#statix -c statix fix .
-	nix shell nixpkgs\#deadnix -c deadnix -e $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#nixfmt -c nixfmt $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#statix -c statix fix .
+	$(NIX_SHELL) nixpkgs\#deadnix -e $(NIX_FILES)
 
-markdown-lint: ## Lint markdown files.
-	nix shell nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 README.md
+markdown-lint: ## Lint all markdown files.
+	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md'
 
-test: lint check-nix markdown-lint ## Run checks locally.
+prettier: ## Check formatting with prettier.
 	npx --yes prettier@3 --check .
-	nix shell nixpkgs\#typos -c typos
-	nix shell nixpkgs\#shfmt -c shfmt -d .
-	nix shell nixpkgs\#shellcheck -c shellcheck $$(find . -name '*.sh' -not -path './.git/*') sway/dnd sway/power sway/temps sway/workspace-scroll
-	nix shell nixpkgs\#shellcheck -c sh -c 'find tmux/scripts -type f -not -name "*.sh" -print0 | xargs -0 --no-run-if-empty shellcheck'
-	nix shell nixpkgs\#fish -c fish --no-execute $$(find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
-	nix shell nixpkgs\#fish -c fish_indent --check $$(find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish' ! -name 'kubectl.fish')
+
+typos: ## Check for typos.
+	$(NIX_SHELL) nixpkgs\#typos -c typos
+
+shfmt: ## Check shell script formatting.
+	$(NIX_SHELL) nixpkgs\#shfmt -c shfmt -d .
+
+shellcheck: ## Lint shell scripts.
+	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $(SHELL_FILES)
+
+fish-lint: ## Check fish syntax and formatting.
+	for f in $(FISH_FILES); do \
+		$(NIX_SHELL) nixpkgs\#fish -c fish --no-execute "$$f" || exit 1; \
+	done
+	$(NIX_SHELL) nixpkgs\#fish -c fish_indent --check $(FISH_FILES)
+
+lua-lint: ## Check Lua formatting and lint.
+	$(NIX_SHELL) nixpkgs\#stylua -c stylua --check nvim/
+	$(NIX_SHELL) nixpkgs\#luajitPackages.luacheck -c luacheck nvim/
+
+test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint ## Run all checks locally.
 
 ##@ Update targets:
 
@@ -99,8 +119,6 @@ update: ## Pull the latest changes from remote.
 upgrade: update ## Update and upgrade external dependencies.
 	$(CURL) https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit \
 		-o gdb/gdbinit
-	$(CURL) https://raw.githubusercontent.com/evanlucas/fish-kubectl-completions/refs/heads/main/completions/kubectl.fish \
-		-o fish/completions/kubectl.fish
 	$(CURL) https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.fish \
 		-o fish/functions/fzf_key_bindings.fish
 	sed -i '/^# Run setup/,$$d' fish/functions/fzf_key_bindings.fish
@@ -108,15 +126,14 @@ upgrade: update ## Update and upgrade external dependencies.
 		-o bat/themes/Dracula.tmTheme
 	$(GIT) add \
 		gdb/gdbinit \
-		fish/completions/kubectl.fish \
 		fish/functions/fzf_key_bindings.fish \
 		bat/themes/Dracula.tmTheme
 	$(GIT) diff-index --cached --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 
 ##@ Cleanup targets:
 
-clean: ## Remove generated configuration files.
-	rm -f $(GITCONFIG_USER_PATH) result
+clean: ## Remove build results.
+	rm -f result
 
 ##@ Help:
 

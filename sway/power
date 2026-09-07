@@ -2,15 +2,13 @@
 set -euo pipefail
 shopt -s nullglob
 
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=hwmon.sh
+. "$(dirname "$0")/hwmon.sh"
+
 cpu_watts() {
-	local rapl=""
-	for p in /sys/class/powercap/intel-rapl:0 /sys/class/powercap/amd_rapl:0; do
-		if [ -r "$p/energy_uj" ]; then
-			rapl="$p"
-			break
-		fi
-	done
-	if [ -z "$rapl" ]; then
+	local rapl="/sys/class/powercap/intel-rapl:0"
+	if [ ! -r "$rapl/energy_uj" ]; then
 		echo "N/A"
 		return
 	fi
@@ -59,21 +57,9 @@ cpu_watts() {
 }
 
 gpu_watts() {
-	for f in /sys/class/hwmon/hwmon*/name; do
-		if [ "$(cat "$f" 2>/dev/null)" = "amdgpu" ]; then
-			local dir
-			dir=$(dirname "$f")
-			local device
-			device=$(readlink -f "$dir/device" 2>/dev/null)
-			if [[ "$device" == */0000:03:00.0 ]]; then
-				local val
-				val=$(cat "$dir/power1_average" 2>/dev/null) || val=0
-				echo $(((val + 500000) / 1000000))
-				return
-			fi
-		fi
-	done
-	echo "0"
+	local val
+	val=$(hwmon_value amdgpu power1_average)
+	echo $(((val + 500000) / 1000000))
 }
 
 cpu=$(cpu_watts)

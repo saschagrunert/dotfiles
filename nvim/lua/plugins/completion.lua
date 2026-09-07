@@ -2,17 +2,15 @@ return {
   {
     "saghen/blink.cmp",
     version = "1.*",
-    event = { "InsertEnter", "CmdlineEnter" },
+    -- Load at startup so blink registers its LSP capabilities via
+    -- vim.lsp.config("*") before the first language server attaches.
+    lazy = false,
     dependencies = {
       "rafamadriz/friendly-snippets",
     },
     opts = {
       keymap = {
         preset = "default",
-        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
-        ["<C-Space>"] = { "show" },
-        ["<C-e>"] = { "cancel", "fallback" },
         ["<CR>"] = { "accept", "fallback" },
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
@@ -36,7 +34,6 @@ return {
         accept = { auto_brackets = { enabled = true } },
         documentation = { auto_show = true },
       },
-      snippets = { preset = "default" },
       signature = { enabled = true },
     },
   },

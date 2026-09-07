@@ -9,6 +9,7 @@
     libnotify
     mako
     networkmanagerapplet
+    papirus-icon-theme
     pavucontrol
     piper
     slurp
@@ -47,6 +48,7 @@
     jira-cli-go
     rpm
     tig
+    tree-sitter
 
     # LSP servers
     bash-language-server
@@ -137,12 +139,15 @@
     proselint
     shellcheck
     shfmt
+    stylua
     typos
     yamllint
 
     # Media & documents
+    exiftool
     imagemagick
     kooha
+    libarchive
     mediainfo
 
     # Nix tools

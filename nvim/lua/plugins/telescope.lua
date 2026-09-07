@@ -9,7 +9,6 @@ return {
     keys = {
       { "<C-p>", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<S-Tab>", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
-      { "cpc", "<cmd>Telescope tags<cr>", desc = "Tags" },
       { "cpi", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer lines" },
       { "cpk", "<cmd>Telescope marks<cr>", desc = "Marks" },
       { "cpm", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
@@ -31,11 +30,10 @@ return {
             prompt_position = "top",
           },
           sorting_strategy = "ascending",
-          file_ignore_patterns = { "vendor/", "node_modules/", "%.git/" },
+          file_ignore_patterns = { "vendor/", "node_modules/" },
         },
         pickers = {
           find_files = {
-            hidden = true,
             find_command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
           },
           live_grep = {

@@ -50,57 +50,49 @@ map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
 map("n", "<leader>W", "<cmd>Wall<cr>", { desc = "Save all" })
 map("n", "<leader>S", "<cmd>SudoWrite<cr>", { desc = "Sudo save" })
 
--- Hex editor
-map("n", "<leader>x", function()
-  require("config.commands").toggle_hex()
-end, { desc = "Toggle hex" })
-
 -- Settings toggles
 map("n", "yoe", "<cmd>set expandtab!<bar>set expandtab?<cr>", { desc = "Toggle expandtab" })
 map("n", "yom", "<cmd>Matches<cr>", { desc = "Show match count" })
-map("n", "yot", function()
-  require("config.commands").toggle_color_column()
-end, { desc = "Toggle color column" })
 map("n", "<leader>h", "<cmd>nohlsearch<cr>", { silent = true, desc = "Clear search highlight" })
 
--- Command line
-map("c", "<C-a>", "<Home>")
-map("c", "<C-b>", "<Left>")
-map("c", "<C-f>", "<Right>")
-map("c", "<C-d>", "<Delete>")
-map("c", "<M-b>", "<S-Left>")
-map("c", "<M-f>", "<S-Right>")
-map("c", "<M-d>", "<S-right><Delete>")
-map("c", "<C-g>", "<C-c>")
-map("c", "<C-p>", "<Up>")
-map("c", "<C-n>", "<Down>")
+-- Command line (readline style)
+map("c", "<C-a>", "<Home>", { desc = "Beginning of line" })
+map("c", "<C-b>", "<Left>", { desc = "Char left" })
+map("c", "<C-f>", "<Right>", { desc = "Char right" })
+map("c", "<C-d>", "<Delete>", { desc = "Delete char" })
+map("c", "<M-b>", "<S-Left>", { desc = "Word left" })
+map("c", "<M-f>", "<S-Right>", { desc = "Word right" })
+map("c", "<M-d>", "<S-right><Delete>", { desc = "Delete word" })
+map("c", "<C-g>", "<C-c>", { desc = "Abort" })
+map("c", "<C-p>", "<Up>", { desc = "Previous history" })
+map("c", "<C-n>", "<Down>", { desc = "Next history" })
 
 -- Search
-map("n", "&", "<cmd>&&<cr>")
+map("n", "&", "<cmd>&&<cr>", { desc = "Repeat substitute with flags" })
 
 -- German keyboard: ö → [, ä → ]
 for c = 65, 90 do
   local ch = string.char(c)
-  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true })
-  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true, desc = "[" .. ch })
+  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true, desc = "]" .. ch })
 end
 for c = 97, 122 do
   local ch = string.char(c)
-  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true })
-  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true })
+  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true, desc = "[" .. ch })
+  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true, desc = "]" .. ch })
 end
 
 -- Visual indent (keep selection)
-map("v", "<", "<gv")
-map("v", ">", ">gv")
+map("v", "<", "<gv", { desc = "Indent left" })
+map("v", ">", ">gv", { desc = "Indent right" })
 
 -- Jump after paste
-map("v", "y", "y`]", { silent = true })
-map("v", "p", "p`]", { silent = true })
-map("n", "p", "p`]", { silent = true })
+map("v", "y", "y`]", { silent = true, desc = "Yank and jump to end" })
+map("v", "p", "p`]", { silent = true, desc = "Paste and jump to end" })
+map("n", "p", "p`]", { silent = true, desc = "Paste and jump to end" })
 
 -- Select pasted text
-map("n", "gV", "`[v`]")
+map("n", "gV", "`[v`]", { desc = "Select last pasted text" })
 
 -- Upper/lower word
 map("n", "<leader>uu", "mQviwU`Q", { desc = "Uppercase word" })
@@ -112,27 +104,35 @@ map("n", "<leader>p", "<cmd>e!<cr>", { desc = "Reload file" })
 map("n", "<leader>ul", "<cmd>t.<CR>Vr=", { silent = true, desc = "Underline heading" })
 
 -- Horizontal scroll
-map("n", "zl", "zL")
-map("n", "zh", "zH")
+map("n", "zl", "zL", { desc = "Scroll half screen right" })
+map("n", "zh", "zH", { desc = "Scroll half screen left" })
 
 -- Escape
-map("i", "jj", "<ESC>")
+map("i", "jj", "<ESC>", { desc = "Escape" })
 
 -- Blank lines
 map("n", "<leader>dd", "m`:silent +g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true, desc = "Delete blank lines below" })
 map("n", "<leader>dD", "m`:silent -g/\\m^\\s*$/d<CR>``:noh<CR>", { silent = true, desc = "Delete blank lines above" })
-map("n", "<leader>o", "m`o<Esc>``", { silent = true, desc = "Blank line below" })
-map("n", "<leader>O", "m`O<Esc>``", { silent = true, desc = "Blank line above" })
 
 -- Folding
-map("n", "zU", "zR")
+map("n", "zU", "zR", { desc = "Open all folds" })
 map("n", "<leader>f", function()
   require("config.commands").toggle_folding()
 end, { desc = "Toggle folding" })
 
 -- Visual search
-map("x", "*", [[:<C-u>call v:lua.require('config.commands').visual_search('/')<CR>/<C-R>=@/<CR><CR>]])
-map("x", "#", [[:<C-u>call v:lua.require('config.commands').visual_search('?')<CR>?<C-R>=@/<CR><CR>]])
+map(
+  "x",
+  "*",
+  [[:<C-u>call v:lua.require('config.commands').visual_search('/')<CR>/<C-R>=@/<CR><CR>]],
+  { desc = "Search selection forward" }
+)
+map(
+  "x",
+  "#",
+  [[:<C-u>call v:lua.require('config.commands').visual_search('?')<CR>?<C-R>=@/<CR><CR>]],
+  { desc = "Search selection backward" }
+)
 
 -- Quickfix / location list
 map("n", "<leader>l", function()
@@ -144,16 +144,17 @@ map("n", "<leader>q", function()
 end, { silent = true, desc = "Toggle quickfix" })
 
 -- Jump mappings
-map("n", "]g", "]}")
-map("n", "[g", "[{")
-map("n", "]h", "])")
-map("n", "[h", "[(")
-map("n", "öö", "[m")
-map("n", "ää", "]m")
+map("n", "]g", "]}", { desc = "Next unmatched }" })
+map("n", "[g", "[{", { desc = "Previous unmatched {" })
+map("n", "]h", "])", { desc = "Next unmatched )" })
+map("n", "[h", "[(", { desc = "Previous unmatched (" })
+-- remap so these follow the treesitter ]m/[m function motions
+map("n", "öö", "[m", { remap = true, desc = "Previous function start" })
+map("n", "ää", "]m", { remap = true, desc = "Next function start" })
 
 -- Insert mode begin/end
-map("i", "<C-A>", "<C-O>0")
-map("i", "<C-E>", "<C-O>$")
+map("i", "<C-A>", "<C-O>0", { desc = "Beginning of line" })
+map("i", "<C-E>", "<C-O>$", { desc = "End of line" })
 
 -- Register accessor
 map("", ";", '"', { silent = true, desc = "Register accessor" })
@@ -165,16 +166,16 @@ map("n", "'", "<cmd>bnext<cr>", { silent = true, desc = "Next buffer" })
 map("n", '"', "<cmd>bprevious<cr>", { silent = true, desc = "Previous buffer" })
 
 -- Breaking habits (disable arrows in insert/visual)
-map("i", "<Left>", '<Esc><cmd>echo "Dude!"<cr>')
-map("i", "<Right>", '<Esc><cmd>echo "Dude!"<cr>')
-map("v", "<Left>", '<Esc><cmd>echo "Dude!"<cr>')
-map("v", "<Right>", '<Esc><cmd>echo "Dude!"<cr>')
-map("v", "<Up>", '<Esc><cmd>echo "Dude!"<cr>')
-map("v", "<Down>", '<Esc><cmd>echo "Dude!"<cr>')
+for _, key in ipairs({ "<Left>", "<Right>" }) do
+  map("i", key, '<Esc><cmd>echo "Dude!"<cr>', { desc = "Disabled" })
+end
+for _, key in ipairs({ "<Left>", "<Right>", "<Up>", "<Down>" }) do
+  map("v", key, '<Esc><cmd>echo "Dude!"<cr>', { desc = "Disabled" })
+end
 
 -- Disable backspace/space in normal
-map("", "<backspace>", "<nop>")
-map("", "<space>", "<nop>")
+map("", "<backspace>", "<nop>", { desc = "Disabled" })
+map("", "<space>", "<nop>", { desc = "Disabled" })
 
 -- Exit
 map("n", "<leader>a", "<cmd>qa<cr>", { desc = "Quit all" })

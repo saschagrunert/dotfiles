@@ -2,42 +2,13 @@
 set -euo pipefail
 shopt -s nullglob
 
-find_temp() {
-	local name=$1
-	for f in /sys/class/hwmon/hwmon*/name; do
-		if [ "$(cat "$f" 2>/dev/null)" = "$name" ]; then
-			local dir
-			dir=$(dirname "$f")
-			local val
-			val=$(cat "$dir/temp1_input" 2>/dev/null) || val=0
-			echo $((val / 1000))
-			return
-		fi
-	done
-	echo 0
-}
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=hwmon.sh
+. "$(dirname "$0")/hwmon.sh"
 
-find_gpu_temp() {
-	for f in /sys/class/hwmon/hwmon*/name; do
-		if [ "$(cat "$f" 2>/dev/null)" = "amdgpu" ]; then
-			local dir
-			dir=$(dirname "$f")
-			local device
-			device=$(readlink -f "$dir/device" 2>/dev/null)
-			if [[ "$device" == */0000:03:00.0 ]]; then
-				local val
-				val=$(cat "$dir/temp1_input" 2>/dev/null) || val=0
-				echo $((val / 1000))
-				return
-			fi
-		fi
-	done
-	echo 0
-}
-
-cpu=$(find_temp k10temp)
-gpu=$(find_gpu_temp)
-nvme=$(find_temp nvme)
+cpu=$(($(hwmon_value k10temp temp1_input) / 1000))
+gpu=$(($(hwmon_value amdgpu temp1_input) / 1000))
+nvme=$(($(hwmon_value nvme temp1_input) / 1000))
 
 class=""
 if [ "$cpu" -ge 85 ] || [ "$gpu" -ge 90 ] || [ "$nvme" -ge 70 ]; then

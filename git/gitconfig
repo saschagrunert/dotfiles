@@ -41,8 +41,6 @@
     prune = true
     pruneTags = true
     parallel = 0
-[maintenance]
-    strategy = incremental
 [rebase]
     autostash = true
     autosquash = true
@@ -53,8 +51,6 @@
     manyFiles = true
 [log]
     date = iso
-[pack]
-    threads = 0
 [status]
     submoduleSummary = true
 [submodule]

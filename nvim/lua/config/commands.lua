@@ -76,53 +76,6 @@ function M.toggle_list(bufname, pfx)
   end
 end
 
--- Toggle color column
-function M.toggle_color_column()
-  if vim.wo.colorcolumn ~= "" then
-    vim.wo.colorcolumn = ""
-  else
-    vim.wo.colorcolumn = "80"
-  end
-end
-
--- Toggle hex editor mode
-function M.toggle_hex()
-  local modified = vim.bo.modified
-  local oldreadonly = vim.bo.readonly
-  vim.bo.readonly = false
-  local oldmodifiable = vim.bo.modifiable
-  vim.bo.modifiable = true
-
-  if not vim.b.editHex then
-    vim.b.oldft = vim.bo.filetype
-    vim.b.oldbin = vim.bo.binary
-    vim.bo.binary = true
-    local ok = pcall(vim.cmd, "%!xxd -g 1")
-    if not ok then
-      vim.bo.binary = vim.b.oldbin or false
-      vim.notify("xxd failed", vim.log.levels.ERROR)
-      return
-    end
-    vim.bo.filetype = "xxd"
-    vim.b.editHex = true
-  else
-    local ok = pcall(vim.cmd, "%!xxd -r")
-    if not ok then
-      vim.notify("xxd -r failed", vim.log.levels.ERROR)
-      return
-    end
-    vim.bo.filetype = vim.b.oldft or ""
-    if not vim.b.oldbin then
-      vim.bo.binary = false
-    end
-    vim.b.editHex = false
-  end
-
-  vim.bo.modified = modified
-  vim.bo.readonly = oldreadonly
-  vim.bo.modifiable = oldmodifiable
-end
-
 -- Visual search (makes * and # work in visual mode)
 function M.visual_search(cmdtype)
   local temp = vim.fn.getreg("s")
@@ -170,19 +123,17 @@ function M.wipeout(bang)
   vim.notify("Deleted " .. tally .. " buffers")
 end
 
--- Toggle syntax-based folding
+-- Toggle treesitter-based folding (enabled by default in options.lua)
 function M.toggle_folding()
-  if not vim.b.outline_mode or vim.b.outline_mode == 0 then
+  if vim.wo.foldmethod == "expr" then
+    vim.notify("Disabling treesitter based folding.")
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.foldenable = false
+  else
     vim.notify("Enabling treesitter based folding.")
     vim.opt_local.foldmethod = "expr"
     vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     vim.opt_local.foldenable = true
-    vim.b.outline_mode = 1
-  else
-    vim.notify("Disabling treesitter based folding.")
-    vim.opt_local.foldmethod = "manual"
-    vim.opt_local.foldenable = false
-    vim.b.outline_mode = 0
   end
 end
 
@@ -207,9 +158,6 @@ vim.api.nvim_create_user_command("Matches", function()
   end
 end, {})
 vim.api.nvim_create_user_command("KillWhitespace", ":%s/\\s\\+$//e", {})
-vim.api.nvim_create_user_command("Hexmode", function()
-  M.toggle_hex()
-end, { bar = true })
 vim.api.nvim_create_user_command("BufOnly", function(opts)
   M.buf_only(opts.bang)
 end, { bang = true })

@@ -73,26 +73,41 @@ end
 set -g fish_cursor_default block
 set -g fish_cursor_insert block
 
-# Source optional functions only if they exist
-set -l _zoxide_cache ~/.cache/fish/zoxide.fish
+# Generated shell integrations, cached and keyed on the tool binary path
+set -l _fish_cache ~/.cache/fish
+set -q XDG_CACHE_HOME && set _fish_cache $XDG_CACHE_HOME/fish
+
+set -l _zoxide_cache $_fish_cache/zoxide.fish
 if command -q zoxide
     set -l _zoxide_bin (realpath (command -v zoxide))
     if not test -f $_zoxide_cache; or not string match -q "# $_zoxide_bin" (head -1 $_zoxide_cache)
-        mkdir -p ~/.cache/fish
+        mkdir -p $_fish_cache
         echo "# $_zoxide_bin" >$_zoxide_cache
         zoxide init fish --cmd j >>$_zoxide_cache
     end
     source $_zoxide_cache
 end
 
-set -l _direnv_cache ~/.cache/fish/direnv.fish
+set -l _direnv_cache $_fish_cache/direnv.fish
 if command -q direnv
     set -l _direnv_bin (realpath (command -v direnv))
     if not test -f $_direnv_cache; or not string match -q "# $_direnv_bin" (head -1 $_direnv_cache)
-        mkdir -p ~/.cache/fish
+        mkdir -p $_fish_cache
         echo "# $_direnv_bin" >$_direnv_cache
         direnv hook fish >>$_direnv_cache
     end
     source $_direnv_cache
 end
-test -f ~/.config/fish/functions/kubernetes.fish && source ~/.config/fish/functions/kubernetes.fish
+
+set -l _kubectl_cache $_fish_cache/kubectl.fish
+if command -q kubectl
+    set -l _kubectl_bin (realpath (command -v kubectl))
+    if not test -f $_kubectl_cache; or not string match -q "# $_kubectl_bin" (head -1 $_kubectl_cache)
+        mkdir -p $_fish_cache
+        echo "# $_kubectl_bin" >$_kubectl_cache
+        kubectl completion fish >>$_kubectl_cache
+    end
+    source $_kubectl_cache
+end
+
+source (status dirname)/functions/kubernetes.fish

@@ -3,13 +3,6 @@ return {
     "neovim/nvim-lspconfig",
     lazy = false,
     config = function()
-      local ok, blink = pcall(require, "blink.cmp")
-      local capabilities = ok and blink.get_lsp_capabilities() or vim.lsp.protocol.make_client_capabilities()
-
-      vim.lsp.config("*", {
-        capabilities = capabilities,
-      })
-
       vim.lsp.config("lua_ls", {
         settings = {
           Lua = {
@@ -78,14 +71,12 @@ return {
             vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
           end
           map("n", "gD", vim.lsp.buf.type_definition, "Type definition")
-          map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
-          map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
           map("n", "<leader>ih", function()
             vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr }))
           end, "Toggle inlay hints")
-          map("n", "gI", vim.lsp.buf.implementation, "Go to implementation")
-          map("n", "gr", function()
+          -- gra/grn/gri/grt are Neovim defaults; only replace grr with telescope
+          map("n", "grr", function()
             require("telescope.builtin").lsp_references()
           end, "References")
         end,

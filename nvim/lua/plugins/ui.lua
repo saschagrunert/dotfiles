@@ -36,11 +36,12 @@ return {
       spec = {
         { "<leader>b", group = "Buffers" },
         { "<leader>d", group = "Delete" },
+        { "<leader>d", group = "Duplicate", mode = "v" },
         { "<leader>g", group = "Git" },
         { "<leader>i", group = "Inlay" },
         { "<leader>s", group = "Split" },
         { "<leader>u", group = "Case" },
-        { "<leader>r", group = "Replace" },
+        { "<leader>r", group = "Grep" },
         { "<leader>c", group = "Code" },
         { "<leader>t", group = "Tabs" },
       },

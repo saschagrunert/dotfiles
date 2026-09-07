@@ -1,8 +1,6 @@
 [env]
 TERM = "alacritty"
 
-[colors]
-
 [colors.bright]
 black = "#6272a4"
 blue = "#d6acff"

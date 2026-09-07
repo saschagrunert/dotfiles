@@ -46,7 +46,7 @@ alacritty/                     # Terminal emulator config
 bat/                           # Syntax highlighting themes
 clang/                         # Clang-format config
 claude/                        # Claude Code settings
-fish/                          # Shell config, functions, completions
+fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
@@ -58,6 +58,7 @@ rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
 ├── dnd                        # Do-not-disturb toggle
+├── hwmon.sh                   # Shared hwmon lookup for power/temps
 ├── power                      # Power consumption monitor
 ├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper
@@ -69,12 +70,12 @@ waybar/
 └── style.css                  # Waybar styling
 nixos/
 ├── configuration.nix          # Main NixOS config
-├── desktop.nix                # Sway, XDG portals, greetd
+├── desktop.nix                # Sway, XDG portals, Wayland env
 ├── hosts/
 │   └── desktop/               # Machine-specific config
 │       ├── default.nix        # Host imports
-│       ├── hardware.nix       # Filesystems, kernel modules
-│       └── boot.nix           # Bootloader, initrd, kernel
+│       ├── hardware.nix       # Filesystems, swap
+│       └── boot.nix           # Bootloader, initrd, kernel modules
 ├── packages.nix               # System packages
 ├── programs.nix               # fish, neovim, gnupg, direnv, ...
 ├── virtualisation.nix         # podman, cri-o, libvirtd
@@ -113,7 +114,7 @@ After editing any configuration file, rebuild with:
 To validate the configuration locally:
 
 ```fish
-> make test     # lint, flake check, markdown, prettier, typos, shfmt, shellcheck
+> make test     # every check: nix, markdown, prettier, typos, shell, fish, lua
 > make check    # verify symlinks and required commands
 > make lint     # nixfmt, statix, deadnix
 ```

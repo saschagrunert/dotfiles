@@ -74,7 +74,7 @@ autocmd("FileType", {
   group = augroup("GitCommit", { clear = true }),
   pattern = "gitcommit",
   callback = function()
-    vim.keymap.set("i", "jj", "<ESC>ZZ", { buffer = 0 })
+    vim.keymap.set("i", "jj", "<ESC>ZZ", { buffer = 0, desc = "Save and close commit" })
   end,
 })
 
@@ -84,17 +84,6 @@ autocmd("FileType", {
   pattern = "go",
   callback = function()
     vim.opt_local.listchars = { tab = "  ", trail = "·", extends = "❯", precedes = "❮" }
-  end,
-})
-
--- Lint on save and open
-autocmd({ "BufWritePost", "BufReadPost" }, {
-  group = augroup("Lint", { clear = true }),
-  callback = function()
-    local ok, lint = pcall(require, "lint")
-    if ok then
-      lint.try_lint()
-    end
   end,
 })
 
@@ -114,7 +103,7 @@ for ft, cmd in pairs(ft_runners) do
       vim.keymap.set("n", "<leader>R", function()
         vim.cmd("write")
         vim.cmd("!" .. cmd .. " " .. vim.fn.shellescape(vim.fn.expand("%")))
-      end, { buffer = 0, silent = true })
+      end, { buffer = 0, silent = true, desc = "Run file with " .. cmd })
     end,
   })
 end
@@ -127,6 +116,6 @@ autocmd("FileType", {
       local base = vim.fn.shellescape(vim.fn.expand("%:r"))
       vim.cmd("write")
       vim.cmd("!gcc -o " .. base .. " -Wall -std=c99 " .. file .. " && ./" .. base)
-    end, { buffer = 0, silent = true })
+    end, { buffer = 0, silent = true, desc = "Compile and run with gcc" })
   end,
 })

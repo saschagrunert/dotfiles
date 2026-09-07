@@ -77,16 +77,17 @@ return {
   {
     "zirrostig/vim-schlepp",
     keys = {
-      { "<leader>sk", "<Plug>SchleppUp", mode = "v" },
-      { "<leader>sj", "<Plug>SchleppDown", mode = "v" },
-      { "<leader>sh", "<Plug>SchleppLeft", mode = "v" },
-      { "<leader>sl", "<Plug>SchleppRight", mode = "v" },
-      { "<S-up>", "<Plug>SchleppIndentUp", mode = "v" },
-      { "<S-down>", "<Plug>SchleppIndentDown", mode = "v" },
-      { "Dk", "<Plug>SchleppDupUp", mode = "v" },
-      { "Dj", "<Plug>SchleppDupDown", mode = "v" },
-      { "Dh", "<Plug>SchleppDupLeft", mode = "v" },
-      { "Dl", "<Plug>SchleppDupRight", mode = "v" },
+      { "<leader>sk", "<Plug>SchleppUp", mode = "v", desc = "Move selection up" },
+      { "<leader>sj", "<Plug>SchleppDown", mode = "v", desc = "Move selection down" },
+      { "<leader>sh", "<Plug>SchleppLeft", mode = "v", desc = "Move selection left" },
+      { "<leader>sl", "<Plug>SchleppRight", mode = "v", desc = "Move selection right" },
+      { "<S-up>", "<Plug>SchleppIndentUp", mode = "v", desc = "Move selection up (indent)" },
+      { "<S-down>", "<Plug>SchleppIndentDown", mode = "v", desc = "Move selection down (indent)" },
+      -- <leader>d prefix instead of D so plain visual D does not wait for timeoutlen
+      { "<leader>dk", "<Plug>SchleppDupUp", mode = "v", desc = "Duplicate selection up" },
+      { "<leader>dj", "<Plug>SchleppDupDown", mode = "v", desc = "Duplicate selection down" },
+      { "<leader>dh", "<Plug>SchleppDupLeft", mode = "v", desc = "Duplicate selection left" },
+      { "<leader>dl", "<Plug>SchleppDupRight", mode = "v", desc = "Duplicate selection right" },
     },
   },
 }
