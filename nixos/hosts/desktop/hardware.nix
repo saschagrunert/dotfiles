@@ -21,7 +21,6 @@ _: {
   swapDevices = [ { device = "/dev/disk/by-uuid/dfaff609-4075-4842-bfb7-2d6e03ad5ee9"; } ];
 
   hardware = {
-    xpadneo.enable = true;
     bluetooth.enable = true;
     cpu.amd.updateMicrocode = true;
     graphics = {
