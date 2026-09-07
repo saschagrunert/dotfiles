@@ -75,9 +75,8 @@ return {
           map("n", "<leader>ih", function()
             vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr }))
           end, "Toggle inlay hints")
-          -- gra/grn/gri/grt are Neovim defaults; only replace grr with telescope
           map("n", "grr", function()
-            require("telescope.builtin").lsp_references()
+            require("fzf-lua").lsp_references()
           end, "References")
         end,
       })

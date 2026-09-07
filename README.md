@@ -21,12 +21,14 @@ both the system configuration and user environment via
   native LSP, [blink.cmp](https://github.com/Saghen/blink.cmp),
   [conform.nvim](https://github.com/stevearc/conform.nvim),
   [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter),
-  [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim),
+  [fzf-lua](https://github.com/ibhagwan/fzf-lua),
   [dracula.nvim](https://github.com/Mofiqul/dracula.nvim).
 - **Shell and tools**: [fish](https://github.com/fish-shell/fish-shell),
   [tmux](https://github.com/tmux/tmux),
-  [git](https://github.com/git/git) + [delta](https://github.com/dandavison/delta),
-  [ranger](https://github.com/ranger/ranger),
+  [git](https://github.com/git/git) +
+  [delta](https://github.com/dandavison/delta) +
+  [lazygit](https://github.com/jesseduffield/lazygit),
+  [yazi](https://github.com/sxyazi/yazi),
   [fzf](https://github.com/junegunn/fzf),
   [zoxide](https://github.com/ajeetdsouza/zoxide),
   [ripgrep](https://github.com/BurntSushi/ripgrep).
@@ -50,10 +52,10 @@ fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
-htop/                          # Process viewer config
+btop/                          # System monitor config
+lazygit/                       # Git TUI config
 mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
-ranger/                        # File manager config and themes
 rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
@@ -62,9 +64,9 @@ sway/
 ├── power                      # Power consumption monitor
 ├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper
-tig/                           # Git text-mode interface config
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers
+yazi/                          # File manager config and theme
 waybar/
 ├── config.jsonc               # Waybar module config
 └── style.css                  # Waybar styling

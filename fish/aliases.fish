@@ -69,5 +69,6 @@ abbr -a tg cd \~ \&\& tmux
 abbr -a tl tmux list-sessions
 abbr -a ts tmux new-session -s
 abbr -a v nvim
-abbr -a vr ranger
+abbr -a vr yazi
+abbr -a lg lazygit
 abbr -a vv nvim -u NONE

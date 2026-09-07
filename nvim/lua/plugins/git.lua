@@ -1,19 +1,19 @@
 return {
   {
-    "tpope/vim-fugitive",
-    cmd = { "Git", "Gdiffsplit", "Gwrite", "Gread", "Gedit" },
+    "NeogitOrg/neogit",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = "Neogit",
     keys = {
-      { "<leader>gs", "<cmd>Git<cr>", desc = "Git status" },
-      { "<leader>gd", "<cmd>Gdiffsplit<cr>", desc = "Git diff" },
-      { "<leader>gc", "<cmd>Gwrite<bar>w<bar>Git commit<cr>A", desc = "Git commit" },
-      { "<leader>gb", "<cmd>Git blame<cr>", desc = "Git blame" },
-      { "<leader>gl", "<cmd>Git pull<cr>", desc = "Git pull" },
-      { "<leader>gw", "<cmd>Gwrite<cr>", desc = "Git write" },
-      { "<leader>gr", "<cmd>Gread<cr>", desc = "Git read" },
-      { "<leader>ge", "<cmd>Gedit<cr>", desc = "Git edit" },
-      { "<leader>gp", "<cmd>w<bar>Git push<cr>", desc = "Git push" },
-      { "<leader>gf", "<cmd>Git fetch<cr>", desc = "Git fetch" },
-      { "<leader>go", "<cmd>Git pull --rebase<cr>", desc = "Git pull rebase" },
+      { "<leader>gs", "<cmd>Neogit<cr>", desc = "Git status" },
+      { "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Git commit" },
+      { "<leader>gd", "<cmd>Neogit diff<cr>", desc = "Git diff" },
+      { "<leader>gl", "<cmd>Neogit pull<cr>", desc = "Git pull" },
+      { "<leader>gp", "<cmd>Neogit push<cr>", desc = "Git push" },
+      { "<leader>gf", "<cmd>Neogit fetch<cr>", desc = "Git fetch" },
+      { "<leader>go", "<cmd>Neogit pull --rebase<cr>", desc = "Git pull rebase" },
+    },
+    opts = {
+      integrations = { fzf_lua = true },
     },
   },
   {
@@ -55,6 +55,7 @@ return {
         end, { expr = true, desc = "Prev hunk" })
         map("n", "<leader>gh", gs.stage_hunk, { desc = "Stage hunk" })
         map("n", "<leader>gu", gs.reset_hunk, { desc = "Reset hunk" })
+        map("n", "<leader>gb", gs.blame, { desc = "Git blame" })
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Inner hunk" })
         map({ "o", "x" }, "ah", ":<C-U>Gitsigns select_hunk<CR>", { desc = "Outer hunk" })
       end,

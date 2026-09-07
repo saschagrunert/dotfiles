@@ -1,0 +1,30 @@
+keybinding:
+  universal:
+    prevItem: k
+    nextItem: j
+    scrollUpMain: <c-u>
+    scrollDownMain: <c-d>
+    prevBlock: h
+    nextBlock: l
+gui:
+  theme:
+    activeBorderColor:
+      - "#bd93f9"
+      - bold
+    inactiveBorderColor:
+      - "#6272a4"
+    optionsTextColor:
+      - "#8be9fd"
+    selectedLineBgColor:
+      - "#44475a"
+    cherryPickedCommitBgColor:
+      - "#44475a"
+    cherryPickedCommitFgColor:
+      - "#ff79c6"
+    unstagedChangesColor:
+      - "#ff5555"
+    defaultFgColor:
+      - "#f8f8f2"
+    searchingActiveBorderColor:
+      - "#f1fa8c"
+  nerdFontsVersion: "3"

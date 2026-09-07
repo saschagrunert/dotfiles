@@ -21,7 +21,6 @@ in
       ".gitconfig".source = dotfile "git/gitconfig";
       ".gitignore_global".source = dotfile "git/gitignore_global";
       ".rustfmt.toml".source = dotfile "rustfmt/rustfmt.toml";
-      ".tigrc".source = dotfile "tig/tigrc";
       ".tmux.conf".source = dotfile "tmux/tmux.conf";
       ".tmux/scripts".source = dotfile "tmux/scripts";
       ".claude/settings.json".source = dotfile "claude/settings.json";
@@ -141,11 +140,12 @@ in
       "mako".source = dotfile "mako";
       "fuzzel".source = dotfile "fuzzel";
       "fish".source = dotfile "fish";
-      "htop".source = dotfile "htop";
       "sway".source = dotfile "sway";
       "waybar".source = dotfile "waybar";
       "nvim".source = dotfile "nvim";
-      "ranger".source = dotfile "ranger";
+      "btop".source = dotfile "btop";
+      "lazygit".source = dotfile "lazygit";
+      "yazi".source = dotfile "yazi";
     };
   };
 }

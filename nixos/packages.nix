@@ -19,20 +19,20 @@
 
     # System utilities
     bat
+    btop
     calc
     eza
     fd
     file
     fzf
-    htop
     jq
     parallel
     pstree
-    ranger
     ripgrep
     tmux
     unzip
     wget
+    yazi
     yq-go
     zoxide
 
@@ -46,8 +46,8 @@
     git-lfs
     gnumake
     jira-cli-go
+    lazygit
     rpm
-    tig
     tree-sitter
 
     # LSP servers
@@ -146,9 +146,9 @@
     # Media & documents
     exiftool
     imagemagick
-    kooha
     libarchive
     mediainfo
+    wf-recorder
 
     # Nix tools
     cachix
