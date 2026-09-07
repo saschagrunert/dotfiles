@@ -80,6 +80,9 @@
     navigate = true
     hyperlinks = true
     syntax-theme = Dracula
+[maintenance]
+    auto = true
+    strategy = incremental
 [credential "https://github.com"]
     helper =
     helper = !/run/current-system/sw/bin/gh auth git-credential

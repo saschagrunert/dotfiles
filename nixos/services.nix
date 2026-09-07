@@ -14,7 +14,7 @@
       RemainAfterExit = true;
       ExecStop = pkgs.writeShellScript "stop-chrome" ''
         ${pkgs.procps}/bin/pkill -SIGTERM --exact chrome || true
-        ${pkgs.procps}/bin/pidwait --exact chrome || true
+        ${pkgs.procps}/bin/pidwait --timeout 30 --exact chrome || true
       '';
       TimeoutStopSec = 45;
     };

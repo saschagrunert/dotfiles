@@ -6,6 +6,7 @@
 {
   default = pkgs.mkShell {
     nativeBuildInputs = [
+      pkgs.gcc
       pkgs.llvmPackages_22.clang
       pkgs.pkg-config
     ];

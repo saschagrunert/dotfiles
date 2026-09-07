@@ -60,6 +60,7 @@ return {
         "yamlls",
         "jsonls",
         "taplo",
+        "buf_ls",
       })
 
       local lsp_group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true })

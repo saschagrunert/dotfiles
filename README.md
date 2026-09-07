@@ -46,13 +46,13 @@ home.nix                       # Home-manager user config
 Makefile                       # Build, lint, test, upgrade
 alacritty/                     # Terminal emulator config
 bat/                           # Syntax highlighting themes
+btop/                          # System monitor config
 clang/                         # Clang-format config
 claude/                        # Claude Code settings
 fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
 gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
-btop/                          # System monitor config
 lazygit/                       # Git TUI config
 mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)

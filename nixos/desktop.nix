@@ -52,6 +52,8 @@
       NoNewPrivileges = true;
       RestrictNamespaces = true;
       MemoryDenyWriteExecute = true;
+      ProtectHome = true;
+      ProtectSystem = "strict";
     };
   };
 }

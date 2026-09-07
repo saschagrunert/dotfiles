@@ -40,7 +40,6 @@
     binutils
     claude-code
     delta
-    gcc
     gh
     git
     git-lfs
