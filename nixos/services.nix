@@ -59,9 +59,9 @@
       };
     };
 
-    journald = {
-      rateLimitBurst = 3000;
-      settings.Journal.SystemMaxUse = "500M";
+    journald.settings.Journal = {
+      RateLimitBurst = 3000;
+      SystemMaxUse = "500M";
     };
 
     openssh = {
