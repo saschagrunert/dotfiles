@@ -8,6 +8,7 @@
   systemd.services.chrome-graceful-shutdown = {
     description = "Gracefully stop Chrome before shutdown";
     wantedBy = [ "multi-user.target" ];
+    after = [ "greetd.service" ];
     restartIfChanged = false;
     serviceConfig = {
       Type = "oneshot";
@@ -16,7 +17,7 @@
         main_pid=$(${pkgs.procps}/bin/pgrep --oldest --exact chrome) || true
         if [ -n "$main_pid" ]; then
           kill -SIGTERM "$main_pid"
-          ${pkgs.procps}/bin/pidwait --timeout 30 --exact chrome || true
+          ${pkgs.coreutils}/bin/timeout 30 ${pkgs.procps}/bin/pidwait --exact chrome || true
         fi
       '';
       TimeoutStopSec = 45;
