@@ -61,7 +61,7 @@
 
     journald = {
       rateLimitBurst = 3000;
-      extraConfig = "SystemMaxUse=500M";
+      settings.Journal.SystemMaxUse = "500M";
     };
 
     openssh = {
