@@ -126,7 +126,5 @@
     nixfmt
     statix
 
-    # Misc
-    perlPackages.Apprainbarf
   ];
 }

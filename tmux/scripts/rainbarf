@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-rainbarf \
-	--rgb \
-	--width=30 \
-	--bright \
-	--skip 1
