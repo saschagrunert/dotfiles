@@ -27,7 +27,5 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
-  "codeStyle": {
-    "reasoning_effort": "xhigh"
-  }
+  "reasoning_effort": "xhigh"
 }
