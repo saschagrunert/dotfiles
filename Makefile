@@ -22,7 +22,7 @@ NOCOLOR := \033[0m
 
 .SILENT:
 .PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
-	markdown-lint prettier typos shfmt fish-lint lua-lint test clean help
+	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint test clean help
 
 ##@ Build targets:
 
@@ -82,7 +82,7 @@ lint-fix: ## Fix formatting and lint issues in all Nix files.
 		'nixfmt $(NIX_FILES) && statix fix . && deadnix -e $(NIX_FILES)'
 
 markdown-lint: ## Lint all markdown files.
-	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md'
+	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md' '!yazi/flavors/**'
 
 prettier: ## Check formatting with prettier.
 	npx --yes prettier@3 --check .
@@ -90,9 +90,11 @@ prettier: ## Check formatting with prettier.
 typos: ## Check for typos.
 	$(NIX_SHELL) nixpkgs\#typos -c typos
 
-shfmt: ## Check shell script formatting and lint.
-	$(NIX_SHELL) nixpkgs\#shfmt nixpkgs\#shellcheck -c bash -c \
-		'shfmt -d . && shellcheck $(SHELL_FILES)'
+shfmt: ## Check shell script formatting.
+	$(NIX_SHELL) nixpkgs\#shfmt -c shfmt -d .
+
+shellcheck: ## Lint shell scripts.
+	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $(SHELL_FILES)
 
 fish-lint: ## Check fish syntax and formatting.
 	$(NIX_SHELL) nixpkgs\#fish -c bash -c \
@@ -102,7 +104,7 @@ lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \
 		'stylua --check nvim/ && luacheck nvim/'
 
-test: lint check-nix markdown-lint prettier typos shfmt fish-lint lua-lint ## Run all checks.
+test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint ## Run all checks.
 
 ##@ Cleanup targets:
 
