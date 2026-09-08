@@ -22,7 +22,7 @@ NOCOLOR := \033[0m
 
 .SILENT:
 .PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
-	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint test clean help
+	markdown-lint prettier typos shfmt fish-lint lua-lint test clean help
 
 ##@ Build targets:
 
@@ -74,14 +74,12 @@ check-nix: ## Run nix flake checks.
 	nix flake check
 
 lint: ## Check formatting and lint all Nix files.
-	$(NIX_SHELL) nixpkgs\#nixfmt -c nixfmt --check $(NIX_FILES)
-	$(NIX_SHELL) nixpkgs\#statix -c statix check .
-	$(NIX_SHELL) nixpkgs\#deadnix -c deadnix --fail $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#nixfmt nixpkgs\#statix nixpkgs\#deadnix -c bash -c \
+		'nixfmt --check $(NIX_FILES) && statix check . && deadnix --fail $(NIX_FILES)'
 
 lint-fix: ## Fix formatting and lint issues in all Nix files.
-	$(NIX_SHELL) nixpkgs\#nixfmt -c nixfmt $(NIX_FILES)
-	$(NIX_SHELL) nixpkgs\#statix -c statix fix .
-	$(NIX_SHELL) nixpkgs\#deadnix -e $(NIX_FILES)
+	$(NIX_SHELL) nixpkgs\#nixfmt nixpkgs\#statix nixpkgs\#deadnix -c bash -c \
+		'nixfmt $(NIX_FILES) && statix fix . && deadnix -e $(NIX_FILES)'
 
 markdown-lint: ## Lint all markdown files.
 	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md'
@@ -92,23 +90,19 @@ prettier: ## Check formatting with prettier.
 typos: ## Check for typos.
 	$(NIX_SHELL) nixpkgs\#typos -c typos
 
-shfmt: ## Check shell script formatting.
-	$(NIX_SHELL) nixpkgs\#shfmt -c shfmt -d .
-
-shellcheck: ## Lint shell scripts.
-	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $(SHELL_FILES)
+shfmt: ## Check shell script formatting and lint.
+	$(NIX_SHELL) nixpkgs\#shfmt nixpkgs\#shellcheck -c bash -c \
+		'shfmt -d . && shellcheck $(SHELL_FILES)'
 
 fish-lint: ## Check fish syntax and formatting.
-	for f in $(FISH_FILES); do \
-		$(NIX_SHELL) nixpkgs\#fish -c fish --no-execute "$$f" || exit 1; \
-	done
-	$(NIX_SHELL) nixpkgs\#fish -c fish_indent --check $(FISH_FILES)
+	$(NIX_SHELL) nixpkgs\#fish -c bash -c \
+		'for f in $(FISH_FILES); do fish --no-execute "$$f" || exit 1; done && fish_indent --check $(FISH_FILES)'
 
 lua-lint: ## Check Lua formatting and lint.
-	$(NIX_SHELL) nixpkgs\#stylua -c stylua --check nvim/
-	$(NIX_SHELL) nixpkgs\#luajitPackages.luacheck -c luacheck nvim/
+	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \
+		'stylua --check nvim/ && luacheck nvim/'
 
-test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint ## Run all checks locally.
+test: lint check-nix markdown-lint prettier typos shfmt fish-lint lua-lint ## Run all checks.
 
 ##@ Cleanup targets:
 

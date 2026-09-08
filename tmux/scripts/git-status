@@ -53,4 +53,4 @@ if [[ -n "$tracking" ]]; then
 	fi
 fi
 
-echo -n "$out"
+echo -n "${out% }"

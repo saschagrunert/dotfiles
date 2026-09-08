@@ -1,40 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-wan_ip=""
+cache="${XDG_RUNTIME_DIR:-/tmp}/tmux-ip-${UID}"
+wan_cache="${cache}-wan.txt"
+lan_cache="${cache}-lan.txt"
+now=$(date +%s)
+
 lan_ip=""
-tmp_file="${XDG_RUNTIME_DIR:-/tmp}/tmux-ip-${UID}.txt"
-
-getLanIP() {
-	mapfile -t all_nics < <(ip -o link show | awk -F': ' '{sub(/@.*/, "", $2); print $2}' | grep -v '^lo$')
-	for nic in "${all_nics[@]}"; do
-		lan_ip="$(ip addr show "${nic}" | grep '\<inet\>' | tr -s ' ' | cut -d ' ' -f3)" || true
-		lan_ip="${lan_ip%/*}"
-		lan_ip="$(echo "$lan_ip" | tail -1)"
-		[ -n "$lan_ip" ] && break
-	done
-}
-
-getWanIP() {
-	if [ -f "$tmp_file" ]; then
-		last_update=$(stat -c "%Y" "${tmp_file}")
-		time_now=$(date +%s)
-		update_period=900
-		if [ $((time_now - last_update)) -lt $update_period ]; then
-			wan_ip=$(cat "${tmp_file}")
-		fi
+if [ -f "$lan_cache" ]; then
+	last=$(stat -c "%Y" "$lan_cache")
+	if [ $((now - last)) -lt 30 ]; then
+		lan_ip=$(cat "$lan_cache")
 	fi
+fi
+if [ -z "$lan_ip" ]; then
+	lan_ip=$(ip -4 route get 1.1.1.1 2>/dev/null | grep -oP 'src \K\S+' || true)
+	[ -n "$lan_ip" ] && echo "$lan_ip" >"$lan_cache"
+fi
 
-	if [ -z "$wan_ip" ]; then
-		if wan_ip=$(curl --max-time 2 -s https://whatismyip.akamai.com/); then
-			echo "${wan_ip}" >"$tmp_file"
-		elif [ -f "${tmp_file}" ]; then
-			wan_ip=$(cat "$tmp_file")
-		fi
+wan_ip=""
+if [ -f "$wan_cache" ]; then
+	last=$(stat -c "%Y" "$wan_cache")
+	if [ $((now - last)) -lt 900 ]; then
+		wan_ip=$(cat "$wan_cache")
 	fi
-}
-
-getLanIP
-getWanIP
+fi
+if [ -z "$wan_ip" ]; then
+	if wan_ip=$(curl --max-time 2 -s https://whatismyip.akamai.com/); then
+		echo "$wan_ip" >"$wan_cache"
+	elif [ -f "$wan_cache" ]; then
+		wan_ip=$(cat "$wan_cache")
+	fi
+fi
 
 echo "${wan_ip} / ${lan_ip:-N/a}"

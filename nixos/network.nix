@@ -10,11 +10,5 @@
     firewall.allowedTCPPorts = [ 22 ];
   };
 
-  services.resolved = {
-    enable = true;
-    settings.Resolve = {
-      DNSSEC = "allow-downgrade";
-      DNSOverTLS = false;
-    };
-  };
+  services.resolved.enable = true;
 }
