@@ -8,7 +8,7 @@
   systemd.services.chrome-graceful-shutdown = {
     description = "Gracefully stop Chrome before shutdown";
     wantedBy = [ "multi-user.target" ];
-    after = [ "greetd.service" ];
+    after = [ "greetd.service" "session-1.scope" ];
     restartIfChanged = false;
     serviceConfig = {
       Type = "oneshot";
