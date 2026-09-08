@@ -6,7 +6,21 @@ keybinding:
     scrollDownMain: <c-d>
     prevBlock: h
     nextBlock: l
+git:
+  autoFetch: true
+  mainBranches:
+    - main
+  diffRenderers:
+    - command: "delta --dark --paging=never"
+os:
+  editPreset: "nvim"
+promptToReturnFromSubprocess: false
 gui:
+  expandFocusedSidePanel: true
+  enlargedSideViewLocation: "top"
+  mainPanelSplitMode: "vertical"
+  showCommandLog: false
+  showBottomLine: false
   theme:
     activeBorderColor:
       - "#bd93f9"
