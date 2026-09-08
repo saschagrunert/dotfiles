@@ -70,12 +70,22 @@ window#waybar {
   background-color: rgba(189, 147, 249, 0.15);
 }
 
+@keyframes pulse-critical {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+
 #custom-temps.critical,
 #cpu.critical,
 #memory.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
   font-weight: bold;
+  animation: pulse-critical 1s ease-in-out infinite alternate;
 }
 
 #custom-temps.warning,

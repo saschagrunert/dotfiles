@@ -48,6 +48,12 @@ function fish_prompt
     echo -n -s $prompt_color $normal
 end
 
+function fish_prompt_transient
+    set -l normal (set_color normal)
+    set -l dim (set_color 6272a4)
+    echo -n -s $dim "> " $normal
+end
+
 function fish_greeting
 end
 function fish_title
