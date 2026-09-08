@@ -9,7 +9,6 @@
     libnotify
     mako
     networkmanagerapplet
-    papirus-icon-theme
     pavucontrol
     piper
     slurp
@@ -26,14 +25,11 @@
     file
     fzf
     jq
-    parallel
-    pstree
     ripgrep
     tmux
     unzip
     wget
     yazi
-    yq-go
     zoxide
 
     # Development tools
@@ -42,11 +38,9 @@
     delta
     gh
     git
-    git-lfs
     gnumake
     jira-cli-go
     lazygit
-    rpm
     tree-sitter
 
     # LSP servers
@@ -87,12 +81,9 @@
     conmon
     conmon-rs
     cri-tools
-    criu
     crun
     fuse-overlayfs
-    oras
     runc
-    skopeo
     slirp4netns
     vagrant
     virt-manager
@@ -100,36 +91,21 @@
     # Kubernetes & cloud
     cosign
     google-cloud-sdk
-    kind
     kubernetes
-    kustomize
 
     # Networking & security
-    cfssl
     conntrack-tools
-    inetutils
     iptables
-    jwt-cli
-    ldns
     openssl
     openvpn
     socat
-    unixtools.netstat
 
     # Debugging & profiling
-    gdb
     lm_sensors
     lshw
-    lvm2
-    perf
-    strace
-    tcpdump
     usbutils
 
     # Code quality & linting
-    bats
-    ginkgo
-    proselint
     shellcheck
     shfmt
     stylua
@@ -147,9 +123,7 @@
     cachix
     deadnix
     nix-index
-    nix-prefetch-git
     nixfmt
-    nixos-shell
     statix
 
     # Misc

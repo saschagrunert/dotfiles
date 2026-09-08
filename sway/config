@@ -175,9 +175,9 @@ include /etc/sway/config.d/*
 
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
 set $mouse "hollering-marmot"
-exec_always ratbagctl $mouse resolution 0 dpi set 800
-exec_always ratbagctl $mouse resolution active set 0
-exec_always ratbagctl $mouse led 0 set mode cycle duration 8000 brightness 255
-exec_always ratbagctl $mouse led 1 set mode cycle duration 8000 brightness 255
+exec ratbagctl $mouse resolution 0 dpi set 800
+exec ratbagctl $mouse resolution active set 0
+exec ratbagctl $mouse led 0 set mode cycle duration 8000 brightness 255
+exec ratbagctl $mouse led 1 set mode cycle duration 8000 brightness 255
 exec alacritty -e fish -C 'tmux new-session -A -s work'
 exec google-chrome-stable

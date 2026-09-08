@@ -1,12 +1,6 @@
-*.dylib
 *.old
 .gdb_history
-.netrwhist
 fish/fish_variables
 fish/fishd*
-ranger/bookmarks
-ranger/history
-ranger/tagged
 result
 *.hm-backup
-__pycache__/

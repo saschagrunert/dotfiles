@@ -4,7 +4,7 @@ set -gx GIT_DISCOVERY_ACROSS_FILESYSTEM 1
 set -gx DOTFILES ~/.dotfiles
 set -gx EDITOR nvim
 set -gx VISUAL nvim
-set -gx MANPAGER "bat -l man -p"
+set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -gx FZF_DEFAULT_OPTS "\
     --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 \
     --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 \

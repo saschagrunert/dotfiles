@@ -16,8 +16,6 @@ in
     file = {
       ".hushlogin".text = "";
       ".clang-format".source = dotfile "clang/clang-format";
-      ".gdbinit".source = dotfile "gdb/gdbinit";
-      ".gdbinit.d".source = dotfile "gdb/gdbinit.d";
       ".gitconfig".source = dotfile "git/gitconfig";
       ".gitignore_global".source = dotfile "git/gitignore_global";
       ".rustfmt.toml".source = dotfile "rustfmt/rustfmt.toml";

@@ -13,6 +13,7 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
+      User = username;
       ExecStop = pkgs.writeShellScript "stop-chrome" ''
         main_pid=$(${pkgs.procps}/bin/pgrep --oldest --exact chrome) || true
         if [ -n "$main_pid" ]; then
