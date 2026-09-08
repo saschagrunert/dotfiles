@@ -1,6 +1,5 @@
 # Used binaries
 GIT := git
-CURL := curl -sfL
 NIX_SHELL := nix shell
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
@@ -12,7 +11,7 @@ SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 # Files
 NIX_FILES := $(shell find . -name '*.nix' -not -path './.git/*')
-FISH_FILES := $(shell find . -name '*.fish' -not -path './.git/*' ! -name 'fzf_key_bindings.fish')
+FISH_FILES := $(shell find . -name '*.fish' -not -path './.git/*')
 SHELL_FILES := $(shell find . -name '*.sh' -not -path './.git/*') \
 	$(shell find tmux/scripts -type f -not -name '*.sh') \
 	sway/dnd sway/power sway/temps sway/workspace-scroll
@@ -22,7 +21,7 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user update upgrade check check-nix lint lint-fix \
+.PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
 	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint test clean help
 
 ##@ Build targets:
@@ -110,25 +109,6 @@ lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#luajitPackages.luacheck -c luacheck nvim/
 
 test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint ## Run all checks locally.
-
-##@ Update targets:
-
-update: ## Pull the latest changes from remote.
-	$(GIT) pull --rebase --autostash
-
-upgrade: update ## Update and upgrade external dependencies.
-	$(CURL) https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit \
-		-o gdb/gdbinit
-	$(CURL) https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.fish \
-		-o fish/functions/fzf_key_bindings.fish
-	sed -i '/^# Run setup/,$$d' fish/functions/fzf_key_bindings.fish
-	$(CURL) https://raw.githubusercontent.com/dracula/sublime/master/Dracula.tmTheme \
-		-o bat/themes/Dracula.tmTheme
-	$(GIT) add \
-		gdb/gdbinit \
-		fish/functions/fzf_key_bindings.fish \
-		bat/themes/Dracula.tmTheme
-	$(GIT) diff-index --cached --quiet HEAD || $(GIT) commit -sm "Upgraded external dependencies"
 
 ##@ Cleanup targets:
 

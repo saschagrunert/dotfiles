@@ -43,15 +43,14 @@ and debugging tools.
 flake.nix                      # Nix flake entry point
 shells.nix                     # Dev shells (base + per-project)
 home.nix                       # Home-manager user config
-Makefile                       # Build, lint, test, upgrade
+Makefile                       # Build, lint, test
 alacritty/                     # Terminal emulator config
-bat/                           # Syntax highlighting themes
+bat/                           # Syntax highlighting config
 btop/                          # System monitor config
 clang/                         # Clang-format config
 claude/                        # Claude Code settings
 fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
-gdb/                           # GDB dashboard and init scripts
 git/                           # gitconfig, gitignore
 lazygit/                       # Git TUI config
 mako/                          # Notification daemon config
@@ -130,12 +129,6 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 ```fish
 > nix flake update --flake ~/.dotfiles
 > make switch
-```
-
-To pull the latest dotfiles and update external dependencies:
-
-```fish
-> make upgrade
 ```
 
 ## Development Shells

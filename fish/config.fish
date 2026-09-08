@@ -66,8 +66,11 @@ function fish_user_key_bindings
     bind -M insert \ce end-of-line
     bind -M insert \cp up-or-search
     bind -M insert \cn down-or-search
-    fzf_key_bindings
-    bind -M insert \cg fzf-cd-widget
+    if command -q fzf
+        source (realpath (command -v fzf) | path dirname)/../share/fzf/key-bindings.fish
+        fzf_key_bindings
+        bind -M insert \cg fzf-cd-widget
+    end
 end
 
 set -g fish_cursor_default block
@@ -86,17 +89,6 @@ if command -q zoxide
         zoxide init fish --cmd j >>$_zoxide_cache
     end
     source $_zoxide_cache
-end
-
-set -l _direnv_cache $_fish_cache/direnv.fish
-if command -q direnv
-    set -l _direnv_bin (realpath (command -v direnv))
-    if not test -f $_direnv_cache; or not string match -q "# $_direnv_bin" (head -1 $_direnv_cache)
-        mkdir -p $_fish_cache
-        echo "# $_direnv_bin" >$_direnv_cache
-        direnv hook fish >>$_direnv_cache
-    end
-    source $_direnv_cache
 end
 
 set -l _kubectl_cache $_fish_cache/kubectl.fish

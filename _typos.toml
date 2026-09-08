@@ -1,13 +1,6 @@
 [files]
-extend-exclude = [
-    "nvim/lazy-lock.json",
-    "nvim/lua/plugins/editing.lua",
-    "gdb/",
-]
+extend-exclude = ["nvim/lazy-lock.json", "nvim/lua/plugins/editing.lua"]
 
 [default.extend-words]
 crypted = "crypted"
 grup = "grup"
-yot = "yot"
-ot = "ot"
-als = "als"
