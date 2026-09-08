@@ -125,6 +125,5 @@
     nix-index
     nixfmt
     statix
-
   ];
 }
