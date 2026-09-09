@@ -10,6 +10,7 @@ git_dir=$(git rev-parse --git-dir 2>/dev/null) || exit 0
 branch_symbol=""
 mod_symbol="󰏫 "
 staged_symbol="󰐗 "
+untracked_symbol="󰋗 "
 stashed_symbol="󰆓 "
 
 out=""
@@ -27,6 +28,12 @@ fi
 modified=$(git ls-files --modified | wc -l | tr -d ' ')
 if [[ "$modified" -gt 0 ]]; then
 	out+="${mod_symbol}${modified} "
+fi
+
+# Untracked
+untracked=$(git ls-files --others --exclude-standard | wc -l | tr -d ' ')
+if [[ "$untracked" -gt 0 ]]; then
+	out+="${untracked_symbol}${untracked} "
 fi
 
 # Staged
