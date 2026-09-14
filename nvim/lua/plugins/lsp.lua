@@ -74,7 +74,7 @@ return {
           map("n", "gD", vim.lsp.buf.type_definition, "Type definition")
           map("n", "<leader>e", vim.diagnostic.open_float, "Diagnostics float")
           map("n", "<leader>ih", function()
-            vim.lsp.inlay_hints.enable(not vim.lsp.inlay_hints.is_enabled({ bufnr = bufnr }))
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
           end, "Toggle inlay hints")
           map("n", "grr", function()
             require("fzf-lua").lsp_references()

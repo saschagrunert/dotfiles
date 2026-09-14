@@ -1,28 +1,21 @@
-cscope.*
-tags
-*.sw?
+# Only personal files that no project commits. Build output such as vendor/,
+# dist/ or target/ belongs in each project's .gitignore, since some projects
+# track it. Anchored entries only match at the repo root, because vendored
+# dependencies ship their own .envrc or .env files.
 *.orig
 .DS_Store
-.vscode/
-.idea/
-.env
-.env.local
-.envrc
-.direnv/
-result
-result-*
-target/
+cscope.*
+/tags
+/.env
+/.env.local
+/.envrc
+/.direnv/
+/result
+/result-*
 __debug_bin*
-node_modules/
-.cache/
-*.o
-*.a
-*.so
-*.py[cod]
+/.claude/settings.local.json
+CLAUDE.local.md
 __pycache__/
+*.py[cod]
 .ruff_cache/
-vendor/
-coverage/
-dist/
-*.log
-*.out
+node_modules/

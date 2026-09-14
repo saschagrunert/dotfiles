@@ -23,6 +23,10 @@ end
 
 test -d ~/.cargo/bin && fish_add_path --path --move ~/.cargo/bin
 test -d ~/.local/bin && fish_add_path --path --move ~/.local/bin
+
+# Everything below only matters for interactive shells
+status is-interactive || return
+
 source (status dirname)/aliases.fish
 
 function fish_prompt
@@ -73,7 +77,7 @@ function fish_user_key_bindings
     bind -M insert \cp up-or-search
     bind -M insert \cn down-or-search
     if command -q fzf
-        source (realpath (command -v fzf) | path dirname)/../share/fzf/key-bindings.fish
+        source (path resolve (command -v fzf) | path dirname)/../share/fzf/key-bindings.fish
         fzf_key_bindings
         bind -M insert \cg fzf-cd-widget
     end
@@ -82,30 +86,42 @@ end
 set -g fish_cursor_default block
 set -g fish_cursor_insert block
 
-# Generated shell integrations, cached and keyed on the tool binary path
+# Generated shell integrations, cached and keyed on the tool binary path. Use
+# builtins (path resolve, read), since each external process costs startup time.
+# Caches are written to a temporary file first, so a failed or concurrent
+# generation never leaves a partial file with a valid header.
 set -l _fish_cache ~/.cache/fish
 set -q XDG_CACHE_HOME && set _fish_cache $XDG_CACHE_HOME/fish
 
 set -l _zoxide_cache $_fish_cache/zoxide.fish
 if command -q zoxide
-    set -l _zoxide_bin (realpath (command -v zoxide))
-    if not test -f $_zoxide_cache; or not string match -q "# $_zoxide_bin" (head -1 $_zoxide_cache)
+    set -l _zoxide_bin (path resolve (command -v zoxide))
+    if not test -f $_zoxide_cache; or not read -l _header <$_zoxide_cache; or test "$_header" != "# $_zoxide_bin"
         mkdir -p $_fish_cache
-        echo "# $_zoxide_bin" >$_zoxide_cache
-        zoxide init fish --cmd j >>$_zoxide_cache
+        begin
+            echo "# $_zoxide_bin"
+            zoxide init fish --cmd j
+        end >$_zoxide_cache.$fish_pid
+        and mv $_zoxide_cache.$fish_pid $_zoxide_cache
+        or rm -f $_zoxide_cache.$fish_pid
     end
-    source $_zoxide_cache
+    test -f $_zoxide_cache && source $_zoxide_cache
 end
 
-set -l _kubectl_cache $_fish_cache/kubectl.fish
+# kubectl completions are large, so write them where fish autoloads them on the
+# first completion instead of sourcing them at startup
+set -l _kubectl_completions $__fish_user_data_dir/vendor_completions.d/kubectl.fish
 if command -q kubectl
-    set -l _kubectl_bin (realpath (command -v kubectl))
-    if not test -f $_kubectl_cache; or not string match -q "# $_kubectl_bin" (head -1 $_kubectl_cache)
-        mkdir -p $_fish_cache
-        echo "# $_kubectl_bin" >$_kubectl_cache
-        kubectl completion fish >>$_kubectl_cache
+    set -l _kubectl_bin (path resolve (command -v kubectl))
+    if not test -f $_kubectl_completions; or not read -l _header <$_kubectl_completions; or test "$_header" != "# $_kubectl_bin"
+        mkdir -p (path dirname $_kubectl_completions)
+        begin
+            echo "# $_kubectl_bin"
+            kubectl completion fish
+        end >$_kubectl_completions.$fish_pid
+        and mv $_kubectl_completions.$fish_pid $_kubectl_completions
+        or rm -f $_kubectl_completions.$fish_pid
     end
-    source $_kubectl_cache
 end
 
 source (status dirname)/functions/kubernetes.fish

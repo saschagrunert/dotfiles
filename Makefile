@@ -1,6 +1,7 @@
 # Used binaries
 GIT := git
-NIX_SHELL := nix shell
+# Resolve nixpkgs from flake.lock, so local runs and CI use the same tool versions
+NIX_SHELL := nix shell --inputs-from .
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
@@ -39,7 +40,7 @@ switch: ## Build and switch to the NixOS configuration.
 gitconfig-user: ## Generate the user-specific gitconfig (keeps other settings in the file).
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(GIT_USER)"
 	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signkey "$(SIGNKEY)"
+	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signingKey "$(SIGNKEY)"
 	grep -q '^# vi: syn=gitconfig' $(GITCONFIG_USER_PATH) || \
 		echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
 
@@ -82,10 +83,10 @@ lint-fix: ## Fix formatting and lint issues in all Nix files.
 		'nixfmt $(NIX_FILES) && statix fix . && deadnix -e $(NIX_FILES)'
 
 markdown-lint: ## Lint all markdown files.
-	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md' '!yazi/flavors/**'
+	$(NIX_SHELL) nixpkgs\#markdownlint-cli2 -c markdownlint-cli2 '**/*.md' '!yazi/flavors/**' '!result/**'
 
 prettier: ## Check formatting with prettier.
-	npx --yes prettier@3 --check .
+	$(NIX_SHELL) nixpkgs\#prettier -c prettier --check .
 
 typos: ## Check for typos.
 	$(NIX_SHELL) nixpkgs\#typos -c typos

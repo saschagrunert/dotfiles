@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-tmux_path=$(tmux display -p "#{pane_current_path}")
-cd "$tmux_path" || exit
-
-git_dir=$(git rev-parse --git-dir 2>/dev/null) || exit 0
-[[ -z "$git_dir" ]] && exit 0
+# $1 is the pane id. The path is looked up here instead of being passed in,
+# since directory names must never become part of a shell command.
+path=$(tmux display -p ${1:+-t "$1"} "#{pane_current_path}")
+cd "$path" 2>/dev/null || exit 0
 
 branch_symbol=""
 mod_symbol="󰏫 "
@@ -13,51 +12,57 @@ staged_symbol="󰐗 "
 untracked_symbol="󰋗 "
 stashed_symbol="󰆓 "
 
-out=""
+# One status call provides every counter. --no-optional-locks keeps this from
+# taking index.lock while a git command runs in the pane.
+status=$(git --no-optional-locks status --porcelain=v2 --branch --show-stash --untracked-files=all --ignore-submodules=dirty 2>/dev/null) || exit 0
 
-# Branch
-branch=$(git symbolic-ref --short HEAD 2>/dev/null) || true
+head="" ahead=0 behind=0 stashed=0 modified=0 staged=0 untracked=0
+while IFS= read -r line; do
+	case "$line" in
+	"# branch.oid (initial)") exit 0 ;;
+	"# branch.head "*) head=${line#"# branch.head "} ;;
+	"# branch.ab "*)
+		read -r ahead behind <<<"${line#"# branch.ab "}"
+		ahead=${ahead#+}
+		behind=${behind#-}
+		;;
+	"# stash "*) stashed=${line#"# stash "} ;;
+	"? "*) untracked=$((untracked + 1)) ;;
+	[12u]" "*)
+		if [[ ${line:2:1} != . ]]; then
+			staged=$((staged + 1))
+		fi
+		if [[ ${line:3:1} != . ]]; then
+			modified=$((modified + 1))
+		fi
+		;;
+	esac
+done <<<"$status"
+
 short_hash=$(git rev-parse --short HEAD 2>/dev/null) || exit 0
-if [[ -n "$branch" ]]; then
-	out="${branch_symbol} ${branch} (${short_hash}) "
-else
+if [[ "$head" == "(detached)" ]]; then
 	out="${branch_symbol} :${short_hash} "
+else
+	out="${branch_symbol} ${head} (${short_hash}) "
 fi
 
-# Modified
-modified=$(git ls-files --modified | wc -l | tr -d ' ')
 if [[ "$modified" -gt 0 ]]; then
 	out+="${mod_symbol}${modified} "
 fi
-
-# Untracked
-untracked=$(git ls-files --others --exclude-standard | wc -l | tr -d ' ')
 if [[ "$untracked" -gt 0 ]]; then
 	out+="${untracked_symbol}${untracked} "
 fi
-
-# Staged
-staged=$(git diff --staged --name-status | wc -l | tr -d ' ')
 if [[ "$staged" -gt 0 ]]; then
 	out+="${staged_symbol}${staged} "
 fi
-
-# Stashed
-stashed=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
 if [[ "$stashed" -gt 0 ]]; then
 	out+="${stashed_symbol}${stashed} "
 fi
-
-# Ahead/behind
-tracking=$(git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)" 2>/dev/null) || true
-if [[ -n "$tracking" ]]; then
-	read -r behind ahead < <(git rev-list --left-right --count "${tracking}...HEAD" 2>/dev/null) || true
-	if [[ "${behind:-0}" -gt 0 ]]; then
-		out+="↓ ${behind} "
-	fi
-	if [[ "${ahead:-0}" -gt 0 ]]; then
-		out+="↑ ${ahead} "
-	fi
+if [[ "$behind" -gt 0 ]]; then
+	out+="↓ ${behind} "
+fi
+if [[ "$ahead" -gt 0 ]]; then
+	out+="↑ ${ahead} "
 fi
 
 echo -n "${out% }"

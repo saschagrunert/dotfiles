@@ -3,7 +3,8 @@ set -euo pipefail
 
 PWD_MAX_LEN="40"
 
-tcwd=$(tmux display -p "#{pane_current_path}")
+# $1 is the pane id, see git-status
+tcwd=$(tmux display -p ${1:+-t "$1"} "#{pane_current_path}")
 trunc_symbol="···"
 dir=${tcwd##*/}
 max_len="$PWD_MAX_LEN"

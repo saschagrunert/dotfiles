@@ -7,7 +7,6 @@
       plugins = [ pkgs.networkmanager-openvpn ];
       wifi.powersave = false;
     };
-    firewall.allowedTCPPorts = [ 22 ];
   };
 
   services.resolved.enable = true;
