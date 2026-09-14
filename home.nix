@@ -25,6 +25,7 @@ in
       ".claude-max/settings.json".source = dotfile "claude/settings.json";
       ".claude-max/CLAUDE.md".source = link "${config.home.homeDirectory}/.claude/CLAUDE.md";
       ".claude-max/projects".source = link "${config.home.homeDirectory}/.claude/projects";
+      ".claude-max/skills".source = link "${config.home.homeDirectory}/.claude/skills";
     };
 
     pointerCursor = {
