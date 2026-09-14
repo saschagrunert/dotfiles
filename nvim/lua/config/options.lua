@@ -44,8 +44,9 @@ vim.fn.mkdir(backupdir, "p")
 vim.fn.mkdir(undodir, "p")
 vim.fn.mkdir(swapdir, "p")
 opt.undodir = undodir
-opt.backupdir = backupdir
-opt.directory = swapdir
+-- Trailing // names files after their full path, so same-named files don't collide
+opt.backupdir = backupdir .. "//"
+opt.directory = swapdir .. "//"
 opt.undofile = true
 opt.backup = true
 opt.sessionoptions:remove({ "blank", "help" })

@@ -45,6 +45,7 @@
 
     # LSP servers
     bash-language-server
+    buf
     lua-language-server
     nil
     pyright

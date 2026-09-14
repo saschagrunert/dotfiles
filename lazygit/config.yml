@@ -8,8 +8,8 @@ keybinding:
     nextBlock: l
 git:
   autoFetch: true
-  mainBranches:
-    - main
+  commit:
+    signOff: true
   diffRenderers:
     - command: "delta --dark --paging=never"
 os:

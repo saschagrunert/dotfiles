@@ -8,10 +8,7 @@
   systemd.services.chrome-graceful-shutdown = {
     description = "Gracefully stop Chrome before shutdown";
     wantedBy = [ "multi-user.target" ];
-    after = [
-      "greetd.service"
-      "session-1.scope"
-    ];
+    after = [ "greetd.service" ];
     restartIfChanged = false;
     serviceConfig = {
       Type = "oneshot";
@@ -26,6 +23,17 @@
       '';
       TimeoutStopSec = 45;
     };
+  };
+
+  # Order every login session before the Chrome stop hook, so it runs before
+  # the session is torn down. The drop-in applies to all session-N.scope units,
+  # whatever number greetd's session gets.
+  systemd.units."session-.scope" = {
+    overrideStrategy = "asDropin";
+    text = ''
+      [Unit]
+      Before=chrome-graceful-shutdown.service
+    '';
   };
 
   services = {
@@ -58,7 +66,7 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.extraConfig."10-disable-battery" = {
+      wireplumber.extraConfig."10-disable-bluez-seat-monitoring" = {
         "wireplumber.profiles".main."monitor.bluez.seat-monitoring" = "disabled";
       };
     };

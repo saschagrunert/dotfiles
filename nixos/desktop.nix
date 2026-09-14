@@ -1,12 +1,10 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   environment.variables = {
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    QT_QPA_PLATFORM = "wayland";
+    QT_QPA_PLATFORM = "wayland;xcb";
     QT_QPA_PLATFORMTHEME = "gtk3";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     NIXOS_OZONE_WL = "1";
-    GDK_BACKEND = "wayland";
   };
 
   services.udev.extraRules = ''
@@ -22,22 +20,6 @@
   };
 
   programs.dconf.enable = true;
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-wlr
-      pkgs.xdg-desktop-portal-gtk
-    ];
-    config = {
-      sway = {
-        default = lib.mkForce [
-          "wlr"
-          "gtk"
-        ];
-      };
-    };
-  };
 
   systemd.user.services.polkit-gnome-agent = {
     description = "polkit-gnome-authentication-agent-1";

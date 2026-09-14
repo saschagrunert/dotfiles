@@ -70,18 +70,6 @@ map("c", "<C-n>", "<Down>", { desc = "Next history" })
 -- Search
 map("n", "&", "<cmd>&&<cr>", { desc = "Repeat substitute with flags" })
 
--- German keyboard: ö → [, ä → ]
-for c = 65, 90 do
-  local ch = string.char(c)
-  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true, desc = "[" .. ch })
-  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true, desc = "]" .. ch })
-end
-for c = 97, 122 do
-  local ch = string.char(c)
-  map({ "n", "x", "o" }, "ö" .. ch, "[" .. ch, { remap = true, desc = "[" .. ch })
-  map({ "n", "x", "o" }, "ä" .. ch, "]" .. ch, { remap = true, desc = "]" .. ch })
-end
-
 -- Visual indent (keep selection)
 map("v", "<", "<gv", { desc = "Indent left" })
 map("v", ">", ">gv", { desc = "Indent right" })
@@ -148,9 +136,6 @@ map("n", "]g", "]}", { desc = "Next unmatched }" })
 map("n", "[g", "[{", { desc = "Previous unmatched {" })
 map("n", "]h", "])", { desc = "Next unmatched )" })
 map("n", "[h", "[(", { desc = "Previous unmatched (" })
--- remap so these follow the treesitter ]m/[m function motions
-map("n", "öö", "[m", { remap = true, desc = "Previous function start" })
-map("n", "ää", "]m", { remap = true, desc = "Next function start" })
 
 -- Insert mode begin/end
 map("i", "<C-A>", "<C-O>0", { desc = "Beginning of line" })
@@ -160,8 +145,6 @@ map("i", "<C-E>", "<C-O>$", { desc = "End of line" })
 map("", ";", '"', { silent = true, desc = "Register accessor" })
 
 -- Buffer switching
-map("n", "Ä", "<cmd>bnext<cr>", { silent = true, desc = "Next buffer" })
-map("n", "Ö", "<cmd>bprevious<cr>", { silent = true, desc = "Previous buffer" })
 map("n", "'", "<cmd>bnext<cr>", { silent = true, desc = "Next buffer" })
 map("n", '"', "<cmd>bprevious<cr>", { silent = true, desc = "Previous buffer" })
 

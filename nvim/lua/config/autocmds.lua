@@ -115,7 +115,7 @@ autocmd("FileType", {
       local file = vim.fn.shellescape(vim.fn.expand("%"))
       local base = vim.fn.shellescape(vim.fn.expand("%:r"))
       vim.cmd("write")
-      vim.cmd("!gcc -o " .. base .. " -Wall -std=c99 " .. file .. " && ./" .. base)
-    end, { buffer = 0, silent = true, desc = "Compile and run with gcc" })
+      vim.cmd("!cc -o " .. base .. " -Wall -std=c99 " .. file .. " && ./" .. base)
+    end, { buffer = 0, silent = true, desc = "Compile and run with cc" })
   end,
 })

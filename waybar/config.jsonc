@@ -26,7 +26,6 @@
     "format": "<span color='#ff5555' size='large'>󰩨</span> {}",
   },
   "sway/workspaces": {
-    "strip-characters": "0:",
     "format": "<span size='x-large'>{name}</span>",
     "disable-scroll-wraparound": true,
   },
