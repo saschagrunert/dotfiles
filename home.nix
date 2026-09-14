@@ -22,6 +22,9 @@ in
       ".tmux.conf".source = dotfile "tmux/tmux.conf";
       ".tmux/scripts".source = dotfile "tmux/scripts";
       ".claude/settings.json".source = dotfile "claude/settings.json";
+      ".claude-max/settings.json".source = dotfile "claude/settings.json";
+      ".claude-max/CLAUDE.md".source = link "${config.home.homeDirectory}/.claude/CLAUDE.md";
+      ".claude-max/projects".source = link "${config.home.homeDirectory}/.claude/projects";
     };
 
     pointerCursor = {

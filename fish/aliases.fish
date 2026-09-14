@@ -11,7 +11,7 @@ abbr -a ll "$_eza -la"
 abbr -a lt "$_eza -lT"
 abbr -a llt "$_eza -laT"
 
-abbr -a cl claude
+abbr -a cl claude --settings \$DOTFILES/claude/settings-vertex.json
 abbr -a clm "CLAUDE_CONFIG_DIR=~/.claude-max claude"
 abbr -a dush du -sh \*
 abbr -a f fd

@@ -1,15 +1,23 @@
 {
   "env": {
-    "ANTHROPIC_VERTEX_PROJECT_ID": "itpc-gcp-hcm-pe-eng-claude",
-    "CLOUD_ML_REGION": "us-east5",
-    "CLAUDE_CODE_USE_VERTEX": "1",
     "CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN": "1"
   },
-  "includeCoAuthoredBy": false,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "model": "claude-opus-4-6",
+  "model": "opus[1m]",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "xhigh"
+    },
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "enabledPlugins": {
     "node-team@ai-helpers": true,
     "node-onboarding@ai-helpers": true,
@@ -26,6 +34,6 @@
     }
   },
   "skipDangerousModePermissionPrompt": true,
-  "editorMode": "vim",
-  "reasoning_effort": "xhigh"
+  "theme": "dark",
+  "editorMode": "vim"
 }
