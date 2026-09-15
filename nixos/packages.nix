@@ -75,6 +75,7 @@
 
     # C/C++
     clang_22
+    gcc
     llvmPackages_22.clang-tools
 
     # Containers & virtualization
