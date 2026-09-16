@@ -5,6 +5,7 @@ return {
     "tpope/vim-abolish",
     event = "VeryLazy",
     config = function()
+      -- typos: off
       local abbreviations = {
         { "exlude", "exclude" },
         { "retrun", "return" },
@@ -48,6 +49,7 @@ return {
           "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
         },
       }
+      -- typos: on
       for _, pair in ipairs(abbreviations) do
         vim.cmd("Abolish " .. pair[1] .. " " .. pair[2])
       end

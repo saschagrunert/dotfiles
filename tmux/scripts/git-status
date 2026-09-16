@@ -16,10 +16,11 @@ stashed_symbol="󰆓 "
 # taking index.lock while a git command runs in the pane.
 status=$(git --no-optional-locks status --porcelain=v2 --branch --show-stash --untracked-files=all --ignore-submodules=dirty 2>/dev/null) || exit 0
 
-head="" ahead=0 behind=0 stashed=0 modified=0 staged=0 untracked=0
+head="" oid="" ahead=0 behind=0 stashed=0 modified=0 staged=0 untracked=0
 while IFS= read -r line; do
 	case "$line" in
 	"# branch.oid (initial)") exit 0 ;;
+	"# branch.oid "*) oid=${line#"# branch.oid "} ;;
 	"# branch.head "*) head=${line#"# branch.head "} ;;
 	"# branch.ab "*)
 		read -r ahead behind <<<"${line#"# branch.ab "}"
@@ -39,7 +40,8 @@ while IFS= read -r line; do
 	esac
 done <<<"$status"
 
-short_hash=$(git rev-parse --short HEAD 2>/dev/null) || exit 0
+[ -n "$oid" ] || exit 0
+short_hash=${oid:0:8}
 if [[ "$head" == "(detached)" ]]; then
 	out="${branch_symbol} :${short_hash} "
 else

@@ -56,28 +56,24 @@ in
       Install.WantedBy = [ "graphical-session.target" ];
     };
 
-    swayidle = {
-      Unit = {
-        Description = "Sway idle management daemon";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = toString (
-          pkgs.writeShellScript "swayidle-start" ''
-            ${pkgs.swayidle}/bin/swayidle -w \
-              timeout ${toString idleTimeout} '${pkgs.sway}/bin/swaymsg "output * dpms off"' \
-              resume '${pkgs.sway}/bin/swaymsg "output * dpms on"'
-          ''
-        );
-        Restart = "on-failure";
-        RestartSec = 2;
-        NoNewPrivileges = true;
-        RestrictNamespaces = true;
-        MemoryDenyWriteExecute = true;
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
+    # The module below writes the unit, this only adds the hardening
+    swayidle.Service = {
+      RestartSec = 2;
+      NoNewPrivileges = true;
+      RestrictNamespaces = true;
+      MemoryDenyWriteExecute = true;
     };
+  };
+
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      {
+        timeout = idleTimeout;
+        command = ''${pkgs.sway}/bin/swaymsg "output * dpms off"'';
+        resumeCommand = ''${pkgs.sway}/bin/swaymsg "output * dpms on"'';
+      }
+    ];
   };
 
   dconf.settings = {

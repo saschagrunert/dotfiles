@@ -57,6 +57,15 @@ autocmd("FileType", {
   end,
 })
 
+-- Prose: spell checking, using the word list in nvim/spell/en.utf-8.add
+autocmd("FileType", {
+  group = augroup("Spell", { clear = true }),
+  pattern = { "gitcommit", "markdown", "plaintex", "tex", "text" },
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})
+
 -- Auto-adjust quickfix height
 autocmd("FileType", {
   group = augroup("QuickfixHeight", { clear = true }),

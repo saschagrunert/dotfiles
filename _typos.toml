@@ -1,5 +1,9 @@
 [files]
-extend-exclude = ["nvim/lazy-lock.json", "nvim/lua/plugins/editing.lua"]
+extend-exclude = ["nvim/lazy-lock.json"]
+
+[default]
+# The vim-abolish table in nvim/lua/plugins/editing.lua is misspelled on purpose
+extend-ignore-re = ["(?s)-- typos: off.*?-- typos: on"]
 
 [default.extend-words]
 crypted = "crypted"

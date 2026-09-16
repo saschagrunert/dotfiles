@@ -1,6 +1,5 @@
 *.old
 .gdb_history
 fish/fish_variables
-fish/fishd*
 result
 *.hm-backup

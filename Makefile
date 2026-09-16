@@ -10,12 +10,18 @@ GIT_USER := Sascha Grunert
 EMAIL := sgrunert@redhat.com
 SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
-# Files
+# Files. Shell scripts are matched by shebang inside the shellcheck recipe, so
+# extensionless helpers are covered without listing them here (a literal # can
+# not appear in a Makefile variable assignment).
 NIX_FILES := $(shell find . -name '*.nix' -not -path './.git/*')
 FISH_FILES := $(shell find . -name '*.fish' -not -path './.git/*')
-SHELL_FILES := $(shell find . -name '*.sh' -not -path './.git/*') \
-	$(shell find tmux/scripts -type f -not -name '*.sh') \
-	sway/dnd sway/power sway/temps sway/workspace-scroll
+TOML_FILES := $(shell find . -name '*.toml' -not -path './.git/*' -not -path './yazi/flavors/*')
+
+# The only colors the configs may use. Upstream theme files ship the full
+# extended palette, so they are excluded. Only hex literals are checked, the
+# rgba() forms in waybar/style.css are not.
+PALETTE := 282a36|44475a|6272a4|8be9fd|50fa7b|f1fa8c|ffb86c|ff79c6|bd93f9|ff5555|f8f8f2
+PALETTE_EXCLUDES := ':!yazi/flavors' ':!alacritty/dracula.toml' ':!fish/themes'
 
 # Colors
 COLOR := \033[36m
@@ -23,7 +29,8 @@ NOCOLOR := \033[0m
 
 .SILENT:
 .PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
-	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint test clean help
+	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint \
+	toml-lint colors test clean help
 
 ##@ Build targets:
 
@@ -94,18 +101,40 @@ typos: ## Check for typos.
 shfmt: ## Check shell script formatting.
 	$(NIX_SHELL) nixpkgs\#shfmt -c shfmt -d .
 
-shellcheck: ## Lint shell scripts.
-	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $(SHELL_FILES)
+shellcheck: ## Lint shell scripts, found by shebang.
+	files=$$(grep -rlE '^#!.*(bash|[[:space:]/]sh)$$' \
+		--binary-files=without-match --exclude-dir=.git --exclude-dir=result .); \
+	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $$files
 
 fish-lint: ## Check fish syntax and formatting.
 	$(NIX_SHELL) nixpkgs\#fish -c bash -c \
 		'for f in $(FISH_FILES); do fish --no-execute "$$f" || exit 1; done && fish_indent --check $(FISH_FILES)'
 
+yaml-lint: ## Lint all YAML files.
+	$(NIX_SHELL) nixpkgs\#yamllint -c yamllint --strict .
+
+toml-lint: ## Check TOML formatting.
+	$(NIX_SHELL) nixpkgs\#taplo -c taplo fmt --check $(TOML_FILES)
+
+colors: ## Check that configs only use the Dracula palette.
+	stray=$$({ \
+		git grep -hoiE '#[0-9a-f]{6}([0-9a-f]{2})?\b' -- . $(PALETTE_EXCLUDES); \
+		git grep -hoiE '^[a-z-]+=[0-9a-f]{8}$$' -- fuzzel/fuzzel.ini | cut -d= -f2; \
+	} | tr 'A-F' 'a-f' | sed 's/^#//' | cut -c1-6 | sort -u \
+		| grep -vE '^($(PALETTE))$$'); \
+	test -z "$$stray" || { \
+		echo "Colors outside the Dracula palette:"; \
+		for c in $$stray; do \
+			git grep -inE "$$c" -- . $(PALETTE_EXCLUDES) | sed 's/^/  /'; \
+		done; \
+		exit 1; \
+	}
+
 lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \
 		'stylua --check nvim/ && luacheck nvim/'
 
-test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint ## Run all checks.
+test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint toml-lint colors ## Run all checks.
 
 ##@ Cleanup targets:
 

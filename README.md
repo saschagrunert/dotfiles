@@ -115,10 +115,13 @@ After editing any configuration file, rebuild with:
 To validate the configuration locally:
 
 ```fish
-> make test     # every check: nix, markdown, prettier, typos, shell, fish, lua
-> make check    # verify symlinks and required commands
+> make test     # all lint and format checks, see `make help`
+> make check    # verify symlinks and required commands on a switched system
 > make lint     # nixfmt, statix, deadnix
 ```
+
+`make test` does not build anything. Use `make build` to check that the
+configuration still builds, or `make switch` to apply it.
 
 Or use the `up` function which also updates Rust and collects garbage.
 
