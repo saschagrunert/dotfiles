@@ -87,7 +87,7 @@
   },
   "pulseaudio": {
     "format": "<span color='#50fa7b' size='large'>{icon}</span> {volume:3}%",
-    "format-muted": "<span color='#6272a4' size='large'>󰖁</span>",
+    "format-muted": "<span color='#6272a4' size='large'>󰖁</span> <span color='#6272a4'>{volume:3}%</span>",
     "format-icons": {
       "default": ["󰖀", "󰕾"],
     },
@@ -100,7 +100,7 @@
     "format": "{format_source}",
     "format-muted": "{format_source}",
     "format-source": "<span color='#ff79c6' size='large'>󰍬</span> {volume:3}%",
-    "format-source-muted": "<span color='#6272a4' size='large'>󰍭</span>",
+    "format-source-muted": "<span color='#6272a4' size='large'>󰍭</span> <span color='#6272a4'>{volume:3}%</span>",
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
