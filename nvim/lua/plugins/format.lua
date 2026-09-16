@@ -59,7 +59,12 @@ local function check_formatters(bufnr, id, done)
   if #formatters == 0 then
     return finish({})
   end
-  vim.defer_fn(finish, CHECK_TIMEOUT_MS)
+  -- A formatter that has not answered in time is unknown, not dirty. Recording
+  -- the partial result would turn format on save off for the rest of the
+  -- session, so fall back to running every formatter instead.
+  vim.defer_fn(function()
+    finish(true)
+  end, CHECK_TIMEOUT_MS)
 
   local ok = pcall(
     vim.system,
