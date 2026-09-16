@@ -1,7 +1,9 @@
 # Update branch from remote, sync origin, prune merged branches
 function gup
     set -l remote $argv[1]
-    test -z "$remote" && set remote origin
+    if test -z "$remote"
+        git remote | string match -q base && set remote base || set remote origin
+    end
     set -l default_branch (gldb)
 
     git fetch --prune --no-tags $remote "+refs/heads/*:refs/remotes/$remote/*" \

@@ -43,7 +43,6 @@ abbr -a gpf git push --force-with-lease
 abbr -a gr git reset .
 abbr -a grc git rebase --continue
 abbr -a grup git remote update
-abbr -a gupb gup base
 abbr -a grv git remote -v
 abbr -a gsp git stash pop
 abbr -a gss git stash
