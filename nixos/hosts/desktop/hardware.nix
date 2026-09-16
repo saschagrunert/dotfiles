@@ -16,6 +16,20 @@ _: {
         "dmask=0022"
       ];
     };
+    "/mnt/windows" = {
+      device = "/dev/disk/by-uuid/E06E2F776E2F459E";
+      fsType = "ntfs3";
+      options = [
+        "uid=1000"
+        "gid=100"
+        "umask=022"
+        "windows_names"
+        "nofail"
+        "noauto"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=10min"
+      ];
+    };
   };
 
   swapDevices = [ { device = "/dev/disk/by-uuid/dfaff609-4075-4842-bfb7-2d6e03ad5ee9"; } ];
