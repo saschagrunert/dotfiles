@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# List failed units, $1 is an optional systemctl scope flag such as --user.
+# Errors, such as an unavailable bus, count as no failed units.
+failed() {
+	{ systemctl ${1:+"$1"} --failed --plain --no-legend 2>/dev/null || true; } | awk '{print $1}'
+}
+
+system=$(failed)
+user=$(failed --user)
+
+count=$(printf '%s\n%s\n' "$system" "$user" | grep -c . || true)
+
+# Empty text hides the module.
+if [ "$count" -eq 0 ]; then
+	echo '{"text": ""}'
+	exit 0
+fi
+
+tooltip=""
+append() {
+	local scope=$1 units=$2 unit
+	[ -n "$units" ] || return 0
+	while read -r unit; do
+		# Escape systemd's \x2d style escapes for JSON.
+		tooltip+="${tooltip:+\\n}$(printf '%-7s %s' "$scope:" "${unit//\\/\\\\}")"
+	done <<<"$units"
+}
+append System "$system"
+append User "$user"
+
+text="<span color='#ff5555' size='large'>󰀦</span> $count failed"
+
+printf '{"text": "%s", "tooltip": "%s", "class": "failed"}\n' "$text" "$tooltip"

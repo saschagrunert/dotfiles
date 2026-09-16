@@ -44,10 +44,13 @@ window#waybar {
 #network,
 #memory,
 #cpu,
+#custom-gpu,
+#privacy,
 #pulseaudio,
 #pulseaudio.source,
 #idle_inhibitor,
 #custom-dnd,
+#custom-failed-units,
 #clock,
 #tray {
   padding: 0 10px;
@@ -64,10 +67,12 @@ window#waybar {
 #network:hover,
 #memory:hover,
 #cpu:hover,
+#custom-gpu:hover,
 #pulseaudio:hover,
 #pulseaudio.source:hover,
 #idle_inhibitor:hover,
 #custom-dnd:hover,
+#custom-failed-units:hover,
 #clock:hover {
   background-color: rgba(189, 147, 249, 0.15);
 }
@@ -84,6 +89,7 @@ window#waybar {
 #custom-temps.critical,
 #custom-fans.critical,
 #cpu.critical,
+#custom-gpu.critical,
 #memory.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
@@ -93,7 +99,9 @@ window#waybar {
 
 #custom-temps.warning,
 #cpu.warning,
-#memory.warning {
+#custom-gpu.warning,
+#memory.warning,
+#privacy {
   color: #ffb86c;
   background-color: rgba(255, 184, 108, 0.15);
   font-weight: bold;
@@ -109,6 +117,12 @@ window#waybar {
   font-style: italic;
   margin-left: 12px;
   min-width: 400px;
+}
+
+#custom-failed-units {
+  color: #ff5555;
+  background-color: rgba(255, 85, 85, 0.2);
+  font-weight: bold;
 }
 
 #idle_inhibitor.activated,

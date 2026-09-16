@@ -59,8 +59,10 @@ rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
 ├── dnd                        # Do-not-disturb toggle
+├── failed-units               # Failed systemd units indicator
 ├── fans                       # Fan speed monitor
-├── hwmon.sh                   # Shared hwmon lookup for fans/power/temps
+├── gpu                        # GPU load and VRAM monitor
+├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
 ├── power                      # Power consumption monitor
 ├── temps                      # Hardware temperature monitor
 └── workspace-scroll           # Workspace scroll helper
