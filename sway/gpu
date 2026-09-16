@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=hwmon.sh
+. "$(dirname "$0")/hwmon.sh"
+
+# Print bytes $1 as gigabytes with one decimal, matching the memory module.
+gigabytes() {
+	local tenths=$((($1 * 10 + (1 << 29)) >> 30))
+	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
+}
+
+# Select the discrete GPU through fan1_input, the integrated one also reports
+# load and VRAM.
+busy=$(hwmon_value amdgpu device/gpu_busy_percent fan1_input)
+used=$(hwmon_value amdgpu device/mem_info_vram_used fan1_input)
+total=$(hwmon_value amdgpu device/mem_info_vram_total fan1_input)
+
+class=""
+if [ "$busy" -ge 95 ]; then
+	class="critical"
+elif [ "$busy" -ge 80 ]; then
+	class="warning"
+fi
+
+text=$(printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "$(gigabytes "$used")")
+tooltip="Load: $(printf '%3d' "$busy")%\nVRAM: $(gigabytes "$used")GB / $(gigabytes "$total")GB"
+
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"

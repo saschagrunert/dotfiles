@@ -10,10 +10,13 @@
     "network",
     "memory",
     "cpu",
+    "custom/gpu",
     "pulseaudio",
     "pulseaudio#source",
+    "privacy",
     "idle_inhibitor",
     "custom/dnd",
+    "custom/failed-units",
     "clock#time",
     "clock#date",
     "tray",
@@ -69,9 +72,18 @@
     "states": { "warning": 80, "critical": 95 },
   },
   "cpu": {
-    "format": "<span color='#ffb86c' size='large'>󰾆</span> {usage:3}% ({avg_frequency:0.1f}GHz)",
+    "format": "<span color='#f1fa8c' size='large'>󰾆</span> {usage:3}% ({avg_frequency:0.1f}GHz)",
     "interval": 5,
     "states": { "warning": 80, "critical": 95 },
+  },
+  "custom/gpu": {
+    "exec": "~/.config/sway/gpu",
+    "return-type": "json",
+    "interval": 5,
+  },
+  "privacy": {
+    "icon-size": 14,
+    "modules": [{ "type": "screenshare" }, { "type": "audio-in" }],
   },
   "pulseaudio": {
     "format": "<span color='#50fa7b' size='large'>{icon}</span> {volume:3}%",
@@ -109,6 +121,11 @@
     },
     "tooltip-format-activated": "Idle inhibitor: on",
     "tooltip-format-deactivated": "Idle inhibitor: off",
+  },
+  "custom/failed-units": {
+    "exec": "~/.config/sway/failed-units",
+    "return-type": "json",
+    "interval": 10,
   },
   "clock#time": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S}",
