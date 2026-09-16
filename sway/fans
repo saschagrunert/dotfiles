@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=hwmon.sh
+. "$(dirname "$0")/hwmon.sh"
+
+# Header names and icons for the ASUS NCT6799D mapping, matching the temps and
+# power modules. Unknown headers keep fanN and a generic fan icon.
+declare -A labels=([fan2]=CPU [fan3]=Case)
+declare -A icons=(
+	[fan2]="<span color='#f1fa8c' size='large'>󰻠</span>"
+	[fan3]="<span color='#8be9fd' size='large'>󰇅</span>"
+)
+gpu_icon="<span color='#ffb86c' size='large'>󰢮</span>"
+generic_icon="<span color='#6272a4' size='large'>󰈐</span>"
+
+text=""
+tooltip=""
+class=""
+
+# Append a fan to the module text and tooltip: icon, label, RPM.
+add() {
+	text+="${text:+  }$(printf '%s %4d' "$1" "$3")"
+	tooltip+="${tooltip:+\\n}$(printf '%-5s %4d RPM' "$2:" "$3")"
+}
+
+# Motherboard headers reporting 0 RPM are treated as unconnected, except for
+# the CPU fan, which must always spin.
+declare -A board=()
+if dir=$(find_hwmon nct6799); then
+	for f in "$dir"/fan*_input; do
+		fan=$(basename "$f" _input)
+		rpm=$(cat "$f" 2>/dev/null) || continue
+		if [ "$rpm" -gt 0 ] || [ "$fan" = fan2 ]; then
+			board[$fan]=$rpm
+		fi
+	done
+fi
+
+# Order: CPU, GPU, then the remaining board fans. The GPU fan stops at idle,
+# so it is always shown.
+if [ -n "${board[fan2]:-}" ]; then
+	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}"
+	if [ "${board[fan2]}" -eq 0 ]; then
+		class="critical"
+	fi
+	unset 'board[fan2]'
+fi
+add "$gpu_icon" GPU "$(hwmon_value amdgpu fan1_input)"
+for fan in $(printf '%s\n' "${!board[@]}" | sort -V); do
+	add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}"
+done
+
+# The unit is shown once at the end to keep the module narrow.
+text+=" rpm"
+
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"

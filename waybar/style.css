@@ -39,6 +39,7 @@ window#waybar {
 
 #disk,
 #custom-temps,
+#custom-fans,
 #custom-power,
 #network,
 #memory,
@@ -58,6 +59,7 @@ window#waybar {
 
 #disk:hover,
 #custom-temps:hover,
+#custom-fans:hover,
 #custom-power:hover,
 #network:hover,
 #memory:hover,
@@ -80,6 +82,7 @@ window#waybar {
 }
 
 #custom-temps.critical,
+#custom-fans.critical,
 #cpu.critical,
 #memory.critical {
   color: #ff5555;

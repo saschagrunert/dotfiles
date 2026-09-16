@@ -45,6 +45,8 @@
     kernelModules = [
       "br_netfilter"
       "kvm-amd"
+      # Motherboard fan and voltage sensors (Nuvoton NCT6799D)
+      "nct6775"
     ];
     tmp.useTmpfs = true;
     tmp.tmpfsSize = "75%";

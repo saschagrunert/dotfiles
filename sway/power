@@ -67,11 +67,14 @@ gpu=$(gpu_watts)
 
 if [ "$cpu" = "N/A" ]; then
 	cpu_label="  -"
+	cpu_tooltip="  -"
 else
-	cpu_label=$(printf "%3dW" "$cpu")
+	cpu_label=$(printf "%3d" "$cpu")
+	cpu_tooltip="${cpu_label}W"
 fi
 
-text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %s  <span color='#ffb86c' size='large'>󰢮</span> %3dW" "$cpu_label" "$gpu")
-tooltip="CPU: ${cpu_label}\nGPU: $(printf '%3d' "$gpu")W"
+# The unit is shown once at the end to keep the module narrow.
+text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %s  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu_label" "$gpu")
+tooltip="CPU: ${cpu_tooltip}\nGPU: $(printf '%3d' "$gpu")W"
 
 printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$tooltip"
