@@ -7,7 +7,8 @@ shopt -s nullglob
 . "$(dirname "$0")/hwmon.sh"
 
 cpu=$(($(hwmon_value k10temp temp1_input) / 1000))
-gpu=$(($(hwmon_value amdgpu temp1_input) / 1000))
+# Select the discrete GPU, the integrated one also reports temp1_input.
+gpu=$(($(hwmon_value amdgpu temp1_input fan1_input) / 1000))
 nvme=$(($(hwmon_value nvme temp1_input) / 1000))
 
 class=""
@@ -17,9 +18,10 @@ elif [ "$cpu" -ge 75 ] || [ "$gpu" -ge 80 ] || [ "$nvme" -ge 60 ]; then
 	class="warning"
 fi
 
-text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d°C" "$cpu")
-text+=$(printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d°C" "$gpu")
-text+=$(printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d°C" "$nvme")
+# The unit is shown once at the end to keep the module narrow.
+text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d" "$cpu")
+text+=$(printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d" "$gpu")
+text+=$(printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d °C" "$nvme")
 
 tooltip="CPU:  $(printf '%3d' "$cpu")°C\nGPU:  $(printf '%3d' "$gpu")°C\nNVMe: $(printf '%3d' "$nvme")°C"
 

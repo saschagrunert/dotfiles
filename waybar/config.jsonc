@@ -5,6 +5,7 @@
   "modules-right": [
     "disk",
     "custom/temps",
+    "custom/fans",
     "custom/power",
     "network",
     "memory",
@@ -37,6 +38,11 @@
   },
   "custom/temps": {
     "exec": "~/.config/sway/temps",
+    "return-type": "json",
+    "interval": 5,
+  },
+  "custom/fans": {
+    "exec": "~/.config/sway/fans",
     "return-type": "json",
     "interval": 5,
   },
