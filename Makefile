@@ -102,7 +102,7 @@ shfmt: ## Check shell script formatting.
 	$(NIX_SHELL) nixpkgs\#shfmt -c shfmt -d .
 
 shellcheck: ## Lint shell scripts, found by shebang.
-	files=$$(grep -rlE '^#!.*(bash|[[:space:]/]sh)$$' \
+	files=$$(grep -rlE '^#!.*[[:space:]/](bash|dash|ksh|sh)$$' \
 		--binary-files=without-match --exclude-dir=.git --exclude-dir=result .); \
 	$(NIX_SHELL) nixpkgs\#shellcheck -c shellcheck $$files
 
@@ -121,7 +121,7 @@ colors: ## Check that configs only use the Dracula palette.
 		git grep -hoiE '#[0-9a-f]{6}([0-9a-f]{2})?\b' -- . $(PALETTE_EXCLUDES); \
 		git grep -hoiE '^[a-z-]+=[0-9a-f]{8}$$' -- fuzzel/fuzzel.ini | cut -d= -f2; \
 	} | tr 'A-F' 'a-f' | sed 's/^#//' | cut -c1-6 | sort -u \
-		| grep -vE '^($(PALETTE))$$'); \
+		| { grep -vE '^($(PALETTE))$$' || true; }); \
 	test -z "$$stray" || { \
 		echo "Colors outside the Dracula palette:"; \
 		for c in $$stray; do \
