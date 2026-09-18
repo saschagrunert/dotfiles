@@ -5,35 +5,45 @@
   ...
 }:
 {
-  systemd.services.chrome-graceful-shutdown = {
-    description = "Gracefully stop Chrome before shutdown";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "greetd.service" ];
-    restartIfChanged = false;
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      User = username;
-      ExecStop = pkgs.writeShellScript "stop-chrome" ''
-        main_pid=$(${pkgs.procps}/bin/pgrep --oldest --exact chrome) || true
-        if [ -n "$main_pid" ]; then
-          kill -SIGTERM "$main_pid"
-          ${pkgs.coreutils}/bin/timeout 30 ${pkgs.procps}/bin/pidwait --exact chrome || true
-        fi
-      '';
-      TimeoutStopSec = 45;
+  systemd = {
+    services.chrome-graceful-shutdown = {
+      description = "Gracefully stop Chrome before shutdown";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "greetd.service" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = username;
+        ExecStop = pkgs.writeShellScript "stop-chrome" ''
+          main_pid=$(${pkgs.procps}/bin/pgrep --oldest --exact chrome) || true
+          if [ -n "$main_pid" ]; then
+            kill -SIGTERM "$main_pid"
+            ${pkgs.coreutils}/bin/timeout 30 ${pkgs.procps}/bin/pidwait --exact chrome || true
+          fi
+        '';
+        TimeoutStopSec = 45;
+      };
     };
-  };
 
-  # Order every login session before the Chrome stop hook, so it runs before
-  # the session is torn down. The drop-in applies to all session-N.scope units,
-  # whatever number greetd's session gets.
-  systemd.units."session-.scope" = {
-    overrideStrategy = "asDropin";
-    text = ''
-      [Unit]
-      Before=chrome-graceful-shutdown.service
-    '';
+    # Dumping a crashed process writes its whole address space to disk before
+    # compressing it, which stalls the machine for minutes on large ones. Only
+    # ProcessSizeMax skips that write, Storage just drops the result.
+    coredump.settings.Coredump = {
+      Storage = "none";
+      ProcessSizeMax = 0;
+    };
+
+    # Order every login session before the Chrome stop hook, so it runs before
+    # the session is torn down. The drop-in applies to all session-N.scope
+    # units, whatever number greetd's session gets.
+    units."session-.scope" = {
+      overrideStrategy = "asDropin";
+      text = ''
+        [Unit]
+        Before=chrome-graceful-shutdown.service
+      '';
+    };
   };
 
   services = {
