@@ -33,9 +33,10 @@ both the system configuration and user environment via
   [zoxide](https://github.com/ajeetdsouza/zoxide),
   [ripgrep](https://github.com/BurntSushi/ripgrep).
 
-See [`nixos/packages.nix`](nixos/packages.nix) for the full list of installed
-packages, including container runtimes, Kubernetes tools, networking utilities,
-and debugging tools.
+See [`home/packages.nix`](home/packages.nix) for the user session packages
+(desktop apps, CLI tools, language servers, linters) and
+[`nixos/packages.nix`](nixos/packages.nix) for what root and the system
+services need (toolchains, container runtimes, networking and debugging tools).
 
 ## Structure
 
@@ -60,9 +61,7 @@ mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
 rustfmt/                       # Rust formatter config
 sway/
-├── config                     # Sway compositor config, portable across hosts
-├── hosts/
-│   └── nixos.conf             # Outputs, workspace mapping, input devices
+├── config                     # Sway compositor config
 └── workspace-scroll           # Workspace scroll helper
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers
@@ -102,10 +101,9 @@ services need (toolchains used through `sudo`, container and networking tools),
 the system closure.
 
 To add a new host, create a directory under `nixos/hosts/` with its own
-`hardware.nix` and `boot.nix`, add a `sway/hosts/<hostname>.conf` with the
-outputs and input devices of that machine, then add a new `nixosConfigurations`
-entry in `flake.nix`. `sway/config` itself stays portable, it pulls the
-machine-specific part in through `~/.config/sway/config.local`.
+`hardware.nix` and `boot.nix`, then add a new `nixosConfigurations` entry in
+`flake.nix`. The machine-specific parts of `sway/config` (outputs, workspace
+mapping, input devices) are marked with comments.
 
 ## Installation
 
@@ -153,8 +151,10 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 ```
 
 This also happens weekly in CI: `.github/workflows/update.yml` runs
-`nix flake update`, builds the system closure and opens a pull request only if
-the build succeeds. Dependabot keeps the GitHub Actions up to date.
+`nix flake update`, then `make test` and `make build`, and opens a pull request
+only if both pass. It has to verify everything itself, because a pull request
+opened with `GITHUB_TOKEN` does not trigger the test workflow. Dependabot keeps
+the GitHub Actions up to date.
 
 ## Development Shells
 
@@ -177,8 +177,9 @@ shell reads `$PWD` to locate the project's nix files at evaluation time.
 ### Neovim
 
 Plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim) and
-install automatically on first launch. LSP servers are installed as Nix
-packages via `nixos/packages.nix`.
+install automatically on first launch. LSP servers, formatters and linters are
+installed as Nix packages via `home/packages.nix`, and resolved from `PATH` by
+`nvim-lspconfig`, `conform.nvim` and `nvim-lint`.
 
 ## Contributing
 

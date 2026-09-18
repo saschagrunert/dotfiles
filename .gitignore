@@ -1,7 +1,4 @@
 *.old
 .gdb_history
-# Written here only until the home.nix migration has moved it to
-# ~/.config/fish, see home.activation.migrateFishVariables
-fish/fish_variables
 result
 *.hm-backup
