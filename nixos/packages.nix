@@ -36,6 +36,12 @@
     openvpn
     socat
 
+    # Icon themes. mako/config names these by absolute path in the system
+    # profile, so they have to be here rather than in home/packages.nix.
+    # hicolor only resolved before because a GTK package happened to pull it in.
+    hicolor-icon-theme
+    papirus-icon-theme
+
     # Debugging & profiling
     lm_sensors
     lshw

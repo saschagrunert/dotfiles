@@ -1,9 +1,7 @@
 {
   config,
-  lib,
   pkgs,
   dotfilesPath,
-  hostName,
   ...
 }:
 let
@@ -39,34 +37,6 @@ in
       ".claude-max/projects".source = link "${config.home.homeDirectory}/.claude/projects";
       ".claude-max/skills".source = link "${config.home.homeDirectory}/.claude/skills";
     };
-
-    # ~/.config/fish and ~/.config/sway used to be symlinks to the whole
-    # directory in the repository. Now that they are linked file by file, the
-    # stale directory link has to go before anything else: home-manager would
-    # otherwise create the new links through it, straight back into the
-    # repository, and back the originals up as .hm-backup. Safe to delete once
-    # it has run on every machine, like the migration below.
-    activation.dropStaleConfigDirLinks = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
-      for dir in fish sway; do
-        stale="${config.xdg.configHome}/$dir"
-        if [ -L "$stale" ]; then
-          run rm "$stale"
-        fi
-      done
-    '';
-
-    # One-time migration: fish_variables used to be written into the repository,
-    # because the whole fish directory was symlinked. Move it next to the new
-    # per-file links so the universal variables survive. Safe to delete once it
-    # has run on every machine.
-    activation.migrateFishVariables = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      old="${dotfilesPath}/fish/fish_variables"
-      new="${config.xdg.configHome}/fish/fish_variables"
-      if [ -f "$old" ] && [ ! -e "$new" ]; then
-        run mkdir -p "$(dirname "$new")"
-        run mv "$old" "$new"
-      fi
-    '';
 
     pointerCursor = {
       enable = true;
@@ -171,6 +141,7 @@ in
       "bat".source = dotfile "bat";
       "mako".source = dotfile "mako";
       "fuzzel".source = dotfile "fuzzel";
+      "sway".source = dotfile "sway";
       "waybar".source = dotfile "waybar";
       "nvim".source = dotfile "nvim";
       "btop".source = dotfile "btop";
@@ -183,11 +154,6 @@ in
       "fish/aliases.fish".source = dotfile "fish/aliases.fish";
       "fish/functions".source = dotfile "fish/functions";
       "fish/themes".source = dotfile "fish/themes";
-
-      # Same, so the machine-specific include can live inside the directory
-      "sway/config".source = dotfile "sway/config";
-      "sway/workspace-scroll".source = dotfile "sway/workspace-scroll";
-      "sway/config.local".source = dotfile "sway/hosts/${hostName}.conf";
     };
   };
 }

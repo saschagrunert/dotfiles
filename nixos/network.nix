@@ -1,7 +1,7 @@
-{ pkgs, hostName, ... }:
+{ pkgs, ... }:
 {
   networking = {
-    inherit hostName;
+    hostName = "nixos";
     networkmanager = {
       enable = true;
       plugins = [ pkgs.networkmanager-openvpn ];
