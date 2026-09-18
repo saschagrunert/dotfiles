@@ -44,46 +44,51 @@ flake.nix                      # Nix flake entry point
 shells.nix                     # Dev shells (base + per-project)
 home.nix                       # Home-manager user config
 Makefile                       # Build, lint, test
+.editorconfig                  # Indentation, shared by shfmt and prettier
 alacritty/                     # Terminal emulator config
 bat/                           # Syntax highlighting config
 btop/                          # System monitor config
 clang/                         # Clang-format config
-claude/                        # Claude Code settings
+claude/                        # Claude Code settings and instructions
 fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
 git/                           # gitconfig, gitignore
+home/
+└── packages.nix               # User session packages
 lazygit/                       # Git TUI config
 mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
 rustfmt/                       # Rust formatter config
 sway/
-├── config                     # Sway compositor config
-├── dnd                        # Do-not-disturb toggle
-├── failed-units               # Failed systemd units indicator
-├── fans                       # Fan speed monitor
-├── gpu                        # GPU load and VRAM monitor
-├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
-├── power                      # Power consumption monitor
-├── temps                      # Hardware temperature monitor
+├── config                     # Sway compositor config, portable across hosts
+├── hosts/
+│   └── nixos.conf             # Outputs, workspace mapping, input devices
 └── workspace-scroll           # Workspace scroll helper
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers
 yazi/                          # File manager config and theme
 waybar/
 ├── config.jsonc               # Waybar module config
-└── style.css                  # Waybar styling
+├── style.css                  # Waybar styling
+├── dnd                        # Do-not-disturb toggle
+├── failed-units               # Failed systemd units indicator
+├── fans                       # Fan speed monitor
+├── gpu                        # GPU load and VRAM monitor
+├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
+├── power                      # Power consumption monitor
+└── temps                      # Hardware temperature monitor
 nixos/
 ├── configuration.nix          # Main NixOS config
-├── desktop.nix                # Sway, XDG portals, Wayland env
+├── desktop.nix                # Sway, Wayland env, polkit agent
 ├── hosts/
 │   └── desktop/               # Machine-specific config
 │       ├── default.nix        # Host imports
 │       ├── hardware.nix       # Filesystems, swap
 │       └── boot.nix           # Bootloader, initrd, kernel modules
-├── packages.nix               # System packages
+├── packages.nix               # System packages (root and services)
 ├── programs.nix               # fish, neovim, gnupg, direnv, ...
 ├── virtualisation.nix         # podman, cri-o, libvirtd
-├── services.nix               # Sway, greetd, pipewire, ...
+├── services.nix               # greetd, pipewire, openssh, ...
 ├── network.nix                # Hostname, NetworkManager
 ├── security.nix               # Kerberos, PKI, sudo
 ├── users.nix                  # User accounts, groups, shell
@@ -91,9 +96,16 @@ nixos/
 └── fonts.nix                  # Nerd Fonts, Roboto, ...
 ```
 
+Packages are split in two: `nixos/packages.nix` holds what root and the system
+services need (toolchains used through `sudo`, container and networking tools),
+`home/packages.nix` holds the user session. Changing the latter does not rebuild
+the system closure.
+
 To add a new host, create a directory under `nixos/hosts/` with its own
-`hardware.nix` and `boot.nix`, then add a new `nixosConfigurations` entry
-in `flake.nix`.
+`hardware.nix` and `boot.nix`, add a `sway/hosts/<hostname>.conf` with the
+outputs and input devices of that machine, then add a new `nixosConfigurations`
+entry in `flake.nix`. `sway/config` itself stays portable, it pulls the
+machine-specific part in through `~/.config/sway/config.local`.
 
 ## Installation
 
@@ -120,11 +132,14 @@ To validate the configuration locally:
 ```fish
 > make test     # all lint and format checks, see `make help`
 > make check    # verify symlinks and required commands on a switched system
+> make smoke    # run the waybar status scripts and validate their JSON
 > make lint     # nixfmt, statix, deadnix
 ```
 
 `make test` does not build anything. Use `make build` to check that the
-configuration still builds, or `make switch` to apply it.
+configuration still builds, or `make switch` to apply it. CI runs every `make
+test` target plus `make build`, so a package that stopped building on
+nixpkgs-unstable fails in a pull request instead of at switch time.
 
 Or use the `up` function which also updates Rust and collects garbage.
 
@@ -136,6 +151,10 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 > nix flake update --flake ~/.dotfiles
 > make switch
 ```
+
+This also happens weekly in CI: `.github/workflows/update.yml` runs
+`nix flake update`, builds the system closure and opens a pull request only if
+the build succeeds. Dependabot keeps the GitHub Actions up to date.
 
 ## Development Shells
 

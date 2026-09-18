@@ -2,6 +2,8 @@
 GIT := git
 # Resolve nixpkgs from flake.lock, so local runs and CI use the same tool versions
 NIX_SHELL := nix shell --inputs-from .
+# The flake attribute to build and switch to
+HOST := nixos
 # Paths
 GITCONFIG_USER_PATH := ~/.gitconfig_user
 
@@ -30,17 +32,17 @@ NOCOLOR := \033[0m
 .SILENT:
 .PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
 	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint \
-	toml-lint colors test clean help
+	toml-lint colors smoke test clean help
 
 ##@ Build targets:
 
 all: switch ## Build and switch to the NixOS configuration (default).
 
-build: ## Build the NixOS configuration.
-	nixos-rebuild build --flake .\#nixos
+build: ## Build the NixOS configuration without activating it.
+	nix build .\#nixosConfigurations.$(HOST).config.system.build.toplevel
 
 switch: ## Build and switch to the NixOS configuration.
-	sudo nixos-rebuild switch --flake .\#nixos
+	sudo nixos-rebuild switch --flake .\#$(HOST)
 
 ##@ Setup targets:
 
@@ -129,6 +131,21 @@ colors: ## Check that configs only use the Dracula palette.
 		done; \
 		exit 1; \
 	}
+
+smoke: ## Run the status bar scripts and check they emit valid JSON.
+	$(NIX_SHELL) nixpkgs\#jq -c bash -c ' \
+	fail=0; \
+	for s in waybar/temps waybar/fans waybar/gpu waybar/power waybar/dnd \
+		waybar/failed-units; do \
+		if out=$$(./$$s 2>&1) && printf "%s" "$$out" | jq -e . >/dev/null 2>&1; then \
+			echo "  OK: $$s"; \
+		else \
+			echo "  FAIL: $$s"; \
+			echo "$$out" | sed "s/^/    /"; \
+			fail=1; \
+		fi; \
+	done; \
+	exit $$fail'
 
 lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \

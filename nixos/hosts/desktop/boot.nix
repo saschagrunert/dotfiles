@@ -49,7 +49,7 @@
       "nct6775"
     ];
     tmp.useTmpfs = true;
-    tmp.tmpfsSize = "75%";
+    tmp.tmpfsSize = "50%";
     loader = {
       timeout = 6;
       efi.canTouchEfiVariables = true;

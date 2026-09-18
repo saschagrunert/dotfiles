@@ -1,0 +1,24 @@
+# Shared by shfmt (make shfmt, conform.nvim) and prettier, so the tab
+# convention for shell scripts lives in one place instead of each tool's
+# default.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{sh,bash}]
+indent_style = tab
+
+# The waybar and tmux helpers have no extension, they are matched by shebang
+[{temps,fans,gpu,power,dnd,failed-units,hwmon.sh,workspace-scroll,pwd,git-status,ip}]
+indent_style = tab
+
+[*.{nix,lua,fish,toml,json,jsonc,yml,yaml,css,md}]
+indent_style = space
+indent_size = 2
+
+[Makefile]
+indent_style = tab

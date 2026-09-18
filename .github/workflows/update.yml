@@ -1,0 +1,53 @@
+name: update
+on:
+  schedule:
+    # Mondays, early enough to be ready before the week starts
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  # Dependabot only covers the GitHub Actions. This keeps the flake inputs
+  # moving too. Everything has to be verified here: a pull request opened with
+  # GITHUB_TOKEN does not trigger further workflow runs, so the test workflow
+  # never runs on the branch this creates.
+  flake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /usr/local/share/boost /opt/hostedtoolcache
+          df -h /
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
+
+      - name: Update flake inputs
+        run: nix flake update
+
+      # Open the pull request only if the update passes everything, so a broken
+      # nixpkgs revision never reaches the branch.
+      - name: Run the checks
+        run: make test
+
+      - name: Build the system closure
+        run: make build
+
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: update-flake-inputs
+          title: Update flake inputs
+          commit-message: Update flake inputs
+          body: Automated `nix flake update`. `make test` and `make build` pass.
+          delete-branch: true
+          sign-commits: true
+          assignees: saschagrunert
