@@ -1,82 +1,18 @@
 { pkgs, ... }:
 {
+  # System-wide packages: everything root or a system service needs. User
+  # session tooling lives in home/packages.nix, so changing it does not rebuild
+  # the system closure.
   environment.systemPackages = with pkgs; [
-    # Desktop & UI
-    alacritty
-    fuzzel
-    google-chrome
-    grim
-    libnotify
-    mako
-    networkmanagerapplet
-    pavucontrol
-    piper
-    slurp
-    wdisplays
-    wl-clipboard
-    xdg-utils
-
-    # System utilities
-    bat
-    btop
-    calc
-    eza
-    fd
-    file
-    fzf
-    jq
-    ripgrep
-    tmux
-    unzip
-    wget
-    yazi
-    zoxide
-
-    # Development tools
+    # Toolchains. Needed system-wide because they are also used through sudo,
+    # for example the Kubernetes and CRI-O builds in fish/functions/kubernetes.fish.
     binutils
-    claude-code
-    delta
-    gh
-    git
-    gnumake
-    jira-cli-go
-    lazygit
-    tree-sitter
-
-    # LSP servers
-    bash-language-server
-    buf
-    lua-language-server
-    nil
-    pyright
-    taplo
-    vscode-langservers-extracted
-    vtsls
-    yaml-language-server
-
-    # Go
-    go_1_27
-    gofumpt
-    golangci-lint
-    gopls
-    gotools
-
-    # Rust
-    rustup
-
-    # Python
-    python3
-    python3Packages.osc
-    ruff
-
-    # Node.js
-    nodejs
-    prettier
-
-    # C/C++
     clang_22
     gcc
-    llvmPackages_22.clang-tools
+    git
+    gnumake
+    go_1_27
+    python3
 
     # Containers & virtualization
     cni-plugins
@@ -90,9 +26,7 @@
     vagrant
     virt-manager
 
-    # Kubernetes & cloud
-    cosign
-    google-cloud-sdk
+    # Kubernetes
     kubernetes
 
     # Networking & security
@@ -106,26 +40,5 @@
     lm_sensors
     lshw
     usbutils
-
-    # Code quality & linting
-    shellcheck
-    shfmt
-    stylua
-    typos
-    yamllint
-
-    # Media & documents
-    exiftool
-    imagemagick
-    libarchive
-    mediainfo
-    wf-recorder
-
-    # Nix tools
-    cachix
-    deadnix
-    nix-index
-    nixfmt
-    statix
   ];
 }

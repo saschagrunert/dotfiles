@@ -9,10 +9,6 @@ set $fg         #f8f8f2
 set $purple     #bd93f9
 set $red        #ff5555
 
-# Output configuration (dual 4K)
-output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
-output HDMI-A-2 resolution 3840x2160@60Hz position 2560,0 scale 1.5
-
 # Wallpaper
 set $wallpaper ~/.dotfiles/wallpaper/blurred.jpg
 output * bg $wallpaper fill
@@ -121,10 +117,6 @@ bar {
     swaybar_command waybar
 }
 
-# Machine-specific: workspace to output mappings
-workspace $ws_browser output HDMI-A-1
-workspace $ws_terminal output HDMI-A-2
-
 # take a screenshot
 bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied"
@@ -142,6 +134,12 @@ bindsym $mod+y [urgent=latest] focus
 # notification control
 bindsym $mod+b exec makoctl dismiss
 bindsym $mod+Shift+b exec makoctl restore
+
+# exit sway, with a confirmation so a mistyped binding does not end the session
+bindsym $mod+Shift+e exec swaynag \
+    --background $bg --text $fg --button-background $purple \
+    --border $selection --border-bottom $selection \
+    -m "Exit sway?" -B "Exit" "swaymsg exit"
 
 # floating window settings
 for_window [app_id=".*"] inhibit_idle fullscreen
@@ -173,11 +171,11 @@ client.urgent           $red        $red        $bg         $red        $red
 
 include /etc/sway/config.d/*
 
+# Outputs, workspace-to-output mapping and input devices differ per machine.
+# home-manager links this to sway/hosts/<hostname>.conf, so the rest of this
+# file stays portable. Included last, because it uses the $ws_* variables.
+include ~/.config/sway/config.local
+
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
-set $mouse "hollering-marmot"
-exec ratbagctl $mouse resolution 0 dpi set 800
-exec ratbagctl $mouse resolution active set 0
-exec ratbagctl $mouse led 0 set mode cycle duration 8000 brightness 255
-exec ratbagctl $mouse led 1 set mode cycle duration 8000 brightness 255
 exec alacritty -e fish -C 'tmux new-session -A -s work'
 exec google-chrome-stable

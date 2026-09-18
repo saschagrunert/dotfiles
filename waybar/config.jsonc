@@ -40,17 +40,17 @@
     "interval": 30,
   },
   "custom/temps": {
-    "exec": "~/.config/sway/temps",
+    "exec": "~/.config/waybar/temps",
     "return-type": "json",
     "interval": 5,
   },
   "custom/fans": {
-    "exec": "~/.config/sway/fans",
+    "exec": "~/.config/waybar/fans",
     "return-type": "json",
     "interval": 5,
   },
   "custom/power": {
-    "exec": "~/.config/sway/power",
+    "exec": "~/.config/waybar/power",
     "return-type": "json",
     "interval": 5,
   },
@@ -77,7 +77,7 @@
     "states": { "warning": 80, "critical": 95 },
   },
   "custom/gpu": {
-    "exec": "~/.config/sway/gpu",
+    "exec": "~/.config/waybar/gpu",
     "return-type": "json",
     "interval": 5,
   },
@@ -107,7 +107,7 @@
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
   },
   "custom/dnd": {
-    "exec": "~/.config/sway/dnd",
+    "exec": "~/.config/waybar/dnd",
     "return-type": "json",
     "interval": 5,
     "on-click": "makoctl mode -t do-not-disturb",
@@ -123,7 +123,7 @@
     "tooltip-format-deactivated": "Idle inhibitor: off",
   },
   "custom/failed-units": {
-    "exec": "~/.config/sway/failed-units",
+    "exec": "~/.config/waybar/failed-units",
     "return-type": "json",
     "interval": 10,
   },

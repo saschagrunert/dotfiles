@@ -19,12 +19,20 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       username = "sascha";
+      hostName = "nixos";
       dotfilesPath = "/home/${username}/.dotfiles";
     in
     {
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.${hostName} = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit nixpkgs dotfilesPath username; };
+        specialArgs = {
+          inherit
+            nixpkgs
+            dotfilesPath
+            hostName
+            username
+            ;
+        };
         modules = [
           ./nixos/configuration.nix
           home-manager.nixosModules.home-manager
@@ -33,7 +41,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "hm-backup";
-              extraSpecialArgs = { inherit dotfilesPath username; };
+              extraSpecialArgs = { inherit dotfilesPath hostName username; };
               users.${username} = import ./home.nix;
             };
           }
