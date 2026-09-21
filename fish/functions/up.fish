@@ -27,7 +27,6 @@ end
 
 function up -d "Update system"
     nix flake update --flake $DOTFILES
-    and sudo nix-collect-garbage -d
     and set -l system (nix build --no-link --print-out-paths \
         $DOTFILES#nixosConfigurations.nixos.config.system.build.toplevel)
     and test -n "$system"

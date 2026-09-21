@@ -23,8 +23,6 @@
     fuse-overlayfs
     runc
     slirp4netns
-    vagrant
-    virt-manager
 
     # Kubernetes
     kubernetes

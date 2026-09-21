@@ -75,8 +75,10 @@ waybar/
 ├── gpu                        # GPU load and VRAM monitor
 ├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
 ├── nix-updates                # Pending nixpkgs updates indicator
+├── nix-updates.jq             # Update grouping and tooltip, tested by make updates-test
 ├── power                      # Power consumption monitor
-└── temps                      # Hardware temperature monitor
+├── temps                      # Hardware temperature monitor
+└── testdata/                  # Fixtures for make updates-test
 nixos/
 ├── configuration.nix          # Main NixOS config
 ├── desktop.nix                # Sway, Wayland env, polkit agent

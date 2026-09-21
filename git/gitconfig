@@ -7,7 +7,7 @@
 [mergetool]
     prompt = false
 [push]
-    default = upstream
+    default = simple
     autoSetupRemote = true
     useForceIfIncludes = true
 [diff]
