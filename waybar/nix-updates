@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Show how many packages a `nix flake update` would upgrade, grouped by
+# priority in the tooltip: kernel, base system, system packages, user packages.
+# The flake.lock of the repository is never touched, the updated lock file is
+# written to a temporary directory and only used for evaluation.
+#
+# Called with --force the cached result is refreshed, which is what the click
+# handler does. Every failure keeps the last known result instead of clearing
+# the module, so a missing network never hides pending updates.
+
+force=""
+if [ "${1:-}" = "--force" ]; then
+	force=1
+fi
+
+flake=${NIX_UPDATES_FLAKE:-$HOME/.dotfiles}
+host=${NIX_UPDATES_HOST:-$(hostname)}
+max_age=${NIX_UPDATES_MAX_AGE:-21600}
+cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/waybar
+cache=$cache_dir/nix-updates.json
+
+mkdir -p "$cache_dir"
+
+# The cache is fresh if it is younger than max_age and newer than flake.lock,
+# so running `nix flake update` resets the module on the next interval.
+fresh() {
+	[ -z "$force" ] &&
+		[ -s "$cache" ] &&
+		[ "$cache" -nt "$flake/flake.lock" ] &&
+		[ $(($(date +%s) - $(stat -c %Y "$cache"))) -lt "$max_age" ]
+}
+
+# Print the last result, empty text hides the module.
+emit() {
+	if [ -s "$cache" ]; then
+		cat "$cache"
+	else
+		echo '{"text": ""}'
+	fi
+}
+
+if fresh; then
+	emit
+	exit 0
+fi
+
+# Multiple bars (one per output) run this at the same time, only one of them
+# evaluates and the others pick up its result. A wedged run must not block the
+# bar forever, so give up on the lock instead of waiting for it.
+exec 9>"$cache_dir/nix-updates.lock"
+if ! flock -w 5 9; then
+	emit
+	exit 0
+fi
+if fresh; then
+	emit
+	exit 0
+fi
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"; rm -f "$cache.tmp"' EXIT
+
+# Map each package group to {pname: version}. Packages sharing a pname are
+# collapsed into one entry listing their versions, so the result does not depend
+# on the order of the package lists. Only names are evaluated, nothing gets
+# built or downloaded apart from the new flake inputs.
+read -r -d '' apply <<'EOF' || true
+c:
+let
+  versions = ps:
+    let
+      pairs = map (p:
+        let d = builtins.parseDrvName (p.name or ""); in {
+          name = p.pname or d.name;
+          version = p.version or d.version;
+        }) ps;
+      # attrNames sorts and deduplicates.
+      uniq = vs: builtins.attrNames (builtins.listToAttrs
+        (map (v: { name = v; value = true; }) vs));
+    in
+    builtins.mapAttrs
+      (_: g: builtins.concatStringsSep ", "
+        (uniq (builtins.filter (v: v != "") (map (v: v.version) g))))
+      (builtins.groupBy (v: v.name) pairs);
+  hm = c.home-manager.users or { };
+in {
+  kernel = versions ([ c.boot.kernelPackages.kernel ] ++ c.boot.extraModulePackages);
+  base = versions [ c.systemd.package c.nix.package ];
+  system = versions c.environment.systemPackages;
+  user = versions (builtins.concatMap (u: hm.${u}.home.packages) (builtins.attrNames hm));
+}
+EOF
+
+# Keep the lock out of the nix children, a lingering one must not hold it.
+evaluate() {
+	nix eval --json --no-write-lock-file "$@" \
+		"$flake#nixosConfigurations.$host.config" --apply "$apply" 2>/dev/null 9>&-
+}
+
+# Errors, such as no network, keep the previous result and retry next interval.
+if ! nix flake update --flake "$flake" --output-lock-file "$tmp/flake.lock" 2>/dev/null 9>&- ||
+	! old=$(evaluate) || [ -z "$old" ] ||
+	! new=$(evaluate --reference-lock-file "$tmp/flake.lock") || [ -z "$new" ]; then
+	emit
+	exit 0
+fi
+
+icon="<span color='#8be9fd' size='large'>󰚰</span>"
+
+# A package is listed once, in the first group that upgrades it. Kernel updates
+# get their own class, since they need a reboot.
+if ! jq -cn --argjson old "$old" --argjson new "$new" --arg icon "$icon" '
+    def esc: gsub("&"; "&amp;") | gsub("<"; "&lt;") | gsub(">"; "&gt;");
+    reduce (["kernel", "Kernel"], ["base", "Base"], ["system", "System"], ["user", "User"]) as [$key, $label]
+        ({seen: {}, groups: []};
+        .seen as $seen
+        | ([$new[$key] | to_entries[]
+            | select(.value != "" and ($seen[.key] | not))
+            | {name: .key, from: ($old[$key][.key] // ""), to: .value}
+            | select(.from != "" and .from != .to)] | sort_by(.name)) as $ups
+        | .seen += ($ups | map({key: .name, value: true}) | from_entries)
+        | .groups += [{key: $key, label: $label, ups: $ups}])
+    | [.groups[] | select(.ups | length > 0)] as $groups
+    | ([$groups[].ups | length] | add // 0) as $count
+    | ([$groups[].ups[].name | length] | max // 0) as $width
+    | if $count == 0 then {text: ""} else {
+        text: "\($icon) \($count)",
+        tooltip: ("<tt>" + ($groups | map("<b>\(.label)</b>\n" + (.ups
+            | map("  \(.name | esc)\(" " * ($width - (.name | length) + 1))\(.from | esc) → \(.to | esc)")
+            | join("\n"))) | join("\n\n")) + "</tt>"),
+        class: (if $groups[0].key == "kernel" then "kernel" else "updates" end)
+    } end
+' >"$cache.tmp"; then
+	emit
+	exit 0
+fi
+mv "$cache.tmp" "$cache"
+
+emit

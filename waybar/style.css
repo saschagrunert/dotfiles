@@ -51,6 +51,7 @@ window#waybar {
 #idle_inhibitor,
 #custom-dnd,
 #custom-failed-units,
+#custom-nix-updates,
 #clock,
 #tray {
   padding: 0 10px;
@@ -73,6 +74,7 @@ window#waybar {
 #idle_inhibitor:hover,
 #custom-dnd:hover,
 #custom-failed-units:hover,
+#custom-nix-updates:hover,
 #clock:hover {
   background-color: rgba(189, 147, 249, 0.15);
 }
@@ -101,6 +103,7 @@ window#waybar {
 #cpu.warning,
 #custom-gpu.warning,
 #memory.warning,
+#custom-nix-updates.kernel,
 #privacy {
   color: #ffb86c;
   background-color: rgba(255, 184, 108, 0.15);

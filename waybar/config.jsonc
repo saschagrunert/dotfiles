@@ -17,6 +17,7 @@
     "idle_inhibitor",
     "custom/dnd",
     "custom/failed-units",
+    "custom/nix-updates",
     "clock#time",
     "clock#date",
     "tray",
@@ -126,6 +127,13 @@
     "exec": "~/.config/waybar/failed-units",
     "return-type": "json",
     "interval": 10,
+  },
+  "custom/nix-updates": {
+    "exec": "~/.config/waybar/nix-updates",
+    "return-type": "json",
+    "interval": 1800,
+    "signal": 9,
+    "on-click": "~/.config/waybar/nix-updates --force && pkill -RTMIN+9 waybar",
   },
   "clock#time": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S}",

@@ -74,6 +74,7 @@ waybar/
 ├── fans                       # Fan speed monitor
 ├── gpu                        # GPU load and VRAM monitor
 ├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
+├── nix-updates                # Pending nixpkgs updates indicator
 ├── power                      # Power consumption monitor
 └── temps                      # Hardware temperature monitor
 nixos/
