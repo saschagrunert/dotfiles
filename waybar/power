@@ -15,9 +15,10 @@ cpu_watts() {
 
 	local cache="${XDG_RUNTIME_DIR:-/tmp}/waybar-power-rapl"
 	local now_uj
-	now_uj=$(cat "$rapl/energy_uj")
-	local now_ns
-	now_ns=$(date +%s%N)
+	IFS= read -r now_uj <"$rapl/energy_uj"
+	# EPOCHREALTIME has microsecond precision, its separator is locale
+	# dependent. Dropping it and padding to nanoseconds avoids calling date.
+	local now_ns=${EPOCHREALTIME/[.,]/}000
 
 	if [ -f "$cache" ]; then
 		local prev_uj prev_ns prev_watts
@@ -34,8 +35,8 @@ cpu_watts() {
 			return
 		fi
 		if [ "$d_uj" -lt 0 ]; then
-			local max
-			max=$(cat "$rapl/max_energy_range_uj" 2>/dev/null) || {
+			local max=""
+			IFS= read -r max <"$rapl/max_energy_range_uj" 2>/dev/null || [ -n "$max" ] || {
 				echo "N/A"
 				echo "$now_uj $now_ns N/A" >"$cache"
 				return

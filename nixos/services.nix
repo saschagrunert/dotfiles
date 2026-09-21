@@ -76,8 +76,27 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      wireplumber.extraConfig."10-disable-bluez-seat-monitoring" = {
-        "wireplumber.profiles".main."monitor.bluez.seat-monitoring" = "disabled";
+      wireplumber.extraConfig = {
+        "10-disable-bluez-seat-monitoring" = {
+          "wireplumber.profiles".main."monitor.bluez.seat-monitoring" = "disabled";
+        };
+
+        # The flight yoke announces a mixer it does not implement. Keeping it in
+        # the graph makes wireplumber poll that mixer and the kernel log
+        # "sticky mixer values" a few times per second. It has no audio use, and
+        # dropping it also frees ALSA card 0 and keeps it out of the mixer UIs.
+        "11-ignore-velocityone-flight" = {
+          "monitor.alsa.rules" = [
+            {
+              matches = [
+                {
+                  "device.name" = "alsa_card.usb-Turtle_Beach_VelocityOne_Flight_VelocityOne_Flight-02";
+                }
+              ];
+              actions.update-props."device.disabled" = true;
+            }
+          ];
+        };
       };
     };
 

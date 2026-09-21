@@ -1,0 +1,11 @@
+{
+  "kernel": { "linux": "7.2.6" },
+  "base": { "nix": "2.32.1", "systemd": "261.2" },
+  "system": { "brand-new": "1.0", "cri-o": "1.37.0", "git": "2.55.0" },
+  "user": {
+    "foo&bar": "1.1",
+    "git": "2.55.0",
+    "no-version": "",
+    "ruff": "0.16.7"
+  }
+}

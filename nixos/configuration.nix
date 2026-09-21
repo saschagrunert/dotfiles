@@ -29,6 +29,13 @@
       keep-outputs = true;
       keep-derivations = false;
       trusted-users = [ username ];
+
+      # Every command in the dotfiles repository runs against a dirty tree.
+      warn-dirty = false;
+
+      # /tmp is a tmpfs sized at half of RAM, so a large uncached build would
+      # run in memory. Build on disk instead.
+      build-dir = "/var/tmp";
     };
 
     # Set explicitly: the automatic nixpkgs.flake defaults only record the store

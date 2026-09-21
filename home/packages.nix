@@ -69,6 +69,11 @@
     ruff
     rustup
 
+    # Virtualization front-ends. These run as the user, the daemons and the
+    # container tooling stay in nixos/packages.nix.
+    vagrant
+    virt-manager
+
     # Cloud
     cosign
     google-cloud-sdk

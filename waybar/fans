@@ -28,13 +28,18 @@ add() {
 
 # Motherboard headers reporting 0 RPM are treated as unconnected, except for
 # the CPU fan, which must always spin.
+# The glob is already in fan number order, which is the order they are shown in,
+# so no sorting is needed.
 declare -A board=()
+order=()
 if dir=$(find_hwmon nct6799); then
 	for f in "$dir"/fan*_input; do
-		fan=$(basename "$f" _input)
-		rpm=$(cat "$f" 2>/dev/null) || continue
+		fan=${f##*/} rpm=""
+		fan=${fan%_input}
+		IFS= read -r rpm <"$f" 2>/dev/null || [ -n "$rpm" ] || continue
 		if [ "$rpm" -gt 0 ] || [ "$fan" = fan2 ]; then
 			board[$fan]=$rpm
+			order+=("$fan")
 		fi
 	done
 fi
@@ -46,11 +51,12 @@ if [ -n "${board[fan2]:-}" ]; then
 	if [ "${board[fan2]}" -eq 0 ]; then
 		class="critical"
 	fi
-	unset 'board[fan2]'
 fi
 add "$gpu_icon" GPU "$(hwmon_value amdgpu fan1_input)"
-for fan in $(printf '%s\n' "${!board[@]}" | sort -V); do
-	add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}"
+for fan in "${order[@]}"; do
+	if [ "$fan" != fan2 ]; then
+		add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}"
+	fi
 done
 
 # The unit is shown once at the end to keep the module narrow.

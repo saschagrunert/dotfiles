@@ -32,7 +32,7 @@ NOCOLOR := \033[0m
 .SILENT:
 .PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
 	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint \
-	toml-lint colors smoke test clean help
+	toml-lint colors smoke updates-test test clean help
 
 ##@ Build targets:
 
@@ -147,11 +147,24 @@ smoke: ## Run the status bar scripts and check they emit valid JSON.
 	done; \
 	exit $$fail'
 
+# The pending updates logic is pure jq, so it is checked against fixtures here
+# rather than in smoke, which would have to evaluate the whole configuration.
+updates-test: ## Check the pending updates logic against the waybar/testdata fixtures.
+	$(NIX_SHELL) nixpkgs\#jq -c bash -c ' \
+	set -e; \
+	d=waybar/testdata; \
+	render() { jq -cn --argjson old "$$(cat $$d/updates-old.json)" \
+		--argjson new "$$(cat $$1)" --arg icon ICON -f waybar/nix-updates.jq; }; \
+	render $$d/updates-new.json | jq -e -f $$d/updates-assert.jq >/dev/null; \
+	echo "  OK: upgrades"; \
+	render $$d/updates-old.json | jq -e ".text | length == 0" >/dev/null; \
+	echo "  OK: no upgrades"'
+
 lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \
 		'stylua --check nvim/ && luacheck nvim/'
 
-test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint toml-lint colors ## Run all checks.
+test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint toml-lint colors updates-test ## Run all checks.
 
 ##@ Cleanup targets:
 
