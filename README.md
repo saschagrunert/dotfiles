@@ -153,11 +153,8 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 > make switch
 ```
 
-This also happens weekly in CI: `.github/workflows/update.yml` runs
-`nix flake update`, then `make test` and `make build`, and opens a pull request
-only if both pass. It has to verify everything itself, because a pull request
-opened with `GITHUB_TOKEN` does not trigger the test workflow. Dependabot keeps
-the GitHub Actions up to date.
+The waybar `custom/nix-updates` module shows how many packages an update would
+upgrade. Dependabot keeps the GitHub Actions up to date.
 
 ## Development Shells
 
