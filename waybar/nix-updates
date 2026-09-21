@@ -47,10 +47,15 @@ if fresh; then
 fi
 
 # Multiple bars (one per output) run this at the same time, only one of them
-# evaluates and the others pick up its result. A wedged run must not block the
-# bar forever, so give up on the lock instead of waiting for it.
+# evaluates and the others wait for its result. The wait has to outlast a full
+# evaluation, otherwise a bar gives up early and shows the previous result, or
+# nothing at all, until its next interval. A failed run leaves the cache as it
+# is, so the waiting bars show it instead of repeating the evaluation one after
+# another. A wedged run must still not block the bar forever, so the wait is
+# bounded.
 exec 9>"$cache_dir/nix-updates.lock"
-if ! flock -w 5 9; then
+if ! flock -n 9; then
+	flock -w 600 9 || true
 	emit
 	exit 0
 fi
