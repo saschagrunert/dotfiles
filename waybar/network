@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+# Bandwidth of the interface with the default route, with download and upload
+# history graphs and the connection details in the tooltip.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+DOWN="#8be9fd"
+UP="#50fa7b"
+# Graphs scale to their peak, but at least to this many bytes per second, so
+# idle traffic stays flat.
+FLOOR=10000
+
+declare -a down_history=() up_history=()
+iface="" rx=0 tx=0 time=0
+
+# Print the interface and gateway of the default route with the lowest metric.
+# The gateway is a little-endian hex address.
+default_route() {
+	awk 'NR > 1 && $2 == "00000000" && (best == "" || $7 < metric) {
+		best = $1; metric = $7; gw = $3
+	}
+	END {
+		if (best == "") exit 1
+		printf "%s %d.%d.%d.%d\n", best, strtonum("0x" substr(gw, 7, 2)),
+			strtonum("0x" substr(gw, 5, 2)), strtonum("0x" substr(gw, 3, 2)),
+			strtonum("0x" substr(gw, 1, 2))
+	}' /proc/net/route
+}
+
+# Print bytes per second $1 like the built-in module, with decimal prefixes.
+rate() {
+	awk -v b="$1" 'BEGIN {
+		if (b < 1000) { printf "%dB/s", b; exit }
+		split("k M G T", p, " ")
+		for (i = 0; b >= 1000 && i < 4; i++) b /= 1000
+		printf "%.1f%sB/s", b, p[i]
+	}'
+}
+
+# Print the percentages of the rates $@ relative to their peak.
+scale() {
+	local peak=$FLOOR v
+	for v; do ((v > peak)) && peak=$v; done
+	for v; do echo $((v * 100 / peak)); done
+}
+
+# Print the largest of $@.
+peak() {
+	local max=0 v
+	for v; do ((v > max)) && max=$v; done
+	echo "$max"
+}
+
+# Print a traffic section titled $1 with the rate history named $2 in color $3
+# and the total bytes $4.
+traffic() {
+	local -n rates=$2
+	local -a pcts
+	mapfile -t pcts < <(scale "${rates[@]}")
+	printf '%s\\n%s\\n%s %s  %s %s  %s %s' "$(header "$1")" "$(graph "$3" "${pcts[@]}")" \
+		"$(label Now)" "$(rate "${rates[-1]}")" \
+		"$(label Peak)" "$(rate "$(peak "${rates[@]}")")" \
+		"$(label Total)" "$(size $(($4 >> 10)))"
+}
+
+emit() {
+	local route gateway
+	if ! route=$(default_route); then
+		iface="" down_history=() up_history=()
+		printf '{"text": "%s", "tooltip": "Disconnected", "class": "disconnected"}\n' \
+			"<span color='#6272a4' size='large'>󰤭</span> disconnected"
+		return
+	fi
+	read -r route gateway <<<"$route"
+
+	local now new_rx new_tx
+	now=${EPOCHREALTIME/./}
+	read -r new_rx <"/sys/class/net/$route/statistics/rx_bytes"
+	read -r new_tx <"/sys/class/net/$route/statistics/tx_bytes"
+	# Start over on a new interface, its counters are unrelated.
+	# shellcheck disable=SC2034 # The histories are used by name.
+	if [ "$route" != "$iface" ]; then
+		iface=$route rx=$new_rx tx=$new_tx time=$now down_history=() up_history=()
+		sleep 1
+		now=${EPOCHREALTIME/./}
+		read -r new_rx <"/sys/class/net/$iface/statistics/rx_bytes"
+		read -r new_tx <"/sys/class/net/$iface/statistics/tx_bytes"
+	fi
+	local elapsed=$((now - time))
+	((elapsed > 0)) || elapsed=1
+	local down=$(((new_rx - rx) * 1000000 / elapsed)) up=$(((new_tx - tx) * 1000000 / elapsed))
+	rx=$new_rx tx=$new_tx time=$now
+	record down_history "$down"
+	record up_history "$up"
+
+	local address
+	address=$(ip -o -4 addr show dev "$iface" | awk '{ print $4; exit }')
+
+	# Wi-Fi details come from the last scan of NetworkManager, which does not
+	# trigger a new one. Escaped colons separate nothing.
+	local icon="󰈀" details ssid="" bssid="" chan="" freq="" bitrate="" signal=""
+	if [ -e "/sys/class/net/$iface/wireless" ]; then
+		local line
+		line=$(nmcli -t -f IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL device wifi list \
+			ifname "$iface" --rescan no 2>/dev/null | grep -m1 '^\*' || true)
+		line=${line//\\:/$'\x1f'}
+		IFS=: read -r _ ssid bssid chan freq bitrate signal <<<"$line"
+		ssid=$(escape "${ssid//$'\x1f'/:}") bssid=${bssid//$'\x1f'/:}
+		local icons=("󰤯" "󰤟" "󰤢" "󰤥" "󰤨")
+		icon=${icons[${signal:-0} * 4 / 100]}
+		details="$(label SSID) $ssid  $(label Signal) <span color='$(color $((100 - ${signal:-0})))'>${signal:-0}%</span>\n"
+		details+="$(label Channel) $chan ($freq)  $(label Rate) $bitrate\n"
+		details+="$(label BSSID) $bssid\n"
+	else
+		local speed=""
+		{ read -r speed <"/sys/class/net/$iface/speed"; } 2>/dev/null || true
+		details=""
+		[ "${speed:--1}" -gt 0 ] && details="$(label Speed) ${speed}Mbit/s\n"
+	fi
+	details+="$(label Interface) $iface  $(label Address) ${address:--}\n$(label Gateway) $gateway"
+
+	local text tooltip
+	text=$(printf "<span color='#8be9fd' size='large'>%s</span> <span color='#6272a4'>󰇚</span> %9s <span color='#6272a4'>󰕒</span> %9s" \
+		"$icon" "$(rate "$down")" "$(rate "$up")")
+	tooltip="$(traffic Download down_history "$DOWN" "$rx")\n\n"
+	tooltip+="$(traffic Upload up_history "$UP" "$tx")\n\n"
+	tooltip+="$(header Connection)\n$details"
+
+	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "$tooltip"
+}
+
+run emit "${1:-}"

@@ -41,9 +41,9 @@ window#waybar {
 #custom-temps,
 #custom-fans,
 #custom-power,
-#network,
-#memory,
-#cpu,
+#custom-network,
+#custom-memory,
+#custom-cpu,
 #custom-gpu,
 #privacy,
 #pulseaudio,
@@ -65,9 +65,9 @@ window#waybar {
 #custom-temps:hover,
 #custom-fans:hover,
 #custom-power:hover,
-#network:hover,
-#memory:hover,
-#cpu:hover,
+#custom-network:hover,
+#custom-memory:hover,
+#custom-cpu:hover,
 #custom-gpu:hover,
 #pulseaudio:hover,
 #pulseaudio.source:hover,
@@ -90,9 +90,9 @@ window#waybar {
 
 #custom-temps.critical,
 #custom-fans.critical,
-#cpu.critical,
+#custom-cpu.critical,
 #custom-gpu.critical,
-#memory.critical {
+#custom-memory.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
   font-weight: bold;
@@ -100,9 +100,9 @@ window#waybar {
 }
 
 #custom-temps.warning,
-#cpu.warning,
+#custom-cpu.warning,
 #custom-gpu.warning,
-#memory.warning,
+#custom-memory.warning,
 #custom-nix-updates.kernel,
 #privacy {
   color: #ffb86c;
