@@ -3,16 +3,12 @@
   "position": "top",
   "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
   "modules-right": [
-    "disk",
-    "custom/temps",
-    "custom/fans",
-    "custom/power",
+    "group/hardware",
     "network",
+    "disk",
     "memory",
-    "cpu",
-    "custom/gpu",
-    "pulseaudio",
-    "pulseaudio#source",
+    "group/load",
+    "group/audio",
     "privacy",
     "idle_inhibitor",
     "custom/dnd",
@@ -39,6 +35,35 @@
     "format": "<span color='#50fa7b' size='large'>󰋊</span> {percentage_used:3}% ({free} free)",
     "tooltip-format": "{used} / {total}",
     "interval": 30,
+  },
+  // The drawers show their first module and expand to the left on hover, so
+  // the visible module does not move. Temperatures stay visible, power and fans
+  // expand.
+  "group/hardware": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "transition-left-to-right": false,
+    },
+    "modules": ["custom/temps", "custom/power", "custom/fans"],
+  },
+  // CPU load stays visible, GPU load expands on hover
+  "group/load": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "transition-left-to-right": false,
+    },
+    "modules": ["cpu", "custom/gpu"],
+  },
+  // Output volume stays visible, the microphone expands on hover
+  "group/audio": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "transition-left-to-right": false,
+    },
+    "modules": ["pulseaudio", "pulseaudio#source"],
   },
   "custom/temps": {
     "exec": "~/.config/waybar/temps",
@@ -107,11 +132,14 @@
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
   },
+  // The signal refreshes the module right after a click. The interval stays,
+  // an interval of 0 together with a signal broke all tooltips before.
   "custom/dnd": {
     "exec": "~/.config/waybar/dnd",
     "return-type": "json",
     "interval": 5,
-    "on-click": "makoctl mode -t do-not-disturb",
+    "signal": 8,
+    "on-click": "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar",
     "on-click-right": "makoctl dismiss -a",
   },
   "idle_inhibitor": {
