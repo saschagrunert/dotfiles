@@ -44,10 +44,12 @@ gigabytes() {
 	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
 }
 
-# Print kibibytes $1 as gigabytes with one decimal from 1GB and as megabytes
-# below.
+# Print kibibytes $1 as terabytes or gigabytes with one decimal from 1TB or 1GB,
+# and as megabytes below.
 size() {
-	if [ "$1" -ge $((1 << 20)) ]; then
+	if [ "$1" -ge $((1 << 30)) ]; then
+		printf '%sTB' "$(gigabytes $(($1 >> 10)))"
+	elif [ "$1" -ge $((1 << 20)) ]; then
 		printf '%sGB' "$(gigabytes "$1")"
 	else
 		printf '%dMB' $((($1 + 512) >> 10))
@@ -121,6 +123,43 @@ graph() {
 		((row > 0)) && out+="\n"
 	done
 	printf "<span line_height='0.75'>%s</span>%s" "$out" "\n<span size='xx-small'> </span>"
+}
+
+# Print bytes per second $1 like the built-in module, with decimal prefixes.
+rate() {
+	awk -v b="$1" 'BEGIN {
+		if (b < 1000) { printf "%dB/s", b; exit }
+		split("k M G T", p, " ")
+		for (i = 0; b >= 1000 && i < 4; i++) b /= 1000
+		printf "%.1f%sB/s", b, p[i]
+	}'
+}
+
+# Print the percentages of the rates $@ relative to their peak, or at least to
+# $FLOOR bytes per second, which the sourcing script sets.
+scale() {
+	local peak=$FLOOR v
+	for v; do ((v > peak)) && peak=$v; done
+	for v; do echo $((v * 100 / peak)); done
+}
+
+# Print the largest of $@.
+peak() {
+	local max=0 v
+	for v; do ((v > max)) && max=$v; done
+	echo "$max"
+}
+
+# Print a section titled $1 with the history of bytes per second named $2 as a
+# graph in color $3, and the total bytes $4.
+traffic() {
+	local -n rates=$2
+	local -a pcts
+	mapfile -t pcts < <(scale "${rates[@]}")
+	printf '%s\\n%s\\n%s %s  %s %s  %s %s' "$(header "$1")" "$(graph "$3" "${pcts[@]}")" \
+		"$(label Now)" "$(rate "${rates[-1]}")" \
+		"$(label Peak)" "$(rate "$(peak "${rates[@]}")")" \
+		"$(label Total)" "$(size $(($4 >> 10)))"
 }
 
 # Print tooltip $1 with the rows spaced out by $LINE.

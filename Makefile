@@ -136,7 +136,8 @@ smoke: ## Run the status bar scripts and check they emit valid JSON.
 	$(NIX_SHELL) nixpkgs\#jq -c bash -c ' \
 	fail=0; \
 	for s in "waybar/cpu --once" "waybar/memory --once" "waybar/gpu --once" \
-		"waybar/network --once" waybar/temps waybar/fans waybar/power waybar/dnd \
+		"waybar/network --once" "waybar/disk --once" "waybar/temps --once" \
+		"waybar/power --once" waybar/fans waybar/dnd \
 		waybar/failed-units; do \
 		if out=$$(./$$s 2>&1) && printf "%s" "$$out" | jq -e . >/dev/null 2>&1; then \
 			echo "  OK: $$s"; \
