@@ -10,11 +10,9 @@
     "group/load",
     "group/audio",
     "privacy",
-    "idle_inhibitor",
-    "custom/dnd",
     "custom/failed-units",
     "custom/nix-updates",
-    "clock#time",
+    "group/time",
     "clock#date",
     "tray",
   ],
@@ -58,6 +56,16 @@
       "transition-left-to-right": false,
     },
     "modules": ["pulseaudio", "pulseaudio#source"],
+  },
+  // The time stays visible, the idle inhibitor and do not disturb expand on
+  // hover
+  "group/time": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "transition-left-to-right": false,
+    },
+    "modules": ["clock#time", "idle_inhibitor", "custom/dnd"],
   },
   // Temperatures and power run continuously like the tooltip scripts below,
   // the fans only show current values and run every 5 seconds.
