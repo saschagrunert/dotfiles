@@ -1,0 +1,129 @@
+#!/usr/bin/env bash
+# CPU usage with a history graph, per-core meters and the busiest processes in
+# the tooltip. Usage is the difference between two samples of /proc.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+TOP=8
+# Two columns of core meters, each with a label like "#16 100% ", fill the
+# width.
+METER=$(((WIDTH - 3) / 2 - 9))
+
+ncpu=$(nproc)
+declare -a history=()
+
+# Fill cpu_total and cpu_idle with the jiffies of every line in /proc/stat,
+# where index 0 is the aggregate and index n+1 is core n.
+declare -a cpu_total cpu_idle
+sample_stat() {
+	local name user nice system idle iowait irq softirq steal i=0
+	cpu_total=() cpu_idle=()
+	while read -r name user nice system idle iowait irq softirq steal _; do
+		[[ $name == cpu* ]] || break
+		cpu_total[i]=$((user + nice + system + idle + iowait + irq + softirq + steal))
+		cpu_idle[i]=$((idle + iowait))
+		i=$((i + 1))
+	done </proc/stat
+}
+
+# Print "pid tid:starttime ticks core name" separated by tabs for every thread,
+# where core is the one the thread last ran on. The name sits in parentheses
+# and may contain anything, so the fields are split after the last closing one.
+# The files are read with getline, since awk aborts on a file argument that
+# vanishes, which happens all the time with exiting threads.
+sample_threads() {
+	awk -v OFS='\t' "$CLEAN_NAME"'
+	BEGIN {
+		for (a = 1; a < ARGC; a++) {
+			if ((getline line <ARGV[a]) <= 0) continue
+			close(ARGV[a])
+			split(ARGV[a], path, "/")
+			lp = index(line, "("); rp = 0
+			for (i = length(line); i > 0; i--) if (substr(line, i, 1) == ")") { rp = i; break }
+			name = clean(substr(line, lp + 1, rp - lp - 1))
+			split(substr(line, rp + 2), f, " ")
+			print path[3], substr(line, 1, lp - 2) ":" f[20], f[12] + f[13], f[37], name
+		}
+	}' /proc/[0-9]*/task/[0-9]*/stat
+}
+
+emit() {
+	local -a prev_total=("${cpu_total[@]}")
+	local -a prev_idle=("${cpu_idle[@]}")
+	local prev_threads=$threads
+	sample_stat
+	threads=$(sample_threads)
+
+	local -a usage=()
+	local i dt di
+	for i in "${!cpu_total[@]}"; do
+		dt=$((cpu_total[i] - prev_total[i])) di=$((cpu_idle[i] - prev_idle[i]))
+		usage[i]=0
+		[ "$dt" -gt 0 ] && usage[i]=$(((dt - di) * 100 / dt))
+	done
+	local total=${usage[0]}
+	record history "$total"
+
+	local freq load1 load5 load15 tasks
+	freq=$(awk '{ s += $1; n++ } END { printf "%.1f", n ? s / n / 1e6 : 0 }' \
+		/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq </dev/null)
+	read -r load1 load5 load15 tasks _ </proc/loadavg
+
+	local text tooltip
+	text=$(printf "<span color='#f1fa8c' size='large'>󰾆</span> %3d%% (%sGHz)" "$total" "$freq")
+
+	tooltip="$(header CPU)\n$(graph "" "${history[@]}")\n"
+	tooltip+="$(label Total) $(printf '<b>%3d%%</b>' "$total") $(meter "$total" $((WIDTH - 11)))\n"
+	tooltip+="$(label Clock) ${freq}GHz  $(label Load) $load1 $load5 $load15  $(label Tasks) ${tasks#*/}"
+
+	# Cores in two columns to keep the tooltip compact, numbered from 1.
+	tooltip+="\n\n$(header Cores)"
+	local half=$(((ncpu + 1) / 2)) core
+	for ((i = 0; i < half; i++)); do
+		tooltip+="\n"
+		for core in "$i" $((i + half)); do
+			[ "$core" -lt "$ncpu" ] || continue
+			[ "$core" -eq "$i" ] || tooltip+="   "
+			tooltip+="$(label "$(printf '#%-2d' $((core + 1)))") $(printf '%3d%%' "${usage[core + 1]}") "
+			tooltip+="$(meter "${usage[core + 1]}" "$METER")"
+		done
+	done
+
+	# Process usage is the sum of its threads and relative to one core like in
+	# top, so it may exceed 100%. The core is the one of its busiest thread, and
+	# the name comes from the main thread, whose id is the process id. Cores are
+	# numbered from 1 as in the Cores section.
+	local per_core=$(((cpu_total[0] - prev_total[0]) / ncpu))
+	tooltip+="\n\n$(header Processes)"
+	tooltip+="\n$(label "    PID   CPU  CORE  NAME")"
+	local pid pct name
+	while IFS=$'\t' read -r pid pct core name; do
+		tooltip+="\n$(label "$(printf '%7d' "$pid")") "
+		tooltip+="$(printf "<span color='%s'>%4d%%</span>  %4s  %s" \
+			"$(color "$pct")" "$pct" "#$((core + 1))" "$name")"
+	done < <(awk -F '\t' -v elapsed="$per_core" '
+		NR == FNR { prev[$2] = $3; next }
+		{ split($2, id, ":"); if (id[1] == $1) name[$1] = $5 }
+		$2 in prev {
+			d = $3 - prev[$2]; sum[$1] += d
+			if (!($1 in busiest) || d > busiest[$1]) { busiest[$1] = d; core[$1] = $4 }
+		}
+		END {
+			if (elapsed <= 0) exit
+			for (p in sum) {
+				pct = sum[p] * 100 / elapsed
+				if (pct >= 1 && p in name) printf "%d\t%d\t%d\t%s\n", p, pct, core[p], name[p]
+			}
+		}' <(printf '%s\n' "$prev_threads") <(printf '%s\n' "$threads") |
+		sort -t $'\t' -k2,2nr | head -n "$TOP")
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$total")"
+}
+
+sample_stat
+threads=$(sample_threads)
+run emit "${1:-}"

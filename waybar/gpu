@@ -1,31 +1,121 @@
 #!/usr/bin/env bash
+# Discrete GPU load and VRAM with a history graph, meters and the processes
+# using the GPU in the tooltip.
 set -euo pipefail
 shopt -s nullglob
 
 # shellcheck source-path=SCRIPTDIR
 # shellcheck source=hwmon.sh
 . "$(dirname "$0")/hwmon.sh"
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
 
-# Print bytes $1 as gigabytes with one decimal, matching the memory module.
-gigabytes() {
-	local tenths=$((($1 * 10 + (1 << 29)) >> 30))
-	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
-}
+TOP=8
+
+declare -a history=()
 
 # Select the discrete GPU through fan1_input, the integrated one also reports
-# load and VRAM.
-busy=$(hwmon_value amdgpu device/gpu_busy_percent fan1_input)
-used=$(hwmon_value amdgpu device/mem_info_vram_used fan1_input)
-total=$(hwmon_value amdgpu device/mem_info_vram_total fan1_input)
+# load and VRAM. Its PCI address tells its clients apart from the integrated
+# GPU ones.
+hwmon=$(find_hwmon amdgpu fan1_input) || hwmon=""
+pdev=""
+[ -n "$hwmon" ] && pdev=$(basename "$(readlink -f "$hwmon/device")")
 
-class=""
-if [ "$busy" -ge 95 ]; then
-	class="critical"
-elif [ "$busy" -ge 80 ]; then
-	class="warning"
-fi
+# Print the value of file $1, or 0 if unavailable.
+value() {
+	local v=""
+	{ IFS= read -r v <"$1"; } 2>/dev/null || true
+	echo "${v:-0}"
+}
 
-text=$(printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "$(gigabytes "$used")")
-tooltip="Load: $(printf '%3d' "$busy")%\nVRAM: $(gigabytes "$used")GB / $(gigabytes "$total")GB"
+# Print "pid client ns vram name" separated by tabs for every DRM client of the
+# discrete GPU, with the time spent on the graphics and compute engines in
+# nanoseconds and the resident VRAM in kibibytes. A client shows up in every
+# file descriptor sharing it, so only the first one counts. The files are read
+# with getline, since awk aborts on a file argument that vanishes.
+sample_clients() {
+	local fds
+	fds=$(find /proc/[0-9]*/fd -lname '/dev/dri/*' 2>/dev/null || true)
+	[ -n "$fds" ] || return 0
+	# shellcheck disable=SC2086 # One path per line without spaces.
+	awk -v OFS='\t' -v pdev="$pdev" "$CLEAN_NAME"'
+	BEGIN {
+		for (a = 1; a < ARGC; a++) {
+			file = ARGV[a]; sub(/\/fd\//, "/fdinfo/", file)
+			dev = client = ""; ns = vram = 0
+			while ((getline line <file) > 0) {
+				split(line, f, /[ \t]+/)
+				if (f[1] == "drm-pdev:") dev = f[2]
+				else if (f[1] == "drm-client-id:") client = f[2]
+				else if (f[1] == "drm-engine-gfx:" || f[1] == "drm-engine-compute:") ns += f[2]
+				else if (f[1] == "drm-resident-vram:" || (f[1] == "drm-memory-vram:" && !vram)) vram = f[2]
+			}
+			close(file)
+			if (dev != pdev || client == "" || seen[client]++) continue
+			split(ARGV[a], path, "/"); pid = path[3]
+			if (!(pid in name)) {
+				comm = "/proc/" pid "/comm"
+				name[pid] = ""
+				if ((getline name[pid] <comm) > 0) name[pid] = clean(name[pid])
+				close(comm)
+			}
+			print pid, client, ns, vram, name[pid]
+		}
+	}' $fds
+}
 
-printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
+emit() {
+	local prev_clients=$clients prev_time=$time
+	clients=$(sample_clients)
+	time=${EPOCHREALTIME/./}
+
+	local busy used total sclk mclk
+	busy=$(value "$hwmon/device/gpu_busy_percent")
+	used=$(($(value "$hwmon/device/mem_info_vram_used") >> 10))
+	total=$(($(value "$hwmon/device/mem_info_vram_total") >> 10))
+	sclk=$(value "$hwmon/freq1_input")
+	mclk=$(value "$hwmon/freq2_input")
+	local vram_pct=0
+	[ "$total" -gt 0 ] && vram_pct=$(((used * 100 + total / 2) / total))
+	record history "$busy"
+
+	local text tooltip
+	text=$(printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "$(gigabytes "$used")")
+
+	tooltip="$(header GPU)\n$(graph "" "${history[@]}")\n"
+	tooltip+="$(label "Load ") $(printf '<b>%3d%%</b>' "$busy") $(meter "$busy" $((WIDTH - 11)))\n"
+	tooltip+="$(label "VRAM ") $(printf '%3d%%' "$vram_pct") $(meter "$vram_pct" $((WIDTH - 11)))\n"
+	tooltip+="$(label Clock) $(awk -v hz="$sclk" 'BEGIN { printf "%.1f", hz / 1e9 }')GHz  "
+	tooltip+="$(label Memory) $(awk -v hz="$mclk" 'BEGIN { printf "%.1f", hz / 1e9 }')GHz  "
+	tooltip+="$(label VRAM) $(gigabytes "$used")/$(gigabytes "$total")GB"
+
+	# Process load is the share of the elapsed time a process kept the graphics
+	# and compute engines busy, summed over its clients.
+	tooltip+="\n\n$(header Processes)"
+	tooltip+="\n$(label "    PID   GPU     VRAM  NAME")"
+	local pid pct vram name
+	while IFS=$'\t' read -r pid pct vram name; do
+		tooltip+="\n$(label "$(printf '%7d' "$pid")") "
+		tooltip+="$(printf "<span color='%s'>%4d%%</span>  %7s  %s" \
+			"$(color "$pct")" "$pct" "$(size "$vram")" "$name")"
+	done < <(awk -F '\t' -v elapsed=$(((time - prev_time) * 1000)) '
+		NR == FNR { prev[$2] = $3; next }
+		{
+			vram[$1] += $4; name[$1] = $5
+			if ($2 in prev && elapsed > 0) ns[$1] += $3 - prev[$2]
+		}
+		END {
+			for (p in vram) {
+				pct = elapsed > 0 ? ns[p] * 100 / elapsed : 0
+				if (pct >= 1 || vram[p] >= 1024) printf "%d\t%d\t%d\t%s\n", p, pct, vram[p], name[p]
+			}
+		}' <(printf '%s\n' "$prev_clients") <(printf '%s\n' "$clients") |
+		sort -t $'\t' -k2,2nr -k3,3nr | head -n "$TOP")
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$busy")"
+}
+
+clients=$(sample_clients)
+time=${EPOCHREALTIME/./}
+run emit "${1:-}"

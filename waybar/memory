@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# Memory usage with a history graph, RAM and swap meters and the processes
+# using the most memory in the tooltip.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+TOP=8
+
+declare -a history=()
+
+# Print "pid rss name" separated by tabs for every process with resident
+# memory in kibibytes, which leaves out kernel threads. The files are read with
+# getline, since awk aborts on a file argument that vanishes.
+sample_procs() {
+	awk -v OFS='\t' "$CLEAN_NAME"'
+	BEGIN {
+		for (a = 1; a < ARGC; a++) {
+			name = ""
+			while ((getline line <ARGV[a]) > 0) {
+				if (line ~ /^Name:/) name = substr(line, 7)
+				else if (line ~ /^VmRSS:/) {
+					split(ARGV[a], path, "/"); split(line, f, " ")
+					print path[3], f[2], clean(name)
+					break
+				}
+			}
+			close(ARGV[a])
+		}
+	}' /proc/[0-9]*/status
+}
+
+emit() {
+	local key value
+	local total=0 avail=0 buffers=0 cached=0 reclaimable=0 swap_total=0 swap_free=0
+	while read -r key value _; do
+		case $key in
+		MemTotal:) total=$value ;;
+		MemAvailable:) avail=$value ;;
+		Buffers:) buffers=$value ;;
+		Cached:) cached=$value ;;
+		SReclaimable:) reclaimable=$value ;;
+		SwapTotal:) swap_total=$value ;;
+		SwapFree:) swap_free=$value ;;
+		esac
+	done </proc/meminfo
+
+	# Used memory is what is not available, as in the built-in module.
+	local used=$((total - avail)) cache=$((buffers + cached + reclaimable))
+	local swap_used=$((swap_total - swap_free))
+	local pct=$(((used * 100 + total / 2) / total)) swap_pct=0
+	[ "$swap_total" -gt 0 ] && swap_pct=$(((swap_used * 100 + swap_total / 2) / swap_total))
+	record history "$pct"
+
+	local text tooltip
+	text=$(printf "<span color='#ff79c6' size='large'>󰘚</span> %2dGB (%3d%%)" \
+		$(((used + (1 << 19)) >> 20)) "$pct")
+
+	tooltip="$(header Memory)\n$(graph "" "${history[@]}")\n"
+	tooltip+="$(label "RAM  ") $(printf '<b>%3d%%</b>' "$pct") $(meter "$pct" $((WIDTH - 11)))\n"
+	if [ "$swap_total" -gt 0 ]; then
+		tooltip+="$(label "Swap ") $(printf '%3d%%' "$swap_pct") $(meter "$swap_pct" $((WIDTH - 11)))\n"
+	fi
+	tooltip+="$(label Used) $(gigabytes "$used")/$(gigabytes "$total")GB  $(label Cache) $(gigabytes "$cache")GB"
+	if [ "$swap_total" -gt 0 ]; then
+		tooltip+="  $(label Swap) $(gigabytes "$swap_used")/$(gigabytes "$swap_total")GB"
+	fi
+
+	# Resident memory like RES in top, which counts shared pages in every
+	# process using them.
+	tooltip+="\n\n$(header Processes)"
+	tooltip+="\n$(label "    PID      RSS   MEM  NAME")"
+	local pid rss name
+	while IFS=$'\t' read -r pid rss name; do
+		tooltip+="\n$(label "$(printf '%7d' "$pid")")  "
+		tooltip+="$(printf '%7s  %3d%%  %s' "$(size "$rss")" $((rss * 100 / total)) "$name")"
+	done < <(sample_procs | sort -t $'\t' -k2,2nr | head -n "$TOP")
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$pct")"
+}
+
+run emit "${1:-}"
