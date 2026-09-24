@@ -97,7 +97,8 @@ record() {
 # Print the percentages $2... as a graph $GRAPH rows high, oldest first and
 # padded on the left while the history fills up. The graph takes color $1, or
 # the gradient color of each value if $1 is empty. The reduced line height
-# closes the gaps between rows.
+# closes the gaps between rows, and a small blank line below keeps the graph
+# apart from the next row.
 graph() {
 	local levels=(" " "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█") out="" pct row fill col open i
 	local fixed=$1
@@ -119,7 +120,7 @@ graph() {
 		[ -n "$open" ] && out+="</span>"
 		((row > 0)) && out+="\n"
 	done
-	printf "<span line_height='0.75'>%s</span>" "$out"
+	printf "<span line_height='0.75'>%s</span>%s" "$out" "\n<span size='xx-small'> </span>"
 }
 
 # Print tooltip $1 with the rows spaced out by $LINE.

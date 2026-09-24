@@ -1,81 +1,86 @@
 #!/usr/bin/env bash
+# CPU and GPU power draw with a history graph of the total and meters against
+# the power limits in the tooltip.
 set -euo pipefail
 shopt -s nullglob
 
 # shellcheck source-path=SCRIPTDIR
 # shellcheck source=hwmon.sh
 . "$(dirname "$0")/hwmon.sh"
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
 
-cpu_watts() {
-	local rapl="/sys/class/powercap/intel-rapl:0"
-	if [ ! -r "$rapl/energy_uj" ]; then
-		echo "N/A"
-		return
-	fi
+RAPL=/sys/class/powercap/intel-rapl:0
+# Package power limit (PPT) of the Ryzen 7 9800X3D in watts. AMD exposes no
+# RAPL constraints, so it cannot be read from sysfs.
+CPU_LIMIT=162
 
-	local cache="${XDG_RUNTIME_DIR:-/tmp}/waybar-power-rapl"
-	local now_uj
-	IFS= read -r now_uj <"$rapl/energy_uj"
-	# EPOCHREALTIME has microsecond precision, its separator is locale
-	# dependent. Dropping it and padding to nanoseconds avoids calling date.
-	local now_ns=${EPOCHREALTIME/[.,]/}000
+declare -a history=() watts=()
 
-	if [ -f "$cache" ]; then
-		local prev_uj prev_ns prev_watts
-		read -r prev_uj prev_ns prev_watts <"$cache" || true
-		if [ -z "${prev_uj:-}" ] || [ -z "${prev_ns:-}" ]; then
-			echo "N/A"
-			echo "$now_uj $now_ns N/A" >"$cache"
-			return
-		fi
-		local d_uj=$((now_uj - prev_uj))
-		if [ "$d_uj" -eq 0 ]; then
-			echo "${prev_watts:-0}"
-			echo "$now_uj $now_ns ${prev_watts:-0}" >"$cache"
-			return
-		fi
+# Print the CPU package energy counter in microjoules, or nothing without
+# RAPL.
+energy() {
+	local uj=""
+	{ IFS= read -r uj <"$RAPL/energy_uj"; } 2>/dev/null || true
+	echo "$uj"
+}
+
+# Print watts $1 as a percentage of limit $2.
+percent() {
+	local pct=0
+	[ "$2" -gt 0 ] && pct=$((($1 * 100 + $2 / 2) / $2))
+	((pct > 100)) && pct=100
+	echo "$pct"
+}
+
+emit() {
+	local prev_uj=$uj prev_time=$time
+	uj=$(energy)
+	time=${EPOCHREALTIME/[.,]/}
+
+	# The counter wraps at max_energy_range_uj. A sample without it reads as
+	# 0W.
+	local cpu=0 d_uj d_us=$((time - prev_time)) max=0
+	if [ -n "$uj" ] && [ -n "$prev_uj" ] && [ "$d_us" -gt 0 ]; then
+		d_uj=$((uj - prev_uj))
 		if [ "$d_uj" -lt 0 ]; then
-			local max=""
-			IFS= read -r max <"$rapl/max_energy_range_uj" 2>/dev/null || [ -n "$max" ] || {
-				echo "N/A"
-				echo "$now_uj $now_ns N/A" >"$cache"
-				return
-			}
+			{ IFS= read -r max <"$RAPL/max_energy_range_uj"; } 2>/dev/null || true
 			d_uj=$((d_uj + max))
 		fi
-		local d_ns=$((now_ns - prev_ns))
-		if [ "$d_ns" -gt 0 ]; then
-			local watts=$(((d_uj * 1000 + d_ns / 2) / d_ns))
-			echo "$watts"
-			echo "$now_uj $now_ns $watts" >"$cache"
-		else
-			echo "${prev_watts:-N/A}"
-		fi
-	else
-		echo "N/A"
-		echo "$now_uj $now_ns N/A" >"$cache"
+		cpu=$(((d_uj + d_us / 2) / d_us))
+		((cpu < 0)) && cpu=0
 	fi
+
+	local gpu gpu_limit
+	gpu=$((($(hwmon_value amdgpu power1_average fan1_input) + 500000) / 1000000))
+	gpu_limit=$((($(hwmon_value amdgpu power1_cap fan1_input) + 500000) / 1000000))
+	local total=$((cpu + gpu))
+	record history "$(percent "$total" $((CPU_LIMIT + gpu_limit)))"
+	record watts "$total"
+
+	local sum=0 peak=0 w
+	for w in "${watts[@]}"; do
+		sum=$((sum + w))
+		((w > peak)) && peak=$w
+	done
+
+	local cpu_pct gpu_pct
+	cpu_pct=$(percent "$cpu" "$CPU_LIMIT")
+	gpu_pct=$(percent "$gpu" "$gpu_limit")
+
+	# The unit is shown once at the end to keep the module narrow.
+	local text tooltip
+	text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu" "$gpu")
+
+	tooltip="$(header Power)\n$(graph "" "${history[@]}")\n"
+	tooltip+="$(label "CPU  ") $(printf '%4dW' "$cpu") $(meter "$cpu_pct" $((WIDTH - 12)))\n"
+	tooltip+="$(label "GPU  ") $(printf '%4dW' "$gpu") $(meter "$gpu_pct" $((WIDTH - 12)))\n"
+	tooltip+="$(label Total) <b>${total}W</b>  $(label Average) $((sum / ${#watts[@]}))W  $(label Peak) ${peak}W"
+
+	printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$(spaced "$tooltip")"
 }
 
-gpu_watts() {
-	local val
-	val=$(hwmon_value amdgpu power1_average)
-	echo $(((val + 500000) / 1000000))
-}
-
-cpu=$(cpu_watts)
-gpu=$(gpu_watts)
-
-if [ "$cpu" = "N/A" ]; then
-	cpu_label="  -"
-	cpu_tooltip="  -"
-else
-	cpu_label=$(printf "%3d" "$cpu")
-	cpu_tooltip="${cpu_label}W"
-fi
-
-# The unit is shown once at the end to keep the module narrow.
-text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %s  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu_label" "$gpu")
-tooltip="CPU: ${cpu_tooltip}\nGPU: $(printf '%3d' "$gpu")W"
-
-printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$tooltip"
+uj=$(energy)
+time=${EPOCHREALTIME/[.,]/}
+run emit "${1:-}"

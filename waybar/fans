@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
+# Fan speeds with a meter of the PWM duty cycle each fan is driven at in the
+# tooltip.
 set -euo pipefail
 shopt -s nullglob
 
 # shellcheck source-path=SCRIPTDIR
 # shellcheck source=hwmon.sh
 . "$(dirname "$0")/hwmon.sh"
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
 
 # Header names and icons for the ASUS NCT6799D mapping, matching the temps and
 # power modules. Unknown headers keep fanN and a generic fan icon.
@@ -17,20 +22,29 @@ gpu_icon="<span color='#ffb86c' size='large'>󰢮</span>"
 generic_icon="<span color='#6272a4' size='large'>󰈐</span>"
 
 text=""
-tooltip=""
+tooltip=$(header Fans)
 class=""
 
-# Append a fan to the module text and tooltip: icon, label, RPM.
+# Print PWM value $1 out of $2 as a percentage.
+duty() {
+	local max=${2:-255}
+	[ "$max" -gt 0 ] || max=255
+	echo $((($1 * 100 + max / 2) / max))
+}
+
+# Append a fan to the module text and tooltip: icon, label, RPM and duty cycle
+# percentage.
 add() {
 	text+="${text:+  }$(printf '%s %4d' "$1" "$3")"
-	tooltip+="${tooltip:+\\n}$(printf '%-5s %4d RPM' "$2:" "$3")"
+	tooltip+="\\n$(label "$(printf '%-5s' "$2")") $(printf '%4d RPM  %3d%%' "$3" "$4")"
+	tooltip+=" $(meter "$4" $((WIDTH - 21)))"
 }
 
 # Motherboard headers reporting 0 RPM are treated as unconnected, except for
 # the CPU fan, which must always spin.
 # The glob is already in fan number order, which is the order they are shown in,
 # so no sorting is needed.
-declare -A board=()
+declare -A board=() pwm=()
 order=()
 if dir=$(find_hwmon nct6799); then
 	for f in "$dir"/fan*_input; do
@@ -39,6 +53,8 @@ if dir=$(find_hwmon nct6799); then
 		IFS= read -r rpm <"$f" 2>/dev/null || [ -n "$rpm" ] || continue
 		if [ "$rpm" -gt 0 ] || [ "$fan" = fan2 ]; then
 			board[$fan]=$rpm
+			pwm[$fan]=0
+			IFS= read -r "pwm[$fan]" <"$dir/pwm${fan#fan}" 2>/dev/null || true
 			order+=("$fan")
 		fi
 	done
@@ -47,19 +63,21 @@ fi
 # Order: CPU, GPU, then the remaining board fans. The GPU fan stops at idle,
 # so it is always shown.
 if [ -n "${board[fan2]:-}" ]; then
-	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}"
+	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}" "$(duty "${pwm[fan2]:-0}")"
 	if [ "${board[fan2]}" -eq 0 ]; then
 		class="critical"
 	fi
 fi
-add "$gpu_icon" GPU "$(hwmon_value amdgpu fan1_input)"
+add "$gpu_icon" GPU "$(hwmon_value amdgpu fan1_input)" \
+	"$(duty "$(hwmon_value amdgpu pwm1 fan1_input)" "$(hwmon_value amdgpu pwm1_max fan1_input)")"
 for fan in "${order[@]}"; do
 	if [ "$fan" != fan2 ]; then
-		add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}"
+		add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}" \
+			"$(duty "${pwm[$fan]:-0}")"
 	fi
 done
 
 # The unit is shown once at the end to keep the module narrow.
 text+=" rpm"
 
-printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
