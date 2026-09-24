@@ -127,7 +127,8 @@ workspace $ws_terminal output HDMI-A-2
 
 # take a screenshot
 bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
-bindsym $mod+Shift+v exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied"
+# The selection is taken first, so a cancelled slurp leaves the clipboard alone
+bindsym $mod+Shift+v exec g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied"
 bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 
 # move workspace to other output
@@ -187,5 +188,5 @@ exec ratbagctl $mouse resolution 0 dpi set 800
 exec ratbagctl $mouse resolution active set 0
 exec ratbagctl $mouse led 0 set mode cycle duration 8000 brightness 255
 exec ratbagctl $mouse led 1 set mode cycle duration 8000 brightness 255
-exec alacritty -e fish -C 'tmux new-session -A -s work'
+exec alacritty -e fish -C 'tmux new-session -A -s main'
 exec google-chrome-stable

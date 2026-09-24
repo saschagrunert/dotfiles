@@ -3,7 +3,7 @@ abbr -a ... cd ../..
 abbr -a .... cd ../../..
 abbr -a ..... cd ../../../..
 abbr -a cat bat
-set -l _eza "eza --git -bg --classify=always"
+set -l _eza "eza --git -bg --classify=always --icons=auto"
 abbr -a ls "$_eza"
 abbr -a l "$_eza -l"
 abbr -a la "$_eza -a"

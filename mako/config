@@ -30,3 +30,7 @@ default-timeout=15000
 
 [mode=do-not-disturb]
 invisible=1
+
+# Critical notifications, such as earlyoom warnings, still get through
+[mode=do-not-disturb urgency=critical]
+invisible=0

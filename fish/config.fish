@@ -59,10 +59,8 @@ end
 function fish_mode_prompt
 end
 
-if not set -q __fish_theme_configured
-    fish_config theme choose Dracula
-    set -U __fish_theme_configured 1
-end
+# Sets global variables only, so it has to run in every shell (about 5ms)
+fish_config theme choose Dracula
 
 function fish_user_key_bindings
     fish_vi_key_bindings
