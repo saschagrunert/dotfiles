@@ -10,6 +10,9 @@ INTERVAL=5
 WIDTH=49
 # Graph height in rows, each holding eight levels of block height.
 GRAPH=3
+# Line height of the tooltip rows, except for the graphs, which keep their
+# rows close together.
+LINE=1.2
 
 # Meter colors from low to high load, using the Dracula palette.
 GRADIENT=("#50fa7b" "#50fa7b" "#50fa7b" "#50fa7b" "#f1fa8c" "#f1fa8c"
@@ -117,6 +120,11 @@ graph() {
 		((row > 0)) && out+="\n"
 	done
 	printf "<span line_height='0.75'>%s</span>" "$out"
+}
+
+# Print tooltip $1 with the rows spaced out by $LINE.
+spaced() {
+	printf "<span line_height='%s'>%s</span>" "$LINE" "$1"
 }
 
 # Print a section header with a rule filling the rest of the width.

@@ -121,7 +121,7 @@ emit() {
 		}' <(printf '%s\n' "$prev_threads") <(printf '%s\n' "$threads") |
 		sort -t $'\t' -k2,2nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$total")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$total")"
 }
 
 sample_stat

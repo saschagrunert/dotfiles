@@ -113,7 +113,7 @@ emit() {
 		}' <(printf '%s\n' "$prev_clients") <(printf '%s\n' "$clients") |
 		sort -t $'\t' -k2,2nr -k3,3nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$busy")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$busy")"
 }
 
 clients=$(sample_clients)

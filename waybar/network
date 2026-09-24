@@ -130,7 +130,7 @@ emit() {
 	tooltip+="$(traffic Upload up_history "$UP" "$tx")\n\n"
 	tooltip+="$(header Connection)\n$details"
 
-	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "$tooltip"
+	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "$(spaced "$tooltip")"
 }
 
 run emit "${1:-}"

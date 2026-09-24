@@ -79,7 +79,7 @@ emit() {
 		tooltip+="$(printf '%7s  %3d%%  %s' "$(size "$rss")" $((rss * 100 / total)) "$name")"
 	done < <(sample_procs | sort -t $'\t' -k2,2nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$(class "$pct")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$pct")"
 }
 
 run emit "${1:-}"
