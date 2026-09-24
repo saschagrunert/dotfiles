@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+# Disk usage of the root filesystem, with a meter for every local filesystem
+# and read and write history graphs of the physical disks in the tooltip.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+READ="#8be9fd"
+WRITE="#ff79c6"
+# Graphs scale to their peak, but at least to this many bytes per second, so
+# background writes stay flat.
+FLOOR=1000000
+
+# shellcheck disable=SC2034 # The histories are used by name.
+declare -a read_history=() write_history=()
+read_bytes=0 write_bytes=0 time=0
+
+# Print "pct size used avail type mount" separated by tabs for every filesystem
+# on a block device, in kibibytes. Bind mounts like /nix/store share the device
+# of an earlier mount. Automounts are left out, since checking them every few
+# seconds would keep them from expiring, so df only gets the mount points to
+# show. Their autofs entries come before the mounts in /proc/self/mounts, which
+# escapes spaces and backslashes in octal.
+filesystems() {
+	local -a mounts
+	mapfile -t mounts < <(awk '{ gsub(/\\040/, " ", $2); gsub(/\\134/, "\\", $2) }
+		$3 == "autofs" { auto[$2] = 1 }
+		$1 ~ /^\/dev\// && !($2 in auto) && !seen[$1]++ { print $2 }' /proc/self/mounts)
+	df -k --output=source,fstype,size,used,avail,pcent,target "${mounts[@]}" |
+		awk -v OFS='\t' "$CLEAN_NAME"'
+		NR > 1 {
+			mount = $0; sub(/^([^ ]+ +){6}/, "", mount)
+			print $6 + 0, $3, $4, $5, $2, escape(mount)
+		}' | sort -t $'\t' -k6,6
+}
+
+# Fill read_bytes and write_bytes with the totals of the physical disks since
+# boot, which leaves out partitions and device mapper devices counting the same
+# bytes again. The sectors in the stat files are always 512 bytes.
+sample_disks() {
+	local dev sectors_read sectors_written
+	read_bytes=0 write_bytes=0
+	for dev in /sys/block/*/device; do
+		read -r _ _ sectors_read _ _ _ sectors_written _ <"${dev%/device}/stat"
+		read_bytes=$((read_bytes + sectors_read * 512))
+		write_bytes=$((write_bytes + sectors_written * 512))
+	done
+}
+
+emit() {
+	local old_read=$read_bytes old_write=$write_bytes now elapsed
+	now=${EPOCHREALTIME/[.,]/}
+	sample_disks
+	elapsed=$((now - time))
+	((elapsed > 0)) || elapsed=1
+	time=$now
+	record read_history $(((read_bytes - old_read) * 1000000 / elapsed))
+	record write_history $(((write_bytes - old_write) * 1000000 / elapsed))
+
+	local -a rows
+	mapfile -t rows < <(filesystems)
+
+	# Right-align the used and total sizes in a column as wide as the widest,
+	# so the meters line up.
+	local row pct size used avail type mount usage col=0 i
+	for row in "${rows[@]}"; do
+		IFS=$'\t' read -r _ size used _ _ _ <<<"$row"
+		usage="$(size "$used") / $(size "$size")"
+		((${#usage} > col)) && col=${#usage}
+	done
+
+	# Each filesystem shows its mount point and type with the free space on
+	# the right, then its meter with the used and total sizes. A small blank
+	# line keeps them apart.
+	local text="" class="" tooltip gap free shown
+	tooltip="$(header Filesystems)"
+	for row in "${rows[@]}"; do
+		IFS=$'\t' read -r pct size used avail type mount <<<"$row"
+		[ "$row" = "${rows[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
+		free=$(size "$avail")
+		# The mount point is escaped, so measure it with the entities undone.
+		shown=${mount//&amp;/"&"} shown=${shown//&lt;/"<"} shown=${shown//&gt;/">"}
+		gap=""
+		for ((i = ${#shown} + ${#type} + ${#free} + 7; i < WIDTH; i++)); do gap+=" "; done
+		tooltip+="\n<b>$mount</b> $(label "$type")$gap $(label Free) $free"
+		tooltip+="\n$(printf '<b>%3d%%</b> %s %*s' "$pct" "$(meter "$pct" $((WIDTH - col - 6)))" \
+			"$col" "$(size "$used") / $(size "$size")")"
+		if [ "$mount" = / ]; then
+			text=$(printf "<span color='#50fa7b' size='large'>󰋊</span> %3d%% (%dGB free)" \
+				"$pct" $(((avail + (1 << 19)) >> 20)))
+			class=$(class "$pct")
+		fi
+	done
+
+	tooltip+="\n\n$(traffic Read read_history "$READ" "$read_bytes")"
+	tooltip+="\n\n$(traffic Write write_history "$WRITE" "$write_bytes")"
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+}
+
+# The first rates cover the short first sample of run.
+sample_disks
+time=${EPOCHREALTIME/[.,]/}
+run emit "${1:-}"

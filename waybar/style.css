@@ -37,11 +37,11 @@ window#waybar {
   background-color: rgba(68, 71, 90, 0.4);
 }
 
-#disk,
 #custom-temps,
 #custom-fans,
 #custom-power,
 #custom-network,
+#custom-disk,
 #custom-memory,
 #custom-cpu,
 #custom-gpu,
@@ -61,11 +61,11 @@ window#waybar {
   transition: background-color 0.3s ease;
 }
 
-#disk:hover,
 #custom-temps:hover,
 #custom-fans:hover,
 #custom-power:hover,
 #custom-network:hover,
+#custom-disk:hover,
 #custom-memory:hover,
 #custom-cpu:hover,
 #custom-gpu:hover,
@@ -92,7 +92,8 @@ window#waybar {
 #custom-fans.critical,
 #custom-cpu.critical,
 #custom-gpu.critical,
-#custom-memory.critical {
+#custom-memory.critical,
+#custom-disk.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
   font-weight: bold;
@@ -103,6 +104,7 @@ window#waybar {
 #custom-cpu.warning,
 #custom-gpu.warning,
 #custom-memory.warning,
+#custom-disk.warning,
 #custom-nix-updates.kernel,
 #privacy {
   color: #ffb86c;

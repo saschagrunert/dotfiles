@@ -5,7 +5,7 @@
   "modules-right": [
     "group/hardware",
     "custom/network",
-    "disk",
+    "custom/disk",
     "custom/memory",
     "group/load",
     "group/audio",
@@ -29,12 +29,6 @@
   "sway/workspaces": {
     "format": "<span size='x-large'>{name}</span>",
     "disable-scroll-wraparound": true,
-  },
-  "disk": {
-    "path": "/",
-    "format": "<span color='#50fa7b' size='large'>󰋊</span> {percentage_used:3}% ({free} free)",
-    "tooltip-format": "{used} / {total}",
-    "interval": 30,
   },
   // The drawers show their first module and expand to the left on hover, so
   // the visible module does not move. Temperatures stay visible, power and fans
@@ -85,6 +79,10 @@
     "exec": "~/.config/waybar/network",
     "return-type": "json",
     "on-click": "nm-connection-editor",
+  },
+  "custom/disk": {
+    "exec": "~/.config/waybar/disk",
+    "return-type": "json",
   },
   "custom/memory": {
     "exec": "~/.config/waybar/memory",
