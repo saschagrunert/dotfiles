@@ -1,28 +1,73 @@
 #!/usr/bin/env bash
+# CPU, GPU and NVMe temperatures with a CPU history graph and meters in the
+# tooltip.
 set -euo pipefail
 shopt -s nullglob
 
 # shellcheck source-path=SCRIPTDIR
 # shellcheck source=hwmon.sh
 . "$(dirname "$0")/hwmon.sh"
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
 
-cpu=$(($(hwmon_value k10temp temp1_input) / 1000))
-# Select the discrete GPU, the integrated one also reports temp1_input.
-gpu=$(($(hwmon_value amdgpu temp1_input fan1_input) / 1000))
-nvme=$(($(hwmon_value nvme temp1_input) / 1000))
+# Meters and the graph span from $FLOOR to the critical temperature of each
+# sensor, so an idle machine stays green and a full meter means critical.
+FLOOR=20
+CPU_CRIT=85 CPU_WARN=75
+GPU_CRIT=90 GPU_WARN=80
+NVME_CRIT=70 NVME_WARN=60
 
-class=""
-if [ "$cpu" -ge 85 ] || [ "$gpu" -ge 90 ] || [ "$nvme" -ge 70 ]; then
-	class="critical"
-elif [ "$cpu" -ge 75 ] || [ "$gpu" -ge 80 ] || [ "$nvme" -ge 60 ]; then
-	class="warning"
-fi
+declare -a history=()
 
-# The unit is shown once at the end to keep the module narrow.
-text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d" "$cpu")
-text+=$(printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d" "$gpu")
-text+=$(printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d °C" "$nvme")
+# Print temperature $1 as a percentage between $FLOOR and critical $2.
+scale() {
+	local pct=$((($1 - FLOOR) * 100 / ($2 - FLOOR)))
+	((pct < 0)) && pct=0
+	((pct > 100)) && pct=100
+	echo "$pct"
+}
 
-tooltip="CPU:  $(printf '%3d' "$cpu")°C\nGPU:  $(printf '%3d' "$gpu")°C\nNVMe: $(printf '%3d' "$nvme")°C"
+# Print a tooltip row with label $1, temperature $2 and critical $3.
+row() {
+	local pct
+	pct=$(scale "$2" "$3")
+	printf '%s %s %s' "$(label "$(printf '%-5s' "$1")")" \
+		"$(printf "<span color='%s'>%3d°C</span>" "$(color "$pct")" "$2")" \
+		"$(meter "$pct" $((WIDTH - 12)))"
+}
 
-printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$tooltip" "$class"
+emit() {
+	local cpu gpu nvme ccd hotspot mem
+	cpu=$(($(hwmon_value k10temp temp1_input) / 1000))
+	ccd=$(($(hwmon_value k10temp temp3_input) / 1000))
+	# Select the discrete GPU, the integrated one also reports temp1_input.
+	gpu=$(($(hwmon_value amdgpu temp1_input fan1_input) / 1000))
+	hotspot=$(($(hwmon_value amdgpu temp2_input fan1_input) / 1000))
+	mem=$(($(hwmon_value amdgpu temp3_input fan1_input) / 1000))
+	nvme=$(($(hwmon_value nvme temp1_input) / 1000))
+	record history "$(scale "$cpu" "$CPU_CRIT")"
+
+	local class=""
+	if [ "$cpu" -ge "$CPU_CRIT" ] || [ "$gpu" -ge "$GPU_CRIT" ] || [ "$nvme" -ge "$NVME_CRIT" ]; then
+		class="critical"
+	elif [ "$cpu" -ge "$CPU_WARN" ] || [ "$gpu" -ge "$GPU_WARN" ] || [ "$nvme" -ge "$NVME_WARN" ]; then
+		class="warning"
+	fi
+
+	# The unit is shown once at the end to keep the module narrow.
+	local text tooltip
+	text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d" "$cpu")
+	text+=$(printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d" "$gpu")
+	text+=$(printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d °C" "$nvme")
+
+	tooltip="$(header "CPU temperature")\n$(graph "" "${history[@]}")\n"
+	tooltip+="$(row CPU "$cpu" "$CPU_CRIT")\n"
+	tooltip+="$(row GPU "$gpu" "$GPU_CRIT")\n"
+	tooltip+="$(row NVMe "$nvme" "$NVME_CRIT")\n"
+	tooltip+="$(label CCD) ${ccd}°C  $(label "GPU hotspot") ${hotspot}°C  $(label VRAM) ${mem}°C"
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+}
+
+run emit "${1:-}"

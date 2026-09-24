@@ -65,10 +65,11 @@
     },
     "modules": ["pulseaudio", "pulseaudio#source"],
   },
+  // Temperatures and power run continuously like the tooltip scripts below,
+  // the fans only show current values and run every 5 seconds.
   "custom/temps": {
     "exec": "~/.config/waybar/temps",
     "return-type": "json",
-    "interval": 5,
   },
   "custom/fans": {
     "exec": "~/.config/waybar/fans",
@@ -78,7 +79,6 @@
   "custom/power": {
     "exec": "~/.config/waybar/power",
     "return-type": "json",
-    "interval": 5,
   },
   // The tooltip scripts run continuously and print a line every 5 seconds.
   "custom/network": {
