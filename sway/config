@@ -182,11 +182,13 @@ include /etc/sway/config.d/*
 
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
 
-# Machine-specific: mouse, configured through ratbagd
-set $mouse "hollering-marmot"
-exec ratbagctl $mouse resolution 0 dpi set 800
-exec ratbagctl $mouse resolution active set 0
-exec ratbagctl $mouse led 0 set mode cycle duration 8000 brightness 255
-exec ratbagctl $mouse led 1 set mode cycle duration 8000 brightness 255
+# Machine-specific: mouse, configured through ratbagd. The ratbagd device name
+# is derived from the device node and changes, so look it up by model.
+exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
+    [ -n "$m" ] || exit 0; \
+    ratbagctl "$m" resolution 0 dpi set 800; \
+    ratbagctl "$m" resolution active set 0; \
+    ratbagctl "$m" led 0 set mode cycle duration 8000 brightness 255; \
+    ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
 exec alacritty -e fish -C 'tmux new-session -A -s main'
 exec google-chrome-stable
