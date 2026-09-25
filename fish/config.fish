@@ -116,4 +116,15 @@ if command -q kubectl
     end
 end
 
+# Set up the #project dev shell for repos that ship nix/derivation.nix and
+# nix/overlay.nix, since their own flakes don't export devShells. direnv picks
+# up the new .envrc on the next prompt.
+function __auto_envrc --on-variable PWD
+    test -e .envrc && return
+    test -f nix/derivation.nix -a -f nix/overlay.nix || return
+    echo 'use flake ~/.dotfiles#project --impure' >.envrc
+    direnv allow
+end
+__auto_envrc
+
 source (status dirname)/functions/kubernetes.fish
