@@ -155,9 +155,7 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 ```
 
 The waybar `custom/nix-updates` module shows how many packages an update would
-upgrade. A weekly workflow opens a pull request with the updated `flake.lock`
-once the system still builds with it. Dependabot keeps the GitHub Actions up to
-date.
+upgrade. Dependabot keeps the GitHub Actions up to date.
 
 ## Development Shells
 
