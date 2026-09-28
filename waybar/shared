@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Run the continuous waybar script named $1 once for all bars. There is one bar
+# per output, and each would otherwise run its own copy, sampling the same data
+# twice. The bar holding the lock runs the script and publishes every line to a
+# file, the other bars print that file whenever it changes. A bar that goes
+# away with its output releases the lock, and another one takes over.
+set -euo pipefail
+
+name=${1:?usage: shared <script>}
+[[ "$name" =~ ^[a-z-]+$ ]] || {
+	echo "invalid script: $name" >&2
+	exit 1
+}
+script=$(dirname "$0")/$name
+dir=${XDG_RUNTIME_DIR:?}/waybar
+out=$dir/$name.json
+mkdir -p "$dir"
+exec 8>"$dir/$name.lock"
+
+# The script and its children must not hold the lock, or it would outlive this
+# bar. Each line replaces the file in one rename, so followers never read half
+# of one.
+produce() {
+	rm -f "$out"
+	"$script" 8>&- | while IFS= read -r line; do
+		printf '%s\n' "$line" >"$out.tmp" && mv -f "$out.tmp" "$out"
+		printf '%s\n' "$line"
+	done
+}
+
+# A FIFO nobody writes to, so read -t waits without forking sleep. Opening it
+# read-write does not block, and it can be unlinked once open.
+mkfifo "$dir/$name.$$.fifo"
+exec 7<>"$dir/$name.$$.fifo"
+rm -f "$dir/$name.$$.fifo"
+
+last=""
+while true; do
+	if flock -n 8; then
+		exec 7<&-
+		produce
+		exit
+	fi
+	# Poll the file every second and the lock every five. Both the file read
+	# and the wait are builtins, $(<file) and sleep would fork every time.
+	for _ in 1 2 3 4 5; do
+		cur=""
+		IFS= read -r -d '' cur <"$out" 2>/dev/null || true
+		cur=${cur%$'\n'}
+		if [ -n "$cur" ] && [ "$cur" != "$last" ]; then
+			printf '%s\n' "$cur"
+			last=$cur
+		fi
+		read -r -t 1 -u 7 _ || true
+	done
+done

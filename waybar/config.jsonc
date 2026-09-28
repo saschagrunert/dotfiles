@@ -70,7 +70,7 @@
   // Temperatures and power run continuously like the tooltip scripts below,
   // the fans only show current values and run every 5 seconds.
   "custom/temps": {
-    "exec": "~/.config/waybar/temps",
+    "exec": "~/.config/waybar/shared temps",
     "return-type": "json",
   },
   "custom/fans": {
@@ -79,29 +79,29 @@
     "interval": 5,
   },
   "custom/power": {
-    "exec": "~/.config/waybar/power",
+    "exec": "~/.config/waybar/shared power",
     "return-type": "json",
   },
   // The tooltip scripts run continuously and print a line every 5 seconds.
   "custom/network": {
-    "exec": "~/.config/waybar/network",
+    "exec": "~/.config/waybar/shared network",
     "return-type": "json",
     "on-click": "nm-connection-editor",
   },
   "custom/disk": {
-    "exec": "~/.config/waybar/disk",
+    "exec": "~/.config/waybar/shared disk",
     "return-type": "json",
   },
   "custom/memory": {
-    "exec": "~/.config/waybar/memory",
+    "exec": "~/.config/waybar/shared memory",
     "return-type": "json",
   },
   "custom/cpu": {
-    "exec": "~/.config/waybar/cpu",
+    "exec": "~/.config/waybar/shared cpu",
     "return-type": "json",
   },
   "custom/gpu": {
-    "exec": "~/.config/waybar/gpu",
+    "exec": "~/.config/waybar/shared gpu",
     "return-type": "json",
   },
   "privacy": {

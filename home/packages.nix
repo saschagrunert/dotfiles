@@ -99,6 +99,5 @@
 
     # Nix tools
     cachix
-    nix-index
   ];
 }

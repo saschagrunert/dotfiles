@@ -77,6 +77,7 @@ waybar/
 ├── nix-updates                # Pending nixpkgs updates indicator
 ├── nix-updates.jq             # Update grouping and tooltip, tested by make updates-test
 ├── power                      # Power consumption monitor
+├── shared                     # Runs a monitor script once for both bars
 ├── temps                      # Hardware temperature monitor
 └── testdata/                  # Fixtures for make updates-test
 nixos/
@@ -154,7 +155,9 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 ```
 
 The waybar `custom/nix-updates` module shows how many packages an update would
-upgrade. Dependabot keeps the GitHub Actions up to date.
+upgrade. A weekly workflow opens a pull request with the updated `flake.lock`
+once the system still builds with it. Dependabot keeps the GitHub Actions up to
+date.
 
 ## Development Shells
 

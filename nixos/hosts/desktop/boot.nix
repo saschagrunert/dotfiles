@@ -11,10 +11,9 @@
         "usb_storage"
         "xhci_pci"
       ];
-      kernelModules = [
-        "amdgpu"
-        "dm-snapshot"
-      ];
+      # amdgpu stays out of the initrd: it would pull in 38M of firmware for
+      # every AMD GPU generation, and the 196M ESP then fits only one kernel.
+      kernelModules = [ "dm-snapshot" ];
       luks.devices = {
         crypted = {
           device = "/dev/disk/by-uuid/8696c19a-d6f5-49f3-85f3-14ffcad011fa";
@@ -58,7 +57,6 @@
         configurationLimit = 1;
         enable = true;
         efiSupport = true;
-        enableCryptodisk = true;
         device = "nodev";
         useOSProber = true;
       };

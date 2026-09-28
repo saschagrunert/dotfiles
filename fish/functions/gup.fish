@@ -1,4 +1,5 @@
-# Update branch from remote, sync origin, prune merged branches
+# Fast-forward the default branch from remote, sync origin, prune merged
+# branches. --ff-only refuses to merge into a feature branch or a diverged one.
 function gup
     set -l remote $argv[1]
     if test -z "$remote"
@@ -7,7 +8,7 @@ function gup
     set -l default_branch (gldb)
 
     git fetch --prune --no-tags $remote "+refs/heads/*:refs/remotes/$remote/*" \
-        && git merge $remote/$default_branch \
+        && git merge --ff-only $remote/$default_branch \
         && git push \
         || return $status
 
