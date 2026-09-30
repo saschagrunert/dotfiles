@@ -18,13 +18,21 @@ mkdir -p "$dir"
 exec 8>"$dir/$name.lock"
 
 # The script and its children must not hold the lock, or it would outlive this
-# bar. Each line replaces the file in one rename, so followers never read half
-# of one.
+# bar. The lines are read here and not in a pipeline, whose subshell would keep
+# the lock and the file after this bar is gone, until the script prints again.
+# The script stops with this bar, and a line goes to the bar before the file,
+# so nothing replaces the file once the bar is gone. Each line replaces the
+# file in one rename, so followers never read half of one.
 produce() {
+	local line
 	rm -f "$out"
-	"$script" 8>&- | while IFS= read -r line; do
+	exec 6< <(exec "$script" 8>&-)
+	pid=$!
+	trap 'kill "$pid" 2>/dev/null' EXIT
+	trap exit TERM INT HUP
+	while IFS= read -r line <&6; do
+		printf '%s\n' "$line" 2>/dev/null || exit
 		printf '%s\n' "$line" >"$out.tmp" && mv -f "$out.tmp" "$out"
-		printf '%s\n' "$line"
 	done
 }
 
