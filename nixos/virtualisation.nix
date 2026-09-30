@@ -1,9 +1,5 @@
 _: {
   virtualisation = {
-    containers = {
-      enable = true;
-      ociSeccompBpfHook.enable = true;
-    };
     # Module enabled for config generation, service intentionally disabled
     cri-o.enable = true;
 

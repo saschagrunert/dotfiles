@@ -3,14 +3,16 @@
 # to merge a diverged default branch.
 function gup
     set -l remote $argv[1]
+    # A base remote is fetched even before it has any branches, which is
+    # when gdr would still pick origin.
     if test -z "$remote"
         git remote | string match -q base && set remote base || set remote origin
     end
-    set -l default_branch (gldb)
-    set -l upstream $remote/$default_branch
     set -l current (git branch --show-current)
 
     git fetch --prune --no-tags $remote "+refs/heads/*:refs/remotes/$remote/*" || return $status
+    set -l default_branch (gldb $remote)
+    set -l upstream $remote/$default_branch
     if not git rev-parse -q --verify refs/remotes/$upstream >/dev/null
         echo "No $upstream branch" >&2
         return 1

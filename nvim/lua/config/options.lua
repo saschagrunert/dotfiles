@@ -85,6 +85,8 @@ opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldlevelstart = 99
 
 -- Diff
+-- Replace the default linematch:40 instead of adding a second one
+opt.diffopt:remove("linematch:40")
 opt.diffopt:append("linematch:60")
 opt.diffopt:append("algorithm:histogram")
 

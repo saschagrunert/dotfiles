@@ -56,30 +56,30 @@ emit() {
 	record history "$pct"
 
 	local text tooltip
-	text=$(printf "<span color='#ff79c6' size='large'>󰘚</span> %2dGB (%3d%%)" \
-		$(((used + (1 << 19)) >> 20)) "$pct")
+	text=${ printf "<span color='#ff79c6' size='large'>󰘚</span> %2dGB (%3d%%)" \
+		$(((used + (1 << 19)) >> 20)) "$pct";}
 
-	tooltip="$(header Memory)\n$(graph "" "${history[@]}")\n"
-	tooltip+="$(label "RAM  ") $(printf '<b>%3d%%</b>' "$pct") $(meter "$pct" $((WIDTH - 11)))\n"
+	tooltip="${ header Memory;}\n${ graph "" "${history[@]}";}\n"
+	tooltip+="${ label "RAM  ";} ${ printf '<b>%3d%%</b>' "$pct";} ${ meter "$pct" $((WIDTH - 11));}\n"
 	if [ "$swap_total" -gt 0 ]; then
-		tooltip+="$(label "Swap ") $(printf '%3d%%' "$swap_pct") $(meter "$swap_pct" $((WIDTH - 11)))\n"
+		tooltip+="${ label "Swap ";} ${ printf '%3d%%' "$swap_pct";} ${ meter "$swap_pct" $((WIDTH - 11));}\n"
 	fi
-	tooltip+="$(label Used) $(gigabytes "$used")/$(gigabytes "$total")GB  $(label Cache) $(gigabytes "$cache")GB"
+	tooltip+="${ label Used;} ${ gigabytes "$used";}/${ gigabytes "$total";}GB  ${ label Cache;} ${ gigabytes "$cache";}GB"
 	if [ "$swap_total" -gt 0 ]; then
-		tooltip+="  $(label Swap) $(gigabytes "$swap_used")/$(gigabytes "$swap_total")GB"
+		tooltip+="  ${ label Swap;} ${ gigabytes "$swap_used";}/${ gigabytes "$swap_total";}GB"
 	fi
 
 	# Resident memory like RES in top, which counts shared pages in every
 	# process using them.
-	tooltip+="\n\n$(header Processes)"
-	tooltip+="\n$(label "    PID      RSS   MEM  NAME")"
+	tooltip+="\n\n${ header Processes;}"
+	tooltip+="\n${ label "    PID      RSS   MEM  NAME";}"
 	local pid rss name
 	while IFS=$'\t' read -r pid rss name; do
-		tooltip+="\n$(label "$(printf '%7d' "$pid")")  "
-		tooltip+="$(printf '%7s  %3d%%  %s' "$(size "$rss")" $((rss * 100 / total)) "$name")"
+		tooltip+="\n${ label "${ printf '%7d' "$pid";}";}  "
+		tooltip+="${ printf '%7s  %3d%%  %s' "${ size "$rss";}" $((rss * 100 / total)) "$name";}"
 	done < <(sample_procs | sort -t $'\t' -k2,2nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$pct")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "${ class "$pct";}"
 }
 
 run emit "${1:-}"

@@ -19,7 +19,6 @@
     slurp
     wdisplays
     wl-clipboard
-    xdg-utils
 
     # System utilities
     bat

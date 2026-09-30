@@ -14,7 +14,12 @@ function gpr
             return 1
         end
     else
-        # Like the previous +pull/N/head:pr-N refspec, this resets an existing pr-N
+        # An existing pr-N is only moved forward, so local commits are kept
+        if git rev-parse -q --verify refs/heads/$branch >/dev/null
+            and not git merge-base --is-ancestor $branch FETCH_HEAD
+            echo "Cannot fast-forward $branch (local commits or force-pushed PR). To reset: git checkout -B $branch FETCH_HEAD" >&2
+            return 1
+        end
         git checkout -B $branch FETCH_HEAD
     end
 end

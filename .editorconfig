@@ -12,13 +12,19 @@ trim_trailing_whitespace = true
 [*.{sh,bash}]
 indent_style = tab
 
-# The waybar and tmux helpers have no extension, they are matched by shebang
-[{temps,fans,gpu,power,dnd,failed-units,hwmon.sh,workspace-scroll,pwd,git-status,ip}]
+# The waybar, sway and tmux scripts have no extension, so they are listed by
+# name. New ones have to be added here.
+[{claude,cpu,disk,dnd,failed-units,fans,gpu,memory,network,nix-updates,power,shared,temps,workspace-scroll,pwd,git-status,ip}]
 indent_style = tab
 
-[*.{nix,lua,fish,toml,json,jsonc,yml,yaml,css,md}]
+[*.{nix,lua,toml,json,jsonc,yml,yaml,css,md}]
 indent_style = space
 indent_size = 2
+
+# fish_indent always indents by four
+[*.fish]
+indent_style = space
+indent_size = 4
 
 [Makefile]
 indent_style = tab

@@ -13,19 +13,21 @@ focused_num=$(echo "$workspaces" | jq '.[] | select(.focused==true) | .num')
 
 focused_output=$(echo "$workspaces" | jq -r '.[] | select(.focused==true) | .output')
 
+# Scrolling must never toggle back to the previous workspace, which
+# workspace_auto_back_and_forth does when switching to the focused one.
 if [ "$direction" = "next" ]; then
 	if [ "$focused_num" -lt 1 ]; then
-		swaymsg workspace 1
+		swaymsg workspace --no-auto-back-and-forth 1
 	elif [ "$focused_num" -lt 5 ]; then
-		swaymsg workspace "$((focused_num + 1))"
+		swaymsg workspace --no-auto-back-and-forth "$((focused_num + 1))"
 	fi
 elif [ "$direction" = "prev" ]; then
 	if [ "$focused_num" -gt 1 ]; then
-		swaymsg workspace "$((focused_num - 1))"
+		swaymsg workspace --no-auto-back-and-forth "$((focused_num - 1))"
 	elif [ "$focused_num" -le 1 ]; then
 		symbol=$(echo "$workspaces" | jq -r --arg out "$focused_output" '[.[] | select(.output==$out and .num==0) | .name] | first // empty')
 		if [ -n "$symbol" ]; then
-			swaymsg "workspace \"$symbol\""
+			swaymsg "workspace --no-auto-back-and-forth \"$symbol\""
 		fi
 	fi
 fi

@@ -18,7 +18,6 @@
     cni-plugins
     conmon
     conmon-rs
-    cri-tools
     crun
     fuse-overlayfs
     runc
@@ -29,7 +28,6 @@
 
     # Networking & security
     conntrack-tools
-    iptables
     openssl
     openvpn
     socat

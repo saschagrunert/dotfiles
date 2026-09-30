@@ -32,12 +32,14 @@
 
       # Every command in the dotfiles repository runs against a dirty tree.
       warn-dirty = false;
+
+      # Set explicitly: the automatic nixpkgs.flake defaults only record the
+      # store path, which drops the rev (nixpkgs#lib.version turns into
+      # 19700101.dirty) and sends <nixpkgs> lookups through the global flake
+      # registry.
+      nix-path = [ "nixpkgs=${nixpkgs}" ];
     };
 
-    # Set explicitly: the automatic nixpkgs.flake defaults only record the store
-    # path, which drops the rev (nixpkgs#lib.version turns into 19700101.dirty)
-    # and sends <nixpkgs> lookups through the global flake registry.
-    nixPath = [ "nixpkgs=${nixpkgs}" ];
     registry.nixpkgs.flake = nixpkgs;
 
     optimise.automatic = true;
