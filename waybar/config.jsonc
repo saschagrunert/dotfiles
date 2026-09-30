@@ -10,6 +10,7 @@
     "group/load",
     "group/audio",
     "privacy",
+    "custom/claude",
     "custom/failed-units",
     "custom/nix-updates",
     "group/time",
@@ -147,6 +148,12 @@
     },
     "tooltip-format-activated": "Idle inhibitor: on",
     "tooltip-format-deactivated": "Idle inhibitor: off",
+  },
+  // Claude plan usage, fetched every five minutes
+  "custom/claude": {
+    "exec": "~/.config/waybar/shared claude",
+    "return-type": "json",
+    "on-click": "xdg-open https://claude.ai/settings/usage",
   },
   "custom/failed-units": {
     "exec": "~/.config/waybar/failed-units",

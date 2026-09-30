@@ -1,0 +1,268 @@
+#!/usr/bin/env bash
+# Claude plan usage: the current session on the bar, a meter for every rate
+# limit with the time it resets and the running Claude Code sessions in the
+# tooltip. The limits come from the usage endpoint Claude Code shows in /usage,
+# called with its OAuth token, which does not count against them.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+# The limits change slowly and the endpoint is rate limited itself, which
+# Claude Code calls as well, so they are fetched far less often than the
+# sessions are read. Every rejected fetch doubles the wait, up to $BACKOFF.
+FETCH=300
+BACKOFF=1800
+URL=https://api.anthropic.com/api/oauth/usage
+# Fields are separated by the unit separator. Unlike a tab it keeps empty
+# fields apart when read, and the fields never contain it.
+US=$'\x1f'
+ICON=
+ORANGE="#ffb86c"
+
+# The subscription lives in its own config directory, ~/.claude is set up for
+# Vertex AI and has no credentials.
+credentials=""
+for dir in "${CLAUDE_CONFIG_DIR:-}" "$HOME/.claude-max" "$HOME/.claude"; do
+	[ -n "$dir" ] && [ -f "$dir/.credentials.json" ] && {
+		credentials=$dir/.credentials.json
+		break
+	}
+done
+
+# The last limits fetched, each "name pct reset active severity" with the reset
+# in epoch seconds or 0, the weekly usage by product, the times of
+# the last fetch and the last successful one, the wait until the next one, and
+# why the last fetch failed.
+declare -a limits=()
+breakdown="" fetched=0 updated=0 wait=$FETCH error=""
+
+# They outlive the script, so a waybar reload neither fetches again nor starts
+# without values.
+state=""
+if [ -n "${XDG_RUNTIME_DIR:-}" ]; then
+	state=$XDG_RUNTIME_DIR/waybar/claude.state
+	mkdir -p "${state%/*}"
+	# shellcheck source=/dev/null
+	[ -f "$state" ] && . "$state"
+fi
+
+# Fetch the limits. Claude Code renews the token, which lasts a few hours, so
+# an expired one means it has not run for a while. The token goes to curl on
+# stdin to keep it out of the process list.
+fetch() {
+	local token="" expires=0 response code
+	if [ -z "$credentials" ]; then
+		error="no credentials, log in to Claude Code"
+		return
+	fi
+	IFS=$US read -r token expires < <(jq -r '.claudeAiOauth // {}
+		| [.accessToken // "", .expiresAt // 0] | map(tostring) | join("\u001f")' \
+		"$credentials" 2>/dev/null) || true
+	if [ -z "$token" ]; then
+		error="no OAuth token, log in to Claude Code"
+		return
+	elif ((expires / 1000 <= EPOCHSECONDS)); then
+		error="token expired, start Claude Code to renew it"
+		return
+	fi
+	if ! response=$(curl -s -m 10 -w '\n%{http_code}' -K - "$URL" \
+		-H "anthropic-beta: oauth-2025-04-20" <<<"header = \"Authorization: Bearer $token\""); then
+		error="offline"
+		return
+	fi
+	code=${response##*$'\n'}
+	if [ "$code" = 429 ]; then
+		wait=$((wait * 2 > BACKOFF ? BACKOFF : wait * 2))
+		error="rate limited, next try in $((wait / 60))m"
+		return
+	elif [ "$code" != 200 ]; then
+		error="HTTP $code"
+		return
+	fi
+	# Scoped limits are named after their model or surface, each either an
+	# object or a name. Names come from the server, so only plain characters
+	# get into the tooltip. The weekly usage by product comes first, where the
+	# command substitution keeps it when empty, leaving out the unused ones.
+	local out row name pct reset active severity
+	local -a rows
+	if ! out=$(jq -r 'def plain: tostring | gsub("[^A-Za-z0-9 ._%-]"; "");
+		([.seven_day_breakdown.rows // [] | .[] | select(.percent > 0)
+			| "\(.display_name) \(.percent | floor)%" | plain] | join("  ")),
+		(.limits[] | [
+			(if .kind == "session" then "Session"
+			 elif .kind == "weekly_all" then "Week"
+			 else (.scope.model? | objects | .display_name)
+				// (.scope.surface? | objects | .display_name)
+				// (.scope.surface? | strings) // .kind end
+			 | plain | .[:20] | if . == "" then "Limit" else . end),
+			(.percent // 0 | floor), (.resets_at // "" | gsub("[^0-9TZ:.+-]"; "")),
+			.is_active == true, (.severity // "" | plain)]
+			| map(tostring) | join("\u001f"))' \
+		<<<"${response%$'\n'*}" 2>/dev/null); then
+		error="unexpected response"
+		return
+	fi
+	mapfile -t rows <<<"$out"
+	if [ ${#rows[@]} -lt 2 ]; then
+		error="no limits in response"
+		return
+	fi
+	breakdown=${rows[0]:0:WIDTH}
+	limits=()
+	for row in "${rows[@]:1}"; do
+		IFS=$US read -r name pct reset active severity <<<"$row"
+		# An empty date would be midnight today.
+		if [ -z "$reset" ] || ! reset=$(date -d "$reset" +%s 2>/dev/null); then
+			reset=0
+		fi
+		limits+=("$name$US$pct$US$reset$US$active$US$severity")
+	done
+	updated=$EPOCHSECONDS wait=$FETCH error=""
+}
+
+# Print when epoch $1 comes, as the time of day if that is today and with the
+# weekday otherwise, followed by how long until then.
+reset_time() {
+	local left=$(($1 - EPOCHSECONDS)) day today when
+	((left < 0)) && left=0
+	printf -v day '%(%F)T' "$1"
+	printf -v today '%(%F)T' -1
+	if [ "$day" = "$today" ]; then
+		printf -v when '%(%H:%M)T' "$1"
+	else
+		printf -v when '%(%a %H:%M)T' "$1"
+	fi
+	if ((left >= 86400)); then
+		printf '%s\t%dd %dh' "$when" $((left / 86400)) $((left % 86400 / 3600))
+	elif ((left >= 3600)); then
+		printf '%s\t%dh %dm' "$when" $((left / 3600)) $((left % 3600 / 60))
+	else
+		printf '%s\t%dm' "$when" $(((left + 59) / 60))
+	fi
+}
+
+# Print "dir status" separated by tabs for every running Claude Code session
+# of the subscription. A session file stays behind when Claude Code crashes, so
+# its process must still be the one that started, with the same start time.
+# Each file is read on its own, so one caught while being written only leaves
+# out its own session. Directories may contain anything, so the characters
+# breaking the tooltip are dropped.
+sessions() {
+	[ -n "$credentials" ] || return 0
+	local file pid start dir status stat
+	for file in "${credentials%/*}"/sessions/*.json; do
+		IFS=$US read -r pid start dir status < <(jq -r '[.pid, .procStart, .cwd, .status]
+			| map(. // "" | tostring | gsub("[[:cntrl:]\"\\\\<>&]"; "")) | join("\u001f")' \
+			"$file" 2>/dev/null) || continue
+		stat=$(cat "/proc/$pid/stat" 2>/dev/null) || continue
+		stat=${stat##*) }
+		read -ra stat <<<"$stat"
+		[ -n "$start" ] && [ "${stat[19]}" = "$start" ] || continue
+		dir=${dir:-?} dir=${dir/#"$HOME"/"~"}
+		status=${status:-?}
+		printf '%s\t%s\n' "$dir" "${status:0:12}"
+	done
+}
+
+emit() {
+	if ((EPOCHSECONDS - fetched >= wait)); then
+		fetched=$EPOCHSECONDS
+		fetch
+		[ -z "$state" ] || declare -p limits breakdown fetched updated wait error >"$state"
+	fi
+
+	# Each limit shows its name with the reset time on the right, then its
+	# meter. A small blank line keeps them apart. The limit the server marks
+	# as active is labeled, and the weekly one lists its usage by product. A
+	# limit fetched before its reset has started over since, and its usage is
+	# unknown until the next fetch, since chats count against it too.
+	#
+	# The bar shows the session, followed by any other limit the server warns
+	# about, and takes the class of the most severe one. Without a severity
+	# the thresholds of the other modules apply.
+	local session="" extra="" class="" rank=0 tooltip row name pct reset active severity
+	local shown when left right gap tag level i
+	tooltip="$(header "Claude usage")"
+	for row in "${limits[@]}"; do
+		IFS=$US read -r name pct reset active severity <<<"$row"
+		printf -v shown '%3d%%' "$pct"
+		if ((reset > 0 && reset <= EPOCHSECONDS)); then
+			pct=0 shown=" --%" reset=0 level=0
+		else
+			case $severity in
+			critical) level=2 ;;
+			warning) level=1 ;;
+			normal) level=0 ;;
+			*) level=$((pct >= 95 ? 2 : pct >= 80 ? 1 : 0)) ;;
+			esac
+		fi
+		((level > rank)) && rank=$level
+		if [ "$name" = Session ]; then
+			[ "$shown" = " --%" ] || session=$shown
+		elif ((level)); then
+			extra+=" $name$shown"
+		fi
+		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
+		right="" gap="" tag=""
+		[ "$active" = true ] && tag=" active"
+		if ((reset > 0)); then
+			IFS=$'\t' read -r when left <<<"$(reset_time "$reset")"
+			right="$(label Resets) $when $(label in) $left"
+			for ((i = ${#name} + ${#tag} + ${#when} + ${#left} + 12; i < WIDTH; i++)); do gap+=" "; done
+		fi
+		tooltip+="\n<b>$name</b>${tag:+ $(label "${tag# }")}${right:+$gap $right}"
+		tooltip+="\n<b>$shown</b> $(meter "$pct" $((WIDTH - 5)))"
+		[ "$name" = Week ] && [ -n "$breakdown" ] && tooltip+="\n$(label "$breakdown")"
+	done
+	((rank == 2)) && class=critical
+	((rank == 1)) && class=warning
+
+	# Old values are dimmed and lose their class while fetching fails. Without
+	# any value the bar only shows the icon, dimmed as well.
+	local text="${session:+ $session}$extra" color=$ORANGE
+	if [ -z "$text" ]; then
+		color=$DIM class=""
+	elif [ -n "$error" ]; then
+		text="<span color='$DIM'>$text</span>" class=""
+	fi
+	text="<span color='$color' size='large'>$ICON</span>$text"
+
+	if [ -n "$error" ]; then
+		((${#limits[@]})) && tooltip+="\n"
+		if ((updated)); then
+			tooltip+="\n$(label "Updated $(printf '%(%H:%M)T' "$updated"), $error")"
+		else
+			tooltip+="\n$(label "No data, $error")"
+		fi
+	fi
+
+	# Each session shows its directory, shortened from the left to fit, and
+	# its status on the right.
+	local -a running
+	mapfile -t running < <(sessions)
+	if [ ${#running[@]} -gt 0 ]; then
+		local dir status color max
+		tooltip+="\n\n$(header Sessions)"
+		for row in "${running[@]}"; do
+			IFS=$'\t' read -r dir status <<<"$row"
+			case $status in
+			busy) color=${GRADIENT[0]} ;;
+			idle) color=$DIM ;;
+			*) color=${GRADIENT[7]} ;;
+			esac
+			max=$((WIDTH - ${#status} - 3))
+			((max < 2)) && max=2
+			((${#dir} > max)) && dir="…${dir: -$((max - 1))}"
+			gap=""
+			for ((i = ${#dir} + ${#status} + 3; i < WIDTH; i++)); do gap+=" "; done
+			tooltip+="\n<span color='$color'>●</span> $dir$gap $(label "$status")"
+		done
+	fi
+
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+}
+
+run emit "${1:-}"

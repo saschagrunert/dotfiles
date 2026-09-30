@@ -50,6 +50,7 @@ window#waybar {
 #pulseaudio.source,
 #idle_inhibitor,
 #custom-dnd,
+#custom-claude,
 #custom-failed-units,
 #custom-nix-updates,
 #clock,
@@ -73,6 +74,7 @@ window#waybar {
 #pulseaudio.source:hover,
 #idle_inhibitor:hover,
 #custom-dnd:hover,
+#custom-claude:hover,
 #custom-failed-units:hover,
 #custom-nix-updates:hover,
 #clock:hover {
@@ -93,7 +95,8 @@ window#waybar {
 #custom-cpu.critical,
 #custom-gpu.critical,
 #custom-memory.critical,
-#custom-disk.critical {
+#custom-disk.critical,
+#custom-claude.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
   font-weight: bold;
@@ -105,6 +108,7 @@ window#waybar {
 #custom-gpu.warning,
 #custom-memory.warning,
 #custom-disk.warning,
+#custom-claude.warning,
 #custom-nix-updates.kernel,
 #privacy {
   color: #ffb86c;
