@@ -61,7 +61,7 @@ abbr -a p pwd
 abbr -a po popd
 abbr -a pu pushd
 abbr -a rup rustup update
-abbr -a screensleep swaymsg \"output \* dpms off\"
+abbr -a screensleep swaymsg \"output \* power off\"
 abbr -a t tail -f
 abbr -a ta tmux attach
 abbr -a tg cd \~ \&\& tmux

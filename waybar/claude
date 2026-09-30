@@ -32,7 +32,7 @@ for dir in "${CLAUDE_CONFIG_DIR:-}" "$HOME/.claude-max" "$HOME/.claude"; do
 	}
 done
 
-# The last limits fetched, each "name pct reset active severity" with the reset
+# The last limits fetched, each "name pct reset active" with the reset
 # in epoch seconds or 0, the weekly usage by product, the times of
 # the last fetch and the last successful one, the wait until the next one, and
 # why the last fetch failed.
@@ -86,7 +86,7 @@ fetch() {
 	# object or a name. Names come from the server, so only plain characters
 	# get into the tooltip. The weekly usage by product comes first, where the
 	# command substitution keeps it when empty, leaving out the unused ones.
-	local out row name pct reset active severity
+	local out row name pct reset active
 	local -a rows
 	if ! out=$(jq -r 'def plain: tostring | gsub("[^A-Za-z0-9 ._%-]"; "");
 		([.seven_day_breakdown.rows // [] | .[] | select(.percent > 0)
@@ -99,7 +99,7 @@ fetch() {
 				// (.scope.surface? | strings) // .kind end
 			 | plain | .[:20] | if . == "" then "Limit" else . end),
 			(.percent // 0 | floor), (.resets_at // "" | gsub("[^0-9TZ:.+-]"; "")),
-			.is_active == true, (.severity // "" | plain)]
+			.is_active == true]
 			| map(tostring) | join("\u001f"))' \
 		<<<"${response%$'\n'*}" 2>/dev/null); then
 		error="unexpected response"
@@ -113,12 +113,12 @@ fetch() {
 	breakdown=${rows[0]:0:WIDTH}
 	limits=()
 	for row in "${rows[@]:1}"; do
-		IFS=$US read -r name pct reset active severity <<<"$row"
+		IFS=$US read -r name pct reset active <<<"$row"
 		# An empty date would be midnight today.
 		if [ -z "$reset" ] || ! reset=$(date -d "$reset" +%s 2>/dev/null); then
 			reset=0
 		fi
-		limits+=("$name$US$pct$US$reset$US$active$US$severity")
+		limits+=("$name$US$pct$US$reset$US$active")
 	done
 	updated=$EPOCHSECONDS wait=$FETCH error=""
 }
@@ -180,43 +180,36 @@ emit() {
 	# limit fetched before its reset has started over since, and its usage is
 	# unknown until the next fetch, since chats count against it too.
 	#
-	# The bar shows the session, followed by the week once it warns, and takes
-	# the class of the more severe of the two. A model or surface running out
-	# leaves the rest of the plan usable, so it is left out. Without a severity
-	# the thresholds of the other modules apply.
-	local session="" week="" class="" rank=0 tooltip row name pct reset active severity
-	local shown when left right gap tag level i
-	tooltip="$(header "Claude usage")"
+	# The bar shows the session, followed by the week once it warns, and warns
+	# when either does. A model or surface running out leaves the rest of the
+	# plan usable, so it is left out. The server already warns from 75%, which
+	# is early for limits that reset on their own, so a warning starts at 95%.
+	# A state saved before the severity was dropped has a fifth field.
+	local session="" week="" class="" tooltip row name pct reset active
+	local shown when left right gap tag warn i
+	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
-		IFS=$US read -r name pct reset active severity <<<"$row"
+		IFS=$US read -r name pct reset active _ <<<"$row"
 		printf -v shown '%3d%%' "$pct"
+		warn=$((pct >= 95))
 		if ((reset > 0 && reset <= EPOCHSECONDS)); then
-			pct=0 shown=" --%" reset=0 level=0
-		else
-			case $severity in
-			critical) level=2 ;;
-			warning) level=1 ;;
-			normal) level=0 ;;
-			*) level=$((pct >= 95 ? 2 : pct >= 80 ? 1 : 0)) ;;
-			esac
+			pct=0 shown=" --%" reset=0 warn=0
 		fi
-		case $name in Session | Week) ((level > rank)) && rank=$level ;; esac
+		case $name in Session | Week) ((warn)) && class=warning ;; esac
 		[ "$name" = Session ] && [ "$shown" != " --%" ] && session=$shown
-		[ "$name" = Week ] && ((level)) && week=" $name$shown"
+		[ "$name" = Week ] && ((warn)) && week=" $name$shown"
 		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
 		right="" gap="" tag=""
 		[ "$active" = true ] && tag=" active"
 		if ((reset > 0)); then
-			IFS=$'\t' read -r when left <<<"$(reset_time "$reset")"
-			right="$(label Resets) $when $(label in) $left"
+			IFS=$'\t' read -r when left <<<"${ reset_time "$reset";}"
+			right="${ label Resets;} $when ${ label in;} $left"
 			for ((i = ${#name} + ${#tag} + ${#when} + ${#left} + 12; i < WIDTH; i++)); do gap+=" "; done
 		fi
-		tooltip+="\n<b>$name</b>${tag:+ $(label "${tag# }")}${right:+$gap $right}"
-		tooltip+="\n<b>$shown</b> $(meter "$pct" $((WIDTH - 5)))"
-		[ "$name" = Week ] && [ -n "$breakdown" ] && tooltip+="\n$(label "$breakdown")"
+		tooltip+="\n<b>$name</b>${tag:+ ${ label "${tag# }";}}${right:+$gap $right}"
+		tooltip+="\n<b>$shown</b> ${ meter "$pct" $((WIDTH - 5));}"
+		[ "$name" = Week ] && [ -n "$breakdown" ] && tooltip+="\n${ label "$breakdown";}"
 	done
-	((rank == 2)) && class=critical
-	((rank == 1)) && class=warning
 
 	# Old values are dimmed and lose their class while fetching fails. Without
 	# any value the bar only shows the icon, dimmed as well.
@@ -231,9 +224,9 @@ emit() {
 	if [ -n "$error" ]; then
 		((${#limits[@]})) && tooltip+="\n"
 		if ((updated)); then
-			tooltip+="\n$(label "Updated $(printf '%(%H:%M)T' "$updated"), $error")"
+			tooltip+="\n${ label "Updated ${ printf '%(%H:%M)T' "$updated";}, $error";}"
 		else
-			tooltip+="\n$(label "No data, $error")"
+			tooltip+="\n${ label "No data, $error";}"
 		fi
 	fi
 
@@ -243,7 +236,7 @@ emit() {
 	mapfile -t running < <(sessions)
 	if [ ${#running[@]} -gt 0 ]; then
 		local dir status color max
-		tooltip+="\n\n$(header Sessions)"
+		tooltip+="\n\n${ header Sessions;}"
 		for row in "${running[@]}"; do
 			IFS=$'\t' read -r dir status <<<"$row"
 			case $status in
@@ -256,11 +249,11 @@ emit() {
 			((${#dir} > max)) && dir="…${dir: -$((max - 1))}"
 			gap=""
 			for ((i = ${#dir} + ${#status} + 3; i < WIDTH; i++)); do gap+=" "; done
-			tooltip+="\n<span color='$color'>●</span> $dir$gap $(label "$status")"
+			tooltip+="\n<span color='$color'>●</span> $dir$gap ${ label "$status";}"
 		done
 	fi
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "$class"
 }
 
 run emit "${1:-}"

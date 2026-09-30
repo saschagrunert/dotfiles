@@ -68,7 +68,7 @@ emit() {
 	local row pct size used avail type mount usage col=0 i
 	for row in "${rows[@]}"; do
 		IFS=$'\t' read -r _ size used _ _ _ <<<"$row"
-		usage="$(size "$used") / $(size "$size")"
+		usage="${ size "$used";} / ${ size "$size";}"
 		((${#usage} > col)) && col=${#usage}
 	done
 
@@ -76,29 +76,29 @@ emit() {
 	# the right, then its meter with the used and total sizes. A small blank
 	# line keeps them apart.
 	local text="" class="" tooltip gap free shown
-	tooltip="$(header Filesystems)"
+	tooltip="${ header Filesystems;}"
 	for row in "${rows[@]}"; do
 		IFS=$'\t' read -r pct size used avail type mount <<<"$row"
 		[ "$row" = "${rows[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
-		free=$(size "$avail")
+		free=${ size "$avail";}
 		# The mount point is escaped, so measure it with the entities undone.
 		shown=${mount//&amp;/"&"} shown=${shown//&lt;/"<"} shown=${shown//&gt;/">"}
 		gap=""
 		for ((i = ${#shown} + ${#type} + ${#free} + 7; i < WIDTH; i++)); do gap+=" "; done
-		tooltip+="\n<b>$mount</b> $(label "$type")$gap $(label Free) $free"
-		tooltip+="\n$(printf '<b>%3d%%</b> %s %*s' "$pct" "$(meter "$pct" $((WIDTH - col - 6)))" \
-			"$col" "$(size "$used") / $(size "$size")")"
+		tooltip+="\n<b>$mount</b> ${ label "$type";}$gap ${ label Free;} $free"
+		tooltip+="\n${ printf '<b>%3d%%</b> %s %*s' "$pct" "${ meter "$pct" $((WIDTH - col - 6));}" \
+			"$col" "${ size "$used";} / ${ size "$size";}";}"
 		if [ "$mount" = / ]; then
-			text=$(printf "<span color='#50fa7b' size='large'>󰋊</span> %3d%% (%dGB free)" \
-				"$pct" $(((avail + (1 << 19)) >> 20)))
-			class=$(class "$pct")
+			text=${ printf "<span color='#50fa7b' size='large'>󰋊</span> %3d%% (%dGB free)" \
+				"$pct" $(((avail + (1 << 19)) >> 20));}
+			class=${ class "$pct";}
 		fi
 	done
 
-	tooltip+="\n\n$(traffic Read read_history "$READ" "$read_bytes")"
-	tooltip+="\n\n$(traffic Write write_history "$WRITE" "$write_bytes")"
+	tooltip+="\n\n${ traffic Read read_history "$READ" "$read_bytes";}"
+	tooltip+="\n\n${ traffic Write write_history "$WRITE" "$write_bytes";}"
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "$class"
 }
 
 # The first rates cover the short first sample of run.

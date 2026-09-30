@@ -95,8 +95,7 @@ window#waybar {
 #custom-cpu.critical,
 #custom-gpu.critical,
 #custom-memory.critical,
-#custom-disk.critical,
-#custom-claude.critical {
+#custom-disk.critical {
   color: #ff5555;
   background-color: rgba(255, 85, 85, 0.2);
   font-weight: bold;

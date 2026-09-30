@@ -38,19 +38,24 @@ class() {
 	fi
 }
 
+# Print $1 divided by $2 with one decimal, rounded.
+fraction() {
+	local tenths=$((($1 * 10 + $2 / 2) / $2))
+	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
+}
+
 # Print kibibytes $1 as gigabytes with one decimal.
 gigabytes() {
-	local tenths=$((($1 * 10 + (1 << 19)) >> 20))
-	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
+	fraction "$1" $((1 << 20))
 }
 
 # Print kibibytes $1 as terabytes or gigabytes with one decimal from 1TB or 1GB,
 # and as megabytes below.
 size() {
 	if [ "$1" -ge $((1 << 30)) ]; then
-		printf '%sTB' "$(gigabytes $(($1 >> 10)))"
+		printf '%sTB' "${ gigabytes $(($1 >> 10));}"
 	elif [ "$1" -ge $((1 << 20)) ]; then
-		printf '%sGB' "$(gigabytes "$1")"
+		printf '%sGB' "${ gigabytes "$1";}"
 	else
 		printf '%dMB' $((($1 + 512) >> 10))
 	fi
@@ -127,12 +132,15 @@ graph() {
 
 # Print bytes per second $1 like the built-in module, with decimal prefixes.
 rate() {
-	awk -v b="$1" 'BEGIN {
-		if (b < 1000) { printf "%dB/s", b; exit }
-		split("k M G T", p, " ")
-		for (i = 0; b >= 1000 && i < 4; i++) b /= 1000
-		printf "%.1f%sB/s", b, p[i]
-	}'
+	local unit=1 i=0 prefixes=(k M G T)
+	if (($1 < 1000)); then
+		printf '%dB/s' "$1"
+		return
+	fi
+	while ((i < 4 && $1 >= unit * 1000)); do
+		unit=$((unit * 1000)) i=$((i + 1))
+	done
+	printf '%s%sB/s' "${ fraction "$1" "$unit";}" "${prefixes[i - 1]}"
 }
 
 # Print the percentages of the rates $@ relative to their peak, or at least to
@@ -156,10 +164,10 @@ traffic() {
 	local -n rates=$2
 	local -a pcts
 	mapfile -t pcts < <(scale "${rates[@]}")
-	printf '%s\\n%s\\n%s %s  %s %s  %s %s' "$(header "$1")" "$(graph "$3" "${pcts[@]}")" \
-		"$(label Now)" "$(rate "${rates[-1]}")" \
-		"$(label Peak)" "$(rate "$(peak "${rates[@]}")")" \
-		"$(label Total)" "$(size $(($4 >> 10)))"
+	printf '%s\\n%s\\n%s %s  %s %s  %s %s' "${ header "$1";}" "${ graph "$3" "${pcts[@]}";}" \
+		"${ label Now;}" "${ rate "${rates[-1]}";}" \
+		"${ label Peak;}" "${ rate "${ peak "${rates[@]}";}";}" \
+		"${ label Total;}" "${ size $(($4 >> 10));}"
 }
 
 # Print tooltip $1 with the rows spaced out by $LINE.

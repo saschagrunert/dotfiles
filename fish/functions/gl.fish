@@ -1,4 +1,4 @@
-# Pull and prune gone branches
+# Pull (fetch.prune drops gone remote branches) and prune local ones
 function gl
-    git pull --prune && gpl
+    git pull && gpl
 end

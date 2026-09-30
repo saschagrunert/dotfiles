@@ -22,7 +22,7 @@ gpu_icon="<span color='#ffb86c' size='large'>󰢮</span>"
 generic_icon="<span color='#6272a4' size='large'>󰈐</span>"
 
 text=""
-tooltip=$(header Fans)
+tooltip=${ header Fans;}
 class=""
 
 # Print PWM value $1 out of $2 as a percentage.
@@ -35,9 +35,9 @@ duty() {
 # Append a fan to the module text and tooltip: icon, label, RPM and duty cycle
 # percentage.
 add() {
-	text+="${text:+  }$(printf '%s %4d' "$1" "$3")"
-	tooltip+="\\n$(label "$(printf '%-5s' "$2")") $(printf '%4d RPM  %3d%%' "$3" "$4")"
-	tooltip+=" $(meter "$4" $((WIDTH - 21)))"
+	text+="${text:+  }${ printf '%s %4d' "$1" "$3";}"
+	tooltip+="\\n${ label "${ printf '%-5s' "$2";}";} ${ printf '%4d RPM  %3d%%' "$3" "$4";}"
+	tooltip+=" ${ meter "$4" $((WIDTH - 21));}"
 }
 
 # Motherboard headers reporting 0 RPM are treated as unconnected, except for
@@ -46,7 +46,7 @@ add() {
 # so no sorting is needed.
 declare -A board=() pwm=()
 order=()
-if dir=$(find_hwmon nct6799); then
+if dir=${ find_hwmon nct6799;}; then
 	for f in "$dir"/fan*_input; do
 		fan=${f##*/} rpm=""
 		fan=${fan%_input}
@@ -63,21 +63,21 @@ fi
 # Order: CPU, GPU, then the remaining board fans. The GPU fan stops at idle,
 # so it is always shown.
 if [ -n "${board[fan2]:-}" ]; then
-	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}" "$(duty "${pwm[fan2]:-0}")"
+	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}" "${ duty "${pwm[fan2]:-0}";}"
 	if [ "${board[fan2]}" -eq 0 ]; then
 		class="critical"
 	fi
 fi
-add "$gpu_icon" GPU "$(hwmon_value amdgpu fan1_input)" \
-	"$(duty "$(hwmon_value amdgpu pwm1 fan1_input)" "$(hwmon_value amdgpu pwm1_max fan1_input)")"
+add "$gpu_icon" GPU "${ hwmon_value amdgpu fan1_input;}" \
+	"${ duty "${ hwmon_value amdgpu pwm1 fan1_input;}" "${ hwmon_value amdgpu pwm1_max fan1_input;}";}"
 for fan in "${order[@]}"; do
 	if [ "$fan" != fan2 ]; then
 		add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}" \
-			"$(duty "${pwm[$fan]:-0}")"
+			"${ duty "${pwm[$fan]:-0}";}"
 	fi
 done
 
 # The unit is shown once at the end to keep the module narrow.
 text+=" rpm"
 
-printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$class"
+printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "$class"

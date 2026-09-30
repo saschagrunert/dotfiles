@@ -80,8 +80,8 @@ check: ## Check symlinks and required commands.
 	done; \
 	exit $$fail
 
-check-nix: ## Run nix flake checks.
-	nix flake check
+check-nix: ## Run nix flake checks, failing on evaluation warnings.
+	nix flake check --option abort-on-warn true
 
 lint: ## Check formatting and lint all Nix files.
 	$(NIX_SHELL) nixpkgs\#nixfmt nixpkgs\#statix nixpkgs\#deadnix -c bash -c \

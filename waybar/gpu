@@ -18,7 +18,7 @@ declare -a history=()
 # Select the discrete GPU through fan1_input, the integrated one also reports
 # load and VRAM. Its PCI address tells its clients apart from the integrated
 # GPU ones.
-hwmon=$(find_hwmon amdgpu fan1_input) || hwmon=""
+hwmon=${ find_hwmon amdgpu fan1_input;} || hwmon=""
 pdev=""
 [ -n "$hwmon" ] && pdev=$(basename "$(readlink -f "$hwmon/device")")
 
@@ -71,34 +71,34 @@ emit() {
 	time=${EPOCHREALTIME/./}
 
 	local busy used total sclk mclk
-	busy=$(value "$hwmon/device/gpu_busy_percent")
-	used=$(($(value "$hwmon/device/mem_info_vram_used") >> 10))
-	total=$(($(value "$hwmon/device/mem_info_vram_total") >> 10))
-	sclk=$(value "$hwmon/freq1_input")
-	mclk=$(value "$hwmon/freq2_input")
+	busy=${ value "$hwmon/device/gpu_busy_percent";}
+	used=$((${ value "$hwmon/device/mem_info_vram_used";} >> 10))
+	total=$((${ value "$hwmon/device/mem_info_vram_total";} >> 10))
+	sclk=${ value "$hwmon/freq1_input";}
+	mclk=${ value "$hwmon/freq2_input";}
 	local vram_pct=0
 	[ "$total" -gt 0 ] && vram_pct=$(((used * 100 + total / 2) / total))
 	record history "$busy"
 
 	local text tooltip
-	text=$(printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "$(gigabytes "$used")")
+	text=${ printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "${ gigabytes "$used";}";}
 
-	tooltip="$(header GPU)\n$(graph "" "${history[@]}")\n"
-	tooltip+="$(label "Load ") $(printf '<b>%3d%%</b>' "$busy") $(meter "$busy" $((WIDTH - 11)))\n"
-	tooltip+="$(label "VRAM ") $(printf '%3d%%' "$vram_pct") $(meter "$vram_pct" $((WIDTH - 11)))\n"
-	tooltip+="$(label Clock) $(awk -v hz="$sclk" 'BEGIN { printf "%.1f", hz / 1e9 }')GHz  "
-	tooltip+="$(label Memory) $(awk -v hz="$mclk" 'BEGIN { printf "%.1f", hz / 1e9 }')GHz  "
-	tooltip+="$(label VRAM) $(gigabytes "$used")/$(gigabytes "$total")GB"
+	tooltip="${ header GPU;}\n${ graph "" "${history[@]}";}\n"
+	tooltip+="${ label "Load ";} ${ printf '<b>%3d%%</b>' "$busy";} ${ meter "$busy" $((WIDTH - 11));}\n"
+	tooltip+="${ label "VRAM ";} ${ printf '%3d%%' "$vram_pct";} ${ meter "$vram_pct" $((WIDTH - 11));}\n"
+	tooltip+="${ label Clock;} ${ fraction "$sclk" 1000000000;}GHz  "
+	tooltip+="${ label Memory;} ${ fraction "$mclk" 1000000000;}GHz  "
+	tooltip+="${ label VRAM;} ${ gigabytes "$used";}/${ gigabytes "$total";}GB"
 
 	# Process load is the share of the elapsed time a process kept the graphics
 	# and compute engines busy, summed over its clients.
-	tooltip+="\n\n$(header Processes)"
-	tooltip+="\n$(label "    PID   GPU     VRAM  NAME")"
+	tooltip+="\n\n${ header Processes;}"
+	tooltip+="\n${ label "    PID   GPU     VRAM  NAME";}"
 	local pid pct vram name
 	while IFS=$'\t' read -r pid pct vram name; do
-		tooltip+="\n$(label "$(printf '%7d' "$pid")") "
-		tooltip+="$(printf "<span color='%s'>%4d%%</span>  %7s  %s" \
-			"$(color "$pct")" "$pct" "$(size "$vram")" "$name")"
+		tooltip+="\n${ label "${ printf '%7d' "$pid";}";} "
+		tooltip+="${ printf "<span color='%s'>%4d%%</span>  %7s  %s" \
+			"${ color "$pct";}" "$pct" "${ size "$vram";}" "$name";}"
 	done < <(awk -F '\t' -v elapsed=$(((time - prev_time) * 1000)) '
 		NR == FNR { prev[$2] = $3; next }
 		{
@@ -113,7 +113,7 @@ emit() {
 		}' <(printf '%s\n' "$prev_clients") <(printf '%s\n' "$clients") |
 		sort -t $'\t' -k2,2nr -k3,3nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$busy")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "${ class "$busy";}"
 }
 
 clients=$(sample_clients)

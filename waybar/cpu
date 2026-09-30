@@ -74,22 +74,22 @@ emit() {
 	read -r load1 load5 load15 tasks _ </proc/loadavg
 
 	local text tooltip
-	text=$(printf "<span color='#f1fa8c' size='large'>󰾆</span> %3d%% (%sGHz)" "$total" "$freq")
+	text=${ printf "<span color='#f1fa8c' size='large'>󰾆</span> %3d%% (%sGHz)" "$total" "$freq";}
 
-	tooltip="$(header CPU)\n$(graph "" "${history[@]}")\n"
-	tooltip+="$(label Total) $(printf '<b>%3d%%</b>' "$total") $(meter "$total" $((WIDTH - 11)))\n"
-	tooltip+="$(label Clock) ${freq}GHz  $(label Load) $load1 $load5 $load15  $(label Tasks) ${tasks#*/}"
+	tooltip="${ header CPU;}\n${ graph "" "${history[@]}";}\n"
+	tooltip+="${ label Total;} ${ printf '<b>%3d%%</b>' "$total";} ${ meter "$total" $((WIDTH - 11));}\n"
+	tooltip+="${ label Clock;} ${freq}GHz  ${ label Load;} $load1 $load5 $load15  ${ label Tasks;} ${tasks#*/}"
 
 	# Cores in two columns to keep the tooltip compact, numbered from 1.
-	tooltip+="\n\n$(header Cores)"
+	tooltip+="\n\n${ header Cores;}"
 	local half=$(((ncpu + 1) / 2)) core
 	for ((i = 0; i < half; i++)); do
 		tooltip+="\n"
 		for core in "$i" $((i + half)); do
 			[ "$core" -lt "$ncpu" ] || continue
 			[ "$core" -eq "$i" ] || tooltip+="   "
-			tooltip+="$(label "$(printf '#%-2d' $((core + 1)))") $(printf '%3d%%' "${usage[core + 1]}") "
-			tooltip+="$(meter "${usage[core + 1]}" "$METER")"
+			tooltip+="${ label "${ printf '#%-2d' $((core + 1));}";} ${ printf '%3d%%' "${usage[core + 1]}";} "
+			tooltip+="${ meter "${usage[core + 1]}" "$METER";}"
 		done
 	done
 
@@ -98,13 +98,13 @@ emit() {
 	# the name comes from the main thread, whose id is the process id. Cores are
 	# numbered from 1 as in the Cores section.
 	local per_core=$(((cpu_total[0] - prev_total[0]) / ncpu))
-	tooltip+="\n\n$(header Processes)"
-	tooltip+="\n$(label "    PID   CPU  CORE  NAME")"
+	tooltip+="\n\n${ header Processes;}"
+	tooltip+="\n${ label "    PID   CPU  CORE  NAME";}"
 	local pid pct name
 	while IFS=$'\t' read -r pid pct core name; do
-		tooltip+="\n$(label "$(printf '%7d' "$pid")") "
-		tooltip+="$(printf "<span color='%s'>%4d%%</span>  %4s  %s" \
-			"$(color "$pct")" "$pct" "#$((core + 1))" "$name")"
+		tooltip+="\n${ label "${ printf '%7d' "$pid";}";} "
+		tooltip+="${ printf "<span color='%s'>%4d%%</span>  %4s  %s" \
+			"${ color "$pct";}" "$pct" "#$((core + 1))" "$name";}"
 	done < <(awk -F '\t' -v elapsed="$per_core" '
 		NR == FNR { prev[$2] = $3; next }
 		{ split($2, id, ":"); if (id[1] == $1) name[$1] = $5 }
@@ -121,7 +121,7 @@ emit() {
 		}' <(printf '%s\n' "$prev_threads") <(printf '%s\n' "$threads") |
 		sort -t $'\t' -k2,2nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "$(spaced "$tooltip")" "$(class "$total")"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "${ class "$total";}"
 }
 
 sample_stat

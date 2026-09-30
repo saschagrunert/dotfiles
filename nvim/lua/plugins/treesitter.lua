@@ -79,8 +79,6 @@ return {
         { "if", "@function.inner", "Inner function" },
         { "ac", "@class.outer", "Outer class" },
         { "ic", "@class.inner", "Inner class" },
-        { "aa", "@parameter.outer", "Outer argument" },
-        { "ia", "@parameter.inner", "Inner argument" },
       }
       for _, m in ipairs(select_maps) do
         vim.keymap.set({ "x", "o" }, m[1], function()

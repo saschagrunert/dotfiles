@@ -53,10 +53,10 @@ emit() {
 	fi
 
 	local gpu gpu_limit
-	gpu=$((($(hwmon_value amdgpu power1_average fan1_input) + 500000) / 1000000))
-	gpu_limit=$((($(hwmon_value amdgpu power1_cap fan1_input) + 500000) / 1000000))
+	gpu=$(((${ hwmon_value amdgpu power1_average fan1_input;} + 500000) / 1000000))
+	gpu_limit=$(((${ hwmon_value amdgpu power1_cap fan1_input;} + 500000) / 1000000))
 	local total=$((cpu + gpu))
-	record history "$(percent "$total" $((CPU_LIMIT + gpu_limit)))"
+	record history "${ percent "$total" $((CPU_LIMIT + gpu_limit));}"
 	record watts "$total"
 
 	local sum=0 peak=0 w
@@ -66,19 +66,19 @@ emit() {
 	done
 
 	local cpu_pct gpu_pct
-	cpu_pct=$(percent "$cpu" "$CPU_LIMIT")
-	gpu_pct=$(percent "$gpu" "$gpu_limit")
+	cpu_pct=${ percent "$cpu" "$CPU_LIMIT";}
+	gpu_pct=${ percent "$gpu" "$gpu_limit";}
 
 	# The unit is shown once at the end to keep the module narrow.
 	local text tooltip
-	text=$(printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu" "$gpu")
+	text=${ printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu" "$gpu";}
 
-	tooltip="$(header Power)\n$(graph "" "${history[@]}")\n"
-	tooltip+="$(label "CPU  ") $(printf '%4dW' "$cpu") $(meter "$cpu_pct" $((WIDTH - 12)))\n"
-	tooltip+="$(label "GPU  ") $(printf '%4dW' "$gpu") $(meter "$gpu_pct" $((WIDTH - 12)))\n"
-	tooltip+="$(label Total) <b>${total}W</b>  $(label Average) $((sum / ${#watts[@]}))W  $(label Peak) ${peak}W"
+	tooltip="${ header Power;}\n${ graph "" "${history[@]}";}\n"
+	tooltip+="${ label "CPU  ";} ${ printf '%4dW' "$cpu";} ${ meter "$cpu_pct" $((WIDTH - 12));}\n"
+	tooltip+="${ label "GPU  ";} ${ printf '%4dW' "$gpu";} ${ meter "$gpu_pct" $((WIDTH - 12));}\n"
+	tooltip+="${ label Total;} <b>${total}W</b>  ${ label Average;} $((sum / ${#watts[@]}))W  ${ label Peak;} ${peak}W"
 
-	printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "$(spaced "$tooltip")"
+	printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "${ spaced "$tooltip";}"
 }
 
 uj=$(energy)

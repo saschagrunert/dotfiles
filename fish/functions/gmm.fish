@@ -1,4 +1,4 @@
 # Merge default branch
 function gmm
-    git merge origin/(gldb)
+    git merge (gdr)/(gldb)
 end

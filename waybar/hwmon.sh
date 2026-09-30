@@ -27,7 +27,7 @@ find_hwmon() {
 # The hwmon is selected by file $3, defaulting to $2.
 hwmon_value() {
 	local name=$1 file=$2 dir value
-	dir=$(find_hwmon "$name" "${3:-$file}") || {
+	dir=${ find_hwmon "$name" "${3:-$file}";} || {
 		echo 0
 		return
 	}

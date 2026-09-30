@@ -18,9 +18,10 @@ declare -a down_history=() up_history=()
 iface="" rx=0 tx=0 time=0
 
 # Print the interface and gateway of the default route with the lowest metric.
-# The gateway is a little-endian hex address.
+# The gateway is a little-endian hex address. The mask must be empty as well,
+# VPNs cover the whole range with two half routes like 0.0.0.0/1.
 default_route() {
-	awk 'NR > 1 && $2 == "00000000" && (best == "" || $7 < metric) {
+	awk 'NR > 1 && $2 == "00000000" && $8 == "00000000" && (best == "" || $7 < metric) {
 		best = $1; metric = $7; gw = $3
 	}
 	END {
@@ -76,25 +77,25 @@ emit() {
 		ssid=$(escape "${ssid//$'\x1f'/:}") bssid=${bssid//$'\x1f'/:}
 		local icons=("󰤯" "󰤟" "󰤢" "󰤥" "󰤨")
 		icon=${icons[${signal:-0} * 4 / 100]}
-		details="$(label SSID) $ssid  $(label Signal) <span color='$(color $((100 - ${signal:-0})))'>${signal:-0}%</span>\n"
-		details+="$(label Channel) $chan ($freq)  $(label Rate) $bitrate\n"
-		details+="$(label BSSID) $bssid\n"
+		details="${ label SSID;} $ssid  ${ label Signal;} <span color='${ color $((100 - ${signal:-0}));}'>${signal:-0}%</span>\n"
+		details+="${ label Channel;} $chan ($freq)  ${ label Rate;} $bitrate\n"
+		details+="${ label BSSID;} $bssid\n"
 	else
 		local speed=""
 		{ read -r speed <"/sys/class/net/$iface/speed"; } 2>/dev/null || true
 		details=""
-		[ "${speed:--1}" -gt 0 ] && details="$(label Speed) ${speed}Mbit/s\n"
+		[ "${speed:--1}" -gt 0 ] && details="${ label Speed;} ${speed}Mbit/s\n"
 	fi
-	details+="$(label Interface) $iface  $(label Address) ${address:--}\n$(label Gateway) $gateway"
+	details+="${ label Interface;} $iface  ${ label Address;} ${address:--}\n${ label Gateway;} $gateway"
 
 	local text tooltip
-	text=$(printf "<span color='#8be9fd' size='large'>%s</span> <span color='#6272a4'>󰇚</span> %9s <span color='#6272a4'>󰕒</span> %9s" \
-		"$icon" "$(rate "$down")" "$(rate "$up")")
-	tooltip="$(traffic Download down_history "$DOWN" "$rx")\n\n"
-	tooltip+="$(traffic Upload up_history "$UP" "$tx")\n\n"
-	tooltip+="$(header Connection)\n$details"
+	text=${ printf "<span color='#8be9fd' size='large'>%s</span> <span color='#6272a4'>󰇚</span> %9s <span color='#6272a4'>󰕒</span> %9s" \
+		"$icon" "${ rate "$down";}" "${ rate "$up";}";}
+	tooltip="${ traffic Download down_history "$DOWN" "$rx";}\n\n"
+	tooltip+="${ traffic Upload up_history "$UP" "$tx";}\n\n"
+	tooltip+="${ header Connection;}\n$details"
 
-	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "$(spaced "$tooltip")"
+	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "${ spaced "$tooltip";}"
 }
 
 run emit "${1:-}"
