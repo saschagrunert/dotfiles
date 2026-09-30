@@ -180,10 +180,11 @@ emit() {
 	# limit fetched before its reset has started over since, and its usage is
 	# unknown until the next fetch, since chats count against it too.
 	#
-	# The bar shows the session, followed by any other limit the server warns
-	# about, and takes the class of the most severe one. Without a severity
+	# The bar shows the session, followed by the week once it warns, and takes
+	# the class of the more severe of the two. A model or surface running out
+	# leaves the rest of the plan usable, so it is left out. Without a severity
 	# the thresholds of the other modules apply.
-	local session="" extra="" class="" rank=0 tooltip row name pct reset active severity
+	local session="" week="" class="" rank=0 tooltip row name pct reset active severity
 	local shown when left right gap tag level i
 	tooltip="$(header "Claude usage")"
 	for row in "${limits[@]}"; do
@@ -199,12 +200,9 @@ emit() {
 			*) level=$((pct >= 95 ? 2 : pct >= 80 ? 1 : 0)) ;;
 			esac
 		fi
-		((level > rank)) && rank=$level
-		if [ "$name" = Session ]; then
-			[ "$shown" = " --%" ] || session=$shown
-		elif ((level)); then
-			extra+=" $name$shown"
-		fi
+		case $name in Session | Week) ((level > rank)) && rank=$level ;; esac
+		[ "$name" = Session ] && [ "$shown" != " --%" ] && session=$shown
+		[ "$name" = Week ] && ((level)) && week=" $name$shown"
 		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
 		right="" gap="" tag=""
 		[ "$active" = true ] && tag=" active"
@@ -222,7 +220,7 @@ emit() {
 
 	# Old values are dimmed and lose their class while fetching fails. Without
 	# any value the bar only shows the icon, dimmed as well.
-	local text="${session:+ $session}$extra" color=$ORANGE
+	local text="${session:+ $session}$week" color=$ORANGE
 	if [ -z "$text" ]; then
 		color=$DIM class=""
 	elif [ -n "$error" ]; then
