@@ -53,7 +53,7 @@ fi
 # an expired one means it has not run for a while. The token goes to curl on
 # stdin to keep it out of the process list.
 fetch() {
-	local token="" expires=0 response code
+	local token="" expires=0 response code rc=0
 	if [ -z "$credentials" ]; then
 		error="no credentials, log in to Claude Code"
 		return
@@ -68,11 +68,23 @@ fetch() {
 		error="token expired, start Claude Code to renew it"
 		return
 	fi
-	if ! response=$(curl -s -m 10 -w '\n%{http_code}' -K - "$URL" \
-		-H "anthropic-beta: oauth-2025-04-20" <<<"header = \"Authorization: Bearer $token\""); then
-		error="offline"
+	response=$(curl -s -m 10 -w '\n%{http_code}' -K - "$URL" \
+		-H "anthropic-beta: oauth-2025-04-20" <<<"header = \"Authorization: Bearer $token\"") || rc=$?
+	# A request that could not resolve or connect never reached the server, so
+	# it is tried again on the next update to show the limits soon after going
+	# online. Any other failure, like a timeout, may have reached it and is
+	# tried again after a minute.
+	case $rc in
+	0) ;;
+	6 | 7)
+		error="offline" fetched=0
 		return
-	fi
+		;;
+	*)
+		error="request failed" fetched=$((EPOCHSECONDS - wait + 60))
+		return
+		;;
+	esac
 	code=${response##*$'\n'}
 	if [ "$code" = 429 ]; then
 		wait=$((wait * 2 > BACKOFF ? BACKOFF : wait * 2))
