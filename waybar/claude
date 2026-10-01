@@ -156,18 +156,35 @@ reset_time() {
 	fi
 }
 
-# Print "dir status" separated by tabs for every running Claude Code session
-# of the subscription. A session file stays behind when Claude Code crashes, so
-# its process must still be the one that started, with the same start time.
-# Each file is read on its own, so one caught while being written only leaves
-# out its own session. Directories may contain anything, so the characters
-# breaking the tooltip are dropped.
+# Print the model of the last reply in transcript $1 and its effort, separated
+# by a tab, like "Opus 5.5" and "high". The transcript is read from its end,
+# where a line still being written may be cut off, so lines that do not parse
+# are skipped, like replies Claude Code makes up itself, which have no real
+# model.
+transcript_model() {
+	tac -- "$1" 2>/dev/null | grep -a -m5 -F '"model":"claude-' | jq -nrR '
+		first(inputs | fromjson? | select(.type == "assistant")
+			| [(.message.model | strings | ltrimstr("claude-") | sub("\\[.*"; "")
+				| sub("-[0-9]{8}$"; "") | split("-")
+				| (.[0][:1] | ascii_upcase) + .[0][1:] + " " + (.[1:] | join(".")) | .[:20]),
+				(.effort // "" | tostring | .[:8])]
+			| map(gsub("[^A-Za-z0-9 ._-]"; "") | rtrimstr(" ")) | join("\t"))' \
+		2>/dev/null || true
+}
+
+# Print "dir status model effort" separated by tabs for every running Claude Code
+# session of the subscription. A session file stays behind when Claude Code
+# crashes, so its process must still be the one that started, with the same
+# start time. Each file is read on its own, so one caught while being written
+# only leaves out its own session. Directories may contain anything, so the
+# characters breaking the tooltip are dropped.
 sessions() {
 	[ -n "$credentials" ] || return 0
-	local file pid start dir status stat
+	local file pid start dir status stat id transcript model
 	for file in "${credentials%/*}"/sessions/*.json; do
-		IFS=$US read -r pid start dir status < <(jq -r '[.pid, .procStart, .cwd, .status]
-			| map(. // "" | tostring | gsub("[[:cntrl:]\"\\\\<>&]"; "")) | join("\u001f")' \
+		IFS=$US read -r pid start dir status id < <(jq -r '[.pid, .procStart, .cwd, .status, .sessionId]
+			| map(. // "" | tostring | gsub("[[:cntrl:]\"\\\\<>&]"; ""))
+			| .[4] |= gsub("[^A-Za-z0-9-]"; "") | join("\u001f")' \
 			"$file" 2>/dev/null) || continue
 		stat=$(cat "/proc/$pid/stat" 2>/dev/null) || continue
 		stat=${stat##*) }
@@ -175,7 +192,11 @@ sessions() {
 		[ -n "$start" ] && [ "${stat[19]}" = "$start" ] || continue
 		dir=${dir:-?} dir=${dir/#"$HOME"/"~"}
 		status=${status:-?}
-		printf '%s\t%s\n' "$dir" "${status:0:12}"
+		model=""
+		[ -n "$id" ] && for transcript in "${credentials%/*}"/projects/*/"$id".jsonl; do
+			model=$(transcript_model "$transcript")
+		done
+		printf '%s\t%s\t%s\n' "$dir" "${status:0:12}" "$model"
 	done
 }
 
@@ -243,14 +264,16 @@ emit() {
 	fi
 
 	# Each session shows its directory, shortened from the left to fit, and
-	# its status on the right.
+	# its status on the right. Below come the model of its last reply, which a
+	# new session does not have yet, and its effort on the right. A small
+	# blank line keeps the sessions apart.
 	local -a running
 	mapfile -t running < <(sessions)
 	if [ ${#running[@]} -gt 0 ]; then
-		local dir status color max
+		local dir status model effort color max n
 		tooltip+="\n\n${ header Sessions;}"
-		for row in "${running[@]}"; do
-			IFS=$'\t' read -r dir status <<<"$row"
+		for n in "${!running[@]}"; do
+			IFS=$'\t' read -r dir status model effort <<<"${running[n]}"
 			case $status in
 			busy) color=${GRADIENT[0]} ;;
 			idle) color=$DIM ;;
@@ -261,7 +284,12 @@ emit() {
 			((${#dir} > max)) && dir="…${dir: -$((max - 1))}"
 			gap=""
 			for ((i = ${#dir} + ${#status} + 3; i < WIDTH; i++)); do gap+=" "; done
+			((n)) && tooltip+="\n<span size='xx-small'> </span>"
 			tooltip+="\n<span color='$color'>●</span> $dir$gap ${ label "$status";}"
+			[ -n "$model" ] || continue
+			gap=""
+			for ((i = ${#model} + ${#effort} + 3; i < WIDTH; i++)); do gap+=" "; done
+			tooltip+="\n  $model${effort:+$gap ${ label "$effort";}}"
 		done
 	fi
 
