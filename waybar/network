@@ -32,6 +32,97 @@ default_route() {
 	}' /proc/net/route
 }
 
+# NetworkManager calls give up after this many seconds, so a hung
+# NetworkManager does not stall the bar.
+NM_TIMEOUT=2
+
+# Add the tunnel interfaces that are not down to the associative array named
+# $1, keyed by their first IPv4 address, or else their first global IPv6 one.
+# WireGuard sets its device type, and tun devices carry IFF_TUN, which the tap
+# devices of virtual machines lack. This also finds tunnels outside
+# NetworkManager, like wg-quick or Tailscale.
+tunnels() {
+	local -n found=$1
+	local dir flags address
+	for dir in /sys/class/net/*; do
+		if [ -e "$dir/tun_flags" ]; then
+			read -r flags <"$dir/tun_flags"
+			((flags & 1)) || continue
+		elif [[ $(<"$dir/uevent") != *DEVTYPE=wireguard* ]]; then
+			continue
+		fi
+		[ "$(<"$dir/operstate")" != down ] || continue
+		address=$(ip -o addr show dev "${dir##*/}" scope global | awk '
+			$3 == "inet" { print $4; found = 1; exit }
+			$3 == "inet6" && v6 == "" { v6 = $4 }
+			END { if (!found && v6 != "") print v6 }')
+		# shellcheck disable=SC2034 # The array is used by name.
+		[ -z "$address" ] || found["$address"]=${dir##*/}
+	done
+}
+
+# Print the tooltip rows of a VPN named $1 with tunnel interface $2 and address
+# $3. The name is shortened to keep its row within the tooltip width.
+vpn_rows() {
+	local name=$1 room=$((WIDTH - 5)) dev=""
+	if [ -n "$2" ] && [ "$2" != "$1" ]; then
+		dev="  ${ label Interface;} $2" room=$((room - 12 - ${#2}))
+	fi
+	((${#name} <= room)) || name="${name:0:room-1}…"
+	printf '%s %s%s\\n%s %s\\n' "${ label Name;}" "${ escape "$name";}" "$dev" \
+		"${ label Address;}" "${3:--}"
+}
+
+# Print the tooltip rows of each active VPN. VPNs that only route some networks
+# leave the default route alone, so they do not show otherwise. NetworkManager
+# VPNs count once activated and take the tunnel with their address, IPsec ones
+# have none. The remaining tunnels show by interface name.
+vpns() {
+	local -A tunnel=() name=() address=()
+	local -a uuids=() args=()
+	local active state type uuid label key value addr dev
+	tunnels tunnel
+	active=$(timeout "$NM_TIMEOUT" nmcli -t -f STATE,TYPE,UUID,NAME \
+		connection show --active 2>/dev/null) || active=""
+	while IFS=: read -r state type uuid label; do
+		[ "$state" = activated ] || continue
+		case $type in
+		vpn | wireguard) ;;
+		*) continue ;;
+		esac
+		# Terse output escapes colons and backslashes.
+		label=${label//\\\\/$'\x1f'}
+		label=${label//\\:/:}
+		uuids+=("$uuid") args+=(uuid "$uuid") name[$uuid]=${label//$'\x1f'/\\}
+	done <<<"$active"
+
+	# One call for all VPNs, which lists the IPv4 addresses first. Link-local
+	# IPv6 addresses say nothing about the VPN.
+	if ((${#args[@]})); then
+		while IFS=: read -r key value; do
+			case $key in
+			GENERAL.UUID) uuid=$value ;;
+			IP4.ADDRESS* | IP6.ADDRESS*)
+				[[ -n ${address[$uuid]:-} || $value == fe80:* ]] || address[$uuid]=$value
+				;;
+			esac
+		done < <(timeout "$NM_TIMEOUT" nmcli -t -f GENERAL.UUID,IP4.ADDRESS,IP6.ADDRESS \
+			connection show --active "${args[@]}" 2>/dev/null)
+	fi
+
+	for uuid in "${uuids[@]}"; do
+		addr=${address[$uuid]:-} dev=""
+		if [ -n "$addr" ] && [ -n "${tunnel[$addr]:-}" ]; then
+			dev=${tunnel[$addr]}
+			unset "tunnel[$addr]"
+		fi
+		vpn_rows "${name[$uuid]}" "$dev" "$addr"
+	done
+	for addr in "${!tunnel[@]}"; do
+		vpn_rows "${tunnel[$addr]}" "${tunnel[$addr]}" "$addr"
+	done
+}
+
 emit() {
 	local route gateway
 	if ! route=$(default_route); then
@@ -70,7 +161,7 @@ emit() {
 	local icon="󰈀" details ssid="" bssid="" chan="" freq="" bitrate="" signal=""
 	if [ -e "/sys/class/net/$iface/wireless" ]; then
 		local line
-		line=$(nmcli -t -f IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL device wifi list \
+		line=$(timeout "$NM_TIMEOUT" nmcli -t -f IN-USE,SSID,BSSID,CHAN,FREQ,RATE,SIGNAL device wifi list \
 			ifname "$iface" --rescan no 2>/dev/null | grep -m1 '^\*' || true)
 		line=${line//\\:/$'\x1f'}
 		IFS=: read -r _ ssid bssid chan freq bitrate signal <<<"$line"
@@ -88,12 +179,16 @@ emit() {
 	fi
 	details+="${ label Interface;} $iface  ${ label Address;} ${address:--}\n${ label Gateway;} $gateway"
 
-	local text tooltip
+	# A lock next to the connection icon shows an active VPN.
+	local vpn text tooltip
+	vpn=${ vpns;}
+	[ -n "$vpn" ] && icon+=" <span color='#50fa7b'>󰌾</span> "
 	text=${ printf "<span color='#8be9fd' size='large'>%s</span> <span color='#6272a4'>󰇚</span> %9s <span color='#6272a4'>󰕒</span> %9s" \
 		"$icon" "${ rate "$down";}" "${ rate "$up";}";}
 	tooltip="${ traffic Download down_history "$DOWN" "$rx";}\n\n"
 	tooltip+="${ traffic Upload up_history "$UP" "$tx";}\n\n"
 	tooltip+="${ header Connection;}\n$details"
+	[ -n "$vpn" ] && tooltip+="\n\n${ header VPN;}\n${vpn%\\n}"
 
 	printf '{"text": "%s", "tooltip": "%s", "class": ""}\n' "$text" "${ spaced "$tooltip";}"
 }
