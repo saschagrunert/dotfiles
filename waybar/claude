@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Claude plan usage: the current session on the bar, a meter for every rate
-# limit with the time it resets and the running Claude Code sessions in the
-# tooltip. The limits come from the usage endpoint Claude Code shows in /usage,
-# called with its OAuth token, which does not count against them.
+# Claude plan usage: the current session and today's share of the week on the
+# bar, a meter for every rate limit with the time it resets, today's share and
+# the running Claude Code sessions in the tooltip. The limits come from the
+# usage endpoint Claude Code shows in /usage, called with its OAuth token,
+# which does not count against them.
 set -euo pipefail
 shopt -s nullglob
 
@@ -21,6 +22,8 @@ URL=https://api.anthropic.com/api/oauth/usage
 US=$'\x1f'
 ICON=
 ORANGE="#ffb86c"
+# The weekdays the week is shared across, as numbered by %u from Monday.
+WORKDAYS=12345
 
 # The subscription lives in its own config directory, ~/.claude is set up for
 # Vertex AI and has no credentials.
@@ -135,6 +138,51 @@ fetch() {
 	updated=$EPOCHSECONDS wait=$FETCH error=""
 }
 
+# Share the week, $1 percent used and resetting at epoch $2, evenly across its
+# working days. Those are the days starting within it, and with five of them
+# each takes 20% in turn. The evening of the last reset counts as the first
+# one when it falls on a working day. Set days to their number, dayno to
+# today's position among them or 0 on a day off, day to the percentage of
+# today's share used, empty on a day off, and balance to the shares the days
+# before left over, or overdrew on a day off, in percent of a share. Today's
+# share only fills once the earlier ones did.
+#
+# The days are walked back from noon of the last one, which a change to or
+# from daylight saving time keeps on the same date.
+budget() {
+	local pct=$1 reset=$2 today date wday hour done=0 used i t
+	printf -v today '%(%F)T' -1
+	printf -v hour '%(%H)T' $((reset - 1))
+	days=0 dayno=0 day="" balance=0
+	for ((i = 7; i >= 0; i--)); do
+		t=$((reset - 1 + (12 - 10#$hour) * 3600 - i * 86400))
+		printf -v wday '%(%u)T' "$t"
+		[[ $WORKDAYS == *$wday* ]] || continue
+		printf -v date '%(%F)T' "$t"
+		if ((i == 7)); then
+			[ "$date" = "$today" ] && dayno=1
+			continue
+		fi
+		days=$((days + 1))
+		[[ $date > $today ]] || done=$days
+		[ "$date" = "$today" ] && dayno=$days
+	done
+	((days)) || {
+		dayno=0
+		return 0
+	}
+	if ((dayno == 0)); then
+		balance=$((done * 100 - pct * days))
+		return
+	fi
+	used=$((pct * days - (dayno - 1) * 100))
+	if ((used < 0)); then
+		day=0 balance=$((-used))
+	else
+		day=$used
+	fi
+}
+
 # Print when epoch $1 comes, as the time of day if that is today and with the
 # weekday otherwise, followed by how long until then.
 reset_time() {
@@ -213,13 +261,17 @@ emit() {
 	# limit fetched before its reset has started over since, and its usage is
 	# unknown until the next fetch, since chats count against it too.
 	#
-	# The bar shows the session, followed by the week once it warns, and warns
-	# when either does. A model or surface running out leaves the rest of the
-	# plan usable, so it is left out. The server already warns from 75%, which
-	# is early for limits that reset on their own, so a warning starts at 95%.
+	# Today's share of the week follows the weekly limit, with the meter of
+	# what it used and the shares left over from the days before.
+	#
+	# The bar shows the session and today's share, followed by the week once it
+	# warns, and warns when either does. A model or surface running out leaves
+	# the rest of the plan usable, so it is left out. The server already warns
+	# from 75%, which is early for limits that reset on their own, so a warning
+	# starts at 95%.
 	# A state saved before the severity was dropped has a fifth field.
 	local session="" week="" class="" tooltip row name pct reset active
-	local shown when left right gap tag warn i
+	local shown when left right gap tag warn i days=0 dayno=0 day="" balance=0
 	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
 		IFS=$US read -r name pct reset active _ <<<"$row"
@@ -241,12 +293,45 @@ emit() {
 		fi
 		tooltip+="\n<b>$name</b>${tag:+ ${ label "${tag# }";}}${right:+$gap $right}"
 		tooltip+="\n<b>$shown</b> ${ meter "$pct" $((WIDTH - 5));}"
-		[ "$name" = Week ] && [ -n "$breakdown" ] && tooltip+="\n${ label "$breakdown";}"
+		[ "$name" = Week ] || continue
+		[ -n "$breakdown" ] && tooltip+="\n${ label "$breakdown";}"
+		((reset > 0)) && budget "$pct" "$reset"
+		((days)) || continue
+		if ((dayno)); then
+			right="${ label Day;} $dayno ${ label of;} $days" left="Day $dayno of $days"
+		else
+			right="${ label "Day off";}" left="Day off"
+		fi
+		gap=""
+		for ((i = ${#left} + 6; i < WIDTH; i++)); do gap+=" "; done
+		tooltip+="\n<span size='xx-small'> </span>\n<b>Today</b>$gap $right"
+		if [ -n "$day" ]; then
+			printf -v shown '%3d%%' "$day"
+			tooltip+="\n<b>$shown</b> ${ meter "$day" $((WIDTH - 5));}"
+		fi
+		shown=${ fraction 100 "$days";} shown=${shown%.0}%
+		tooltip+="\n${ label Share;} $shown ${ label "of the week";}"
+		((balance)) || continue
+		left=${ printf '%+d%%' "$balance";}
+		gap=""
+		for ((i = ${#shown} + ${#left} + 32; i < WIDTH; i++)); do gap+=" "; done
+		tooltip+="$gap ${ label "Carried over";} $left"
 	done
+
+	# Today's share follows the session after a slash, which stays while the
+	# session is unknown to tell them apart, and shows the balance only when
+	# there is one, colored by whether it is left over or overdrawn.
+	local today="" sign=""
+	if ((days)) && { [ -n "$day" ] || ((balance)); }; then
+		((balance)) && sign=${ printf '%+d%%' "$balance";}
+		[ -z "$error" ] && ((balance)) &&
+			sign="<span color='${GRADIENT[balance > 0 ? 0 : 9]}'>$sign</span>"
+		today=" /${day:+ $day%}${sign:+ $sign}"
+	fi
 
 	# Old values are dimmed and lose their class while fetching fails. Without
 	# any value the bar only shows the icon, dimmed as well.
-	local text="${session:+ $session}$week" color=$ORANGE
+	local text="${session:+ $session}$today$week" color=$ORANGE
 	if [ -z "$text" ]; then
 		color=$DIM class=""
 	elif [ -n "$error" ]; then
