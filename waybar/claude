@@ -22,6 +22,7 @@ URL=https://api.anthropic.com/api/oauth/usage
 US=$'\x1f'
 ICON=
 ORANGE="#ffb86c"
+WEEK_ICON=󰨳
 # The weekdays the week is shared across, as numbered by %u from Monday.
 WORKDAYS=12345
 
@@ -142,18 +143,20 @@ fetch() {
 # working days. Those are the days starting within it, and with five of them
 # each takes 20% in turn. The evening of the last reset counts as the first
 # one when it falls on a working day. Set days to their number, dayno to
-# today's position among them or 0 on a day off, day to the percentage of
-# today's share used, empty on a day off, and balance to the shares the days
-# before left over, or overdrew on a day off, in percent of a share. Today's
-# share only fills once the earlier ones did.
+# today's position among them or 0 on a day off, and used to what the week
+# used beyond the shares of the days before today, in percent of a share, which
+# is negative while they left some over. Set day to the percentage of today's
+# share used, empty on a day off, and balance to the shares the days before
+# left over, or overdrew on a day off. Today's share only fills once the
+# earlier ones did.
 #
 # The days are walked back from noon of the last one, which a change to or
 # from daylight saving time keeps on the same date.
 budget() {
-	local pct=$1 reset=$2 today date wday hour done=0 used i t
+	local pct=$1 reset=$2 today date wday hour done=0 i t
 	printf -v today '%(%F)T' -1
 	printf -v hour '%(%H)T' $((reset - 1))
-	days=0 dayno=0 day="" balance=0
+	days=0 dayno=0 used=0 day="" balance=0
 	for ((i = 7; i >= 0; i--)); do
 		t=$((reset - 1 + (12 - 10#$hour) * 3600 - i * 86400))
 		printf -v wday '%(%u)T' "$t"
@@ -171,16 +174,13 @@ budget() {
 		dayno=0
 		return 0
 	}
-	if ((dayno == 0)); then
-		balance=$((done * 100 - pct * days))
-		return
-	fi
-	used=$((pct * days - (dayno - 1) * 100))
-	if ((used < 0)); then
-		day=0 balance=$((-used))
+	if ((dayno)); then
+		used=$((pct * days - (dayno - 1) * 100))
+		day=$((used < 0 ? 0 : used))
 	else
-		day=$used
+		used=$((pct * days - done * 100))
 	fi
+	balance=$((${day:-0} - used))
 }
 
 # Print when epoch $1 comes, as the time of day if that is today and with the
@@ -262,16 +262,16 @@ emit() {
 	# unknown until the next fetch, since chats count against it too.
 	#
 	# Today's share of the week follows the weekly limit, with the meter of
-	# what it used and the shares left over from the days before.
+	# what it used and how far ahead or behind the days before left it.
 	#
-	# The bar shows the session and today's share, followed by the week once it
-	# warns, and warns when either does. A model or surface running out leaves
-	# the rest of the plan usable, so it is left out. The server already warns
-	# from 75%, which is early for limits that reset on their own, so a warning
-	# starts at 95%.
+	# The bar shows the session and today's share, followed by the week in
+	# parentheses once it warns, and warns when either does. A model or surface
+	# running out leaves the rest of the plan usable, so it is left out. The
+	# server already warns from 75%, which is early for limits that reset on
+	# their own, so a warning starts at 95%.
 	# A state saved before the severity was dropped has a fifth field.
 	local session="" week="" class="" tooltip row name pct reset active
-	local shown when left right gap tag warn i days=0 dayno=0 day="" balance=0
+	local shown when left right gap tag warn i days=0 dayno=0 used=0 day="" balance=0
 	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
 		IFS=$US read -r name pct reset active _ <<<"$row"
@@ -282,7 +282,7 @@ emit() {
 		fi
 		case $name in Session | Week) ((warn)) && class=warning ;; esac
 		[ "$name" = Session ] && [ "$shown" != " --%" ] && session=$shown
-		[ "$name" = Week ] && ((warn)) && week=" $name$shown"
+		[ "$name" = Week ] && ((warn)) && week=" ($WEEK_ICON $pct%)"
 		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
 		right="" gap="" tag=""
 		[ "$active" = true ] && tag=" active"
@@ -311,22 +311,28 @@ emit() {
 		fi
 		shown=${ fraction 100 "$days";} shown=${shown%.0}%
 		tooltip+="\n${ label Share;} $shown ${ label "of the week";}"
-		((balance)) || continue
-		left=${ printf '%+d%%' "$balance";}
+		if ((balance > 0)); then
+			right=Ahead left=$balance%
+		elif ((balance < 0)); then
+			right=Behind left=$((-balance))%
+		else
+			continue
+		fi
 		gap=""
-		for ((i = ${#shown} + ${#left} + 32; i < WIDTH; i++)); do gap+=" "; done
-		tooltip+="$gap ${ label "Carried over";} $left"
+		for ((i = ${#shown} + ${#right} + ${#left} + 20; i < WIDTH; i++)); do gap+=" "; done
+		tooltip+="$gap ${ label "$right";} $left"
 	done
 
 	# Today's share follows the session after a slash, which stays while the
-	# session is unknown to tell them apart, and shows the balance only when
-	# there is one, colored by whether it is left over or overdrawn.
-	local today="" sign=""
+	# session is unknown to tell them apart. The balance counts against it, so
+	# a share left over from the days before makes it negative and one
+	# overdrawn on a day off positive, colored by which it is.
+	local today="" share
 	if ((days)) && { [ -n "$day" ] || ((balance)); }; then
-		((balance)) && sign=${ printf '%+d%%' "$balance";}
+		share="$used%"
 		[ -z "$error" ] && ((balance)) &&
-			sign="<span color='${GRADIENT[balance > 0 ? 0 : 9]}'>$sign</span>"
-		today=" /${day:+ $day%}${sign:+ $sign}"
+			share="<span color='${GRADIENT[balance > 0 ? 0 : 9]}'>$share</span>"
+		today=" / $share"
 	fi
 
 	# Old values are dimmed and lose their class while fetching fails. Without
