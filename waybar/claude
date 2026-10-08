@@ -258,8 +258,9 @@ emit() {
 	# Each limit shows its name with the reset time on the right, then its
 	# meter. A small blank line keeps them apart. The limit the server marks
 	# as active is labeled, and the weekly one lists its usage by product. A
-	# limit fetched before its reset has started over since, and its usage is
-	# unknown until the next fetch, since chats count against it too.
+	# limit fetched before its reset has started over since and shows as unused
+	# until the next fetch, the week resetting again a week later and without
+	# its usage by product.
 	#
 	# Today's share of the week follows the weekly limit, with the meter of
 	# what it used and how far ahead or behind the days before left it.
@@ -271,17 +272,16 @@ emit() {
 	# their own, so a warning starts at 95%.
 	# A state saved before the severity was dropped has a fifth field.
 	local session="" week="" class="" tooltip row name pct reset active
-	local shown when left right gap tag warn i days=0 dayno=0 used=0 day="" balance=0
+	local shown when left right gap tag warn i next days=0 dayno=0 used=0 day="" balance=0
 	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
 		IFS=$US read -r name pct reset active _ <<<"$row"
+		next=$reset
+		((reset > 0 && reset <= EPOCHSECONDS)) && pct=0 reset=0
 		printf -v shown '%3d%%' "$pct"
 		warn=$((pct >= 95))
-		if ((reset > 0 && reset <= EPOCHSECONDS)); then
-			pct=0 shown=" --%" reset=0 warn=0
-		fi
 		case $name in Session | Week) ((warn)) && class=warning ;; esac
-		[ "$name" = Session ] && [ "$shown" != " --%" ] && session=$shown
+		[ "$name" = Session ] && session=$shown
 		[ "$name" = Week ] && ((warn)) && week=" ($WEEK_ICON $pct%)"
 		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
 		right="" gap="" tag=""
@@ -294,8 +294,8 @@ emit() {
 		tooltip+="\n<b>$name</b>${tag:+ ${ label "${tag# }";}}${right:+$gap $right}"
 		tooltip+="\n<b>$shown</b> ${ meter "$pct" $((WIDTH - 5));}"
 		[ "$name" = Week ] || continue
-		[ -n "$breakdown" ] && tooltip+="\n${ label "$breakdown";}"
-		((reset > 0)) && budget "$pct" "$reset"
+		[ -n "$breakdown" ] && ((reset == next)) && tooltip+="\n${ label "$breakdown";}"
+		((next > 0)) && budget "$pct" $((reset ? reset : next + 7 * 86400))
 		((days)) || continue
 		if ((dayno)); then
 			right="${ label Day;} $dayno ${ label of;} $days" left="Day $dayno of $days"
