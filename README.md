@@ -69,17 +69,23 @@ yazi/                          # File manager config and theme
 waybar/
 ├── config.jsonc               # Waybar module config
 ├── style.css                  # Waybar styling
+├── claude                     # Claude plan usage and running sessions
+├── cpu                        # CPU usage, per-core and process monitor
+├── disk                       # Filesystem usage and disk I/O monitor
 ├── dnd                        # Do-not-disturb toggle
 ├── failed-units               # Failed systemd units indicator
 ├── fans                       # Fan speed monitor
 ├── gpu                        # GPU load and VRAM monitor
 ├── hwmon.sh                   # Shared hwmon lookup for fans/gpu/power/temps
+├── memory                     # RAM, swap and process memory monitor
+├── network                    # Bandwidth, connection and VPN monitor
 ├── nix-updates                # Pending nixpkgs updates indicator
 ├── nix-updates.jq             # Update grouping and tooltip, tested by make updates-test
 ├── power                      # Power consumption monitor
 ├── shared                     # Runs a monitor script once for both bars
 ├── temps                      # Hardware temperature monitor
-└── testdata/                  # Fixtures for make updates-test
+├── testdata/                  # Fixtures for make updates-test
+└── tooltip.sh                 # Shared tooltip drawing: meters, graphs, headers
 nixos/
 ├── configuration.nix          # Main NixOS config
 ├── desktop.nix                # Sway, Wayland env, polkit agent
