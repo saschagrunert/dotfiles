@@ -59,6 +59,7 @@ check: ## Check symlinks and required commands.
 	fail=0; \
 	echo "Checking symlinks..."; \
 	for f in $$(find ~ -maxdepth 3 -type l 2>/dev/null | sort); do \
+		case "$$f" in *.hm-backup*) continue ;; esac; \
 		target=$$(readlink "$$f"); \
 		case "$$target" in *home-manager-files*) \
 			if [ -e "$$f" ]; then \
