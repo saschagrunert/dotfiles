@@ -22,8 +22,6 @@ _: {
             admin_server = "kerberos.corp.redhat.com";
           };
           "IPA.REDHAT.COM" = {
-            pkinit_anchors = "FILE:/etc/ipa/ca.crt";
-            pkinit_pool = "FILE:/etc/ipa/ca.crt";
             default_domain = "ipa.redhat.com";
             dns_lookup_kdc = true;
             auth_to_local = ''RULE:[1:$1@$0](.*@REDHAT\.COM)s/@.*//'';

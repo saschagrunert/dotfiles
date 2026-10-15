@@ -32,10 +32,6 @@ in
       ".tmux/scripts".source = dotfile "tmux/scripts";
       ".claude/settings.json".source = dotfile "claude/settings.json";
       ".claude/CLAUDE.md".source = dotfile "claude/CLAUDE.md";
-      ".claude-max/settings.json".source = dotfile "claude/settings.json";
-      ".claude-max/CLAUDE.md".source = dotfile "claude/CLAUDE.md";
-      ".claude-max/projects".source = link "${config.home.homeDirectory}/.claude/projects";
-      ".claude-max/skills".source = link "${config.home.homeDirectory}/.claude/skills";
     };
 
     pointerCursor = {

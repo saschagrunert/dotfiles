@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, llvmVersion, ... }:
 {
   # Packages that only the user session needs. Keeping them out of
   # environment.systemPackages means adding an editor plugin, a language server
@@ -57,7 +57,7 @@
 
     # Language tooling. The compilers themselves stay system-wide, since
     # sudo-driven builds (see fish/functions/kubernetes.fish) need them.
-    llvmPackages_22.clang-tools
+    pkgs."llvmPackages_${llvmVersion}".clang-tools
     gofumpt
     golangci-lint
     gopls

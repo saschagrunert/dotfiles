@@ -2,11 +2,12 @@
   pkgs,
   nixpkgs,
   system,
+  llvmVersion,
 }:
 {
   default = pkgs.mkShell {
     nativeBuildInputs = [
-      pkgs.llvmPackages_22.clang
+      pkgs."llvmPackages_${llvmVersion}".clang
       pkgs.pkg-config
     ];
     buildInputs = [
