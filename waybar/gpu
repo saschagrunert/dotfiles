@@ -68,7 +68,7 @@ sample_clients() {
 emit() {
 	local prev_clients=$clients prev_time=$time
 	clients=$(sample_clients)
-	time=${EPOCHREALTIME/./}
+	time=${EPOCHREALTIME/[.,]/}
 
 	local busy used total sclk mclk
 	busy=${ value "$hwmon/device/gpu_busy_percent";}
@@ -117,5 +117,5 @@ emit() {
 }
 
 clients=$(sample_clients)
-time=${EPOCHREALTIME/./}
+time=${EPOCHREALTIME/[.,]/}
 run emit "${1:-}"

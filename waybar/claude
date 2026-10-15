@@ -26,15 +26,8 @@ WEEK_ICON=󰨳
 # The weekdays the week is shared across, as numbered by %u from Monday.
 WORKDAYS=12345
 
-# The subscription lives in its own config directory, ~/.claude is set up for
-# Vertex AI and has no credentials.
-credentials=""
-for dir in "${CLAUDE_CONFIG_DIR:-}" "$HOME/.claude-max" "$HOME/.claude"; do
-	[ -n "$dir" ] && [ -f "$dir/.credentials.json" ] && {
-		credentials=$dir/.credentials.json
-		break
-	}
-done
+credentials=${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.credentials.json
+[ -f "$credentials" ] || credentials=""
 
 # The last limits fetched, each "name pct reset active" with the reset
 # in epoch seconds or 0, the weekly usage by product, the times of
@@ -270,12 +263,11 @@ emit() {
 	# running out leaves the rest of the plan usable, so it is left out. The
 	# server already warns from 75%, which is early for limits that reset on
 	# their own, so a warning starts at 95%.
-	# A state saved before the severity was dropped has a fifth field.
 	local session="" week="" class="" tooltip row name pct reset active
 	local shown when left right gap tag warn i next days=0 dayno=0 used=0 day="" balance=0
 	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
-		IFS=$US read -r name pct reset active _ <<<"$row"
+		IFS=$US read -r name pct reset active <<<"$row"
 		next=$reset
 		((reset > 0 && reset <= EPOCHSECONDS)) && pct=0 reset=0
 		printf -v shown '%3d%%' "$pct"

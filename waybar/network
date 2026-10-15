@@ -134,7 +134,7 @@ emit() {
 	read -r route gateway <<<"$route"
 
 	local now new_rx new_tx
-	now=${EPOCHREALTIME/./}
+	now=${EPOCHREALTIME/[.,]/}
 	read -r new_rx <"/sys/class/net/$route/statistics/rx_bytes"
 	read -r new_tx <"/sys/class/net/$route/statistics/tx_bytes"
 	# Start over on a new interface, its counters are unrelated.
@@ -142,7 +142,7 @@ emit() {
 	if [ "$route" != "$iface" ]; then
 		iface=$route rx=$new_rx tx=$new_tx time=$now down_history=() up_history=()
 		sleep 1
-		now=${EPOCHREALTIME/./}
+		now=${EPOCHREALTIME/[.,]/}
 		read -r new_rx <"/sys/class/net/$iface/statistics/rx_bytes"
 		read -r new_tx <"/sys/class/net/$iface/statistics/tx_bytes"
 	fi

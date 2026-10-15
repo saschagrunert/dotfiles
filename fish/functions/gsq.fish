@@ -1,3 +1,4 @@
+# Squash the branch into one signed-off commit on its merge base
 function gsq
     set -l current (git rev-parse --abbrev-ref HEAD)
     set -l default (gldb)

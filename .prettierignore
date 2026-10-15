@@ -1,7 +1,5 @@
 *.fish
 *.lua
 *.nix
-*.py
-*.pyc
 flake.lock
 nvim/lazy-lock.json

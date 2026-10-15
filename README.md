@@ -181,7 +181,7 @@ When entering the project directory, direnv automatically activates the shell
 with the correct dependencies. The `--impure` flag is required because the
 shell reads `$PWD` to locate the project's nix files at evaluation time.
 
-### Neovim
+## Neovim
 
 Plugins are managed by [lazy.nvim](https://github.com/folke/lazy.nvim) and
 install automatically on first launch. LSP servers, formatters and linters are

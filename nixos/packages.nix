@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, llvmVersion, ... }:
 {
   # System-wide packages: everything root or a system service needs. User
   # session tooling lives in home/packages.nix, so changing it does not rebuild
@@ -7,7 +7,7 @@
     # Toolchains. Needed system-wide because they are also used through sudo,
     # for example the Kubernetes and CRI-O builds in fish/functions/kubernetes.fish.
     binutils
-    clang_22
+    pkgs."llvmPackages_${llvmVersion}".clang
     gcc
     git
     gnumake
