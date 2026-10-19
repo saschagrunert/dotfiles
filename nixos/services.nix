@@ -111,6 +111,8 @@
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
         X11Forwarding = false;
+        # Termius on iOS does not answer the DA1 query, so fish would wait 10s
+        SetEnv = "fish_features=no-query-term";
       };
     };
 
