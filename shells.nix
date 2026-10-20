@@ -38,7 +38,14 @@
               })
             ];
           };
-          drv = devPkgs.callPackage "${projectDir}/nix/derivation.nix" { };
+          drvFile = "${projectDir}/nix/derivation.nix";
+          # Project flakes may pass build metadata, which the shell does not need.
+          drv = devPkgs.callPackage drvFile (
+            builtins.intersectAttrs (builtins.functionArgs (import drvFile)) {
+              rev = "";
+              lastModified = "0";
+            }
+          );
         in
         pkgs.mkShell {
           inputsFrom = [ drv ];
