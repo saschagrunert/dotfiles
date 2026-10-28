@@ -16,7 +16,9 @@ return {
         settings = {
           gopls = {
             gofumpt = true,
-            staticcheck = true,
+            -- golangci-lint (nvim-lint) runs staticcheck, so gopls would only
+            -- report the same findings twice
+            staticcheck = false,
             analyses = { unusedparams = true, unusedwrite = true, nilness = true },
             hints = {
               assignVariableTypes = true,

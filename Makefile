@@ -1,16 +1,7 @@
-# Used binaries
-GIT := git
 # Resolve nixpkgs from flake.lock, so local runs and CI use the same tool versions
 NIX_SHELL := nix shell --inputs-from .
 # The flake attribute to build and switch to
 HOST := nixos
-# Paths
-GITCONFIG_USER_PATH := ~/.gitconfig_user
-
-# User specific settings
-GIT_USER := Sascha Grunert
-EMAIL := sgrunert@redhat.com
-SIGNKEY := 79C3DE73D9F8B626A81B990109D97D153EF94D93
 
 # Files. Shell scripts are matched by shebang inside the shellcheck recipe, so
 # extensionless helpers are covered without listing them here (a literal # can
@@ -30,7 +21,7 @@ COLOR := \033[36m
 NOCOLOR := \033[0m
 
 .SILENT:
-.PHONY: all build switch gitconfig-user check check-nix lint lint-fix \
+.PHONY: all build switch check check-nix lint lint-fix \
 	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint \
 	toml-lint colors smoke updates-test test clean help
 
@@ -43,15 +34,6 @@ build: ## Build the NixOS configuration without activating it.
 
 switch: ## Build and switch to the NixOS configuration.
 	sudo nixos-rebuild switch --flake .\#$(HOST)
-
-##@ Setup targets:
-
-gitconfig-user: ## Generate the user-specific gitconfig (keeps other settings in the file).
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.name "$(GIT_USER)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.email "$(EMAIL)"
-	$(GIT) config -f $(GITCONFIG_USER_PATH) user.signingKey "$(SIGNKEY)"
-	grep -q '^# vi: syn=gitconfig' $(GITCONFIG_USER_PATH) || \
-		echo '# vi: syn=gitconfig' >> $(GITCONFIG_USER_PATH)
 
 ##@ Validation targets:
 

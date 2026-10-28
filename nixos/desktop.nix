@@ -34,8 +34,30 @@
       NoNewPrivileges = true;
       RestrictNamespaces = true;
       MemoryDenyWriteExecute = true;
-      ProtectHome = true;
+      # Home and the runtime directory stay hidden, so the agent cannot reach
+      # the keys in home or the gpg, ssh and sway sockets next to the ones it
+      # needs. Only the session bus, the Wayland socket and the GTK, dconf,
+      # font and cursor settings are mounted back, otherwise the dialog falls
+      # back to Xwayland without the theme. sway takes wayland-1 as the only
+      # compositor of the session. Every path is optional, so a missing one
+      # degrades the dialog instead of failing the unit, which would leave
+      # pkexec without an agent.
+      ProtectHome = "tmpfs";
       ProtectSystem = "strict";
+      BindReadOnlyPaths = [
+        "-%t/bus"
+        "-%t/wayland-1"
+        "-%h/.config/dconf"
+        "-%h/.config/fontconfig"
+        "-%h/.config/gtk-3.0"
+        "-%h/.icons"
+        "-%h/.local/share/icons"
+      ];
+      # dconf writes its runtime file here. dconf-service is started on
+      # demand, so the directory is created first, outside the sandbox (+),
+      # where the read-only runtime directory cannot get in the way.
+      ExecStartPre = "+${pkgs.coreutils}/bin/mkdir -p %t/dconf";
+      BindPaths = [ "%t/dconf" ];
     };
   };
 }

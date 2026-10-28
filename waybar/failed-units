@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Called with --reset, which the click handler does, the failed state of every
+# unit is cleared, so the module hides until a unit fails again. sudo -n never
+# prompts, a click must not hang on a password.
+if [ "${1:-}" = "--reset" ]; then
+	sudo -n systemctl reset-failed || true
+	systemctl --user reset-failed || true
+	exit 0
+fi
+
 # List failed units, $1 is an optional systemctl scope flag such as --user.
 # Errors, such as an unavailable bus, count as no failed units.
 failed() {
@@ -18,17 +27,42 @@ if [ "$count" -eq 0 ]; then
 	exit 0
 fi
 
+# The last journal lines of every unit follow it, dimmed, to show why it
+# failed.
+LINES=5
+WIDTH=80
+
+# Print the last $LINES journal lines of unit $2 as tooltip rows, $1 is an
+# optional journalctl scope flag such as --user. Log lines may contain
+# anything, so control characters are dropped and the rest is escaped for JSON
+# and Pango markup, after shortening to $WIDTH characters so no escape is cut.
+# systemd starts its own messages with the unit name, which the row above
+# already shows.
+logs() {
+	{ journalctl ${1:+"$1"} -u "$2" -n "$LINES" -o cat --no-pager 2>/dev/null || true; } |
+		awk -v width="$WIDTH" -v unit="$2" '{
+			if (index($0, unit ": ") == 1) $0 = substr($0, length(unit) + 3)
+			gsub(/[[:cntrl:]]/, "")
+			if (length($0) > width) $0 = substr($0, 1, width - 1) "…"
+			gsub(/\\/, "\\\\\\\\"); gsub(/"/, "\\\"")
+			gsub(/&/, "\\&amp;"); gsub(/</, "\\&lt;"); gsub(/>/, "\\&gt;")
+			printf "\\n  <span color='"'#6272a4'"'>%s</span>", $0
+		}'
+}
+
 tooltip=""
 append() {
-	local scope=$1 units=$2 unit
+	local scope=$1 flag=$2 units=$3 unit
 	[ -n "$units" ] || return 0
 	while read -r unit; do
 		# Escape systemd's \x2d style escapes for JSON.
-		tooltip+="${tooltip:+\\n}$(printf '%-7s %s' "$scope:" "${unit//\\/\\\\}")"
+		tooltip+="${tooltip:+\\n\\n}$(printf '%-7s %s' "$scope:" "${unit//\\/\\\\}")"
+		tooltip+=$(logs "$flag" "$unit")
 	done <<<"$units"
 }
-append System "$system"
-append User "$user"
+append System "" "$system"
+append User --user "$user"
+tooltip+="\\n\\nClick to clear"
 
 text="<span color='#ff5555' size='large'>󰀦</span> $count failed"
 

@@ -70,7 +70,10 @@
 
     # Virtualization front-ends. These run as the user, the daemons and the
     # container tooling stay in nixos/packages.nix.
-    vagrant
+    # libguestfs is marked broken (stuck on fuse2). Vagrant only puts it on
+    # PATH for virt-sysprep in `vagrant package`, so the rest keeps working.
+    # Drop the override once libguestfs builds again.
+    (vagrant.override { libguestfs = emptyDirectory; })
     virt-manager
 
     # Cloud

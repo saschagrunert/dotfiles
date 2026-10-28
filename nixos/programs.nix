@@ -27,4 +27,7 @@ _: {
       vimAlias = true;
     };
   };
+
+  # defaultEditor only sets EDITOR, and some tools only read VISUAL
+  environment.variables.VISUAL = "nvim";
 }
