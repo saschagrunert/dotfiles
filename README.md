@@ -120,12 +120,11 @@ mapping, input devices) are marked with comments.
 ```fish
 > git clone https://github.com/saschagrunert/dotfiles ~/.dotfiles
 > cd ~/.dotfiles
-> make gitconfig-user GIT_USER="John Doe" EMAIL="john@doe.com" SIGNKEY="123"
 > sudo nixos-rebuild switch --flake ~/.dotfiles#nixos
 ```
 
-The `gitconfig-user` target creates `~/.gitconfig_user` with your name, email
-and GPG signing key.
+Change the `[user]` and `[sendemail]` sections in `git/gitconfig` to your own
+name, email, GPG signing key and mail server first.
 
 ## Rebuilding
 

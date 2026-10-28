@@ -159,6 +159,9 @@
     "exec": "~/.config/waybar/failed-units",
     "return-type": "json",
     "interval": 10,
+    // The signal hides the module right after a click, like custom/dnd
+    "signal": 10,
+    "on-click": "~/.config/waybar/failed-units --reset && pkill -RTMIN+10 waybar",
   },
   "custom/nix-updates": {
     "exec": "~/.config/waybar/nix-updates",

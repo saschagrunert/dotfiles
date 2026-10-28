@@ -1,5 +1,11 @@
-[include]
-    path = ~/.gitconfig_user
+[user]
+    name = Sascha Grunert
+    email = sgrunert@redhat.com
+    signingKey = 79C3DE73D9F8B626A81B990109D97D153EF94D93
+[sendemail]
+    smtpServer = smtp.corp.redhat.com
+    smtpServerPort = 25
+    smtpEncryption = none
 [merge]
     tool = nvimdiff
     conflictstyle = zdiff3

@@ -17,7 +17,6 @@
       luks.devices = {
         crypted = {
           device = "/dev/disk/by-uuid/8696c19a-d6f5-49f3-85f3-14ffcad011fa";
-          preLVM = true;
           allowDiscards = true;
           bypassWorkqueues = true;
         };
@@ -26,7 +25,6 @@
     kernel = {
       sysctl = {
         "net.ipv4.conf.all.forwarding" = 1;
-        "net.ipv4.conf.all.route_localnet" = 1;
         "net.ipv4.conf.default.forwarding" = 1;
         "net.ipv6.conf.all.forwarding" = 1;
         "net.ipv6.conf.default.forwarding" = 1;
