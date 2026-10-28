@@ -84,10 +84,15 @@
     "return-type": "json",
   },
   // The tooltip scripts run continuously and print a line every 5 seconds.
+  //
+  // Click handlers that open a window go through swaymsg exec. waybar runs as
+  // a systemd service, which would otherwise kill the window whenever the bar
+  // restarts, and start it without sway's environment (NIXOS_OZONE_WL,
+  // QT_QPA_PLATFORM, SSH_AUTH_SOCK).
   "custom/network": {
     "exec": "~/.config/waybar/shared network",
     "return-type": "json",
-    "on-click": "nm-connection-editor",
+    "on-click": "swaymsg exec nm-connection-editor",
   },
   "custom/disk": {
     "exec": "~/.config/waybar/shared disk",
@@ -117,7 +122,7 @@
     },
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-",
-    "on-click": "pavucontrol",
+    "on-click": "swaymsg exec pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
   },
   "pulseaudio#source": {
@@ -125,7 +130,7 @@
     "format-muted": "{format_source}",
     "format-source": "<span color='#ff79c6' size='large'>󰍬</span> {volume:3}%",
     "format-source-muted": "<span color='#6272a4' size='large'>󰍭</span> <span color='#6272a4'>{volume:3}%</span>",
-    "on-click": "pavucontrol",
+    "on-click": "swaymsg exec pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-",
@@ -137,7 +142,7 @@
     "return-type": "json",
     "interval": 5,
     "signal": 8,
-    "on-click": "makoctl mode -t do-not-disturb && pkill -RTMIN+8 waybar",
+    "on-click": "makoctl mode -t do-not-disturb && ~/.config/waybar/signal 8",
     "on-click-right": "makoctl dismiss -a",
   },
   "idle_inhibitor": {
@@ -153,7 +158,7 @@
   "custom/claude": {
     "exec": "~/.config/waybar/shared claude",
     "return-type": "json",
-    "on-click": "xdg-open https://claude.ai/settings/usage",
+    "on-click": "swaymsg exec xdg-open https://claude.ai/settings/usage",
   },
   "custom/failed-units": {
     "exec": "~/.config/waybar/failed-units",
@@ -161,14 +166,16 @@
     "interval": 10,
     // The signal hides the module right after a click, like custom/dnd
     "signal": 10,
-    "on-click": "~/.config/waybar/failed-units --reset && pkill -RTMIN+10 waybar",
+    "on-click": "~/.config/waybar/failed-units --reset && ~/.config/waybar/signal 10",
   },
   "custom/nix-updates": {
     "exec": "~/.config/waybar/nix-updates",
     "return-type": "json",
     "interval": 1800,
     "signal": 9,
-    "on-click": "~/.config/waybar/nix-updates --force && pkill -RTMIN+9 waybar",
+    // The evaluation takes a while, so sway runs it, where a bar restart
+    // cannot cut it short
+    "on-click": "swaymsg exec '~/.config/waybar/nix-updates --force && ~/.config/waybar/signal 9'",
   },
   "clock#time": {
     "format": "<span color='#bd93f9' size='large'>󰅐</span> {:%H:%M:%S}",

@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   dotfilesPath,
   ...
@@ -66,6 +67,27 @@ in
     swayidle.Service = hardening // {
       RestartSec = 2;
     };
+
+    # waybar gets no hardening: the failed units module clears system units
+    # through sudo, and in a user unit every one of these options implies
+    # NoNewPrivileges.
+    waybar = {
+      # A crash brings the bar back after 2 seconds. Every start counts
+      # against the limit, also the one at login and the restarts by sway and
+      # $mod+p, which leaves plenty of room below 20 a minute. A bar that keeps
+      # failing, for example with a broken config, ends up failed after about
+      # 40 seconds. sway/session resets it before a restart.
+      Unit = {
+        StartLimitIntervalSec = 60;
+        StartLimitBurst = 20;
+      };
+      Service = {
+        RestartSec = 2;
+        # The module's mixed sends SIGKILL to the bar scripts, which skips
+        # their cleanup traps
+        KillMode = lib.mkForce "control-group";
+      };
+    };
   };
 
   services.swayidle = {
@@ -77,6 +99,14 @@ in
         resumeCommand = ''${pkgs.sway}/bin/swaymsg "output * power on"'';
       }
     ];
+  };
+
+  # A service of the session rather than sway's bar, so it comes back when it
+  # crashes, which the pulseaudio module does when PipeWire restarts during a
+  # switch. Without settings the module leaves the linked waybar/ alone.
+  programs.waybar = {
+    enable = true;
+    systemd.enable = true;
   };
 
   dconf.settings = {

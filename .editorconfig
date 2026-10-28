@@ -20,7 +20,7 @@ indent_style = tab
 [tmux/scripts/*]
 indent_style = tab
 
-[sway/workspace-scroll]
+[sway/{session,workspace-scroll}]
 indent_style = tab
 
 [*.{nix,lua,toml,json,jsonc,yml,yaml,css,md}]

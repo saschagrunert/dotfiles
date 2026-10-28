@@ -62,6 +62,7 @@ nvim/                          # Neovim config (lazy.nvim plugins)
 rustfmt/                       # Rust formatter config
 sway/
 ├── config                     # Sway compositor config
+├── session                    # Starts and stops the systemd session with sway
 └── workspace-scroll           # Workspace scroll helper
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers
@@ -83,6 +84,7 @@ waybar/
 ├── nix-updates.jq             # Update grouping and tooltip, tested by make updates-test
 ├── power                      # Power consumption monitor
 ├── shared                     # Runs a monitor script once for both bars
+├── signal                     # Refreshes a module through its signal
 ├── temps                      # Hardware temperature monitor
 ├── testdata/                  # Fixtures for make updates-test
 └── tooltip.sh                 # Shared tooltip drawing: meters, graphs, headers

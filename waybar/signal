@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Refresh the waybar module listening on SIGRTMIN+$1. The signal goes to the
+# main process of the service only: the bar scripts would die of it, and pkill
+# would also hit a waybar outside the service.
+set -euo pipefail
+
+n=${1:?usage: signal <n>}
+[[ "$n" =~ ^[0-9]+$ ]] || {
+	echo "invalid signal: $n" >&2
+	exit 1
+}
+exec systemctl --user kill --kill-whom=main -s "SIGRTMIN+$n" waybar

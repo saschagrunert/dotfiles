@@ -23,10 +23,15 @@ exec 8>"$dir/$name.lock"
 # The script stops with this bar, and a line goes to the bar before the file,
 # so nothing replaces the file once the bar is gone. Each line replaces the
 # file in one rename, so followers never read half of one.
+#
+# The script gets the default SIGPIPE back. It inherits an ignored one from
+# waybar's process, which bash cannot undo, so a writer to a pipe that was
+# closed early, like sort | head or grep | jq, logs a write error instead of
+# quietly ending.
 produce() {
 	local line
 	rm -f "$out"
-	exec 6< <(exec "$script" 8>&-)
+	exec 6< <(exec env --default-signal=PIPE "$script" 8>&-)
 	pid=$!
 	trap 'kill "$pid" 2>/dev/null' EXIT
 	trap exit TERM INT HUP
@@ -53,7 +58,8 @@ while true; do
 	# and the wait are builtins, $(<file) and sleep would fork every time.
 	for _ in 1 2 3 4 5; do
 		cur=""
-		IFS= read -r -d '' cur <"$out" 2>/dev/null || true
+		# stderr is redirected first, so a missing file is silenced as well
+		IFS= read -r -d '' cur 2>/dev/null <"$out" || true
 		cur=${cur%$'\n'}
 		if [ -n "$cur" ] && [ "$cur" != "$last" ]; then
 			printf '%s\n' "$cur"

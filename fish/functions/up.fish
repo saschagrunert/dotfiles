@@ -5,8 +5,8 @@ function up -d "Update system"
     and rustup update
     # The waybar indicator caches its result for hours, so refresh it here
     # instead of leaving the bar stale until its next interval.
-    # Without a running waybar, for example over SSH, there is nothing to do.
+    # Without a running waybar there is nothing to do.
     and begin
-        pkill -RTMIN+9 waybar; or true
+        $DOTFILES/waybar/signal 9 2>/dev/null; or true
     end
 end

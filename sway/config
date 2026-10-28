@@ -99,8 +99,9 @@ bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
 
-# reload sway configuration
-bindsym $mod+p reload
+# reload sway configuration and restart waybar, which runs as a user service
+# (home.nix) and picks up changed bar scripts only when restarted
+bindsym $mod+p exec ~/.config/sway/session reload
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -116,10 +117,6 @@ mode "resize" {
 }
 
 bindsym $mod+i mode "resize"
-
-bar {
-    swaybar_command waybar
-}
 
 # Machine-specific: workspace to output mappings
 workspace $ws_browser output HDMI-A-1
@@ -181,6 +178,11 @@ client.urgent           $red        $red        $bg         $red        $red
 include /etc/sway/config.d/*
 
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
+
+# The systemd session (waybar, mako, swayidle, the polkit agent and the
+# portals), started with sway and stopped when it exits or crashes
+exec ~/.config/sway/session start
+exec ~/.config/sway/session watch
 
 # Machine-specific: mouse, configured through ratbagd. The ratbagd device name
 # is derived from the device node and changes, so look it up by model.

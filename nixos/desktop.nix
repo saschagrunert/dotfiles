@@ -13,10 +13,17 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    extraPackages = with pkgs; [
-      waybar
-    ];
+    # The defaults are either unused here (swaylock, foot, wmenu,
+    # brightnessctl, pulseaudio, whose pactl wpctl replaces) or installed
+    # elsewhere (grim, swayidle and waybar through home-manager).
+    extraPackages = [ ];
   };
+
+  # sway/session starts and stops the systemd session instead. NixOS' version
+  # imports the environment and starts the session as separate commands at the
+  # same time, and its shutdown hook never fires: it chains the stop with &&
+  # to a swaymsg that fails when sway closes the connection.
+  environment.etc."sway/config.d/nixos.conf".enable = false;
 
   programs.dconf.enable = true;
 

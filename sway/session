@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# The systemd session of this sway, which nixos/desktop.nix takes over from
+# NixOS' nixos.conf. The session belongs to the sway whose socket is in the
+# systemd environment, so a second sway, for example a nested one for testing,
+# leaves it alone.
+#
+#   start   import the environment and start the session, at sway's start
+#   watch   stop the session when sway exits or crashes
+#   reload  reload sway and restart waybar, which picks up changed bar scripts
+#           only when restarted
+set -euo pipefail
+
+owner() {
+	systemctl --user show-environment | sed -n 's/^SWAYSOCK=//p'
+}
+
+case ${1:-} in
+start)
+	# The owner still answering means this is a second sway. A hung one does
+	# not count, its session is taken over.
+	current=$(owner)
+	if [ -n "$current" ] && [ "$current" != "$SWAYSOCK" ] &&
+		timeout 2 swaymsg -s "$current" -t get_version >/dev/null 2>&1; then
+		exit 0
+	fi
+	# One script, so no session unit starts before the environment is
+	# imported. A session left active by a sway that was killed keeps its
+	# units failing against the dead Wayland socket, so it is stopped and the
+	# units' failed state cleared first. It takes stopping
+	# graphical-session.target itself: the portal keeps it needed after
+	# sway-session.target, which is bound to it, stops.
+	dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+	systemctl --user stop graphical-session.target
+	# Units that are not failed are usually not loaded either, which
+	# reset-failed reports as an error.
+	units=$(systemctl --user show -p ConsistsOf --value graphical-session.target)
+	# shellcheck disable=SC2086 # One word per unit.
+	[ -z "$units" ] || systemctl --user reset-failed $units 2>/dev/null || true
+	exec systemctl --user start sway-session.target
+	;;
+watch)
+	# swaymsg returns once the shutdown event arrives or, on a crash, the
+	# connection drops. It fails when sway closes the connection first, so the
+	# stop must not depend on its status.
+	swaymsg -t subscribe '["shutdown"]' >/dev/null 2>&1 || true
+	[ "$(owner)" = "$SWAYSOCK" ] || exit 0
+	exec systemctl --user stop graphical-session.target
+	;;
+reload)
+	# sway reports a broken config itself, the bar restarts either way
+	swaymsg reload >/dev/null || true
+	[ "$(owner)" = "$SWAYSOCK" ] || exit 0
+	# A bar that hit the start limit has to be reset before it restarts. A
+	# stopped one is not loaded, which reset-failed reports as an error.
+	systemctl --user reset-failed waybar 2>/dev/null || true
+	exec systemctl --user restart waybar
+	;;
+*)
+	echo "usage: session <start|watch|reload>" >&2
+	exit 1
+	;;
+esac
