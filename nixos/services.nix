@@ -34,6 +34,20 @@
       ProcessSizeMax = 0;
     };
 
+    # A switch would restart PipeWire under its running clients, which drops
+    # audio and makes waybar's pulseaudio module abort. Instead, an update
+    # takes effect when the user manager starts again: at a login after every
+    # session (tmux and SSH included) has ended, or a reboot. To apply it right
+    # away, run `systemctl --user restart pipewire pipewire-pulse wireplumber`
+    # followed by `swaymsg reload`, which brings back the bar the restart
+    # crashes. Their sockets are only restarted together with the services, so
+    # they stay as well.
+    user.services = {
+      pipewire.restartIfChanged = false;
+      pipewire-pulse.restartIfChanged = false;
+      wireplumber.restartIfChanged = false;
+    };
+
     # Order every login session before the Chrome stop hook, so it runs before
     # the session is torn down. The drop-in applies to all session-N.scope
     # units, whatever number greetd's session gets.
