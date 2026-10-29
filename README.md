@@ -61,6 +61,7 @@ mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
 rustfmt/                       # Rust formatter config
 sway/
+├── chrome-apps                # Starts the Chrome apps once the browser runs
 └── config                     # Sway compositor config
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers

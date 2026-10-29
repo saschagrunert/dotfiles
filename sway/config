@@ -168,10 +168,10 @@ for_window [app_id="piper"] floating enable, fullscreen disable
 # assign to workspaces, Chrome windows open where they are needed
 assign [app_id="Alacritty"] workspace 2
 
-# Machine-specific: Chrome apps installed by hand (Red Hat, Kubernetes and
-# CNCF Slack, then Gmail and Red Hat Calendar)
-assign [app_id="chrome-bohdkodhmnjcidbkgciajlmiaklckdhh-Default"] workspace 0
+# Machine-specific: Chrome apps installed by hand (Kubernetes, Red Hat and
+# CNCF Slack, then Gmail and Google Calendar)
 assign [app_id="chrome-bapgbnlceddfbodjocmfjbbcpciifgle-Default"] workspace 0
+assign [app_id="chrome-bohdkodhmnjcidbkgciajlmiaklckdhh-Default"] workspace 0
 assign [app_id="chrome-clkknhmbffimmbcfcmilfkodeaaoihdo-Default"] workspace 0
 assign [app_id="chrome-fmgjjmmmlfnkbppncabfkddbjimcfncm-Default"] workspace 3
 assign [app_id="chrome-kjbdgfilnfhdoflbpgamdcdgpehopbep-Default"] workspace 3
@@ -208,3 +208,12 @@ exec alacritty -e fish -C 'tmux new-session -A -s main'
 # Normal Chrome windows have no assign, so start Chrome on workspace 1 instead
 # of the output that happens to be focused at startup
 exec swaymsg "workspace 1; exec google-chrome-stable"
+
+# Machine-specific: Chrome apps to start once the browser runs, in the order of
+# the assigns. Gmail and Calendar open on the Red Hat account, not the first.
+exec ~/.config/sway/chrome-apps \
+    bapgbnlceddfbodjocmfjbbcpciifgle \
+    bohdkodhmnjcidbkgciajlmiaklckdhh \
+    clkknhmbffimmbcfcmilfkodeaaoihdo \
+    'fmgjjmmmlfnkbppncabfkddbjimcfncm=https://mail.google.com/mail/?authuser=sgrunert@redhat.com' \
+    'kjbdgfilnfhdoflbpgamdcdgpehopbep=https://calendar.google.com/calendar/?authuser=sgrunert@redhat.com'

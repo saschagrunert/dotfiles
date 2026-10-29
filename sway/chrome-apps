@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Start the Chrome apps given as <id> or <id>=<url>, the URL opens the app on
+# that page instead of its start page. Chrome restores no app windows itself,
+# and starting an app before the browser could keep Chrome from restoring its
+# normal windows, so wait for the first one. sway puts a new window on an
+# unfocused workspace after the one last focused there, not at the end, so each
+# app is moved after the one before it when both share a workspace.
+set -euo pipefail
+
+running() {
+	swaymsg -t get_tree | jq -e --arg id "$1" 'any(.. | objects; .app_id? == $id)' >/dev/null
+}
+
+workspace() {
+	swaymsg -t get_tree | jq -r --arg id "$1" '.. | objects | select(.type? == "workspace") | select(any(.. | objects; .app_id? == $id)) | .name'
+}
+
+for _ in {1..60}; do
+	running google-chrome && break
+	sleep 1
+done
+running google-chrome || {
+	echo "no Chrome window after a minute" >&2
+	exit 1
+}
+
+prev=""
+for app in "$@"; do
+	id=${app%%=*}
+	cur=chrome-$id-Default
+	if ! running "$cur"; then
+		args=(--profile-directory=Default --app-id="$id")
+		if [[ $app == *=* ]]; then
+			args+=(--app-launch-url-for-shortcuts-menu-item="${app#*=}")
+		fi
+		google-chrome-stable "${args[@]}"
+		for _ in {1..20}; do
+			running "$cur" && break
+			sleep 0.5
+		done
+		ws=$(workspace "$cur")
+		if [ -n "$prev" ] && [ -n "$ws" ] && [ "$(workspace "$prev")" = "$ws" ]; then
+			swaymsg "[app_id=\"$prev\"] mark --add _chrome_apps; [app_id=\"$cur\"] move container to mark _chrome_apps; unmark _chrome_apps" >/dev/null
+		fi
+	fi
+	prev=$cur
+done
