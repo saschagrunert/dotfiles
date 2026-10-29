@@ -29,7 +29,6 @@
   },
   "sway/workspaces": {
     "all-outputs": true,
-    "format": "<span size='x-large'>{name}</span>",
     "disable-scroll": true,
   },
   // The drawers show their first module and expand to the left on hover, so
