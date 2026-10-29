@@ -10,7 +10,7 @@ set $purple     #bd93f9
 set $red        #ff5555
 
 # Machine-specific: output configuration (4K, left to right)
-output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5 transform 270
+output HDMI-A-1 resolution 3840x2160@60Hz position 0,110 scale 1.5 transform 270
 output DP-1 resolution 3840x2160@120Hz position 1440,430 scale 1.5
 output DP-2 resolution 3840x2160@120Hz position 4000,430 scale 1.5
 output HDMI-A-2 resolution 3840x2160@60Hz position 6560,0 scale 1.5 transform 90
