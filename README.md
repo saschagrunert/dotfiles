@@ -112,7 +112,7 @@ the system closure.
 To add a new host, create a directory under `nixos/hosts/` with its own
 `hardware.nix` and `boot.nix`, then add a new `nixosConfigurations` entry in
 `flake.nix`. The machine-specific parts of `sway/config` (outputs, workspace
-mapping, input devices) are marked with comments.
+mapping, Chrome app assigns, input devices) are marked with comments.
 
 ## Installation
 

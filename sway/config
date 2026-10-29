@@ -80,12 +80,10 @@ bindsym $mod+minus scratchpad show
 
 # Workspaces 0 to 3 are numbered left to right, one per output (see the
 # mappings below), 4 and 5 open on the focused output
-set $ws_browser 1
-set $ws_terminal 2
 
 # switch to workspace
-bindsym $mod+q workspace $ws_browser
-bindsym $mod+w workspace $ws_terminal
+bindsym $mod+q workspace 1
+bindsym $mod+w workspace 2
 
 bindsym $mod+0 workspace 0
 bindsym $mod+1 workspace 1
@@ -95,8 +93,8 @@ bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
 
 # move focused container to workspace
-bindsym $mod+Shift+q move container to workspace $ws_browser
-bindsym $mod+Shift+w move container to workspace $ws_terminal
+bindsym $mod+Shift+q move container to workspace 1
+bindsym $mod+Shift+w move container to workspace 2
 
 bindsym $mod+Shift+0 move container to workspace 0
 bindsym $mod+Shift+1 move container to workspace 1
@@ -168,7 +166,15 @@ for_window [app_id="nm-connection-editor"] floating enable, fullscreen disable
 for_window [app_id="piper"] floating enable, fullscreen disable
 
 # assign to workspaces, Chrome windows open where they are needed
-assign [app_id="Alacritty"] workspace $ws_terminal
+assign [app_id="Alacritty"] workspace 2
+
+# Machine-specific: Chrome apps installed by hand (Red Hat, Kubernetes and
+# CNCF Slack, then Gmail and Red Hat Calendar)
+assign [app_id="chrome-bohdkodhmnjcidbkgciajlmiaklckdhh-Default"] workspace 0
+assign [app_id="chrome-bapgbnlceddfbodjocmfjbbcpciifgle-Default"] workspace 0
+assign [app_id="chrome-clkknhmbffimmbcfcmilfkodeaaoihdo-Default"] workspace 0
+assign [app_id="chrome-fmgjjmmmlfnkbppncabfkddbjimcfncm-Default"] workspace 3
+assign [app_id="chrome-kjbdgfilnfhdoflbpgamdcdgpehopbep-Default"] workspace 3
 
 workspace_auto_back_and_forth yes
 focus_on_window_activation smart
@@ -199,6 +205,6 @@ exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
     ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
 exec alacritty -e fish -C 'tmux new-session -A -s main'
 
-# Chrome has no assign, so start it on the browser workspace instead of the
-# output that happens to be focused at startup
-exec swaymsg "workspace $ws_browser; exec google-chrome-stable"
+# Normal Chrome windows have no assign, so start Chrome on workspace 1 instead
+# of the output that happens to be focused at startup
+exec swaymsg "workspace 1; exec google-chrome-stable"
