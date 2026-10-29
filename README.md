@@ -61,8 +61,7 @@ mako/                          # Notification daemon config
 nvim/                          # Neovim config (lazy.nvim plugins)
 rustfmt/                       # Rust formatter config
 sway/
-├── config                     # Sway compositor config
-└── workspace-scroll           # Workspace scroll helper
+└── config                     # Sway compositor config
 tmux/                          # Terminal multiplexer config
 wallpaper/                     # Desktop wallpapers
 yazi/                          # File manager config and theme
@@ -82,7 +81,7 @@ waybar/
 ├── nix-updates                # Pending nixpkgs updates indicator
 ├── nix-updates.jq             # Update grouping and tooltip, tested by make updates-test
 ├── power                      # Power consumption monitor
-├── shared                     # Runs a monitor script once for both bars
+├── shared                     # Runs a monitor script once across bars
 ├── temps                      # Hardware temperature monitor
 ├── testdata/                  # Fixtures for make updates-test
 └── tooltip.sh                 # Shared tooltip drawing: meters, graphs, headers

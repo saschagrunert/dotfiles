@@ -9,9 +9,11 @@ set $fg         #f8f8f2
 set $purple     #bd93f9
 set $red        #ff5555
 
-# Machine-specific: output configuration (dual 4K)
-output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5
-output HDMI-A-2 resolution 3840x2160@60Hz position 2560,0 scale 1.5
+# Machine-specific: output configuration (4K, left to right)
+output HDMI-A-1 resolution 3840x2160@60Hz position 0,0 scale 1.5 transform 270
+output DP-1 resolution 3840x2160@120Hz position 1440,430 scale 1.5
+output DP-2 resolution 3840x2160@120Hz position 4000,430 scale 1.5
+output HDMI-A-2 resolution 3840x2160@60Hz position 6560,0 scale 1.5 transform 90
 
 # Wallpaper
 set $wallpaper ~/.dotfiles/wallpaper/blurred.jpg
@@ -76,13 +78,16 @@ bindsym $mod+Shift+a focus child
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
-set $ws_browser "0:󰖟"
-set $ws_terminal "0:"
+# Workspaces 0 to 3 are numbered left to right, one per output (see the
+# mappings below), 4 and 5 open on the focused output
+set $ws_browser 1
+set $ws_terminal 2
 
 # switch to workspace
 bindsym $mod+q workspace $ws_browser
 bindsym $mod+w workspace $ws_terminal
 
+bindsym $mod+0 workspace 0
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
@@ -93,6 +98,7 @@ bindsym $mod+5 workspace 5
 bindsym $mod+Shift+q move container to workspace $ws_browser
 bindsym $mod+Shift+w move container to workspace $ws_terminal
 
+bindsym $mod+Shift+0 move container to workspace 0
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
@@ -122,8 +128,10 @@ bar {
 }
 
 # Machine-specific: workspace to output mappings
-workspace $ws_browser output HDMI-A-1
-workspace $ws_terminal output HDMI-A-2
+workspace 0 output HDMI-A-1
+workspace 1 output DP-1
+workspace 2 output DP-2
+workspace 3 output HDMI-A-2
 
 # take a screenshot
 bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
@@ -159,8 +167,7 @@ for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, fullscreen dis
 for_window [app_id="nm-connection-editor"] floating enable, fullscreen disable
 for_window [app_id="piper"] floating enable, fullscreen disable
 
-# assign to workspaces
-assign [app_id="google-chrome"] workspace $ws_browser
+# assign to workspaces, Chrome windows open where they are needed
 assign [app_id="Alacritty"] workspace $ws_terminal
 
 workspace_auto_back_and_forth yes
@@ -191,4 +198,7 @@ exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
     ratbagctl "$m" led 0 set mode cycle duration 8000 brightness 255; \
     ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
 exec alacritty -e fish -C 'tmux new-session -A -s main'
-exec google-chrome-stable
+
+# Chrome has no assign, so start it on the browser workspace instead of the
+# output that happens to be focused at startup
+exec swaymsg "workspace $ws_browser; exec google-chrome-stable"

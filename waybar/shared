@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Run the continuous waybar script named $1 once for all bars. There is one bar
-# per output, and each would otherwise run its own copy, sampling the same data
-# twice. The bar holding the lock runs the script and publishes every line to a
-# file, the other bars print that file whenever it changes. A bar that goes
-# away with its output releases the lock, and another one takes over.
+# Run the continuous waybar script named $1 only once while several bars run,
+# like the old and new bar overlapping during a sway reload. Each would
+# otherwise run its own copy, sampling the same data twice or polling a rate
+# limited endpoint twice. The bar holding the lock runs the script and
+# publishes every line to a file, the other bars print that file whenever it
+# changes. A bar that goes away releases the lock, and another one takes over.
 set -euo pipefail
 
 name=${1:?usage: shared <script>}
