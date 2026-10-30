@@ -215,9 +215,12 @@ exec swaymsg "workspace 0; layout splitv; workspace 3; layout splitv; \
 
 # Machine-specific: Chrome apps to start once the browser runs, in the order of
 # the assigns. Gmail and Calendar open on the Red Hat account, not the first.
+# Gmail then takes two thirds of the height, set only after the moves since
+# moving a window resets its size.
 exec ~/.config/sway/chrome-apps \
     bapgbnlceddfbodjocmfjbbcpciifgle \
     bohdkodhmnjcidbkgciajlmiaklckdhh \
     clkknhmbffimmbcfcmilfkodeaaoihdo \
     'fmgjjmmmlfnkbppncabfkddbjimcfncm=https://mail.google.com/mail/?authuser=sgrunert@redhat.com' \
-    'kjbdgfilnfhdoflbpgamdcdgpehopbep=https://calendar.google.com/calendar/?authuser=sgrunert@redhat.com'
+    'kjbdgfilnfhdoflbpgamdcdgpehopbep=https://calendar.google.com/calendar/?authuser=sgrunert@redhat.com' && \
+    swaymsg '[app_id="chrome-fmgjjmmmlfnkbppncabfkddbjimcfncm-Default"] resize set height 67 ppt'
