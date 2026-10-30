@@ -205,9 +205,13 @@ exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
     ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
 exec alacritty -e fish -C 'tmux new-session -A -s main'
 
+# Machine-specific: stack the windows on the portrait outputs. sway picks the
+# workspace layout from the output size, but the workspaces created at startup
+# still split horizontally on the rotated outputs.
 # Normal Chrome windows have no assign, so start Chrome on workspace 1 instead
-# of the output that happens to be focused at startup
-exec swaymsg "workspace 1; exec google-chrome-stable"
+# of the output that happens to be focused at startup.
+exec swaymsg "workspace 0; layout splitv; workspace 3; layout splitv; \
+    workspace 1; exec google-chrome-stable"
 
 # Machine-specific: Chrome apps to start once the browser runs, in the order of
 # the assigns. Gmail and Calendar open on the Red Hat account, not the first.
