@@ -20,9 +20,11 @@ set $wallpaper ~/.dotfiles/wallpaper/blurred.jpg
 output * bg $wallpaper fill
 
 # Input configuration
+# The mouse runs at 2800 DPI, and the flat 0.667 factor cancels the 1.5 output
+# scale, so the cursor covers the same physical pixels per inch as on Windows.
 input type:pointer {
-    accel_profile adaptive
-    pointer_accel -0.2
+    accel_profile flat
+    pointer_accel -0.333
 }
 input type:keyboard {
     xkb_layout us
@@ -199,7 +201,8 @@ exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
 # is derived from the device node and changes, so look it up by model.
 exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
     [ -n "$m" ] || exit 0; \
-    ratbagctl "$m" resolution 0 dpi set 800; \
+    ratbagctl "$m" resolution 0 dpi set 2800; \
+    ratbagctl "$m" resolution default set 0; \
     ratbagctl "$m" resolution active set 0; \
     ratbagctl "$m" led 0 set mode cycle duration 8000 brightness 255; \
     ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
