@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Claude plan usage: the current session and today's share of the week on the
-# bar, a meter for every rate limit with the time it resets, today's share and
-# the running Claude Code sessions in the tooltip. The limits come from the
-# usage endpoint Claude Code shows in /usage, called with its OAuth token,
-# which does not count against them.
+# Claude plan usage: the week and today's share of it on the bar, a meter for
+# every rate limit with the time it resets, today's share and the running
+# Claude Code sessions in the tooltip. The limits come from the usage endpoint
+# Claude Code shows in /usage, called with its OAuth token, which does not
+# count against them.
 set -euo pipefail
 shopt -s nullglob
 
@@ -22,7 +22,6 @@ URL=https://api.anthropic.com/api/oauth/usage
 US=$'\x1f'
 ICON=
 ORANGE="#ffb86c"
-WEEK_ICON=󰨳
 # The weekdays the week is shared across, as numbered by %u from Monday.
 WORKDAYS=12345
 
@@ -114,11 +113,12 @@ fetch() {
 		error="unexpected response"
 		return
 	fi
-	mapfile -t rows <<<"$out"
-	if [ ${#rows[@]} -lt 2 ]; then
-		error="no limits in response"
+	# The bar shows the week, so a response without it keeps the last values.
+	if [[ $out != *$'\n'Week$US* ]]; then
+		error="no weekly limit in response"
 		return
 	fi
+	mapfile -t rows <<<"$out"
 	breakdown=${rows[0]:0:WIDTH}
 	limits=()
 	for row in "${rows[@]:1}"; do
@@ -255,26 +255,27 @@ emit() {
 	# until the next fetch, the week resetting again a week later and without
 	# its usage by product.
 	#
-	# Today's share of the week follows the weekly limit, with the meter of
-	# what it used and how far ahead or behind the days before left it.
+	# The weekly limit also gives today's share of the week, shown after all
+	# limits with the meter of what it used and how far ahead or behind the
+	# days before left it.
 	#
-	# The bar shows the session and today's share, followed by the week in
-	# parentheses once it warns, and warns when either does. A model or surface
-	# running out leaves the rest of the plan usable, so it is left out. The
-	# server already warns from 75%, which is early for limits that reset on
-	# their own, so a warning starts at 95%.
-	local session="" week="" class="" tooltip row name pct reset active
-	local shown when left right gap tag warn i next days=0 dayno=0 used=0 day="" balance=0
+	# The bar shows the week and today's share, and warns when the week does.
+	# The plan has no session limit any more. A model or surface running out
+	# leaves the rest of the plan usable, so it is left out. The server already
+	# warns from 75%, which is early for limits that reset on their own, so a
+	# warning starts at 95%.
+	local week="" class="" tooltip row name pct reset active
+	local shown when left right gap tag i next days=0 dayno=0 used=0 day="" balance=0
 	tooltip="${ header "Claude usage";}"
 	for row in "${limits[@]}"; do
 		IFS=$US read -r name pct reset active <<<"$row"
 		next=$reset
 		((reset > 0 && reset <= EPOCHSECONDS)) && pct=0 reset=0
 		printf -v shown '%3d%%' "$pct"
-		warn=$((pct >= 95))
-		case $name in Session | Week) ((warn)) && class=warning ;; esac
-		[ "$name" = Session ] && session=$shown
-		[ "$name" = Week ] && ((warn)) && week=" ($WEEK_ICON $pct%)"
+		if [ "$name" = Week ]; then
+			week=$shown
+			((pct >= 95)) && class=warning
+		fi
 		[ "$row" = "${limits[0]}" ] || tooltip+="\n<span size='xx-small'> </span>"
 		right="" gap="" tag=""
 		[ "$active" = true ] && tag=" active"
@@ -288,7 +289,9 @@ emit() {
 		[ "$name" = Week ] || continue
 		[ -n "$breakdown" ] && ((reset == next)) && tooltip+="\n${ label "$breakdown";}"
 		((next > 0)) && budget "$pct" $((reset ? reset : next + 7 * 86400))
-		((days)) || continue
+	done
+
+	if ((days)); then
 		if ((dayno)); then
 			right="${ label Day;} $dayno ${ label of;} $days" left="Day $dayno of $days"
 		else
@@ -307,17 +310,16 @@ emit() {
 			right=Ahead left=$balance%
 		elif ((balance < 0)); then
 			right=Behind left=$((-balance))%
-		else
-			continue
 		fi
-		gap=""
-		for ((i = ${#shown} + ${#right} + ${#left} + 20; i < WIDTH; i++)); do gap+=" "; done
-		tooltip+="$gap ${ label "$right";} $left"
-	done
+		if ((balance)); then
+			gap=""
+			for ((i = ${#shown} + ${#right} + ${#left} + 20; i < WIDTH; i++)); do gap+=" "; done
+			tooltip+="$gap ${ label "$right";} $left"
+		fi
+	fi
 
-	# Today's share follows the session after a slash, which stays while the
-	# session is unknown to tell them apart. The balance counts against it, so
-	# a share left over from the days before makes it negative and one
+	# Today's share follows the week after a slash. The balance counts against
+	# it, so a share left over from the days before makes it negative and one
 	# overdrawn on a day off positive, colored by which it is.
 	local today="" share
 	if ((days)) && { [ -n "$day" ] || ((balance)); }; then
@@ -329,7 +331,7 @@ emit() {
 
 	# Old values are dimmed and lose their class while fetching fails. Without
 	# any value the bar only shows the icon, dimmed as well.
-	local text="${session:+ $session}$today$week" color=$ORANGE
+	local text="${week:+ $week}$today" color=$ORANGE
 	if [ -z "$text" ]; then
 		color=$DIM class=""
 	elif [ -n "$error" ]; then
