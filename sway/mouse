@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Configure the G403 through ratbagd: keep 2800 DPI as the only resolution, so
+# nothing can change the speed matched with Windows, map the DPI button to F13
+# for the screenshot binding, and cycle the LEDs. The ratbagd device name is
+# derived from the device node and changes, so look it up by model.
+set -euo pipefail
+
+m=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1)
+[ -n "$m" ] || exit 0
+
+# ratbagctl saves the profile to the mouse's flash on every set, so skip a
+# setting the mouse already has. The get command is the set command cut before
+# "set", and its output has to end with the given text. A failed write is
+# reported by ratbagctl and does not stop the remaining settings.
+ensure() {
+	local want=$1 get=()
+	shift
+	for arg; do
+		[ "$arg" = set ] && break
+		get+=("$arg")
+	done
+	[[ $(ratbagctl "$m" "${get[@]}" get) == *"$want" ]] || ratbagctl "$m" "$@" || true
+}
+
+ensure 2800dpi resolution 0 dpi set 2800
+ensure 0 resolution default set 0
+ensure 0 resolution active set 0
+for res in 1 2 3 4; do
+	ensure True resolution "$res" disabled set
+done
+# Read back from the mouse, a key shows up as the macro '↕KEY_F13'
+ensure "KEY_F13'" button 5 action set key KEY_F13
+for led in 0 1; do
+	ensure "mode: cycle, duration: 8000, brightness: 255" \
+		led "$led" set mode cycle duration 8000 brightness 255
+done

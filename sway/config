@@ -137,6 +137,8 @@ workspace 3 output HDMI-A-2
 bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 # The selection is taken first, so a cancelled slurp leaves the clipboard alone
 bindsym $mod+Shift+v exec g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied"
+# The DPI button of the mouse sends F13, which xkb maps to XF86Tools
+bindcode 191 exec g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied"
 bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 
 # move workspace to other output
@@ -197,15 +199,8 @@ include /etc/sway/config.d/*
 
 exec_always wpctl set-volume @DEFAULT_SOURCE@ 1.0
 
-# Machine-specific: mouse, configured through ratbagd. The ratbagd device name
-# is derived from the device node and changes, so look it up by model.
-exec sh -c 'm=$(ratbagctl list | sed -n "s/: *Logitech G403.*//p" | head -n1); \
-    [ -n "$m" ] || exit 0; \
-    ratbagctl "$m" resolution 0 dpi set 2800; \
-    ratbagctl "$m" resolution default set 0; \
-    ratbagctl "$m" resolution active set 0; \
-    ratbagctl "$m" led 0 set mode cycle duration 8000 brightness 255; \
-    ratbagctl "$m" led 1 set mode cycle duration 8000 brightness 255'
+# Machine-specific: mouse, configured through ratbagd
+exec ~/.config/sway/mouse
 exec alacritty -e fish -C 'tmux new-session -A -s main'
 
 # Normal Chrome windows have no assign, so start Chrome on workspace 1 instead
