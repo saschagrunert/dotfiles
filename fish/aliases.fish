@@ -66,7 +66,6 @@ abbr -a ta tmux attach
 abbr -a tg cd \~ \&\& tmux
 abbr -a tl tmux list-sessions
 abbr -a ts tmux new-session -s
-abbr -a unrar NIXPKGS_ALLOW_UNFREE=1 nix shell --impure nixpkgs\#unrar -c unrar x
 abbr -a v nvim
 abbr -a vr yazi
 abbr -a lg lazygit

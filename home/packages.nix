@@ -31,6 +31,7 @@
     jq
     ripgrep
     tmux
+    unrar
     unzip
     wget
     yazi
