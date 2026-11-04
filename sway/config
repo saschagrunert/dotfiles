@@ -134,11 +134,13 @@ workspace 2 output DP-2
 workspace 3 output HDMI-A-2
 
 # take a screenshot
-bindsym $mod+v exec mkdir -p ~/downloads && grim -g "$(slurp)" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
-# The selection is taken first, so a cancelled slurp leaves the clipboard alone
-bindsym $mod+Shift+v exec g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied"
+# A region binding pressed while slurp is open cancels the selection instead of
+# stacking another overlay. The selection is taken first, so a cancelled slurp
+# leaves the clipboard alone.
+bindsym $mod+v exec pkill -x slurp || (g=$(slurp) && mkdir -p ~/downloads && grim -g "$g" ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved")
+bindsym $mod+Shift+v exec pkill -x slurp || (g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied")
 # The DPI button of the mouse sends F13, which xkb maps to XF86Tools
-bindcode 191 exec g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied"
+bindcode 191 exec pkill -x slurp || (g=$(slurp) && grim -g "$g" - | wl-copy && notify-send "Screenshot copied")
 bindsym $mod+Ctrl+v exec mkdir -p ~/downloads && grim ~/downloads/screenshot-$(date +%Y%m%d-%H%M%S).png && notify-send "Screenshot saved"
 
 # move workspace to other output

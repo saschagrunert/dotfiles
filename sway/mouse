@@ -30,7 +30,8 @@ for res in 1 2 3 4; do
 done
 # Read back from the mouse, a key shows up as the macro '↕KEY_F13'
 ensure "KEY_F13'" button 5 action set key KEY_F13
+# The mouse comes up with dark LEDs although ratbagd reads them back as set, and
+# only a write lights them again, so set them on every start.
 for led in 0 1; do
-	ensure "mode: cycle, duration: 8000, brightness: 255" \
-		led "$led" set mode cycle duration 8000 brightness 255
+	ratbagctl "$m" led "$led" set mode cycle duration 8000 brightness 255 || true
 done
