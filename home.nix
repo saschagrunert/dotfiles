@@ -82,6 +82,10 @@ in
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      # gsettings-desktop-schemas defaults this to false, the GTK settings
+      # portal passes it on and Chrome 144+ then disables middle-click paste
+      # of the primary selection.
+      gtk-enable-primary-paste = true;
     };
   };
 

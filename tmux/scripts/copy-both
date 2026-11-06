@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Copy stdin to the clipboard and to the primary selection. tmux mouse
+# selections use this, so a middle click in Chrome and other apps pastes them,
+# while keyboard yanks keep the plain copy-command and only fill the clipboard.
+# Both are written here so the clipboard does not depend on the attached
+# terminal passing OSC 52 through.
+tee >(wl-copy --primary) | wl-copy
