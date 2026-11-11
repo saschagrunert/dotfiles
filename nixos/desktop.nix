@@ -8,6 +8,12 @@
 
   services.udev.extraRules = ''
     SUBSYSTEM=="powercap", KERNEL=="intel-rapl:0|amd_rapl:0", ACTION=="add", RUN+="${pkgs.coreutils}/bin/chmod a+r /sys/class/powercap/%k/energy_uj"
+
+    # The second HID interface of the Turtle Beach VelocityOne Flight yoke fails
+    # once polled, and usbhid then resets the whole device about every second
+    # until nothing has it open. Any program opening its event node starts that,
+    # for example Chrome when a page calls navigator.getGamepads().
+    ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_interface", ATTRS{idVendor}=="10f5", ATTRS{idProduct}=="7001", ATTR{bInterfaceNumber}=="01", ATTR{authorized}="0"
   '';
 
   programs.sway = {
