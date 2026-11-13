@@ -32,6 +32,15 @@ in
       ".tmux/scripts".source = dotfile "tmux/scripts";
       ".claude/settings.json".source = dotfile "claude/settings.json";
       ".claude/CLAUDE.md".source = dotfile "claude/CLAUDE.md";
+      # Separate config dir for claude-enmaas, so the gateway key does not clash
+      # with the claude.ai login in ~/.claude. Sessions, memory, history, skills
+      # and plugins are shared with ~/.claude, the login state is not.
+      ".claude-enmaas/settings.json".source = dotfile "claude/settings.json";
+      ".claude-enmaas/CLAUDE.md".source = dotfile "claude/CLAUDE.md";
+      ".claude-enmaas/projects".source = link "${config.home.homeDirectory}/.claude/projects";
+      ".claude-enmaas/history.jsonl".source = link "${config.home.homeDirectory}/.claude/history.jsonl";
+      ".claude-enmaas/skills".source = link "${config.home.homeDirectory}/.claude/skills";
+      ".claude-enmaas/plugins".source = link "${config.home.homeDirectory}/.claude/plugins";
     };
 
     pointerCursor = {
