@@ -14,8 +14,6 @@ _: {
     direnv = {
       enable = true;
       silent = true;
-      # The direnv package already hooks fish through vendor_conf.d
-      enableFishIntegration = false;
       nix-direnv.enable = true;
     };
     mtr.enable = true;
