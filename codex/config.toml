@@ -1,13 +1,18 @@
 # Same no-prompt posture as claude/settings.json (bypassPermissions)
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
 
 [tui]
 alternate_screen = "never"
 screen_reader_detection_done = true
 
 [tui.model_availability_nux]
-"gpt-6.1-sol" = 1
+"gpt-6.1-sol" = 3
 
 [projects."/home/sascha/.dotfiles"]
+trust_level = "trusted"
+
+[projects."/home/sascha/git/conmon-rs"]
 trust_level = "trusted"

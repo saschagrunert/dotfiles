@@ -12,6 +12,7 @@ abbr -a lt "$_eza -lT"
 abbr -a llt "$_eza -laT"
 
 abbr -a cl claude
+abbr -a co codex
 abbr -a dush du -sh \*
 abbr -a f fd
 abbr -a ff fd --type f
