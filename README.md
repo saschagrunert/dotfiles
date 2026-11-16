@@ -108,8 +108,9 @@ nixos/
 
 Packages are split in two: `nixos/packages.nix` holds what root and the system
 services need (toolchains used through `sudo`, container and networking tools),
-`home/packages.nix` holds the user session. Changing the latter does not rebuild
-the system closure.
+`home/packages.nix` holds the user session. Home Manager is integrated into the
+NixOS configuration, so changes to either list update the system closure and
+are applied with `make switch`.
 
 To add a new host, create a directory under `nixos/hosts/` with its own
 `hardware.nix` and `boot.nix`, then add a new `nixosConfigurations` entry in
@@ -138,10 +139,12 @@ After editing any configuration file, rebuild with:
 To validate the configuration locally:
 
 ```fish
-> make test     # all lint and format checks, see `make help`
-> make check    # verify symlinks and required commands on a switched system
-> make smoke    # run the waybar status scripts and validate their JSON
-> make lint     # nixfmt, statix, deadnix
+> make test        # all lint and format checks, see `make help`
+> make check       # verify symlinks and required commands on a switched system
+> make smoke       # run the waybar status scripts and validate their JSON
+> make status-test # test status script failures and recovery with fixtures
+> make nvim-test   # test editor commands without plugins
+> make lint        # nixfmt, statix, deadnix
 ```
 
 `make test` does not build anything. Use `make build` to check that the
@@ -161,7 +164,12 @@ To update flake inputs (nixpkgs, home-manager) to their latest versions:
 ```
 
 The waybar `custom/nix-updates` module shows how many packages an update would
-upgrade. Dependabot keeps the GitHub Actions up to date.
+upgrade. Its tooltip shows the last successful check time; a stale result or
+failed check stays visible until a refresh succeeds. A failed refresh does not
+expire a valid cached result; automatic checks resume when that result expires
+(after six hours by default) or `flake.lock` changes. Click again to retry sooner.
+Checks have a ten-minute deadline, configurable with `NIX_UPDATES_TIMEOUT`
+(seconds). Dependabot keeps the GitHub Actions up to date.
 
 ## Development Shells
 

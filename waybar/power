@@ -11,7 +11,7 @@ shopt -s nullglob
 # shellcheck source=tooltip.sh
 . "$(dirname "$0")/tooltip.sh"
 
-RAPL=/sys/class/powercap/intel-rapl:0
+RAPL=${RAPL_ROOT:-/sys/class/powercap/intel-rapl:0}
 # Package power limit (PPT) of the Ryzen 7 9800X3D in watts. AMD exposes no
 # RAPL constraints, so it cannot be read from sysfs.
 CPU_LIMIT=162
@@ -21,9 +21,15 @@ declare -a history=() watts=()
 # Print the CPU package energy counter in microjoules, or nothing without
 # RAPL.
 energy() {
-	local uj=""
-	{ IFS= read -r uj <"$RAPL/energy_uj"; } 2>/dev/null || true
-	echo "$uj"
+	sensor_value "$RAPL/energy_uj"
+}
+
+row() {
+	local name=$1 value=$2 limit=$3
+	printf '%s %5s' "${ label "$name";}" "${ reading "$value" W;}"
+	if [ -n "$value" ] && [ -n "$limit" ] && [ "$limit" -gt 0 ]; then
+		printf ' %s' "${ meter "${ percent "$value" "$limit";}" $((WIDTH - 12));}"
+	fi
 }
 
 # Print watts $1 as a percentage of limit $2.
@@ -37,27 +43,36 @@ percent() {
 emit() {
 	local prev_uj=$uj prev_time=$time
 	uj=$(energy)
-	time=${EPOCHREALTIME/[.,]/}
+	time=${ sample_time;}
 
-	# The counter wraps at max_energy_range_uj. A sample without it reads as
-	# 0W.
-	local cpu=0 d_uj d_us=$((time - prev_time)) max=0
+	# Missing samples or an unknown wrap range cannot establish a power reading.
+	local cpu="" d_uj d_us=$((time - prev_time)) max
 	if [ -n "$uj" ] && [ -n "$prev_uj" ] && [ "$d_us" -gt 0 ]; then
 		d_uj=$((uj - prev_uj))
 		if [ "$d_uj" -lt 0 ]; then
-			{ IFS= read -r max <"$RAPL/max_energy_range_uj"; } 2>/dev/null || true
-			d_uj=$((d_uj + max))
+			max=${ sensor_value "$RAPL/max_energy_range_uj";}
+			[ -z "$max" ] || d_uj=$((d_uj + max))
 		fi
-		cpu=$(((d_uj + d_us / 2) / d_us))
-		((cpu < 0)) && cpu=0
+		[ "$d_uj" -lt 0 ] || cpu=$(((d_uj + d_us / 2) / d_us))
 	fi
 
 	local gpu gpu_limit
-	gpu=$(((${ hwmon_value amdgpu power1_average fan1_input;} + 500000) / 1000000))
-	gpu_limit=$(((${ hwmon_value amdgpu power1_cap fan1_input;} + 500000) / 1000000))
-	local total=$((cpu + gpu))
-	record history "${ percent "$total" $((CPU_LIMIT + gpu_limit));}"
-	record watts "$total"
+	gpu=${ hwmon_value amdgpu power1_average fan1_input;}
+	gpu_limit=${ hwmon_value amdgpu power1_cap fan1_input;}
+	[ -z "$gpu" ] || gpu=$(((gpu + 500000) / 1000000))
+	[ -z "$gpu_limit" ] || gpu_limit=$(((gpu_limit + 500000) / 1000000))
+	local total=""
+	if [ -n "$cpu" ] && [ -n "$gpu" ]; then
+		total=$((cpu + gpu))
+		record watts "$total"
+	else
+		watts=()
+	fi
+	if [ -n "$total" ] && [ -n "$gpu_limit" ]; then
+		record history "${ percent "$total" $((CPU_LIMIT + gpu_limit));}"
+	else
+		history=()
+	fi
 
 	local sum=0 peak=0 w
 	for w in "${watts[@]}"; do
@@ -65,22 +80,20 @@ emit() {
 		((w > peak)) && peak=$w
 	done
 
-	local cpu_pct gpu_pct
-	cpu_pct=${ percent "$cpu" "$CPU_LIMIT";}
-	gpu_pct=${ percent "$gpu" "$gpu_limit";}
-
 	# The unit is shown once at the end to keep the module narrow.
 	local text tooltip
-	text=${ printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d  <span color='#ffb86c' size='large'>󰢮</span> %3d W" "$cpu" "$gpu";}
+	text=${ printf "<span color='#f1fa8c' size='large'>󰻠</span> %3s  <span color='#ffb86c' size='large'>󰢮</span> %3s W" "${cpu:-N/A}" "${gpu:-N/A}";}
 
 	tooltip="${ header Power;}\n${ graph "" "${history[@]}";}\n"
-	tooltip+="${ label "CPU  ";} ${ printf '%4dW' "$cpu";} ${ meter "$cpu_pct" $((WIDTH - 12));}\n"
-	tooltip+="${ label "GPU  ";} ${ printf '%4dW' "$gpu";} ${ meter "$gpu_pct" $((WIDTH - 12));}\n"
-	tooltip+="${ label Total;} <b>${total}W</b>  ${ label Average;} $((sum / ${#watts[@]}))W  ${ label Peak;} ${peak}W"
+	tooltip+="${ row "CPU  " "$cpu" "$CPU_LIMIT";}\n${ row "GPU  " "$gpu" "$gpu_limit";}\n"
+	tooltip+="${ label Total;} <b>${ reading "$total" W;}</b>"
+	if ((${#watts[@]})); then
+		tooltip+="  ${ label Average;} $((sum / ${#watts[@]}))W  ${ label Peak;} ${peak}W"
+	fi
 
 	printf '{"text": "%s", "tooltip": "%s"}\n' "$text" "${ spaced "$tooltip";}"
 }
 
 uj=$(energy)
-time=${EPOCHREALTIME/[.,]/}
+time=${ sample_time;}
 run emit "${1:-}"

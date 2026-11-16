@@ -1,8 +1,8 @@
 { pkgs, llvmVersion, ... }:
 {
   # System-wide packages: everything root or a system service needs. User
-  # session tooling lives in home/packages.nix, so changing it does not rebuild
-  # the system closure.
+  # session tooling lives in home/packages.nix. Both lists are part of the
+  # system closure through the integrated Home Manager configuration.
   environment.systemPackages = with pkgs; [
     # Toolchains. Needed system-wide because they are also used through sudo,
     # for example the Kubernetes and CRI-O builds in fish/functions/kubernetes.fish.

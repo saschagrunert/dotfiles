@@ -27,6 +27,7 @@ class=""
 
 # Print PWM value $1 out of $2 as a percentage.
 duty() {
+	[ -n "$1" ] || return 0
 	local max=${2:-255}
 	[ "$max" -gt 0 ] || max=255
 	echo $((($1 * 100 + max / 2) / max))
@@ -35,9 +36,10 @@ duty() {
 # Append a fan to the module text and tooltip: icon, label, RPM and duty cycle
 # percentage.
 add() {
-	text+="${text:+  }${ printf '%s %4d' "$1" "$3";}"
-	tooltip+="\\n${ label "${ printf '%-5s' "$2";}";} ${ printf '%4d RPM  %3d%%' "$3" "$4";}"
-	tooltip+=" ${ meter "$4" $((WIDTH - 21));}"
+	text+="${text:+  }${ printf '%s %4s' "$1" "${3:-N/A}";}"
+	tooltip+="\\n${ label "${ printf '%-5s' "$2";}";} ${ printf '%8s  %4s' "${ reading "$3" ' RPM';}" "${ reading "$4" %;}";}"
+	[ -z "$4" ] || tooltip+=" ${ meter "$4" $((WIDTH - 21));}"
+	return 0
 }
 
 # Motherboard headers reporting 0 RPM are treated as unconnected, except for
@@ -50,11 +52,11 @@ if dir=${ find_hwmon nct6799;}; then
 	for f in "$dir"/fan*_input; do
 		fan=${f##*/} rpm=""
 		fan=${fan%_input}
-		IFS= read -r rpm <"$f" 2>/dev/null || [ -n "$rpm" ] || continue
+		rpm=${ sensor_value "$f";}
+		[ -n "$rpm" ] || continue
 		if [ "$rpm" -gt 0 ] || [ "$fan" = fan2 ]; then
 			board[$fan]=$rpm
-			pwm[$fan]=0
-			IFS= read -r "pwm[$fan]" <"$dir/pwm${fan#fan}" 2>/dev/null || true
+			pwm[$fan]=${ sensor_value "$dir/pwm${fan#fan}";}
 			order+=("$fan")
 		fi
 	done
@@ -63,17 +65,19 @@ fi
 # Order: CPU, GPU, then the remaining board fans. The GPU fan stops at idle,
 # so it is always shown.
 if [ -n "${board[fan2]:-}" ]; then
-	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}" "${ duty "${pwm[fan2]:-0}";}"
+	add "${icons[fan2]}" "${labels[fan2]}" "${board[fan2]}" "${ duty "${pwm[fan2]}";}"
 	if [ "${board[fan2]}" -eq 0 ]; then
 		class="critical"
 	fi
+else
+	add "${icons[fan2]}" "${labels[fan2]}" "" ""
 fi
 add "$gpu_icon" GPU "${ hwmon_value amdgpu fan1_input;}" \
 	"${ duty "${ hwmon_value amdgpu pwm1 fan1_input;}" "${ hwmon_value amdgpu pwm1_max fan1_input;}";}"
 for fan in "${order[@]}"; do
 	if [ "$fan" != fan2 ]; then
 		add "${icons[$fan]:-$generic_icon}" "${labels[$fan]:-$fan}" "${board[$fan]}" \
-			"${ duty "${pwm[$fan]:-0}";}"
+			"${ duty "${pwm[$fan]}";}"
 	fi
 done
 

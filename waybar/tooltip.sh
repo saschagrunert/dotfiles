@@ -40,8 +40,29 @@ class() {
 
 # Print $1 divided by $2 with one decimal, rounded.
 fraction() {
+	if [ -z "$1" ]; then
+		printf 'N/A'
+		return
+	fi
 	local tenths=$((($1 * 10 + $2 / 2) / $2))
 	printf '%d.%d' $((tenths / 10)) $((tenths % 10))
+}
+
+# Keep units off an unavailable reading.
+reading() {
+	if [ -z "$1" ] || [ "$1" = N/A ]; then
+		printf 'N/A'
+	else
+		printf '%s%s' "$1" "${2:-}"
+	fi
+}
+
+# Monotonic microseconds for counter deltas, unaffected by clock adjustments.
+sample_time() {
+	local uptime fraction
+	read -r uptime _ </proc/uptime
+	fraction=${uptime#*.}000000
+	echo $((10#${uptime%.*} * 1000000 + 10#${fraction:0:6}))
 }
 
 # Print kibibytes $1 as gigabytes with one decimal.

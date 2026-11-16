@@ -24,9 +24,9 @@ ICON=
 ORANGE="#ffb86c"
 # The weekdays the week is shared across, as numbered by %u from Monday.
 WORKDAYS=12345
+NO_CREDENTIALS='no credentials, log in to Claude Code'
 
 credentials=${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.credentials.json
-[ -f "$credentials" ] || credentials=""
 
 # The last limits fetched, each "name pct reset active" with the reset
 # in epoch seconds or 0, the weekly usage by product, the times of
@@ -36,22 +36,57 @@ declare -a limits=()
 breakdown="" fetched=0 updated=0 wait=$FETCH error=""
 
 # They outlive the script, so a waybar reload neither fetches again nor starts
-# without values.
+# without values. The old claude.state file is ignored and can remain until
+# the runtime directory is cleared at logout or reboot.
 state=""
 if [ -n "${XDG_RUNTIME_DIR:-}" ]; then
-	state=$XDG_RUNTIME_DIR/waybar/claude.state
+	state=$XDG_RUNTIME_DIR/waybar/claude.state.json
 	mkdir -p "${state%/*}"
-	# shellcheck source=/dev/null
-	[ -f "$state" ] && . "$state"
+	# Cache data is never executed. Validate the whole snapshot before restoring
+	# it, so a malformed or interrupted write simply starts a fresh fetch.
+	if saved=$(jq -ce '
+		def uint: type == "number" and . >= 0 and . == floor;
+		def safe: type == "string" and (test("[\\u0000-\\u001f\"\\\\<>&]") | not);
+		select(type == "object")
+		| select(.fetched | uint) | select(.updated | uint)
+		| select(.wait | uint and . >= 60 and . <= 1800)
+		| select(.breakdown | safe) | select(.error | safe)
+		| select(.limits | type == "array")
+		| select(all(.limits[]; type == "string" and
+			(split("\u001f") | length == 4 and
+			(.[0] | test("^[A-Za-z0-9 ._%-]+$")) and
+			(.[1] | test("^[0-9]+$")) and (.[2] | test("^[0-9]+$")) and
+			(.[3] == "true" or .[3] == "false"))))
+	' "$state" 2>/dev/null); then
+		mapfile -t limits < <(jq -r '.limits[]' <<<"$saved")
+		breakdown=$(jq -r '.breakdown' <<<"$saved")
+		error=$(jq -r '.error' <<<"$saved")
+		read -r fetched updated wait < <(jq -r '[.fetched, .updated, .wait] | @tsv' <<<"$saved")
+	fi
 fi
+
+save_state() {
+	[ -n "$state" ] || return 0
+	local snapshot
+	snapshot=$(mktemp "${state}.XXXXXX") || return 0
+	if jq -cn --argjson limits "$(printf '%s\n' "${limits[@]}" | jq -Rsc 'split("\n") | map(select(length > 0))')" \
+		--arg breakdown "$breakdown" --arg error "$error" \
+		--argjson fetched "$fetched" --argjson updated "$updated" --argjson wait "$wait" \
+		'{limits: $limits, breakdown: $breakdown, error: $error,
+		fetched: $fetched, updated: $updated, wait: $wait}' >"$snapshot"; then
+		mv -f "$snapshot" "$state"
+	else
+		rm -f "$snapshot"
+	fi
+}
 
 # Fetch the limits. Claude Code renews the token, which lasts a few hours, so
 # an expired one means it has not run for a while. The token goes to curl on
 # stdin to keep it out of the process list.
 fetch() {
 	local token="" expires=0 response code rc=0
-	if [ -z "$credentials" ]; then
-		error="no credentials, log in to Claude Code"
+	if [ ! -f "$credentials" ]; then
+		error=$NO_CREDENTIALS
 		return
 	fi
 	IFS=$US read -r token expires < <(jq -r '.claudeAiOauth // {}
@@ -220,7 +255,6 @@ transcript_model() {
 # only leaves out its own session. Directories may contain anything, so the
 # characters breaking the tooltip are dropped.
 sessions() {
-	[ -n "$credentials" ] || return 0
 	local file pid start dir status stat id transcript model
 	for file in "${credentials%/*}"/sessions/*.json; do
 		IFS=$US read -r pid start dir status id < <(jq -r '[.pid, .procStart, .cwd, .status, .sessionId]
@@ -242,10 +276,12 @@ sessions() {
 }
 
 emit() {
-	if ((EPOCHSECONDS - fetched >= wait)); then
+	# A cheap file check notices a login promptly, without fetching or rewriting
+	# state on every sample while credentials are still missing.
+	if ((EPOCHSECONDS - fetched >= wait)) || { [ "$error" = "$NO_CREDENTIALS" ] && [ -f "$credentials" ]; }; then
 		fetched=$EPOCHSECONDS
 		fetch
-		[ -z "$state" ] || declare -p limits breakdown fetched updated wait error >"$state"
+		save_state
 	fi
 
 	# Each limit shows its name with the reset time on the right, then its

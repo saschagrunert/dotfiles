@@ -18,15 +18,29 @@ declare -a history=()
 # Select the discrete GPU through fan1_input, the integrated one also reports
 # load and VRAM. Its PCI address tells its clients apart from the integrated
 # GPU ones.
-hwmon=${ find_hwmon amdgpu fan1_input;} || hwmon=""
-pdev=""
-[ -n "$hwmon" ] && pdev=$(basename "$(readlink -f "$hwmon/device")")
+hwmon="" pdev=""
 
-# Print the value of file $1, or 0 if unavailable.
-value() {
-	local v=""
-	{ IFS= read -r v <"$1"; } 2>/dev/null || true
-	echo "${v:-0}"
+select_gpu() {
+	[ -z "$hwmon" ] || [ ! -d "$hwmon/device" ] || return 0
+	local old_device=$pdev device
+	hwmon=${ find_hwmon amdgpu fan1_input;} || hwmon=""
+	pdev=""
+	if [ -n "$hwmon" ]; then
+		device=$(readlink -f "$hwmon/device") || device=""
+		[ -z "$device" ] || pdev=${device##*/}
+	fi
+	if [ "$old_device" != "$pdev" ]; then
+		clients="" history=()
+	fi
+}
+
+row() {
+	printf '%s ' "${ label "$1";}"
+	if [ -n "$2" ]; then
+		printf '%3d%% %s' "$2" "${ meter "$2" $((WIDTH - 11));}"
+	else
+		printf 'N/A'
+	fi
 }
 
 # Print "pid client ns vram name" separated by tabs for every DRM client of the
@@ -35,6 +49,7 @@ value() {
 # file descriptor sharing it, so only the first one counts. The files are read
 # with getline, since awk aborts on a file argument that vanishes.
 sample_clients() {
+	[ -n "$pdev" ] || return 0
 	local fds
 	fds=$(find /proc/[0-9]*/fd -lname '/dev/dri/*' 2>/dev/null || true)
 	[ -n "$fds" ] || return 0
@@ -66,29 +81,35 @@ sample_clients() {
 }
 
 emit() {
+	select_gpu
 	local prev_clients=$clients prev_time=$time
 	clients=$(sample_clients)
-	time=${EPOCHREALTIME/[.,]/}
+	time=${ sample_time;}
 
 	local busy used total sclk mclk
-	busy=${ value "$hwmon/device/gpu_busy_percent";}
-	used=$((${ value "$hwmon/device/mem_info_vram_used";} >> 10))
-	total=$((${ value "$hwmon/device/mem_info_vram_total";} >> 10))
-	sclk=${ value "$hwmon/freq1_input";}
-	mclk=${ value "$hwmon/freq2_input";}
-	local vram_pct=0
-	[ "$total" -gt 0 ] && vram_pct=$(((used * 100 + total / 2) / total))
-	record history "$busy"
+	busy=${ sensor_value "$hwmon/device/gpu_busy_percent";}
+	used=${ sensor_value "$hwmon/device/mem_info_vram_used" 1024;}
+	total=${ sensor_value "$hwmon/device/mem_info_vram_total" 1024;}
+	sclk=${ sensor_value "$hwmon/freq1_input";}
+	mclk=${ sensor_value "$hwmon/freq2_input";}
+	local vram_pct=""
+	if [ -n "$used" ] && [ "${total:-0}" -gt 0 ]; then
+		vram_pct=$(((used * 100 + total / 2) / total))
+	fi
+	if [ -n "$busy" ]; then
+		record history "$busy"
+	else
+		history=()
+	fi
 
 	local text tooltip
-	text=${ printf "<span color='#ffb86c' size='large'>󰢮</span> %3d%% (%sGB)" "$busy" "${ gigabytes "$used";}";}
+	text=${ printf "<span color='#ffb86c' size='large'>󰢮</span> %4s (%s)" "${ reading "$busy" %;}" "${ reading "${ gigabytes "$used";}" GB;}";}
 
 	tooltip="${ header GPU;}\n${ graph "" "${history[@]}";}\n"
-	tooltip+="${ label "Load ";} ${ printf '<b>%3d%%</b>' "$busy";} ${ meter "$busy" $((WIDTH - 11));}\n"
-	tooltip+="${ label "VRAM ";} ${ printf '%3d%%' "$vram_pct";} ${ meter "$vram_pct" $((WIDTH - 11));}\n"
-	tooltip+="${ label Clock;} ${ fraction "$sclk" 1000000000;}GHz  "
-	tooltip+="${ label Memory;} ${ fraction "$mclk" 1000000000;}GHz  "
-	tooltip+="${ label VRAM;} ${ gigabytes "$used";}/${ gigabytes "$total";}GB"
+	tooltip+="${ row "Load " "$busy";}\n${ row "VRAM " "$vram_pct";}\n"
+	tooltip+="${ label Clock;} ${ reading "${ fraction "$sclk" 1000000000;}" GHz;}  "
+	tooltip+="${ label Memory;} ${ reading "${ fraction "$mclk" 1000000000;}" GHz;}  "
+	tooltip+="${ label VRAM;} ${ reading "${ gigabytes "$used";}" GB;}/${ reading "${ gigabytes "$total";}" GB;}"
 
 	# Process load is the share of the elapsed time a process kept the graphics
 	# and compute engines busy, summed over its clients.
@@ -103,7 +124,7 @@ emit() {
 		NR == FNR { prev[$2] = $3; next }
 		{
 			vram[$1] += $4; name[$1] = $5
-			if ($2 in prev && elapsed > 0) ns[$1] += $3 - prev[$2]
+			if ($2 in prev && elapsed > 0 && $3 >= prev[$2]) ns[$1] += $3 - prev[$2]
 		}
 		END {
 			for (p in vram) {
@@ -113,9 +134,10 @@ emit() {
 		}' <(printf '%s\n' "$prev_clients") <(printf '%s\n' "$clients") |
 		sort -t $'\t' -k2,2nr -k3,3nr | head -n "$TOP")
 
-	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "${ class "$busy";}"
+	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "${ class "${busy:-0}";}"
 }
 
+select_gpu
 clients=$(sample_clients)
-time=${EPOCHREALTIME/[.,]/}
+time=${ sample_time;}
 run emit "${1:-}"
