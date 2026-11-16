@@ -71,6 +71,7 @@ waybar/
 ├── config.jsonc               # Waybar module config
 ├── style.css                  # Waybar styling
 ├── claude                     # Claude plan usage and running sessions
+├── codex                      # Codex monthly spend and running sessions
 ├── cpu                        # CPU usage, per-core and process monitor
 ├── disk                       # Filesystem usage and disk I/O monitor
 ├── dnd                        # Do-not-disturb toggle
@@ -127,6 +128,11 @@ mapping, Chrome app assigns, input devices) are marked with comments.
 
 Change the `[user]` and `[sendemail]` sections in `git/gitconfig` to your own
 name, email, GPG signing key and mail server first.
+
+The Codex Waybar panel sums the cost the ChatGPT backend reports for every
+Codex session of the billing month on this machine. The bar shows the month
+used and what today spent of a working day's share. Set the monthly allowance
+as `LIMIT` and the daily share as `DAILY` in `waybar/codex`.
 
 ## Rebuilding
 

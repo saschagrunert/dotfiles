@@ -46,7 +46,7 @@ if [ -n "${XDG_RUNTIME_DIR:-}" ]; then
 	# it, so a malformed or interrupted write simply starts a fresh fetch.
 	if saved=$(jq -ce '
 		def uint: type == "number" and . >= 0 and . == floor;
-		def safe: type == "string" and (test("[\\u0000-\\u001f\"\\\\<>&]") | not);
+		def safe: type == "string" and (test("[[:cntrl:]\"\\\\<>&]") | not);
 		select(type == "object")
 		| select(.fetched | uint) | select(.updated | uint)
 		| select(.wait | uint and . >= 60 and . <= 1800)
@@ -211,27 +211,6 @@ budget() {
 	balance=$((${day:-0} - used))
 }
 
-# Print when epoch $1 comes, as the time of day if that is today and with the
-# weekday otherwise, followed by how long until then.
-reset_time() {
-	local left=$(($1 - EPOCHSECONDS)) day today when
-	((left < 0)) && left=0
-	printf -v day '%(%F)T' "$1"
-	printf -v today '%(%F)T' -1
-	if [ "$day" = "$today" ]; then
-		printf -v when '%(%H:%M)T' "$1"
-	else
-		printf -v when '%(%a %H:%M)T' "$1"
-	fi
-	if ((left >= 86400)); then
-		printf '%s\t%dd %dh' "$when" $((left / 86400)) $((left % 86400 / 3600))
-	elif ((left >= 3600)); then
-		printf '%s\t%dh %dm' "$when" $((left / 3600)) $((left % 3600 / 60))
-	else
-		printf '%s\t%dm' "$when" $(((left + 59) / 60))
-	fi
-}
-
 # Print the model of the last reply in transcript $1 and its effort, separated
 # by a tab, like "Opus 5.5" and "high". The transcript is read from its end,
 # where a line still being written may be cut off, so lines that do not parse
@@ -318,7 +297,7 @@ emit() {
 		if ((reset > 0)); then
 			IFS=$'\t' read -r when left <<<"${ reset_time "$reset";}"
 			right="${ label Resets;} $when ${ label in;} $left"
-			for ((i = ${#name} + ${#tag} + ${#when} + ${#left} + 12; i < WIDTH; i++)); do gap+=" "; done
+			gap=${ pad $((${#name} + ${#tag} + ${#when} + ${#left} + 12));}
 		fi
 		tooltip+="\n<b>$name</b>${tag:+ ${ label "${tag# }";}}${right:+$gap $right}"
 		tooltip+="\n<b>$shown</b> ${ meter "$pct" $((WIDTH - 5));}"
@@ -333,8 +312,7 @@ emit() {
 		else
 			right="${ label "Day off";}" left="Day off"
 		fi
-		gap=""
-		for ((i = ${#left} + 6; i < WIDTH; i++)); do gap+=" "; done
+		gap=${ pad $((${#left} + 6));}
 		tooltip+="\n<span size='xx-small'> </span>\n<b>Today</b>$gap $right"
 		if [ -n "$day" ]; then
 			printf -v shown '%3d%%' "$day"
@@ -348,8 +326,7 @@ emit() {
 			right=Behind left=$((-balance))%
 		fi
 		if ((balance)); then
-			gap=""
-			for ((i = ${#shown} + ${#right} + ${#left} + 20; i < WIDTH; i++)); do gap+=" "; done
+			gap=${ pad $((${#shown} + ${#right} + ${#left} + 20));}
 			tooltip+="$gap ${ label "$right";} $left"
 		fi
 	fi
@@ -403,13 +380,11 @@ emit() {
 			max=$((WIDTH - ${#status} - 3))
 			((max < 2)) && max=2
 			((${#dir} > max)) && dir="…${dir: -$((max - 1))}"
-			gap=""
-			for ((i = ${#dir} + ${#status} + 3; i < WIDTH; i++)); do gap+=" "; done
+			gap=${ pad $((${#dir} + ${#status} + 3));}
 			((n)) && tooltip+="\n<span size='xx-small'> </span>"
 			tooltip+="\n<span color='$color'>●</span> $dir$gap ${ label "$status";}"
 			[ -n "$model" ] || continue
-			gap=""
-			for ((i = ${#model} + ${#effort} + 3; i < WIDTH; i++)); do gap+=" "; done
+			gap=${ pad $((${#model} + ${#effort} + 3));}
 			tooltip+="\n  $model${effort:+$gap ${ label "$effort";}}"
 		done
 	fi

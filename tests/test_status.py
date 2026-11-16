@@ -1,5 +1,6 @@
 """Behavioral checks for status scripts, without desktop services or network access."""
 
+import base64
 import json
 import os
 import re
@@ -10,7 +11,9 @@ import subprocess
 import tempfile
 import time
 import unittest
+from datetime import datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -35,6 +38,8 @@ class StatusTests(unittest.TestCase):
             "XDG_RUNTIME_DIR": str(self.runtime),
             "XDG_CACHE_HOME": str(self.cache),
             "CLAUDE_CONFIG_DIR": str(self.credentials),
+            "CODEX_HOME": str(self.root / "codex"),
+            "XDG_STATE_HOME": str(self.root / "state"),
             "HWMON_ROOT": str(self.hwmon),
             "RAPL_ROOT": str(self.root / "rapl"),
             "NIX_UPDATES_FLAKE": str(self.root),
@@ -328,6 +333,201 @@ emit""",
         )
         self.assertIn("25%", again["text"])
         self.assertNotIn("request failed", again["tooltip"])
+
+    def test_codex_ignores_malformed_state(self):
+        state = self.root / "state" / "waybar"
+        state.mkdir(parents=True)
+        (state / "codex.json").write_text('{"costs":{')
+        self.assertIn("no credentials", self.payload("codex")["tooltip"])
+        json.loads((state / "codex.json").read_text())
+
+    def test_codex_counts_resumed_sessions_and_today(self):
+        home = self.root / "codex"
+        now = datetime.now()
+        then = now - timedelta(days=40)
+        new = "01a1e399-0000-7000-8000-000000000001"
+        old = "01a1e399-0000-7000-8000-000000000002"
+        files = {}
+        for sid, start in ((new, now), (old, then)):
+            directory = home / "sessions" / start.strftime("%Y/%m/%d")
+            directory.mkdir(parents=True)
+            files[sid] = directory / f"rollout-{start:%Y-%m-%dT%H-%M-%S}-{sid}.jsonl"
+            # The turn context has no effort, which must not shift the cost.
+            files[sid].write_text(
+                json.dumps(
+                    {"type": "turn_context", "payload": {"model": "gpt-test"}},
+                    separators=(",", ":"),
+                )
+                + "\n"
+            )
+        # A base64url payload, which plain base64 decoding rejects.
+        for n in range(64):
+            raw = json.dumps({"exp": 9999999999, "pad": "?" * n + ">"}).encode()
+            payload = base64.urlsafe_b64encode(raw).decode().rstrip("=")
+            if "-" in payload or "_" in payload:
+                break
+        (home / "auth.json").write_text(
+            json.dumps(
+                {"tokens": {"access_token": f"h.{payload}.s", "account_id": "a"}}
+            )
+        )
+        # The old session cost $1 when the month started and spent $2 since.
+        month = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y-%m")
+        state = self.root / "state" / "waybar"
+        state.mkdir(parents=True)
+        (state / "codex.json").write_text(
+            json.dumps(
+                {
+                    "month": month,
+                    "day": "",
+                    "day_spent": 0,
+                    "fetched": 0,
+                    "updated": 0,
+                    "wait": 300,
+                    "error": "",
+                    "costs": {old: 1000000},
+                    "base": {old: 1000000},
+                }
+            )
+        )
+        self.command(
+            "curl",
+            f"""cat >/dev/null
+cat <<'JSON'
+{{"threads":[{{"thread_id":"{new}","native_usage_usd_micros":5000000}},
+{{"thread_id":"{old}","native_usage_usd_micros":3000000}}]}}
+JSON
+printf 200""",
+        )
+        data = self.payload(
+            "codex",
+            f"""exec 3<"{files[new]}"
+pgrep() {{ echo "$$"; }}
+emit""",
+        )
+        # $7 of $300 this month, and the new session's $5 of today's $15.
+        self.assertRegex(data["text"], r" 2% / 33%$")
+        tooltip = re.sub("<[^>]*>", "", data["tooltip"])
+        self.assertIn("$7 of $300", tooltip)
+        self.assertIn("$5 of $15 a working day", tooltip)
+        self.assertRegex(tooltip, r"gpt-test +\$5")
+
+    def codex_session(self, sid, start):
+        directory = self.root / "codex" / "sessions" / start.strftime("%Y/%m/%d")
+        directory.mkdir(parents=True, exist_ok=True)
+        path = directory / f"rollout-{start:%Y-%m-%dT%H-%M-%S}-{sid}.jsonl"
+        path.write_text("")
+        return path
+
+    def codex_login(self):
+        raw = json.dumps({"exp": 9999999999}).encode()
+        payload = base64.urlsafe_b64encode(raw).decode().rstrip("=")
+        (self.root / "codex").mkdir(exist_ok=True)
+        (self.root / "codex" / "auth.json").write_text(
+            json.dumps(
+                {"tokens": {"access_token": f"h.{payload}.s", "account_id": "a"}}
+            )
+        )
+
+    def codex_state(self, **fields):
+        state = self.root / "state" / "waybar"
+        state.mkdir(parents=True, exist_ok=True)
+        month = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y-%m")
+        snapshot = {
+            "month": month,
+            "day": "",
+            "day_spent": 0,
+            "fetched": 0,
+            "updated": 0,
+            "wait": 300,
+            "error": "",
+            "costs": {},
+            "base": {},
+        } | fields
+        (state / "codex.json").write_text(json.dumps(snapshot))
+        return state / "codex.json"
+
+    def test_codex_restores_error_snapshot(self):
+        sid = "01a1e399-0000-7000-8000-000000000001"
+        now = int(time.time())
+        self.codex_state(
+            fetched=now, updated=now - 60, error="offline", costs={sid: 5000000}
+        )
+        data = self.payload("codex")
+        tooltip = re.sub("<[^>]*>", "", data["tooltip"])
+        self.assertIn("$5 of $300, $295 left, 1 session", tooltip)
+        self.assertIn("offline", tooltip)
+
+    def test_claude_restores_error_snapshot(self):
+        state = self.runtime / "waybar"
+        state.mkdir()
+        now = int(time.time())
+        (state / "claude.state.json").write_text(
+            json.dumps(
+                {
+                    "limits": ["Week\u001f25\u001f0\u001ffalse"],
+                    "breakdown": "",
+                    "error": "offline",
+                    "fetched": now,
+                    "updated": now - 60,
+                    "wait": 300,
+                }
+            )
+        )
+        data = self.payload("claude")
+        self.assertIn("25%", data["text"])
+        self.assertIn("offline", data["tooltip"])
+
+    def test_codex_batches_sessions_and_skips_odd_names(self):
+        self.codex_login()
+        now = datetime.now()
+        for n in range(150):
+            self.codex_session(f"01a1e399-0000-7000-8000-{n:012d}", now)
+        stray = self.root / "codex" / "sessions" / "rollout-renamed.jsonl"
+        stray.write_text("")
+        log = self.root / "batches"
+        # Each request answers $1 for every session it asks about.
+        self.command(
+            "curl",
+            f"""body=$(cat)
+jq -c '.thread_ids | length' <<<"$body" >>"{log}"
+jq -c '{{threads: [.thread_ids[] | {{thread_id: ., native_usage_usd_micros: 1000000}}]}}' <<<"$body"
+printf 200""",
+        )
+        data = self.payload("codex")
+        self.assertEqual(log.read_text().split(), ["100", "50"])
+        self.assertIn("$150 of $300", re.sub("<[^>]*>", "", data["tooltip"]))
+
+    def test_codex_keeps_costs_the_backend_does_not_report(self):
+        self.codex_login()
+        now = datetime.now()
+        old = "01a1e399-0000-7000-8000-000000000001"
+        new = "01a1e399-0000-7000-8000-000000000002"
+        self.codex_session(old, now - timedelta(days=40))
+        self.codex_session(new, now)
+        self.codex_state(costs={old: 3000000}, base={old: 1000000})
+        # No amount for the old session and none at all for the new one.
+        self.command(
+            "curl",
+            f"""cat >/dev/null
+printf '{{"threads":[{{"thread_id":"{old}","native_usage_usd_micros":null}}]}}\\n200'""",
+        )
+        tooltip = re.sub("<[^>]*>", "", self.payload("codex")["tooltip"])
+        self.assertIn("$2 of $300, $298 left, 1 session, 1 without usage yet", tooltip)
+        self.assertNotIn("No data", tooltip)
+
+    def test_codex_offline_does_not_rewrite_state_every_sample(self):
+        self.codex_login()
+        self.codex_session("01a1e399-0000-7000-8000-000000000001", datetime.now())
+        self.command("curl", "cat >/dev/null; exit 7")
+        self.payload(
+            "codex",
+            """emit >/dev/null
+before=$(stat -c '%i:%y' "$state")
+emit >/dev/null
+emit
+[[ $(stat -c '%i:%y' "$state") == "$before" ]]""",
+        )
 
     def test_missing_credentials_do_not_rewrite_state_every_sample(self):
         self.payload(

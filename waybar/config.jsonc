@@ -14,6 +14,7 @@
     "group/audio",
     "privacy",
     "custom/claude",
+    "custom/codex",
     "custom/failed-units",
     "custom/nix-updates",
     "group/time",
@@ -156,6 +157,11 @@
     "exec": "~/.config/waybar/shared claude",
     "return-type": "json",
     "on-click": "xdg-open https://claude.ai/settings/usage",
+  },
+  "custom/codex": {
+    "exec": "~/.config/waybar/shared codex",
+    "return-type": "json",
+    "on-click": "xdg-open https://chatgpt.com/settings/usage?tab=overview",
   },
   "custom/failed-units": {
     "exec": "~/.config/waybar/failed-units",

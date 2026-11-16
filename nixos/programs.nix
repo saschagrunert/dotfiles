@@ -28,4 +28,8 @@ _: {
 
   # defaultEditor only sets EDITOR, and some tools only read VISUAL
   environment.variables.VISUAL = "nvim";
+
+  # The Codex settings live in its system layer, so the project trust and state
+  # Codex writes to ~/.codex/config.toml never reach the repository
+  environment.etc."codex/config.toml".source = ../codex/config.toml;
 }

@@ -34,7 +34,6 @@ in
       ".claude/CLAUDE.md".source = dotfile "claude/CLAUDE.md";
       # Codex shares the global instructions with Claude Code
       ".codex/AGENTS.md".source = dotfile "claude/CLAUDE.md";
-      ".codex/config.toml".source = dotfile "codex/config.toml";
       # Separate config dir for claude-enmaas, so the gateway key does not clash
       # with the claude.ai login in ~/.claude. Sessions, memory, history, skills
       # and plugins are shared with ~/.claude, the login state is not.

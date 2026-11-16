@@ -51,6 +51,7 @@ window#waybar {
 #idle_inhibitor,
 #custom-dnd,
 #custom-claude,
+#custom-codex,
 #custom-failed-units,
 #custom-nix-updates,
 #clock,
@@ -75,6 +76,7 @@ window#waybar {
 #idle_inhibitor:hover,
 #custom-dnd:hover,
 #custom-claude:hover,
+#custom-codex:hover,
 #custom-failed-units:hover,
 #custom-nix-updates:hover,
 #clock:hover {
@@ -108,6 +110,7 @@ window#waybar {
 #custom-memory.warning,
 #custom-disk.warning,
 #custom-claude.warning,
+#custom-codex.warning,
 #custom-nix-updates.kernel,
 #privacy {
   color: #ffb86c;
