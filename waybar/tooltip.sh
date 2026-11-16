@@ -204,6 +204,37 @@ header() {
 		"$ACCENT" "$1" "$TRACK" "$rule"
 }
 
+# Print the spaces filling a row whose other text takes $1 cells.
+pad() {
+	local gap="" i
+	for ((i = $1; i < WIDTH; i++)); do gap+=" "; done
+	printf '%s' "$gap"
+}
+
+# Print when epoch $1 comes, as the time of day if that is today, with the
+# weekday within a week and with the date otherwise, followed by a tab and how
+# long until then.
+reset_time() {
+	local left=$(($1 - EPOCHSECONDS)) day today when
+	((left < 0)) && left=0
+	printf -v day '%(%F)T' "$1"
+	printf -v today '%(%F)T' -1
+	if [ "$day" = "$today" ]; then
+		printf -v when '%(%H:%M)T' "$1"
+	elif ((left < 7 * 86400)); then
+		printf -v when '%(%a %H:%M)T' "$1"
+	else
+		printf -v when '%(%b %-d %H:%M)T' "$1"
+	fi
+	if ((left >= 86400)); then
+		printf '%s\t%dd %dh' "$when" $((left / 86400)) $((left % 86400 / 3600))
+	elif ((left >= 3600)); then
+		printf '%s\t%dh %dm' "$when" $((left / 3600)) $((left % 3600 / 60))
+	else
+		printf '%s\t%dm' "$when" $(((left + 59) / 60))
+	fi
+}
+
 # Print label $1 dimmed.
 label() {
 	printf "<span color='%s'>%s</span>" "$DIM" "$1"

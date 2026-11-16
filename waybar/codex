@@ -1,0 +1,471 @@
+#!/usr/bin/env bash
+# Codex budget, laid out like the Claude panel: the month and what today spent
+# of a working day's share on the bar, a meter for each with the reset and
+# what is left in the tooltip, and the running Codex sessions with what each
+# cost. The spend sums what the thread usage endpoint behind the Codex /status
+# cost reports for every session of this machine active in the billing month,
+# called with the Codex OAuth token. Codex used elsewhere is not counted.
+set -euo pipefail
+shopt -s nullglob
+
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=tooltip.sh
+. "$(dirname "$0")/tooltip.sh"
+
+# The spend changes slowly, so it is fetched far less often than the sessions
+# are read. Every rejected fetch doubles the wait, up to $BACKOFF.
+FETCH=300
+BACKOFF=1800
+URL=https://chatgpt.com/backend-api/wham/usage/thread_usage/query
+# The monthly allowance and the share of every working day in dollars. The
+# backend reports no individual limit.
+LIMIT=300
+DAILY=15
+# Fields are separated by the unit separator. Unlike a tab it keeps empty
+# fields apart when read, and the fields never contain it.
+US=$'\x1f'
+ICON=
+CYAN="#8be9fd"
+# Billing months follow US Pacific dates.
+PACIFIC=America/Los_Angeles
+# The weekdays with a share, as numbered by %u from Monday.
+WORKDAYS=12345
+NO_CREDENTIALS='no credentials, log in to Codex'
+
+home=${CODEX_HOME:-$HOME/.codex}
+auth=$home/auth.json
+
+# The total cost of every session active in the billing month in millionths
+# of a dollar, by session id, and for the sessions started before it what
+# they cost when the month started, or when first seen in it. The month they
+# belong to, the times of the last fetch and the last successful one, the
+# wait until the next one, and why the last fetch failed. The local day and
+# the month spend before it give what the day spent, and missing counts the
+# sessions the backend has no usage for yet.
+declare -A costs=() base=()
+month="" fetched=0 updated=0 wait=$FETCH error="" day="" day_spent=0 missing=0
+
+# Print what session $1 spent in the month, its cost beyond its base, which
+# a late or partial report never takes below zero.
+cost() {
+	local spent=$((costs[$1] - ${base[$1]:-0}))
+	echo $((spent < 0 ? 0 : spent))
+}
+
+# Print what the month spent.
+total() {
+	local id sum=0
+	for id in "${!costs[@]}"; do
+		sum=$((sum + ${ cost "$id";}))
+	done
+	echo "$sum"
+}
+
+# They outlive the script and a reboot, so a waybar reload neither fetches
+# again nor starts without values, and the day keeps what it spent. State is
+# never executed. The whole snapshot is validated before it is restored, so a
+# malformed or interrupted write starts a fresh fetch.
+state=${XDG_STATE_HOME:-$HOME/.local/state}/waybar/codex.json
+mkdir -p "${state%/*}"
+if saved=$(jq -ce '
+	def uint: type == "number" and . >= 0 and . == floor;
+	def costs: type == "object"
+		and all(to_entries[]; (.key | test("^[0-9a-f-]{36}$")) and (.value | uint));
+	select(type == "object")
+	| select(.month | type == "string" and test("^[0-9]{4}-[0-9]{2}$"))
+	| select(.day | type == "string" and test("^([0-9]{4}-[0-9]{2}-[0-9]{2})?$"))
+	| select(.day_spent | type == "number" and . == floor)
+	| select(.fetched | uint) | select(.updated | uint) | select(.missing // 0 | uint)
+	| select(.wait | uint and . >= 60 and . <= 1800)
+	| select(.error | type == "string" and (test("[[:cntrl:]\"\\\\<>&]") | not))
+	| select(.costs | costs) | select(.base | costs)' "$state" 2>/dev/null); then
+	{
+		read -r month
+		read -r day
+		read -r day_spent
+		read -r fetched
+		read -r updated
+		read -r wait
+		read -r missing
+		IFS= read -r error
+	} < <(jq -r '.month, .day, .day_spent, .fetched, .updated, .wait, (.missing // 0), .error' <<<"$saved")
+	while read -r kind id cost; do
+		if [ "$kind" = c ]; then costs[$id]=$cost; else base[$id]=$cost; fi
+	done < <(jq -r '(.costs | to_entries[] | "c \(.key) \(.value)"),
+		(.base | to_entries[] | "b \(.key) \(.value)")' <<<"$saved")
+fi
+spent=${ total;}
+
+# Write the state when it changed. A fetch failing while offline is retried
+# on every update and leaves the same state, which is not written each time.
+save_state() {
+	local snapshot id json
+	json=$({
+		for id in "${!costs[@]}"; do echo "c $id ${costs[$id]}"; done
+		for id in "${!base[@]}"; do echo "b $id ${base[$id]}"; done
+	} | jq -Rnc --arg month "$month" --arg day "$day" --argjson day_spent "$day_spent" \
+		--argjson fetched "$fetched" --argjson updated "$updated" --argjson wait "$wait" \
+		--argjson missing "$missing" --arg error "$error" '[inputs | split(" ")] as $rows
+		| def pick($kind): [$rows[] | select(.[0] == $kind) | {(.[1]): (.[2] | tonumber)}]
+			| add // {} | to_entries | sort_by(.key) | from_entries;
+		{month: $month, day: $day, day_spent: $day_spent, fetched: $fetched,
+			updated: $updated, wait: $wait, missing: $missing, error: $error,
+			costs: pick("c"), base: pick("b")}') || return 0
+	[ "$json" != "${saved:-}" ] || return 0
+	snapshot=$(mktemp "$state.XXXXXX") || return 0
+	if printf '%s\n' "$json" >"$snapshot"; then
+		mv -f "$snapshot" "$state"
+		saved=$json
+	else
+		rm -f "$snapshot"
+	fi
+}
+
+# Print "id date old" for every session active since epoch $1, the start of
+# the billing month: its id, its local start date, and 1 if it started before
+# then. Session files are named after their local start time and a resumed
+# session keeps writing to its file, so the sessions are found by the time
+# their files changed. Start times compare as local time strings, and files
+# named otherwise are skipped.
+threads() {
+	local since f name stamp re='^([0-9]{4}-[0-9]{2}-[0-9]{2})T[0-9]{2}-[0-9]{2}-[0-9]{2}-([0-9a-f-]{36})\.jsonl$'
+	printf -v since '%(%Y-%m-%dT%H-%M-%S)T' "$1"
+	while IFS= read -r f; do
+		name=${f##*/rollout-}
+		[[ $name =~ $re ]] || continue
+		stamp=${name:0:19}
+		echo "${BASH_REMATCH[2]} ${BASH_REMATCH[1]} $([[ $stamp < $since ]] && echo 1 || echo 0)"
+	done < <(find "$home/sessions" "$home/archived_sessions" \
+		-name 'rollout-*.jsonl' -newermt "@$1" 2>/dev/null)
+}
+
+# Fetch the cost of the month's sessions, starting at epoch $1. Codex renews
+# the token, which lasts about ten days, so an expired one means it has not
+# run for a while. Its payload is base64url. The token goes to curl through a
+# file descriptor to keep it out of the process list.
+fetch() {
+	local token="" account="" expires sessions
+	if [ ! -f "$auth" ]; then
+		error=$NO_CREDENTIALS
+		return
+	fi
+	IFS=$US read -r token account < <(jq -r '.tokens // {}
+		| [.access_token // "", .account_id // ""] | map(tostring) | join("\u001f")' \
+		"$auth" 2>/dev/null) || true
+	if [ -z "$token" ]; then
+		error="no OAuth token, log in to Codex"
+		return
+	fi
+	expires=$(jq -Rr 'split(".")[1] | gsub("-"; "+") | gsub("_"; "/") | @base64d
+		| fromjson | .exp // 0 | floor' <<<"$token" 2>/dev/null) || expires=0
+	if ((expires <= EPOCHSECONDS)); then
+		error="token expired, start Codex to renew it"
+		return
+	fi
+	sessions=${ threads "$1";}
+	if [ -z "$sessions" ]; then
+		costs=() base=() spent=0 missing=0 updated=$EPOCHSECONDS wait=$FETCH error=""
+		baseline ""
+		return
+	fi
+
+	# The endpoint takes at most 100 sessions a request. Every batch must
+	# succeed, or the fetch keeps the values it had.
+	local -a ids batch
+	local out="" part i
+	mapfile -t ids < <(cut -d' ' -f1 <<<"$sessions")
+	for ((i = 0; i < ${#ids[@]}; i += 100)); do
+		batch=("${ids[@]:i:100}")
+		part=${ query "$token" "$account" "${batch[@]}";} || return 0
+		out+=$part$'\n'
+	done
+
+	# The backend reports no amount for a session it has no usage for yet, and
+	# leaves out ones it does not know. Both are unavailable rather than zero,
+	# so such a session keeps the cost known before, or counts as missing. A
+	# session started before the month keeps its base, and one first seen in
+	# it, resumed, takes its cost then, so only what it spends from then on
+	# counts.
+	local -A was=() wasbase=() reported=()
+	local id cost date old
+	for id in "${!costs[@]}"; do was[$id]=${costs[$id]}; done
+	for id in "${!base[@]}"; do wasbase[$id]=${base[$id]}; done
+	while IFS=$US read -r id cost; do
+		[ -n "$id" ] && [ -n "$cost" ] && reported[$id]=$cost
+	done <<<"$out"
+	costs=() base=() missing=0
+	while read -r id date old; do
+		cost=${reported[$id]:-${was[$id]:-}}
+		if [ -z "$cost" ]; then
+			missing=$((missing + 1))
+			continue
+		fi
+		costs[$id]=$cost
+		((old)) && base[$id]=${wasbase[$id]:-$cost}
+	done <<<"$sessions"
+	spent=${ total;} updated=$EPOCHSECONDS wait=$FETCH error=""
+	baseline "$sessions"
+}
+
+# Print "id cost" separated by the unit separator for the sessions $3... the
+# endpoint reports an amount for, with token $1 and account $2, or set error
+# and fail. A request that could not resolve or connect never reached the
+# server, so it is tried again on the next update to show the spend soon after
+# going online. Any other failure, like a timeout, may have reached it and is
+# tried again after a minute.
+query() {
+	local token=$1 account=$2 response code rc=0
+	shift 2
+	response=$(jq -nc '{thread_ids: $ARGS.positional}' --args "$@" |
+		curl -s -m 10 -w '\n%{http_code}' --data-binary @- \
+			-K <(printf 'header = "Authorization: Bearer %s"\nheader = "ChatGPT-Account-Id: %s"\n' "$token" "$account") \
+			-H "Content-Type: application/json" -H "originator: codex_cli_rs" "$URL") || rc=$?
+	case $rc in
+	0) ;;
+	6 | 7)
+		error="offline" fetched=0
+		return 1
+		;;
+	*)
+		error="request failed" fetched=$((EPOCHSECONDS - wait + 60))
+		return 1
+		;;
+	esac
+	code=${response##*$'\n'}
+	if [ "$code" = 429 ]; then
+		wait=$((wait * 2 > BACKOFF ? BACKOFF : wait * 2))
+		error="rate limited, next try in $((wait / 60))m"
+		return 1
+	elif [ "$code" = 401 ]; then
+		error="token rejected, start Codex to renew it"
+		return 1
+	elif [ "$code" != 200 ]; then
+		error="HTTP $code"
+		return 1
+	fi
+	if ! jq -r '.threads[] | select(.native_usage_usd_micros | type == "number" and . >= 0)
+		| [(.thread_id | gsub("[^0-9a-f-]"; "")), (.native_usage_usd_micros | floor)]
+		| map(tostring) | join("\u001f")' <<<"${response%$'\n'*}" 2>/dev/null; then
+		error="unexpected response"
+		return 1
+	fi
+}
+
+# Start a new local day at its first fetch, with the month spend before it as
+# the baseline of what the day spends. Sessions started that day, by the ids
+# and dates in $1, count for the day in full, so a day starting late, after a
+# reboot or without state, still has them. Usage of older sessions before the
+# first fetch is missed, which is little while waybar runs.
+baseline() {
+	local today id date old started=0
+	printf -v today '%(%F)T' -1
+	[ "$day" != "$today" ] || return 0
+	while read -r id date old; do
+		[ "$date" = "$today" ] && [ -n "${costs[$id]:-}" ] &&
+			started=$((started + ${ cost "$id";}))
+	done <<<"$1"
+	day=$today day_spent=$((spent - started))
+}
+
+# Currency arithmetic uses millionths of a dollar, preserving billing precision
+# until display. Format cents only after rounding, including an overdrawn
+# balance, and leave them out of whole dollars.
+money() {
+	local value=$1 sign=""
+	((value < 0)) && sign="-" value=$((-value))
+	local cents=$(((value + 5000) / 10000))
+	if ((cents % 100)); then
+		printf '%s$%d.%02d' "$sign" $((cents / 100)) $((cents % 100))
+	else
+		printf '%s$%d' "$sign" $((cents / 100))
+	fi
+}
+
+# Print "dir status model effort id" separated by the unit separator for every
+# running Codex session. A running Codex keeps its session file open, which
+# finds it. The status comes from the last turn event and the model and effort
+# from the last turn context, both read from the end of the file. Directories
+# may contain anything, so the characters breaking the tooltip are dropped.
+sessions() {
+	local pid file dir status model id
+	local -A seen=()
+	local -a pids files
+	mapfile -t pids < <(pgrep -x codex || true)
+	for pid in "${pids[@]}"; do
+		mapfile -t files < <(find "/proc/$pid/fd" -lname '*/rollout-*.jsonl' -printf '%l\n' 2>/dev/null)
+		for file in "${files[@]}"; do
+			[ -z "${seen[$file]:-}" ] || continue
+			seen[$file]=1
+			id=${file%.jsonl} id=${id: -36}
+			dir=$(readlink "/proc/$pid/cwd" 2>/dev/null) || dir="?"
+			dir=${dir//[[:cntrl:]\"\\<>&]/} dir=${dir/#"$HOME"/"~"}
+			case ${ tac -- "$file" 2>/dev/null | grep -a -m1 -oE '"type":"(task_started|task_complete|turn_aborted)"' || true;} in
+			*task_started*) status=busy ;;
+			*) status=idle ;;
+			esac
+			model=$(tac -- "$file" 2>/dev/null | grep -a -m1 -F '"type":"turn_context"' |
+				jq -r '.payload | [.model // "", .effort // ""]
+					| map(tostring | gsub("[^A-Za-z0-9 ._-]"; "") | .[:20]) | join("\u001f")' \
+					2>/dev/null || true)
+			printf '%s\n' "$dir$US$status$US${model:-$US}$US$id"
+		done
+	done
+}
+
+# The dates the panel works with, which change at most once a day: today's
+# local date as UTC midnight, the working days of the local month with
+# today's position among them or 0 on a day off, and the start and reset of
+# the Pacific billing month. UTC midnights keep the day arithmetic right
+# across a change to or from daylight saving time.
+dates_for="" current=0 days=0 dayno=0 month_start=0 reset=0
+dates() {
+	[ "$dates_for" != "$1 $2" ] || return 0
+	dates_for="$1 $2"
+	local start finish t wday
+	{ read -r current && read -r start && read -r finish; } < <(
+		printf '%s\n' "$1" "${1:0:7}-01" "${1:0:7}-01 +1 month" | date -u -f - +%s
+	)
+	{ read -r month_start && read -r reset; } < <(
+		printf '%s\n' "$2-01" "$2-01 +1 month" | TZ=$PACIFIC date -f - +%s
+	)
+	days=0 dayno=0
+	for ((t = start / 86400; t < finish / 86400; t++)); do
+		wday=$(((t + 3) % 7 + 1))
+		[[ $WORKDAYS == *$wday* ]] || continue
+		days=$((days + 1))
+		((t == current / 86400)) && dayno=$days
+	done
+	return 0
+}
+
+emit() {
+	local today current_month id
+	printf -v today '%(%F)T' -1
+	TZ=$PACIFIC printf -v current_month '%(%Y-%m)T' -1
+
+	# A new billing month starts with the costs of the old one as the base of
+	# its sessions and fetches right away. The day goes on across it, as the
+	# month turns during the local morning, so it keeps what it spent so far.
+	if [ "$month" != "$current_month" ]; then
+		if [ "$day" = "$today" ]; then
+			day_spent=$((day_spent - spent))
+		else
+			day_spent=0
+		fi
+		base=()
+		for id in "${!costs[@]}"; do base[$id]=${costs[$id]}; done
+		month=$current_month spent=0 fetched=0 updated=0 wait=$FETCH error="" missing=0
+	fi
+	dates "$today" "$month"
+
+	# A cheap file check notices a login promptly, without fetching or rewriting
+	# state on every sample while credentials are still missing.
+	if ((EPOCHSECONDS - fetched >= wait)) || { [ "$error" = "$NO_CREDENTIALS" ] && [ -f "$auth" ]; }; then
+		fetched=$EPOCHSECONDS
+		fetch "$month_start"
+		save_state
+	fi
+
+	# The month shows its reset on the right, then its meter and the spend. A
+	# warning starts at 95%, as for Claude.
+	local limit=$((LIMIT * 1000000)) tooltip pct shown month_pct="" class="" right when left
+	tooltip="${ header "Codex usage";}"
+	if ((updated)); then
+		pct=$((spent * 100 / limit))
+		printf -v month_pct '%3d%%' "$pct"
+		((pct >= 95)) && class=warning
+		IFS=$'\t' read -r when left <<<"${ reset_time "$reset";}"
+		right="${ pad $((5 + ${#when} + ${#left} + 12));} ${ label Resets;} $when ${ label in;} $left"
+		tooltip+="\n<b>Month</b>$right"
+		tooltip+="\n<b>$month_pct</b> ${ meter "$pct" $((WIDTH - 5));}"
+		local count="${#costs[@]} session"
+		((${#costs[@]} == 1)) || count+=s
+		((missing)) && count+=", $missing without usage yet"
+		tooltip+="\n${ label "${ money "$spent";} of ${ money "$limit";}, ${ money $((limit - spent));} left, $count";}"
+	fi
+
+	# Every working day, Monday to Friday, gets a share, and today shows what
+	# the day spent of it, in percent on the bar. Like today's share of the
+	# Claude week it stays uncolored within the share and turns red beyond it.
+	local today_pct="" cost
+	if ((updated)); then
+		local share=$((DAILY * 1000000)) used=0 p
+		[ "$day" = "$today" ] && used=$((spent - day_spent))
+		((used < 0)) && used=0
+		p=$((used * 100 / share))
+		if ((dayno)); then
+			left="Day $dayno of $days"
+			right="${ label Day;} $dayno ${ label of;} $days"
+		else
+			left="Day off"
+			right="${ label "Day off";}"
+		fi
+		tooltip+="\n<span size='xx-small'> </span>"
+		tooltip+="\n<b>Today</b>${ pad $((6 + ${#left}));} $right"
+		printf -v shown '%3d%%' "$p"
+		tooltip+="\n<b>$shown</b> ${ meter "$p" $((WIDTH - 5));}"
+		if ((used > share)); then
+			cost="${ money $((used - share));} over"
+		else
+			cost="${ money $((share - used));} left"
+		fi
+		tooltip+="\n${ label "${ money "$used";} of ${ money "$share";} a working day, $cost";}"
+
+		today_pct="$p%"
+		[ -z "$error" ] && ((used > share)) &&
+			today_pct="<span color='${GRADIENT[9]}'>$today_pct</span>"
+		today_pct=" / $today_pct"
+	fi
+
+	# Old values are dimmed and lose their class while fetching fails. Without
+	# any value the bar only shows the icon, dimmed as well.
+	local text="${month_pct:+ $month_pct}$today_pct" color=$CYAN
+	if [ -z "$text" ]; then
+		color=$DIM class=""
+	elif [ -n "$error" ]; then
+		text="<span color='$DIM'>$text</span>" class=""
+	fi
+	text="<span color='$color' size='large'>$ICON</span>$text"
+
+	if [ -n "$error" ]; then
+		if ((updated)); then
+			tooltip+="\n\n${ label "Updated ${ printf '%(%H:%M)T' "$updated";}, $error";}"
+		else
+			tooltip+="\n${ label "No data, $error";}"
+		fi
+	fi
+
+	# Each session shows its directory, shortened from the left to fit, and
+	# its status on the right. Below come the model of its last turn, and its
+	# effort and its total cost on the right, which a new session does not
+	# have yet. A small blank line keeps the sessions apart.
+	local -a running
+	mapfile -t running < <(sessions)
+	if [ ${#running[@]} -gt 0 ]; then
+		local dir status model effort max n sep
+		tooltip+="\n\n${ header Sessions;}"
+		for n in "${!running[@]}"; do
+			IFS=$US read -r dir status model effort id <<<"${running[n]}"
+			case $status in
+			busy) color=${GRADIENT[0]} ;;
+			*) color=$DIM ;;
+			esac
+			max=$((WIDTH - ${#status} - 3))
+			((${#dir} > max)) && dir="…${dir: -$((max - 1))}"
+			((n)) && tooltip+="\n<span size='xx-small'> </span>"
+			tooltip+="\n<span color='$color'>●</span> $dir${ pad $((${#dir} + ${#status} + 3));} ${ label "$status";}"
+			cost=""
+			[ -n "${costs[$id]:-}" ] && cost=${ money "${costs[$id]}";}
+			[ -n "$model$cost" ] || continue
+			sep=""
+			[ -n "$effort" ] && [ -n "$cost" ] && sep="  "
+			right="${effort:+${ label "$effort";}}$sep$cost"
+			tooltip+="\n  $model${right:+${ pad $((${#model} + ${#effort} + ${#sep} + ${#cost} + 3));} $right}"
+		done
+	fi
+
+	jq -cn --arg text "$text" --arg tooltip "${ spaced "$tooltip";}" --arg class "$class" \
+		'{text: $text, tooltip: ($tooltip | gsub("\\\\n"; "\n")), class: $class}'
+}
+
+run emit "${1:-}"
