@@ -30,6 +30,10 @@ scale() {
 
 # Print a tooltip row with label $1, temperature $2 and critical $3.
 row() {
+	if [ -z "$2" ]; then
+		printf '%s N/A' "${ label "${ printf '%-5s' "$1";}";}"
+		return
+	fi
 	local pct
 	pct=${ scale "$2" "$3";}
 	printf '%s %s %s' "${ label "${ printf '%-5s' "$1";}";}" \
@@ -39,33 +43,37 @@ row() {
 
 emit() {
 	local cpu gpu nvme ccd hotspot mem
-	cpu=$((${ hwmon_value k10temp temp1_input;} / 1000))
-	ccd=$((${ hwmon_value k10temp temp3_input;} / 1000))
+	cpu=${ hwmon_value k10temp temp1_input temp1_input 1000;}
+	ccd=${ hwmon_value k10temp temp3_input temp3_input 1000;}
 	# Select the discrete GPU, the integrated one also reports temp1_input.
-	gpu=$((${ hwmon_value amdgpu temp1_input fan1_input;} / 1000))
-	hotspot=$((${ hwmon_value amdgpu temp2_input fan1_input;} / 1000))
-	mem=$((${ hwmon_value amdgpu temp3_input fan1_input;} / 1000))
-	nvme=$((${ hwmon_value nvme temp1_input;} / 1000))
-	record history "${ scale "$cpu" "$CPU_CRIT";}"
+	gpu=${ hwmon_value amdgpu temp1_input fan1_input 1000;}
+	hotspot=${ hwmon_value amdgpu temp2_input fan1_input 1000;}
+	mem=${ hwmon_value amdgpu temp3_input fan1_input 1000;}
+	nvme=${ hwmon_value nvme temp1_input temp1_input 1000;}
+	if [ -n "$cpu" ]; then
+		record history "${ scale "$cpu" "$CPU_CRIT";}"
+	else
+		history=()
+	fi
 
 	local class=""
-	if [ "$cpu" -ge "$CPU_CRIT" ] || [ "$gpu" -ge "$GPU_CRIT" ] || [ "$nvme" -ge "$NVME_CRIT" ]; then
+	if [ "${cpu:-0}" -ge "$CPU_CRIT" ] || [ "${gpu:-0}" -ge "$GPU_CRIT" ] || [ "${nvme:-0}" -ge "$NVME_CRIT" ]; then
 		class="critical"
-	elif [ "$cpu" -ge "$CPU_WARN" ] || [ "$gpu" -ge "$GPU_WARN" ] || [ "$nvme" -ge "$NVME_WARN" ]; then
+	elif [ "${cpu:-0}" -ge "$CPU_WARN" ] || [ "${gpu:-0}" -ge "$GPU_WARN" ] || [ "${nvme:-0}" -ge "$NVME_WARN" ]; then
 		class="warning"
 	fi
 
 	# The unit is shown once at the end to keep the module narrow.
 	local text tooltip
-	text=${ printf "<span color='#f1fa8c' size='large'>󰻠</span> %3d" "$cpu";}
-	text+=${ printf "  <span color='#ffb86c' size='large'>󰢮</span> %3d" "$gpu";}
-	text+=${ printf "  <span color='#8be9fd' size='large'>󰆼</span> %3d °C" "$nvme";}
+	text=${ printf "<span color='#f1fa8c' size='large'>󰻠</span> %3s" "${cpu:-N/A}";}
+	text+=${ printf "  <span color='#ffb86c' size='large'>󰢮</span> %3s" "${gpu:-N/A}";}
+	text+=${ printf "  <span color='#8be9fd' size='large'>󰆼</span> %3s °C" "${nvme:-N/A}";}
 
 	tooltip="${ header "CPU temperature";}\n${ graph "" "${history[@]}";}\n"
 	tooltip+="${ row CPU "$cpu" "$CPU_CRIT";}\n"
 	tooltip+="${ row GPU "$gpu" "$GPU_CRIT";}\n"
 	tooltip+="${ row NVMe "$nvme" "$NVME_CRIT";}\n"
-	tooltip+="${ label CCD;} ${ccd}°C  ${ label "GPU hotspot";} ${hotspot}°C  ${ label VRAM;} ${mem}°C"
+	tooltip+="${ label CCD;} ${ reading "$ccd" °C;}  ${ label "GPU hotspot";} ${ reading "$hotspot" °C;}  ${ label VRAM;} ${ reading "$mem" °C;}"
 
 	printf '{"text": "%s", "tooltip": "%s", "class": "%s"}\n' "$text" "${ spaced "$tooltip";}" "$class"
 }

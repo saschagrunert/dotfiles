@@ -1,8 +1,7 @@
 { pkgs, llvmVersion, ... }:
 {
-  # Packages that only the user session needs. Keeping them out of
-  # environment.systemPackages means adding an editor plugin, a language server
-  # or a CLI tool no longer rebuilds and activates the system closure.
+  # Packages that only the user session needs. Home Manager is integrated into
+  # NixOS, so changes here also update and activate the system closure.
   # Anything root runs (toolchains used through sudo, container and networking
   # tools, kernel utilities) stays in nixos/packages.nix.
   home.packages = with pkgs; [

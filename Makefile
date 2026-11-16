@@ -22,8 +22,8 @@ NOCOLOR := \033[0m
 
 .SILENT:
 .PHONY: all build switch check check-nix lint lint-fix \
-	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint \
-	toml-lint colors smoke updates-test test clean help
+	markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint python-lint yaml-lint \
+	toml-lint colors smoke updates-test status-test nvim-test test clean help
 
 ##@ Build targets:
 
@@ -149,7 +149,16 @@ lua-lint: ## Check Lua formatting and lint.
 	$(NIX_SHELL) nixpkgs\#stylua nixpkgs\#luajitPackages.luacheck -c bash -c \
 		'stylua --check nvim/ && luacheck nvim/'
 
-test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint yaml-lint toml-lint colors updates-test ## Run all checks.
+python-lint: ## Check Python test formatting and lint.
+	$(NIX_SHELL) nixpkgs\#ruff -c bash -c 'ruff check tests && ruff format --check tests'
+
+status-test: ## Check status script recovery with isolated fixtures.
+	$(NIX_SHELL) nixpkgs\#bash nixpkgs\#coreutils nixpkgs\#python3 nixpkgs\#jq nixpkgs\#util-linux -c python3 -m unittest discover -s tests -v
+
+nvim-test: ## Check editor commands without plugins or user state.
+	$(NIX_SHELL) nixpkgs\#neovim nixpkgs\#python3 -c nvim --headless -u NONE -i NONE -l nvim/tests/commands.lua
+
+test: lint check-nix markdown-lint prettier typos shfmt shellcheck fish-lint lua-lint python-lint yaml-lint toml-lint colors updates-test status-test nvim-test ## Run all checks.
 
 ##@ Cleanup targets:
 

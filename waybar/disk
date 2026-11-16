@@ -44,7 +44,7 @@ sample_disks() {
 	local dev sectors_read sectors_written
 	read_bytes=0 write_bytes=0
 	for dev in /sys/block/*/device; do
-		read -r _ _ sectors_read _ _ _ sectors_written _ <"${dev%/device}/stat"
+		{ read -r _ _ sectors_read _ _ _ sectors_written _ <"${dev%/device}/stat"; } 2>/dev/null || continue
 		read_bytes=$((read_bytes + sectors_read * 512))
 		write_bytes=$((write_bytes + sectors_written * 512))
 	done
@@ -52,11 +52,16 @@ sample_disks() {
 
 emit() {
 	local old_read=$read_bytes old_write=$write_bytes now elapsed
-	now=${EPOCHREALTIME/[.,]/}
+	now=${ sample_time;}
 	sample_disks
 	elapsed=$((now - time))
 	((elapsed > 0)) || elapsed=1
 	time=$now
+	if ((read_bytes < old_read || write_bytes < old_write)); then
+		# shellcheck disable=SC2034 # The histories are used by name.
+		read_history=() write_history=()
+		old_read=$read_bytes old_write=$write_bytes
+	fi
 	record read_history $(((read_bytes - old_read) * 1000000 / elapsed))
 	record write_history $(((write_bytes - old_write) * 1000000 / elapsed))
 
@@ -103,5 +108,5 @@ emit() {
 
 # The first rates cover the short first sample of run.
 sample_disks
-time=${EPOCHREALTIME/[.,]/}
+time=${ sample_time;}
 run emit "${1:-}"

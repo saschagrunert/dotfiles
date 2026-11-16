@@ -17,19 +17,38 @@ FLOOR=10000
 declare -a down_history=() up_history=()
 iface="" rx=0 tx=0 time=0
 
-# Print the interface and gateway of the default route with the lowest metric.
-# The gateway is a little-endian hex address. The mask must be empty as well,
-# VPNs cover the whole range with two half routes like 0.0.0.0/1.
+# Prefer an IPv4 default route, falling back to IPv6 on IPv6-only networks.
+# VPN half routes are not defaults; their tunnels are listed separately below.
 default_route() {
-	awk 'NR > 1 && $2 == "00000000" && $8 == "00000000" && (best == "" || $7 < metric) {
-		best = $1; metric = $7; gw = $3
-	}
-	END {
-		if (best == "") exit 1
-		printf "%s %d.%d.%d.%d\n", best, strtonum("0x" substr(gw, 7, 2)),
-			strtonum("0x" substr(gw, 5, 2)), strtonum("0x" substr(gw, 3, 2)),
-			strtonum("0x" substr(gw, 1, 2))
-	}' /proc/net/route
+	local family route
+	for family in -4 -6; do
+		if route=$(ip -j "$family" route show default 2>/dev/null | jq -er '
+			[.[] | select((.type // "unicast") == "unicast")
+				| . as $route
+				| (if .nexthops then .nexthops[] else . end)
+				| select(.dev != null)
+				| {dev, gateway, metric: ($route.metric // 0)}]
+			| min_by(.metric) | select(. != null)
+			| [.dev, (.gateway // "-")] | join(" ")'); then
+			echo "$route"
+			return
+		fi
+	done
+	return 1
+}
+
+# Interfaces may disappear between route lookup and either counter read.
+counters() {
+	{
+		read -r new_rx <"/sys/class/net/$1/statistics/rx_bytes" &&
+			read -r new_tx <"/sys/class/net/$1/statistics/tx_bytes"
+	} 2>/dev/null
+}
+
+unavailable() {
+	iface="" down_history=() up_history=()
+	printf '{"text": "%s", "tooltip": "%s", "class": "disconnected"}\n' \
+		"<span color='#6272a4' size='large'>󰤭</span> ${1:-disconnected}" "${1:-Disconnected}"
 }
 
 # NetworkManager calls give up after this many seconds, so a hung
@@ -43,19 +62,22 @@ NM_TIMEOUT=2
 # NetworkManager, like wg-quick or Tailscale.
 tunnels() {
 	local -n found=$1
-	local dir flags address
+	local dir flags address uevent state
 	for dir in /sys/class/net/*; do
 		if [ -e "$dir/tun_flags" ]; then
-			read -r flags <"$dir/tun_flags"
+			{ read -r flags <"$dir/tun_flags"; } 2>/dev/null || continue
 			((flags & 1)) || continue
-		elif [[ $(<"$dir/uevent") != *DEVTYPE=wireguard* ]]; then
-			continue
+		else
+			uevent=""
+			{ IFS= read -r -d '' uevent <"$dir/uevent"; } 2>/dev/null || true
+			[[ $uevent == *DEVTYPE=wireguard* ]] || continue
 		fi
-		[ "$(<"$dir/operstate")" != down ] || continue
-		address=$(ip -o addr show dev "${dir##*/}" scope global | awk '
+		{ read -r state <"$dir/operstate"; } 2>/dev/null || continue
+		[ "$state" != down ] || continue
+		address=$(ip -o addr show dev "${dir##*/}" scope global 2>/dev/null | awk '
 			$3 == "inet" { print $4; found = 1; exit }
 			$3 == "inet6" && v6 == "" { v6 = $4 }
-			END { if (!found && v6 != "") print v6 }')
+			END { if (!found && v6 != "") print v6 }') || continue
 		# shellcheck disable=SC2034 # The array is used by name.
 		[ -z "$address" ] || found["$address"]=${dir##*/}
 	done
@@ -126,35 +148,44 @@ vpns() {
 emit() {
 	local route gateway
 	if ! route=$(default_route); then
-		iface="" down_history=() up_history=()
-		printf '{"text": "%s", "tooltip": "Disconnected", "class": "disconnected"}\n' \
-			"<span color='#6272a4' size='large'>󰤭</span> disconnected"
+		unavailable
 		return
 	fi
 	read -r route gateway <<<"$route"
 
 	local now new_rx new_tx
-	now=${EPOCHREALTIME/[.,]/}
-	read -r new_rx <"/sys/class/net/$route/statistics/rx_bytes"
-	read -r new_tx <"/sys/class/net/$route/statistics/tx_bytes"
+	now=${ sample_time;}
+	if ! counters "$route"; then
+		unavailable 'Interface unavailable'
+		return
+	fi
 	# Start over on a new interface, its counters are unrelated.
 	# shellcheck disable=SC2034 # The histories are used by name.
 	if [ "$route" != "$iface" ]; then
 		iface=$route rx=$new_rx tx=$new_tx time=$now down_history=() up_history=()
 		sleep 1
-		now=${EPOCHREALTIME/[.,]/}
-		read -r new_rx <"/sys/class/net/$iface/statistics/rx_bytes"
-		read -r new_tx <"/sys/class/net/$iface/statistics/tx_bytes"
+		now=${ sample_time;}
+		if ! counters "$iface"; then
+			unavailable 'Interface unavailable'
+			return
+		fi
 	fi
 	local elapsed=$((now - time))
 	((elapsed > 0)) || elapsed=1
+	if ((new_rx < rx || new_tx < tx)); then
+		# shellcheck disable=SC2034 # The histories are used by name.
+		rx=$new_rx tx=$new_tx down_history=() up_history=()
+	fi
 	local down=$(((new_rx - rx) * 1000000 / elapsed)) up=$(((new_tx - tx) * 1000000 / elapsed))
 	rx=$new_rx tx=$new_tx time=$now
 	record down_history "$down"
 	record up_history "$up"
 
 	local address
-	address=$(ip -o -4 addr show dev "$iface" | awk '{ print $4; exit }')
+	address=$(ip -j addr show dev "$iface" 2>/dev/null | jq -r '
+		[.[].addr_info[]? | select(.scope == "global")]
+		| sort_by(.family != "inet") | .[0]
+		| if . == null then "-" else "\(.local)/\(.prefixlen)" end') || address="-"
 
 	# Wi-Fi details come from the last scan of NetworkManager, which does not
 	# trigger a new one. Escaped colons separate nothing.

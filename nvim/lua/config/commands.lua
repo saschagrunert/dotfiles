@@ -165,11 +165,17 @@ vim.api.nvim_create_user_command("Wipeout", function(opts)
   M.wipeout(opts.bang)
 end, { bang = true })
 vim.api.nvim_create_user_command("PrettyJSON", function()
-  local ok = pcall(vim.cmd, "%!python3 -m json.tool")
-  if not ok then
-    vim.cmd("undo")
-    vim.notify("python3 json.tool failed", vim.log.levels.ERROR)
+  local input = table.concat(vim.api.nvim_buf_get_lines(0, 0, -1, false), "\n")
+  local ok, result = pcall(function()
+    return vim.system({ "python3", "-m", "json.tool" }, { stdin = input, text = true }):wait()
+  end)
+  if not ok or result.code ~= 0 then
+    local message = ok and vim.trim(result.stderr or "") or tostring(result)
+    vim.notify("python3 json.tool failed: " .. message, vim.log.levels.ERROR)
+    return
   end
+  local lines = vim.split(result.stdout:gsub("\n$", ""), "\n", { plain = true })
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
 end, {})
 vim.api.nvim_create_user_command("Qargs", function()
   vim.cmd("args " .. M.quickfix_filenames())

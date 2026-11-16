@@ -20,6 +20,9 @@ host=${NIX_UPDATES_HOST:-$(hostname)}
 max_age=${NIX_UPDATES_MAX_AGE:-21600}
 cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/waybar
 cache=$cache_dir/nix-updates.json
+failure=$cache_dir/nix-updates-error.json
+deadline=${NIX_UPDATES_TIMEOUT:-600}
+icon="<span color='#8be9fd' size='large'>󰚰</span>"
 
 mkdir -p "$cache_dir"
 
@@ -32,40 +35,67 @@ fresh() {
 		[ $(($(date +%s) - $(stat -c %Y "$cache"))) -lt "$max_age" ]
 }
 
-# Print the last result, empty text hides the module.
+# Print the last result with its successful check time and any refresh error.
+# Even a cached zero count stays visible when checking for updates fails.
 emit() {
+	local data updated="" error
+	data=$(jq -ce 'select(type == "object" and (.text | type == "string"))' "$cache" 2>/dev/null) || data='{"text":""}'
 	if [ -s "$cache" ]; then
-		cat "$cache"
-	else
-		echo '{"text": ""}'
+		updated=$(date -r "$cache" '+%F %R %Z')
 	fi
+	error=$(jq -r '.error // empty' "$failure" 2>/dev/null) || error=""
+	jq -cn --argjson data "$data" --arg updated "$updated" --arg error "$error" --arg icon "$icon" '
+		$data
+		| if $error != "" then
+			.text = (if .text == "" then "\($icon) ?" else .text end)
+			| .class = [(.class // empty), "stale"]
+		  else . end
+		| if .text != "" then
+			.tooltip = ((.tooltip // "No pending updates")
+				+ "\n\n" + (if $updated == "" then "No successful check" else "Updated " + $updated end)
+				+ (if $error == "" then "" else "\n" + $error end))
+		  else . end'
 }
 
-if fresh; then
-	emit
-	exit 0
-fi
-
-# Multiple bars (one per output) run this at the same time, only one of them
-# evaluates and the others wait for its result. The wait has to outlast a full
-# evaluation, otherwise a bar gives up early and shows the previous result, or
-# nothing at all, until its next interval. A failed run leaves the cache as it
-# is, so the waiting bars show it instead of repeating the evaluation one after
-# another. A wedged run must still not block the bar forever, so the wait is
-# bounded.
-exec 9>"$cache_dir/nix-updates.lock"
-if ! flock -n 9; then
-	flock -w 600 9 || true
-	emit
-	exit 0
-fi
-if fresh; then
+# All network access and both evaluations run in one timed child process.
+# The parent alone owns the lock and publishes the result or failure status.
+if [ "${1:-}" != --refresh ]; then
+	if fresh; then
+		emit
+		exit 0
+	fi
+	exec 9>"$cache_dir/nix-updates.lock"
+	if ! flock -n 9; then
+		flock -w "$((deadline + 10))" 9 || true
+		emit
+		exit 0
+	fi
+	if fresh; then
+		emit
+		exit 0
+	fi
+	result=$(mktemp "$cache_dir/nix-updates.XXXXXX")
+	trap 'rm -f "$result"' EXIT
+	rc=0
+	timeout --kill-after=5 "$deadline" "$0" --refresh >"$result" 9>&- || rc=$?
+	if [ "$rc" -eq 0 ] && jq -e 'type == "object" and (.text | type == "string")' "$result" >/dev/null; then
+		mv -f "$result" "$cache"
+		rm -f "$failure"
+	else
+		error='Update check failed; keeping last successful result'
+		if [ "$rc" -eq 124 ] || [ "$rc" -eq 137 ]; then
+			error="Update check timed out after ${deadline}s; keeping last successful result"
+		fi
+		jq -cn --arg error "$error" '{error: $error}' >"$result"
+		mv -f "$result" "$failure"
+	fi
 	emit
 	exit 0
 fi
 
 tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"; rm -f "$cache.tmp"' EXIT
+trap 'rm -rf "$tmp"' EXIT
+trap 'exit 1' TERM INT HUP
 
 # Map each package group to {pname: version}. Packages sharing a pname are
 # collapsed into one entry listing their versions, so the result does not depend
@@ -98,29 +128,19 @@ in {
 }
 EOF
 
-# Keep the lock out of the nix children, a lingering one must not hold it.
 evaluate() {
 	nix eval --json --no-write-lock-file "$@" \
-		"$flake#nixosConfigurations.$host.config" --apply "$apply" 2>/dev/null 9>&-
+		"$flake#nixosConfigurations.$host.config" --apply "$apply" 2>/dev/null
 }
 
 # Errors, such as no network, keep the previous result and retry next interval.
-if ! nix flake update --flake "$flake" --output-lock-file "$tmp/flake.lock" 2>/dev/null 9>&- ||
+if ! nix flake update --flake "$flake" --output-lock-file "$tmp/flake.lock" 2>/dev/null ||
 	! old=$(evaluate) || [ -z "$old" ] ||
 	! new=$(evaluate --reference-lock-file "$tmp/flake.lock") || [ -z "$new" ]; then
-	emit
-	exit 0
+	exit 1
 fi
-
-icon="<span color='#8be9fd' size='large'>󰚰</span>"
 
 # The program lives next to this script, so `make updates-test` can run it
 # against fixtures without evaluating anything.
-if ! jq -cn --argjson old "$old" --argjson new "$new" --arg icon "$icon" \
-	-f "$(dirname "$0")/nix-updates.jq" >"$cache.tmp"; then
-	emit
-	exit 0
-fi
-mv "$cache.tmp" "$cache"
-
-emit
+jq -cn --argjson old "$old" --argjson new "$new" --arg icon "$icon" \
+	-f "$(dirname "$0")/nix-updates.jq"

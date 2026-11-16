@@ -7,6 +7,15 @@
 # changes. A bar that goes away releases the lock, and another one takes over.
 set -euo pipefail
 
+# setpriv arms the kernel's parent-death signal before this worker starts.
+# Check the expected parent to cover it exiting before that signal was armed.
+# GNU timeout forwards TERM to the producer's whole group, including commands
+# the shell is waiting for, and escalates if needed. Zero disables its timer.
+if [ "${1:-}" = --producer ]; then
+	[ "$PPID" -eq "$2" ] || exit 0
+	exec timeout --kill-after=5 0 "$3"
+fi
+
 name=${1:?usage: shared <script>}
 [[ "$name" =~ ^[a-z-]+$ ]] || {
 	echo "invalid script: $name" >&2
@@ -23,17 +32,32 @@ exec 8>"$dir/$name.lock"
 # the lock and the file after this bar is gone, until the script prints again.
 # The script stops with this bar, and a line goes to the bar before the file,
 # so nothing replaces the file once the bar is gone. Each line replaces the
-# file in one rename, so followers never read half of one.
+# file in one rename, so followers never read half of one. Retry a producer
+# that exits, with a capped delay so persistent failures do not busy-loop.
 produce() {
-	local line
+	local line delay=1 produced
 	rm -f "$out"
-	exec 6< <(exec "$script" 8>&-)
-	pid=$!
-	trap 'kill "$pid" 2>/dev/null' EXIT
+	pid=""
+	trap '[ -z "$pid" ] || { kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true; }' EXIT
 	trap exit TERM INT HUP
-	while IFS= read -r line <&6; do
-		printf '%s\n' "$line" 2>/dev/null || exit
-		printf '%s\n' "$line" >"$out.tmp" && mv -f "$out.tmp" "$out"
+	local owner=$BASHPID
+	while true; do
+		produced=""
+		# Parent death also stops the group when shared receives SIGKILL, which
+		# cannot run an EXIT trap. Keep the worker in Waybar's session.
+		exec 6< <(exec setpriv --pdeathsig TERM "$0" --producer "$owner" "$script" 8>&-)
+		pid=$!
+		while IFS= read -r line <&6; do
+			printf '%s\n' "$line" 2>/dev/null || exit
+			printf '%s\n' "$line" >"$out.tmp" && mv -f "$out.tmp" "$out"
+			produced=1
+		done
+		exec 6<&-
+		wait "$pid" || true
+		pid=""
+		[ -z "$produced" ] || delay=1
+		read -r -t "$delay" -u 7 _ || true
+		delay=$((delay * 2 < 30 ? delay * 2 : 30))
 	done
 }
 
@@ -46,7 +70,6 @@ rm -f "$dir/$name.$$.fifo"
 last=""
 while true; do
 	if flock -n 8; then
-		exec 7<&-
 		produce
 		exit
 	fi
