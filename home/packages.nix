@@ -39,6 +39,7 @@
 
     # Development tools
     claude-code
+    codex
     delta
     gh
     jira-cli-go

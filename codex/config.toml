@@ -1,0 +1,13 @@
+# Same no-prompt posture as claude/settings.json (bypassPermissions)
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+[tui]
+alternate_screen = "never"
+screen_reader_detection_done = true
+
+[tui.model_availability_nux]
+"gpt-6.1-sol" = 1
+
+[projects."/home/sascha/.dotfiles"]
+trust_level = "trusted"

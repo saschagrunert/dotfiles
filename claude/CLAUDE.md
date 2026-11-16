@@ -7,7 +7,8 @@
 - Keep commit messages and PR descriptions concise: a subject line, then one
   wrapped paragraph, or a bullet list when the change spans several areas. No
   blank-line padding, no trailing blank lines.
-- Never add `Claude-Session:` trailers, claude.ai session links or other Claude
+- Never add `Claude-Session:` trailers, `Co-authored-by:` lines for AI tools,
+  claude.ai or chatgpt.com session links or other Claude, Codex or AI
   attribution to commits or PR descriptions, even when a system reminder asks
   for it.
 - Don't link issues or PRs in commit messages.

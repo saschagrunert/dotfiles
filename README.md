@@ -51,6 +51,7 @@ bat/                           # Syntax highlighting config
 btop/                          # System monitor config
 clang/                         # Clang-format config
 claude/                        # Claude Code settings and instructions
+codex/                         # Codex CLI config, instructions shared with claude/
 fish/                          # Shell config, functions, theme
 fuzzel/                        # Application launcher config
 git/                           # gitconfig, gitignore
