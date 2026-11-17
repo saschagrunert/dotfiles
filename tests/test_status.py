@@ -52,6 +52,8 @@ class StatusTests(unittest.TestCase):
         self.command("nmcli", "exit 1")
         self.command("nix", "exit 1")
         self.command("curl", "exit 1")
+        # Codex sessions running on this machine must not show up.
+        self.command("pgrep", "exit 1")
 
     def command(self, name, body):
         path = self.bin / name
@@ -341,7 +343,7 @@ emit""",
         self.assertIn("no credentials", self.payload("codex")["tooltip"])
         json.loads((state / "codex.json").read_text())
 
-    def test_codex_counts_resumed_sessions_and_today(self):
+    def test_codex_counts_resumed_sessions(self):
         home = self.root / "codex"
         now = datetime.now()
         then = now - timedelta(days=40)
@@ -379,8 +381,6 @@ emit""",
             json.dumps(
                 {
                     "month": month,
-                    "day": "",
-                    "day_spent": 0,
                     "fetched": 0,
                     "updated": 0,
                     "wait": 300,
@@ -405,12 +405,64 @@ printf 200""",
 pgrep() {{ echo "$$"; }}
 emit""",
         )
-        # $7 of $300 this month, and the new session's $5 of today's $15.
-        self.assertRegex(data["text"], r" 2% / 33%$")
+        # $7 of $300 this month.
+        self.assertRegex(data["text"], r" 2% / ")
         tooltip = re.sub("<[^>]*>", "", data["tooltip"])
         self.assertIn("$7 of $300", tooltip)
-        self.assertIn("$5 of $15 a working day", tooltip)
         self.assertRegex(tooltip, r"gpt-test +\$5")
+
+    def codex_share(self, spent, today, month=None):
+        """Render the panel on local date today with spent micros in month."""
+        month = month or today[:7]
+        self.codex_login()
+        sid = "01a1e399-0000-7000-8000-000000000001"
+        self.codex_state(
+            month=month, costs={sid: spent}, fetched=int(time.time()), updated=1
+        )
+        return self.payload(
+            "codex",
+            f"""printf() {{
+	if [ "$1" = -v ] && [ "$3" = '%(%F)T' ]; then
+		builtin printf -v "$2" %s {today}
+	elif [ "$1" = -v ] && [ "$3" = '%(%Y-%m)T' ]; then
+		builtin printf -v "$2" %s {month}
+	else
+		builtin printf "$@"
+	fi
+}}
+emit""",
+        )
+
+    def test_codex_share_accumulates_over_the_month(self):
+        # 2026-06 has 22 working days, the 15th is the 11th of them. The ten
+        # before allow $136.36, so $36.36 spent leaves $100 or 733% ahead.
+        data = self.codex_share(36363636, "2026-06-15")
+        self.assertRegex(data["text"], r"#50fa7b'>-733%</span>$")
+        tooltip = re.sub("<[^>]*>", "", data["tooltip"])
+        self.assertIn("Day 11 of 22", tooltip)
+        self.assertRegex(tooltip, r"\$13\.64 a working day +Ahead \$100")
+
+    def test_codex_share_overdrawn(self):
+        # Beyond the ten earlier shares and all of today's.
+        data = self.codex_share(170000000, "2026-06-15")
+        self.assertRegex(data["text"], r"#ff5555'>246%</span>$")
+
+    def test_codex_share_overdrawn_on_day_off(self):
+        # On a Sunday the ten days begun allow $136.36.
+        data = self.codex_share(160000000, "2026-06-14")
+        self.assertRegex(data["text"], r"#ff5555'>173%</span>$")
+        self.assertRegex(
+            re.sub("<[^>]*>", "", data["tooltip"]), r"(?m)Behind \$23\.64$"
+        )
+
+    def test_codex_share_before_the_billing_month_turns(self):
+        # Before 09:00 on July 1st the June billing month still runs, with all
+        # its 22 shares begun, so $200 spent leaves $100.
+        data = self.codex_share(200000000, "2026-07-01", "2026-06")
+        self.assertRegex(data["text"], r"#50fa7b'>-733%</span>$")
+        tooltip = re.sub("<[^>]*>", "", data["tooltip"])
+        self.assertIn("Day off", tooltip)
+        self.assertRegex(tooltip, r"(?m)Ahead \$100$")
 
     def codex_session(self, sid, start):
         directory = self.root / "codex" / "sessions" / start.strftime("%Y/%m/%d")
@@ -435,8 +487,6 @@ emit""",
         month = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y-%m")
         snapshot = {
             "month": month,
-            "day": "",
-            "day_spent": 0,
             "fetched": 0,
             "updated": 0,
             "wait": 300,
