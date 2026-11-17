@@ -131,8 +131,9 @@ name, email, GPG signing key and mail server first.
 
 The Codex Waybar panel sums the cost the ChatGPT backend reports for every
 Codex session of the billing month on this machine. The bar shows the month
-used and what today spent of a working day's share. Set the monthly allowance
-as `LIMIT` and the daily share as `DAILY` in `waybar/codex`.
+used and today's share of it, which like the Claude week accumulates across
+the working days, so unused shares carry forward and show as a negative
+percentage. Set the monthly allowance as `LIMIT` in `waybar/codex`.
 
 `codex/config.toml` is installed as `/etc/codex/config.toml`, the system layer
 below `~/.codex/config.toml`. Codex keeps project trust and its own state in

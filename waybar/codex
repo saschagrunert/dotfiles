@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Codex budget, laid out like the Claude panel: the month and what today spent
-# of a working day's share on the bar, a meter for each with the reset and
-# what is left in the tooltip, and the running Codex sessions with what each
-# cost. The spend sums what the thread usage endpoint behind the Codex /status
-# cost reports for every session of this machine active in the billing month,
-# called with the Codex OAuth token. Codex used elsewhere is not counted.
+# Codex budget, laid out like the Claude panel: the month and today's share of
+# it on the bar, a meter for each with the reset and what is left in the
+# tooltip, and the running Codex sessions with what each cost. The spend sums
+# what the thread usage endpoint behind the Codex /status cost reports for
+# every session of this machine active in the billing month, called with the
+# Codex OAuth token. Codex used elsewhere is not counted.
 set -euo pipefail
 shopt -s nullglob
 
@@ -17,10 +17,9 @@ shopt -s nullglob
 FETCH=300
 BACKOFF=1800
 URL=https://chatgpt.com/backend-api/wham/usage/thread_usage/query
-# The monthly allowance and the share of every working day in dollars. The
-# backend reports no individual limit.
+# The monthly allowance in dollars, shared evenly across the working days of
+# the month. The backend reports no individual limit.
 LIMIT=300
-DAILY=15
 # Fields are separated by the unit separator. Unlike a tab it keeps empty
 # fields apart when read, and the fields never contain it.
 US=$'\x1f'
@@ -39,11 +38,10 @@ auth=$home/auth.json
 # of a dollar, by session id, and for the sessions started before it what
 # they cost when the month started, or when first seen in it. The month they
 # belong to, the times of the last fetch and the last successful one, the
-# wait until the next one, and why the last fetch failed. The local day and
-# the month spend before it give what the day spent, and missing counts the
+# wait until the next one, and why the last fetch failed. Missing counts the
 # sessions the backend has no usage for yet.
 declare -A costs=() base=()
-month="" fetched=0 updated=0 wait=$FETCH error="" day="" day_spent=0 missing=0
+month="" fetched=0 updated=0 wait=$FETCH error="" missing=0
 
 # Print what session $1 spent in the month, its cost beyond its base, which
 # a late or partial report never takes below zero.
@@ -62,9 +60,9 @@ total() {
 }
 
 # They outlive the script and a reboot, so a waybar reload neither fetches
-# again nor starts without values, and the day keeps what it spent. State is
-# never executed. The whole snapshot is validated before it is restored, so a
-# malformed or interrupted write starts a fresh fetch.
+# again nor starts without values. State is never executed. The whole snapshot
+# is validated before it is restored, so a malformed or interrupted write
+# starts a fresh fetch.
 state=${XDG_STATE_HOME:-$HOME/.local/state}/waybar/codex.json
 mkdir -p "${state%/*}"
 if saved=$(jq -ce '
@@ -73,22 +71,18 @@ if saved=$(jq -ce '
 		and all(to_entries[]; (.key | test("^[0-9a-f-]{36}$")) and (.value | uint));
 	select(type == "object")
 	| select(.month | type == "string" and test("^[0-9]{4}-[0-9]{2}$"))
-	| select(.day | type == "string" and test("^([0-9]{4}-[0-9]{2}-[0-9]{2})?$"))
-	| select(.day_spent | type == "number" and . == floor)
 	| select(.fetched | uint) | select(.updated | uint) | select(.missing // 0 | uint)
 	| select(.wait | uint and . >= 60 and . <= 1800)
 	| select(.error | type == "string" and (test("[[:cntrl:]\"\\\\<>&]") | not))
 	| select(.costs | costs) | select(.base | costs)' "$state" 2>/dev/null); then
 	{
 		read -r month
-		read -r day
-		read -r day_spent
 		read -r fetched
 		read -r updated
 		read -r wait
 		read -r missing
 		IFS= read -r error
-	} < <(jq -r '.month, .day, .day_spent, .fetched, .updated, .wait, (.missing // 0), .error' <<<"$saved")
+	} < <(jq -r '.month, .fetched, .updated, .wait, (.missing // 0), .error' <<<"$saved")
 	while read -r kind id cost; do
 		if [ "$kind" = c ]; then costs[$id]=$cost; else base[$id]=$cost; fi
 	done < <(jq -r '(.costs | to_entries[] | "c \(.key) \(.value)"),
@@ -103,13 +97,13 @@ save_state() {
 	json=$({
 		for id in "${!costs[@]}"; do echo "c $id ${costs[$id]}"; done
 		for id in "${!base[@]}"; do echo "b $id ${base[$id]}"; done
-	} | jq -Rnc --arg month "$month" --arg day "$day" --argjson day_spent "$day_spent" \
-		--argjson fetched "$fetched" --argjson updated "$updated" --argjson wait "$wait" \
+	} | jq -Rnc --arg month "$month" --argjson fetched "$fetched" \
+		--argjson updated "$updated" --argjson wait "$wait" \
 		--argjson missing "$missing" --arg error "$error" '[inputs | split(" ")] as $rows
 		| def pick($kind): [$rows[] | select(.[0] == $kind) | {(.[1]): (.[2] | tonumber)}]
 			| add // {} | to_entries | sort_by(.key) | from_entries;
-		{month: $month, day: $day, day_spent: $day_spent, fetched: $fetched,
-			updated: $updated, wait: $wait, missing: $missing, error: $error,
+		{month: $month, fetched: $fetched, updated: $updated, wait: $wait,
+			missing: $missing, error: $error,
 			costs: pick("c"), base: pick("b")}') || return 0
 	[ "$json" != "${saved:-}" ] || return 0
 	snapshot=$(mktemp "$state.XXXXXX") || return 0
@@ -121,20 +115,19 @@ save_state() {
 	fi
 }
 
-# Print "id date old" for every session active since epoch $1, the start of
-# the billing month: its id, its local start date, and 1 if it started before
-# then. Session files are named after their local start time and a resumed
-# session keeps writing to its file, so the sessions are found by the time
-# their files changed. Start times compare as local time strings, and files
-# named otherwise are skipped.
+# Print "id old" for every session active since epoch $1, the start of the
+# billing month: its id and 1 if it started before then. Session files are
+# named after their local start time and a resumed session keeps writing to
+# its file, so the sessions are found by the time their files changed. Start
+# times compare as local time strings, and files named otherwise are skipped.
 threads() {
-	local since f name stamp re='^([0-9]{4}-[0-9]{2}-[0-9]{2})T[0-9]{2}-[0-9]{2}-[0-9]{2}-([0-9a-f-]{36})\.jsonl$'
+	local since f name stamp re='^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}-[0-9]{2}-[0-9]{2}-([0-9a-f-]{36})\.jsonl$'
 	printf -v since '%(%Y-%m-%dT%H-%M-%S)T' "$1"
 	while IFS= read -r f; do
 		name=${f##*/rollout-}
 		[[ $name =~ $re ]] || continue
 		stamp=${name:0:19}
-		echo "${BASH_REMATCH[2]} ${BASH_REMATCH[1]} $([[ $stamp < $since ]] && echo 1 || echo 0)"
+		echo "${BASH_REMATCH[1]} $([[ $stamp < $since ]] && echo 1 || echo 0)"
 	done < <(find "$home/sessions" "$home/archived_sessions" \
 		-name 'rollout-*.jsonl' -newermt "@$1" 2>/dev/null)
 }
@@ -165,7 +158,6 @@ fetch() {
 	sessions=${ threads "$1";}
 	if [ -z "$sessions" ]; then
 		costs=() base=() spent=0 missing=0 updated=$EPOCHSECONDS wait=$FETCH error=""
-		baseline ""
 		return
 	fi
 
@@ -187,14 +179,14 @@ fetch() {
 	# it, resumed, takes its cost then, so only what it spends from then on
 	# counts.
 	local -A was=() wasbase=() reported=()
-	local id cost date old
+	local id cost old
 	for id in "${!costs[@]}"; do was[$id]=${costs[$id]}; done
 	for id in "${!base[@]}"; do wasbase[$id]=${base[$id]}; done
 	while IFS=$US read -r id cost; do
 		[ -n "$id" ] && [ -n "$cost" ] && reported[$id]=$cost
 	done <<<"$out"
 	costs=() base=() missing=0
-	while read -r id date old; do
+	while read -r id old; do
 		cost=${reported[$id]:-${was[$id]:-}}
 		if [ -z "$cost" ]; then
 			missing=$((missing + 1))
@@ -204,7 +196,6 @@ fetch() {
 		((old)) && base[$id]=${wasbase[$id]:-$cost}
 	done <<<"$sessions"
 	spent=${ total;} updated=$EPOCHSECONDS wait=$FETCH error=""
-	baseline "$sessions"
 }
 
 # Print "id cost" separated by the unit separator for the sessions $3... the
@@ -249,22 +240,6 @@ query() {
 		error="unexpected response"
 		return 1
 	fi
-}
-
-# Start a new local day at its first fetch, with the month spend before it as
-# the baseline of what the day spends. Sessions started that day, by the ids
-# and dates in $1, count for the day in full, so a day starting late, after a
-# reboot or without state, still has them. Usage of older sessions before the
-# first fetch is missed, which is little while waybar runs.
-baseline() {
-	local today id date old started=0
-	printf -v today '%(%F)T' -1
-	[ "$day" != "$today" ] || return 0
-	while read -r id date old; do
-		[ "$date" = "$today" ] && [ -n "${costs[$id]:-}" ] &&
-			started=$((started + ${ cost "$id";}))
-	done <<<"$1"
-	day=$today day_spent=$((spent - started))
 }
 
 # Currency arithmetic uses millionths of a dollar, preserving billing precision
@@ -313,26 +288,29 @@ sessions() {
 }
 
 # The dates the panel works with, which change at most once a day: today's
-# local date as UTC midnight, the working days of the local month with
-# today's position among them or 0 on a day off, and the start and reset of
-# the Pacific billing month. UTC midnights keep the day arithmetic right
-# across a change to or from daylight saving time.
-dates_for="" current=0 days=0 dayno=0 month_start=0 reset=0
+# local date as UTC midnight, the working days of billing month $2 by local
+# date with today's position among them or 0 on a day off, how many of them
+# have begun by today, and the start and reset of the Pacific billing month.
+# The month turns during the local morning, so until then the old month has
+# begun all its days. UTC midnights keep the day arithmetic right across a
+# change to or from daylight saving time.
+dates_for="" current=0 days=0 dayno=0 begun=0 month_start=0 reset=0
 dates() {
 	[ "$dates_for" != "$1 $2" ] || return 0
 	dates_for="$1 $2"
 	local start finish t wday
 	{ read -r current && read -r start && read -r finish; } < <(
-		printf '%s\n' "$1" "${1:0:7}-01" "${1:0:7}-01 +1 month" | date -u -f - +%s
+		printf '%s\n' "$1" "$2-01" "$2-01 +1 month" | date -u -f - +%s
 	)
 	{ read -r month_start && read -r reset; } < <(
 		printf '%s\n' "$2-01" "$2-01 +1 month" | TZ=$PACIFIC date -f - +%s
 	)
-	days=0 dayno=0
+	days=0 dayno=0 begun=0
 	for ((t = start / 86400; t < finish / 86400; t++)); do
 		wday=$(((t + 3) % 7 + 1))
 		[[ $WORKDAYS == *$wday* ]] || continue
 		days=$((days + 1))
+		((t <= current / 86400)) && begun=$days
 		((t == current / 86400)) && dayno=$days
 	done
 	return 0
@@ -344,14 +322,8 @@ emit() {
 	TZ=$PACIFIC printf -v current_month '%(%Y-%m)T' -1
 
 	# A new billing month starts with the costs of the old one as the base of
-	# its sessions and fetches right away. The day goes on across it, as the
-	# month turns during the local morning, so it keeps what it spent so far.
+	# its sessions and fetches right away.
 	if [ "$month" != "$current_month" ]; then
-		if [ "$day" = "$today" ]; then
-			day_spent=$((day_spent - spent))
-		else
-			day_spent=0
-		fi
 		base=()
 		for id in "${!costs[@]}"; do base[$id]=${costs[$id]}; done
 		month=$current_month spent=0 fetched=0 updated=0 wait=$FETCH error="" missing=0
@@ -384,36 +356,53 @@ emit() {
 		tooltip+="\n${ label "${ money "$spent";} of ${ money "$limit";}, ${ money $((limit - spent));} left, $count";}"
 	fi
 
-	# Every working day, Monday to Friday, gets a share, and today shows what
-	# the day spent of it, in percent on the bar. Like today's share of the
-	# Claude week it stays uncolored within the share and turns red beyond it.
-	local today_pct="" cost
-	if ((updated)); then
-		local share=$((DAILY * 1000000)) used=0 p
-		[ "$day" = "$today" ] && used=$((spent - day_spent))
-		((used < 0)) && used=0
-		p=$((used * 100 / share))
+	# Like the Claude week, the month is shared evenly across its working days,
+	# Monday to Friday, and a share left over carries to the next day. Used is
+	# what the month spent beyond the shares of the days before today, in
+	# percent of a share, negative while they left some over. Today's meter
+	# only fills once the earlier shares did. The balance is what the days
+	# before left over, or what a day off overdrew. On the bar the share is
+	# green while ahead and red beyond today's share or on an overdrawn day off.
+	local today_pct="" share used day balance earlier cost
+	if ((updated && days)); then
+		share=$((limit / days))
 		if ((dayno)); then
+			earlier=$((limit * (dayno - 1) / days))
 			left="Day $dayno of $days"
 			right="${ label Day;} $dayno ${ label of;} $days"
 		else
+			earlier=$((limit * begun / days))
 			left="Day off"
 			right="${ label "Day off";}"
 		fi
+		used=$(((spent - earlier) * 100 / share))
+		day=$((dayno && used > 0 ? used : 0))
+		balance=$((earlier - spent))
+		((dayno && balance < 0)) && balance=0
 		tooltip+="\n<span size='xx-small'> </span>"
 		tooltip+="\n<b>Today</b>${ pad $((6 + ${#left}));} $right"
-		printf -v shown '%3d%%' "$p"
-		tooltip+="\n<b>$shown</b> ${ meter "$p" $((WIDTH - 5));}"
-		if ((used > share)); then
-			cost="${ money $((used - share));} over"
-		else
-			cost="${ money $((share - used));} left"
+		if ((dayno)); then
+			printf -v shown '%3d%%' "$day"
+			tooltip+="\n<b>$shown</b> ${ meter "$day" $((WIDTH - 5));}"
 		fi
-		tooltip+="\n${ label "${ money "$used";} of ${ money "$share";} a working day, $cost";}"
+		cost="${ money "$share";} a working day"
+		if ((balance)); then
+			if ((balance > 0)); then
+				right=Ahead left=${ money "$balance";}
+			else
+				right=Behind left=${ money $((-balance));}
+			fi
+			tooltip+="\n${ label "$cost";}${ pad $((${#cost} + ${#right} + ${#left} + 2));} ${ label "$right";} $left"
+		else
+			tooltip+="\n${ label "$cost";}"
+		fi
 
-		today_pct="$p%"
-		[ -z "$error" ] && ((used > share)) &&
+		today_pct="$used%"
+		if [ -z "$error" ] && ((balance > 0)); then
+			today_pct="<span color='${GRADIENT[0]}'>$today_pct</span>"
+		elif [ -z "$error" ] && ((balance < 0 || used > 100)); then
 			today_pct="<span color='${GRADIENT[9]}'>$today_pct</span>"
+		fi
 		today_pct=" / $today_pct"
 	fi
 
