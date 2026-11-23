@@ -50,6 +50,7 @@ class StatusTests(unittest.TestCase):
         self.command("sleep", "exit 0")
         self.command("ip", "exit 1")
         self.command("nmcli", "exit 1")
+        self.command("nm-online", "exit 2")
         self.command("nix", "exit 1")
         self.command("curl", "exit 1")
         # Codex sessions running on this machine must not show up.
@@ -632,6 +633,25 @@ emit
             self.assertEqual(data["text"], "3")
             self.assertIn("failed", data["tooltip"])
         self.assertFalse((self.runtime / "unexpected-nix").exists())
+
+    def record_online_wait(self):
+        self.command("nm-online", 'echo "$*" >"$XDG_RUNTIME_DIR/nm-online"; exit 1')
+        # Record whether the wait happened before the first fetch.
+        self.command(
+            "nix",
+            'cp "$XDG_RUNTIME_DIR/nm-online" "$XDG_RUNTIME_DIR/nix" 2>/dev/null || true; exit 1',
+        )
+
+    def test_update_waits_for_network(self):
+        self.record_online_wait()
+        data = json.loads(self.run_script("nix-updates", args=()))
+        self.assertIn("failed", data["tooltip"])
+        self.assertEqual((self.runtime / "nix").read_text().strip(), "-q -t 60")
+
+    def test_forced_update_does_not_wait_for_network(self):
+        self.record_online_wait()
+        self.run_script("nix-updates", args=("--force",))
+        self.assertFalse((self.runtime / "nm-online").exists())
 
     def test_update_timeout_defaults_to_ten_minutes(self):
         self.env.pop("NIX_UPDATES_TIMEOUT")

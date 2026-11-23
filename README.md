@@ -180,6 +180,8 @@ upgrade. Its tooltip shows the last successful check time; a stale result or
 failed check stays visible until a refresh succeeds. A failed refresh does not
 expire a valid cached result; automatic checks resume when that result expires
 (after six hours by default) or `flake.lock` changes. Click again to retry sooner.
+Automatic checks first wait up to a minute for an active NetworkManager
+connection, so the check at login does not fail before the network is up.
 Checks have a ten-minute deadline, configurable with `NIX_UPDATES_TIMEOUT`
 (seconds). Dependabot keeps the GitHub Actions up to date.
 
