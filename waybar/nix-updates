@@ -74,6 +74,13 @@ if [ "${1:-}" != --refresh ]; then
 		emit
 		exit 0
 	fi
+	# Waybar starts the first check before the network is up after boot, so
+	# wait up to a minute for an active connection. This happens outside the
+	# check deadline. A click does not wait, and neither does a host without
+	# NetworkManager.
+	if [ -z "$force" ]; then
+		nm-online -q -t 60 >/dev/null 2>&1 9>&- || true
+	fi
 	result=$(mktemp "$cache_dir/nix-updates.XXXXXX")
 	trap 'rm -f "$result"' EXIT
 	rc=0
