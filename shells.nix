@@ -39,9 +39,19 @@
             ];
           };
           drvFile = "${projectDir}/nix/derivation.nix";
+          # From the working tree, lib.cleanSource would copy the whole checkout,
+          # build outputs included, to the store. The plain path is enough to
+          # read files like Cargo.lock.
+          shellPkgs = devPkgs // {
+            lib = devPkgs.lib // {
+              cleanSource = src: src;
+            };
+          };
           # Project flakes may pass build metadata, which the shell does not need.
           drv = devPkgs.callPackage drvFile (
             builtins.intersectAttrs (builtins.functionArgs (import drvFile)) {
+              pkgs = shellPkgs;
+              inherit (shellPkgs) lib;
               rev = "";
               lastModified = "0";
             }
