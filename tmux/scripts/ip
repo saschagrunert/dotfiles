@@ -26,11 +26,16 @@ if [ -f "$wan_cache" ]; then
 	fi
 fi
 if [ -z "$wan_ip" ]; then
-	if wan_ip=$(curl --max-time 2 -fs https://whatismyip.akamai.com/); then
+	for url in https://api.ipify.org https://ifconfig.me/ip https://whatismyip.akamai.com/; do
+		wan_ip=$(curl -4 --max-time 2 -fs "$url" || true)
+		[[ $wan_ip =~ ^[0-9]{1,3}(\.[0-9]{1,3}){3}$ ]] && break
+		wan_ip=""
+	done
+	if [ -n "$wan_ip" ]; then
 		echo "$wan_ip" >"$wan_cache"
 	elif [ -f "$wan_cache" ]; then
 		wan_ip=$(cat "$wan_cache")
 	fi
 fi
 
-echo "${wan_ip} / ${lan_ip:-N/a}"
+echo "${wan_ip:-N/a} / ${lan_ip:-N/a}"
